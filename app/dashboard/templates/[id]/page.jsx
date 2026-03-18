@@ -4,21 +4,12 @@ import { useState, useEffect, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getUserTemplateById, updateUserTemplate } from '@/app/actions/template'
-import { ArrowLeft, Save, Code } from 'lucide-react'
+import { ArrowLeft, Save } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
-
-const VARIABLE_TAGS = [
-  { tag: '{{EVENT_NAME}}', desc: "Nom de l'événement" },
-  { tag: '{{LOCATION}}', desc: "Lieu de l'événement" },
-  { tag: '{{TIME}}', desc: "Heure de l'événement" },
-  { tag: '{{DRESS_CODE}}', desc: 'Code vestimentaire' },
-  { tag: '{{GUEST_NAME}}', desc: "Prénom & nom de l'invité" },
-]
+import CodeTemplateEditor from '@/components/invitation/CodeTemplateEditor'
 
 export default function EditTemplatePage({ params }) {
   const router = useRouter()
@@ -27,30 +18,34 @@ export default function EditTemplatePage({ params }) {
   const [saveName, setSaveName] = useState('')
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [html, setHtml] = useState('')
-  const [css, setCss] = useState('')
   const [activeMode, setActiveMode] = useState('edit')
+  
+  const [templateConfig, setTemplateConfig] = useState({
+    type: 'code',
+    html: '',
+    css: '',
+    js: ''
+  })
 
   useEffect(() => {
     getUserTemplateById(id).then(tmpl => {
       setSaveName(tmpl.name)
-      setHtml(tmpl.config?.html || '')
-      setCss(tmpl.config?.css || '')
+      if (tmpl.config) {
+        setTemplateConfig({
+          type: 'code',
+          html: tmpl.config.html || '',
+          css: tmpl.config.css || '',
+          js: tmpl.config.js || '',
+          primaryColor: tmpl.config.primaryColor || '#d4af37',
+          bgColor: tmpl.config.bgColor || '#111111'
+        })
+      }
       setLoading(false)
     }).catch(e => {
       alert(e.message)
       router.push('/dashboard/templates')
     })
   }, [id, router])
-
-  // Build the template config object from current HTML/CSS
-  const templateConfig = {
-    type: 'code',
-    html,
-    css,
-    primaryColor: '#d4af37',
-    bgColor: '#111111',
-  }
 
   async function handleSave() {
     if (!saveName.trim()) {
@@ -66,11 +61,6 @@ export default function EditTemplatePage({ params }) {
     } finally {
       setSaving(false)
     }
-  }
-
-  function handleApplyPreview() {
-    setHtml(h => h + ' ')
-    setTimeout(() => setHtml(h => h.trimEnd()), 10)
   }
 
   const demoEvent = {
@@ -121,46 +111,12 @@ export default function EditTemplatePage({ params }) {
         </div>
         
         <div className="flex-1 grid lg:grid-cols-[440px_1fr] gap-5 min-h-0">
-          {/* Left: HTML/CSS Editor */}
-          <div className={`border border-border rounded-xl shadow-sm overflow-hidden flex flex-col h-full bg-card ${activeMode === 'edit' ? 'flex' : 'hidden lg:flex'}`}>
-            <div className="px-4 py-3 border-b border-border bg-muted/20 flex items-center gap-2">
-              <Code className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold">Éditeur HTML / CSS</span>
-            </div>
-
-            <div className="px-4 py-2 border-b border-border bg-muted/10 flex flex-wrap gap-1.5">
-              {VARIABLE_TAGS.map(v => (
-                <span key={v.tag} title={v.desc} className="bg-primary/10 text-primary text-[10px] font-mono px-1.5 py-0.5 rounded cursor-help border border-primary/20">
-                  {v.tag}
-                </span>
-              ))}
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-              <div className="space-y-1">
-                <Label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Structure HTML</Label>
-                <Textarea
-                  value={html}
-                  onChange={e => setHtml(e.target.value)}
-                  className="font-mono text-xs bg-background leading-relaxed resize-none"
-                  style={{ minHeight: '280px' }}
-                />
-              </div>
-
-              <div className="space-y-1">
-                <Label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Styles CSS</Label>
-                <Textarea
-                  value={css}
-                  onChange={e => setCss(e.target.value)}
-                  className="font-mono text-xs bg-background leading-relaxed resize-none"
-                  style={{ minHeight: '280px' }}
-                />
-              </div>
-
-              <Button onClick={handleApplyPreview} variant="secondary" className="w-full">
-                Actualiser l'aperçu
-              </Button>
-            </div>
+          {/* Left: HTML/CSS/JS Editor */}
+          <div className={`overflow-hidden flex flex-col h-full bg-card rounded-xl border border-border shadow-sm ${activeMode === 'edit' ? 'flex' : 'hidden lg:flex'}`}>
+            <CodeTemplateEditor 
+              template={templateConfig} 
+              onChange={setTemplateConfig} 
+            />
           </div>
 
           {/* Right: Live Preview */}

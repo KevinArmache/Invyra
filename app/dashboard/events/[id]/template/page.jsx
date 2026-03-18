@@ -5,12 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getEventById, updateEvent } from '@/app/actions/event'
 import { generateTemplateWithAI } from '@/app/actions/template'
-import { TEMPLATE_PRESETS } from '@/utils/template-presets'
-import { ArrowLeft, Save, Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import TemplateEditor from '@/components/invitation/TemplateEditor'
 import CodeTemplateEditor from '@/components/invitation/CodeTemplateEditor'
 import TemplateGallery from '@/components/invitation/TemplateGallery'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
@@ -27,12 +22,12 @@ export default function TemplateConfigurationPage({ params }) {
 
   // Current working copy of the template
   const [template, setTemplate] = useState(null)
-  const [activeTab, setActiveTab] = useState('editor')
+  const [activeTab, setActiveTab] = useState('code')
 
   useEffect(() => {
     getEventById(id).then(e => {
       setEvent(e)
-      setTemplate(e.invitationTemplate || TEMPLATE_PRESETS[0].template)
+      setTemplate(e.invitationTemplate || { type: 'code', html: '', css: '' })
       setLoading(false)
     })
   }, [id])
@@ -55,7 +50,7 @@ export default function TemplateConfigurationPage({ params }) {
     try {
       const res = await generateTemplateWithAI(null, aiPrompt)
       setTemplate(res.template)
-      setActiveTab('editor')
+      setActiveTab('code')
     } catch (e) {
       alert(e.message)
     } finally {
@@ -88,18 +83,13 @@ export default function TemplateConfigurationPage({ params }) {
         <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
             <div className="p-3 border-b border-border bg-muted/20">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="editor">Visuel</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="code">Code HTML/CSS</TabsTrigger>
                 <TabsTrigger value="gallery">Galerie & IA</TabsTrigger>
               </TabsList>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
-              <TabsContent value="editor" className="mt-0 h-full">
-                <TemplateEditor template={template} onChange={setTemplate} />
-              </TabsContent>
-
               <TabsContent value="code" className="mt-0 h-full">
                 <div className="mb-4">
                   <CodeTemplateEditor template={template} onChange={setTemplate} />
@@ -129,7 +119,7 @@ export default function TemplateConfigurationPage({ params }) {
                   selectedId={null}
                   onSelect={(_, tmpl) => {
                     setTemplate(tmpl)
-                    setActiveTab('editor')
+                    setActiveTab('code')
                   }}
                 />
               </TabsContent>

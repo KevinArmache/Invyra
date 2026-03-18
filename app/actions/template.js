@@ -4,8 +4,6 @@ import Groq from 'groq-sdk'
 import { prisma } from '@/utils/prisma'
 import { getSession } from '@/app/actions/auth'
 
-import { TEMPLATE_PRESETS } from '@/utils/template-presets'
-
 // ──────────────────────────────────────────────
 // AI Template Generation
 // ──────────────────────────────────────────────
@@ -28,33 +26,20 @@ export async function generateTemplateWithAI(eventId, prompt) {
 
     const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-    const systemPrompt = `You are a professional event designer. Generate an invitation template JSON based on the description.
+    const systemPrompt = `You are a professional web designer. Generate an invitation template (HTML and CSS) based on the user's description.
+The design MUST BE absolutely stunning, cohesive, modern, and responsive.
 Return ONLY valid JSON with exactly these fields:
 {
-  "style": "elegant|romantic|modern|festive|nature|cosmic",
-  "primaryColor": "#hexcode",
-  "secondaryColor": "#hexcode",
-  "bgColor": "#hexcode (dark, rich background)",
-  "bgGradient": ["#hex1", "#hex2"],
-  "bgImage": null or "https://images.unsplash.com/... (relevant photo URL)",
-  "textColor": "#hexcode (light, readable)",
-  "accentColor": "#hexcode",
-  "fontFamily": "Google Font name, fallback",
-  "headerFontSize": "3rem",
-  "bodyFontSize": "1rem",
-  "borderStyle": "solid|double|dashed|none",
-  "borderColor": "#hexcode",
-  "borderOpacity": 0.5,
-  "cornerDecoration": true|false,
-  "floral": true|false,
-  "glitter": true|false,
-  "headerText": "short invitation headline in the appropriate language",
-  "subHeaderText": "short sub-headline in the appropriate language",
-  "buttonLabel": "RSVP button text in the appropriate language",
-  "buttonColor": "#hexcode",
-  "buttonTextColor": "#hexcode"
+  "type": "code",
+  "html": "<div class='invitation-container'>...</div>",
+  "css": ".invitation-container { ... }"
 }
-Return ONLY the JSON. No markdown, no explanation.`
+Important:
+- Use these exact variables in your HTML text: {{EVENT_TITLE}}, {{GUEST_NAME}}, {{EVENT_LOCATION}}, {{EVENT_DATE}}, {{DRESS_CODE}}.
+- The HTML MUST include an RSVP form. The form should have buttons or inputs with name="rsvp_status" (values "confirmed", "maybe", "declined"), name="dietary_restrictions", name="plus_one", name="notes".
+- Or you can just put buttons with data-rsvp="confirmed" / data-rsvp="declined" attributes.
+- Your CSS should be contained in the "css" string. Do not put <style> tags inside the HTML string.
+- Return ONLY the JSON object. No markdown formatting, no explanations.`
 
     const userPrompt = `Event: ${event?.title || 'Event'}
 Description: ${prompt}
@@ -67,7 +52,7 @@ Generate a beautiful, cohesive invitation template.`
         { role: 'user', content: userPrompt }
       ],
       temperature: 0.8,
-      max_tokens: 800
+      max_tokens: 2000
     })
 
     const responseText = completion.choices[0]?.message?.content || ''
@@ -81,28 +66,9 @@ Generate a beautiful, cohesive invitation template.`
 
     // Sanitize
     const sanitized = {
-      style: ['elegant', 'romantic', 'modern', 'festive', 'nature', 'cosmic'].includes(template.style) ? template.style : 'elegant',
-      primaryColor: template.primaryColor || '#d4af37',
-      secondaryColor: template.secondaryColor || '#c9a27e',
-      bgColor: template.bgColor || '#0f0c08',
-      bgGradient: Array.isArray(template.bgGradient) && template.bgGradient.length >= 2 ? template.bgGradient.slice(0, 2) : ['#1a1a2e', '#0f0f1a'],
-      bgImage: template.bgImage || null,
-      textColor: template.textColor || '#ffffff',
-      accentColor: template.accentColor || template.primaryColor || '#d4af37',
-      fontFamily: template.fontFamily || 'Georgia, serif',
-      headerFontSize: template.headerFontSize || '3rem',
-      bodyFontSize: template.bodyFontSize || '1rem',
-      borderStyle: ['solid', 'double', 'dashed', 'none'].includes(template.borderStyle) ? template.borderStyle : 'solid',
-      borderColor: template.borderColor || template.primaryColor || '#d4af37',
-      borderOpacity: Math.min(Math.max(Number(template.borderOpacity) || 0.5, 0), 1),
-      cornerDecoration: Boolean(template.cornerDecoration),
-      floral: Boolean(template.floral),
-      glitter: Boolean(template.glitter),
-      headerText: template.headerText || 'You are Invited',
-      subHeaderText: template.subHeaderText || 'to a special event',
-      buttonLabel: template.buttonLabel || 'RSVP Now',
-      buttonColor: template.buttonColor || template.primaryColor || '#d4af37',
-      buttonTextColor: template.buttonTextColor || '#ffffff',
+      type: 'code',
+      html: template.html || '<div style="padding:4rem;text-align:center;"><h1>{{EVENT_TITLE}}</h1><p>Invité: {{GUEST_NAME}}</p></div>',
+      css: template.css || 'body { background: #111; color: #fff; font-family: sans-serif; }',
     }
 
     // Save to event
@@ -118,24 +84,6 @@ Generate a beautiful, cohesive invitation template.`
     console.error('Template AI generation error:', error)
     throw new Error(error.message || 'Échec de la génération du template')
   }
-}
-
-// ──────────────────────────────────────────────
-// Apply a preset
-// ──────────────────────────────────────────────
-export async function applyTemplatePreset(eventId, presetId) {
-  const user = await getSession()
-  if (!user) throw new Error('Unauthorized')
-
-  const preset = TEMPLATE_PRESETS.find(p => p.id === presetId)
-  if (!preset) throw new Error('Preset not found')
-
-  await prisma.event.update({
-    where: { id: eventId },
-    data: { invitationTemplate: preset.template }
-  })
-
-  return { template: preset.template }
 }
 
 // ──────────────────────────────────────────────

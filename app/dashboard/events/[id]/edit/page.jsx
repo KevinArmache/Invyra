@@ -12,8 +12,6 @@ import { ArrowLeft, Save, Check, X, LayoutTemplate } from 'lucide-react'
 import { getEventById, updateEvent } from '@/app/actions/event'
 import { getUserTemplates } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
-import { TEMPLATE_PRESETS } from '@/utils/template-presets'
-
 export default function EditEventPage({ params }) {
   const { id } = use(params)
   const router = useRouter()
@@ -120,7 +118,7 @@ export default function EditEventPage({ params }) {
   }
 
   // Derive template config (will update when event.invitationTemplate changes)
-  const activeTemplate = event.invitationTemplate || TEMPLATE_PRESETS[0].template
+  const activeTemplate = event.invitationTemplate || { type: 'code', html: '', css: '' }
 
   // Derive dummy event for preview
   const previewEvent = {
@@ -301,12 +299,12 @@ export default function EditEventPage({ params }) {
                       key={tmpl.id}
                       type="button"
                       onClick={() => setSelectedForSwap(tmpl)}
-                      className={`relative rounded-xl overflow-hidden border-2 transition-all aspect-[3/4] ${
+                      className={`relative rounded-xl overflow-hidden border-2 transition-all aspect-[3/4] bg-muted/20 ${
                         selectedForSwap?.id === tmpl.id ? 'border-primary ring-2 ring-primary' : 'border-border hover:border-primary/40'
                       }`}
                     >
                       <div className="absolute inset-0 pointer-events-none" style={{ transform: 'scale(0.55)', transformOrigin: 'top left', width: '182%', height: '182%' }}>
-                        <InvitationPreview template={tmpl.config} event={previewEvent} guestName="Marie Dupont" />
+                        <InvitationPreview template={tmpl.config} event={previewEvent} guestName="Marie Dupont" readOnly />
                       </div>
                       {selectedForSwap?.id === tmpl.id && (
                         <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center">

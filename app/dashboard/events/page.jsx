@@ -18,7 +18,6 @@ import {
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { getEvents, deleteEvent } from '@/app/actions/event'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
-import { TEMPLATE_PRESETS } from '@/utils/template-presets'
 
 export default function EventsPage() {
   const [search, setSearch] = useState('')
@@ -173,10 +172,10 @@ export default function EventsPage() {
       {/* Fullscreen Preview Dialog */}
       <Dialog open={!!previewEvent} onOpenChange={(open) => !open && setPreviewEvent(null)}>
         <DialogContent className="max-w-[95vw] md:max-w-[600px] h-[90vh] p-0 overflow-hidden bg-black border border-border">
-          {previewEvent && (
+          {previewEvent && previewEvent.invitationTemplate ? (
             <div className="w-full h-full overflow-auto custom-scrollbar">
               <InvitationPreview 
-                template={previewEvent.invitationTemplate || TEMPLATE_PRESETS[0].template} 
+                template={previewEvent.invitationTemplate} 
                 event={{
                   title: previewEvent.title,
                   eventDate: previewEvent.eventDate,
@@ -186,7 +185,16 @@ export default function EventsPage() {
                   customMessage: previewEvent.customMessage
                 }} 
                 guestName="Exemple Invité"
+                readOnly
               />
+            </div>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center text-center p-6 text-muted-foreground">
+              <Eye className="w-12 h-12 mb-4 opacity-20" />
+              <p>Aucun modèle personnalisé n'a été assigné à cet événement.</p>
+              <Link href={`/dashboard/events/${previewEvent?.id}/template`} onClick={() => setPreviewEvent(null)} className="mt-4 text-primary hover:underline text-sm">
+                Sélectionner un modèle
+              </Link>
             </div>
           )}
         </DialogContent>

@@ -25,15 +25,23 @@ export async function getInvitationByToken(token) {
       guest: {
         id: guest.id,
         name: guest.name,
-        rsvp_status: guest.rsvpStatus
+        email: guest.email,
+        rsvp_status: guest.rsvpStatus,
+        dietary_restrictions: guest.dietaryRestrictions,
+        plus_one: guest.plusOne,
+        notes: guest.notes
       },
       event: {
+        id: guest.event.id,
         title: guest.event.title,
         description: guest.event.description,
+        eventDate: guest.event.eventDate,
         date: guest.event.eventDate,
         location: guest.event.location,
-        animation_config: guest.event.animationConfig,
-        custom_message: guest.event.customMessage
+        time: guest.event.time,
+        dressCode: guest.event.dressCode,
+        customMessage: guest.event.customMessage,
+        invitationTemplate: guest.event.invitationTemplate  // ← CRITIQUE: chargement du modèle
       }
     }
   } catch (error) {
