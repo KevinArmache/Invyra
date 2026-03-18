@@ -4,7 +4,7 @@ import { use, useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
-import { fr } from 'date-fns/locale'
+import { fr as dateFr, enUS as dateEn } from 'date-fns/locale'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getEventById, deleteEvent } from '@/app/actions/event'
@@ -14,10 +14,12 @@ import { Calendar, MapPin, Mail, Edit, Trash2, ArrowLeft, RefreshCw } from 'luci
 import { toast } from 'sonner'
 import TabOverview from '@/components/dashboard/event-details/TabOverview'
 import TabGuests from '@/components/dashboard/event-details/TabGuests'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function EventDetailPage({ params }) {
   const router = useRouter()
   const { id } = use(params)
+  const { t, locale } = useTranslation()
 
   const [event, setEvent] = useState(null)
   const [guests, setGuests] = useState([])
@@ -43,11 +45,11 @@ export default function EventDetailPage({ params }) {
   useEffect(() => { loadData() }, [loadData])
 
   async function handleDeleteEvent() {
-    if (!confirm('Voulez-vous vraiment supprimer cet événement ?')) return
+    if (!confirm(t('portal.events.details.actions.delete_event_confirm'))) return
     setDeleting(true)
     try {
       await deleteEvent(id)
-      toast.success('Événement supprimé.')
+      toast.success(t('portal.events.details.actions.event_deleted'))
       router.push('/dashboard/events')
     } catch (e) {
       toast.error('Erreur: ' + e.message)
@@ -56,7 +58,7 @@ export default function EventDetailPage({ params }) {
   }
 
   async function handleSendBulk() {
-    if (!confirm("Envoyer les invitations à tous les invités n'ayant pas encore reçu d'email ?")) return
+    if (!confirm(t('portal.events.details.actions.send_bulk_confirm'))) return
     setSendingBulk(true)
     try {
       const res = await sendBulkInvitations(id)
@@ -72,7 +74,7 @@ export default function EventDetailPage({ params }) {
   async function handleSendSingleEmail(guestId) {
     try {
       await sendInvitationEmail(guestId)
-      toast.success('Email envoyé avec succès !')
+      toast.success(t('portal.events.details.actions.email_sent'))
       loadData()
     } catch (e) {
       toast.error("Erreur lors de l'envoi: " + e.message)
@@ -91,10 +93,10 @@ export default function EventDetailPage({ params }) {
   }
 
   async function handleRemoveGuest(guestId) {
-    if (!confirm('Supprimer cet invité ?')) return
+    if (!confirm(t('portal.events.details.guests.delete_confirm'))) return
     try {
       await deleteGuest(guestId)
-      toast.success('Invité supprimé.')
+      toast.success(t('portal.events.details.actions.guest_deleted'))
       loadData()
     } catch (e) {
       toast.error(e.message)
@@ -120,12 +122,12 @@ export default function EventDetailPage({ params }) {
       <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
           <Link href="/dashboard/events" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 mb-2">
-            <ArrowLeft className="w-4 h-4" /> Retour aux événements
+            <ArrowLeft className="w-4 h-4" /> {t('portal.events.details.actions.back_to_events')}
           </Link>
           <h1 className="text-3xl font-bold tracking-tight">{event.title}</h1>
           <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
             {event.eventDate && (
-              <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {format(new Date(event.eventDate), 'PPP', { locale: fr })}</span>
+              <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {format(new Date(event.eventDate), 'PPP', { locale: locale === 'en' ? dateEn : dateFr })}</span>
             )}
             {event.location && (
               <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {event.location}</span>
@@ -136,11 +138,11 @@ export default function EventDetailPage({ params }) {
           {event.invitationTemplate && (
             <Button variant="secondary" onClick={handleSendBulk} disabled={sendingBulk}>
               <Mail className="w-4 h-4 mr-2" />
-              {sendingBulk ? 'Envoi...' : 'Envoyer les invitations'}
+              {sendingBulk ? t('portal.events.details.actions.sending') : t('portal.events.details.actions.send_invitations')}
             </Button>
           )}
           <Button variant="outline" asChild>
-            <Link href={`/dashboard/events/${id}/edit`}><Edit className="w-4 h-4 mr-2" /> Éditer</Link>
+            <Link href={`/dashboard/events/${id}/edit`}><Edit className="w-4 h-4 mr-2" /> {t('portal.events.details.actions.edit')}</Link>
           </Button>
           <Button variant="destructive" onClick={handleDeleteEvent} disabled={deleting}>
             <Trash2 className="w-4 h-4" />
@@ -150,8 +152,8 @@ export default function EventDetailPage({ params }) {
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
-          <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-          <TabsTrigger value="guests">Invités ({guests.length})</TabsTrigger>
+          <TabsTrigger value="overview">{t('portal.events.details.tabs.overview')}</TabsTrigger>
+          <TabsTrigger value="guests">{t('portal.events.details.tabs.guests')} ({guests.length})</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-6">

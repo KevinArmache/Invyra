@@ -10,26 +10,28 @@ import { Mail, Trash2, UserPlus, CheckCircle, XCircle, HelpCircle, MessageCircle
 import CSVImporter from '@/components/invitation/CSVImporter'
 import { addGuest } from '@/app/actions/guest'
 import { toast } from 'sonner'
+import { useTranslation } from '@/utils/i18n/Context'
 
 function RSVPBadge({ status }) {
+  const { t } = useTranslation()
   if (status === 'confirmed') return (
     <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full">
-      <CheckCircle className="w-3 h-3" /> Confirmé
+      <CheckCircle className="w-3 h-3" /> {t('portal.events.details.guests.status.attending')}
     </span>
   )
   if (status === 'declined') return (
     <span className="inline-flex items-center gap-1 text-xs font-medium text-red-400 bg-red-400/10 border border-red-400/20 px-2 py-0.5 rounded-full">
-      <XCircle className="w-3 h-3" /> Décliné
+      <XCircle className="w-3 h-3" /> {t('portal.events.details.guests.status.declined')}
     </span>
   )
   if (status === 'maybe') return (
     <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2 py-0.5 rounded-full">
-      <HelpCircle className="w-3 h-3" /> Peut-être
+      <HelpCircle className="w-3 h-3" /> {t('portal.events.details.guests.status.pending')}
     </span>
   )
   return (
     <span className="inline-flex items-center gap-1 text-xs text-muted-foreground bg-muted/50 border border-border px-2 py-0.5 rounded-full">
-      <Clock className="w-3 h-3" /> En attente
+      <Clock className="w-3 h-3" /> {t('portal.events.details.guests.status.pending')}
     </span>
   )
 }
@@ -72,7 +74,7 @@ function GuestRow({ g, onSendSingleEmail, onSendWhatsApp, onRemoveGuest }) {
         {emailSent ? (
           <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-blue-400 bg-blue-400/10 border border-blue-400/20 px-2.5 py-1.5 rounded-lg">
             <CheckCircle className="w-3.5 h-3.5" />
-            Email envoyé
+            Email ✓
           </span>
         ) : (
           <Button
@@ -91,7 +93,7 @@ function GuestRow({ g, onSendSingleEmail, onSendWhatsApp, onRemoveGuest }) {
           whatsappSent ? (
             <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1.5 rounded-lg">
               <CheckCircle className="w-3.5 h-3.5" />
-              WA envoyé
+              WA ✓
             </span>
           ) : (
             <Button
@@ -121,6 +123,7 @@ function GuestRow({ g, onSendSingleEmail, onSendWhatsApp, onRemoveGuest }) {
 }
 
 export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmail, onSendWhatsApp, onRemoveGuest }) {
+  const { t } = useTranslation()
   const [showAddGuest, setShowAddGuest] = useState(false)
   const [newGuest, setNewGuest] = useState({ name: '', email: '', phone: '' })
 
@@ -130,7 +133,7 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
       await addGuest(eventId, newGuest)
       setNewGuest({ name: '', email: '', phone: '' })
       setShowAddGuest(false)
-      toast.success('Invité ajouté.')
+      toast.success(t('portal.events.new.success_guest'))
       onRefresh()
     } catch (e) {
       toast.error(e.message)
@@ -144,11 +147,11 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <div>
-          <CardTitle>Liste des invités</CardTitle>
+          <CardTitle>{t('portal.events.details.guests.title')}</CardTitle>
           <CardDescription className="flex items-center gap-3 mt-1">
-            <span>{guests.length} invité{guests.length > 1 ? 's' : ''}</span>
-            {confirmed > 0 && <span className="text-emerald-500 font-medium">{confirmed} confirmé{confirmed > 1 ? 's' : ''}</span>}
-            {pending > 0 && <span className="text-amber-500 font-medium">{pending} en attente</span>}
+            <span>{guests.length} {t('portal.events.list.guests')}</span>
+            {confirmed > 0 && <span className="text-emerald-500 font-medium">{confirmed} {t('portal.events.details.guests.status.attending')}</span>}
+            {pending > 0 && <span className="text-amber-500 font-medium">{pending} {t('portal.events.details.guests.status.pending')}</span>}
           </CardDescription>
         </div>
         <Button
@@ -158,7 +161,7 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
           className="gap-1.5"
         >
           <UserPlus className="w-4 h-4" />
-          {showAddGuest ? 'Fermer' : 'Ajouter'}
+          {showAddGuest ? t('common.close') : t('portal.events.details.guests.add_btn')}
         </Button>
       </CardHeader>
 
@@ -166,16 +169,16 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
         {showAddGuest && (
           <div className="mx-6 mb-4 grid md:grid-cols-2 gap-6 p-4 bg-muted/30 rounded-xl border border-border">
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold flex items-center gap-2"><UserPlus className="w-4 h-4 text-primary" /> Ajout manuel</h3>
-              <Input placeholder="Nom *" value={newGuest.name} onChange={e => setNewGuest(g => ({ ...g, name: e.target.value }))} className="bg-background" />
-              <Input placeholder="Email *" type="email" value={newGuest.email} onChange={e => setNewGuest(g => ({ ...g, email: e.target.value }))} className="bg-background" />
-              <Input placeholder="Téléphone" value={newGuest.phone} onChange={e => setNewGuest(g => ({ ...g, phone: e.target.value }))} className="bg-background" />
+              <h3 className="text-sm font-semibold flex items-center gap-2"><UserPlus className="w-4 h-4 text-primary" /> {t('portal.events.new.add_guest')}</h3>
+              <Input placeholder={t('portal.events.new.labels.name')} value={newGuest.name} onChange={e => setNewGuest(g => ({ ...g, name: e.target.value }))} className="bg-background" />
+              <Input placeholder={t('portal.events.new.labels.email')} type="email" value={newGuest.email} onChange={e => setNewGuest(g => ({ ...g, email: e.target.value }))} className="bg-background" />
+              <Input placeholder={t('portal.events.new.labels.phone')} value={newGuest.phone} onChange={e => setNewGuest(g => ({ ...g, phone: e.target.value }))} className="bg-background" />
               <Button onClick={handleAddGuest} disabled={!newGuest.name || !newGuest.email} className="w-full gap-2">
-                <UserPlus className="w-4 h-4" /> Ajouter l'invité
+                <UserPlus className="w-4 h-4" /> {t('portal.events.new.buttons.add')}
               </Button>
             </div>
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold">Import CSV</h3>
+              <h3 className="text-sm font-semibold">{t('portal.events.new.import_csv')}</h3>
               <CSVImporter
                 onImport={async (gs) => {
                   for (const g of gs) await addGuest(eventId, g).catch(() => {})
@@ -194,8 +197,8 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
               <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-3">
                 <UserPlus className="w-6 h-6 text-muted-foreground" />
               </div>
-              <p className="text-sm font-medium text-muted-foreground">Aucun invité ajouté pour le moment</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">Cliquez sur "Ajouter" pour commencer votre liste</p>
+              <p className="text-sm font-medium text-muted-foreground">{t('portal.events.new.no_guests_yet')}</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">{t('portal.events.details.guests.add_btn')}</p>
             </div>
           ) : (
             guests.map(g => (

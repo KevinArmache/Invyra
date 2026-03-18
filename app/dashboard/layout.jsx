@@ -44,11 +44,11 @@ export default function DashboardLayout({ children }) {
   }
 
   const navigation = [
-    { name: t('sidebar.dashboard'), href: '/dashboard', icon: LayoutDashboard },
-    { name: t('sidebar.events'), href: '/dashboard/events', icon: Calendar },
-    { name: 'Modèles', href: '/dashboard/templates', icon: LayoutTemplate },
-    { name: t('sidebar.analytics'), href: '/dashboard/analytics', icon: BarChart3 },
-    { name: t('sidebar.settings'), href: '/dashboard/settings', icon: Settings },
+    { name: t('portal.sidebar.dashboard'), href: '/dashboard', icon: LayoutDashboard },
+    { name: t('portal.sidebar.events'), href: '/dashboard/events', icon: Calendar },
+    { name: t('portal.sidebar.templates'), href: '/dashboard/templates', icon: LayoutTemplate },
+    { name: t('portal.sidebar.analytics'), href: '/dashboard/analytics', icon: BarChart3 },
+    { name: t('portal.sidebar.settings'), href: '/dashboard/settings', icon: Settings },
   ]
 
   async function handleLogout() {
@@ -197,12 +197,12 @@ export default function DashboardLayout({ children }) {
                   onClick={handleLogout}
                 >
                   <LogOut size={20} className={!isCollapsed || sidebarOpen ? "mr-3 shrink-0" : "shrink-0"} />
-                  {(!isCollapsed || sidebarOpen) && <span className="whitespace-nowrap overflow-hidden">{t('sidebar.sign_out')}</span>}
+                  {(!isCollapsed || sidebarOpen) && <span className="whitespace-nowrap overflow-hidden">{t('portal.sidebar.sign_out')}</span>}
                 </Button>
               </TooltipTrigger>
               {isCollapsed && !sidebarOpen && (
                 <TooltipContent side="right" className="ml-2 font-medium">
-                  {t('sidebar.sign_out')}
+                  {t('portal.sidebar.sign_out')}
                 </TooltipContent>
               )}
             </Tooltip>
@@ -216,7 +216,7 @@ export default function DashboardLayout({ children }) {
             <button
               className="lg:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground shrink-0"
               onClick={() => setSidebarOpen(true)}
-              aria-label={t('sidebar.open_sidebar')}
+              aria-label={t('portal.sidebar.open_sidebar')}
             >
               <Menu size={24} />
             </button>

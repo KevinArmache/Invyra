@@ -210,6 +210,173 @@
     "where": "Where",
     "dear": "Dear"
   },
+  "portal": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "events": "Events",
+      "templates": "Templates",
+      "analytics": "Analytics",
+      "settings": "Settings",
+      "sign_out": "Sign out",
+      "open_sidebar": "Open sidebar"
+    },
+    "events": {
+      "list": {
+        "title": "Events",
+        "subtitle": "Manage all your events and invitations",
+        "create_btn": "Create Event",
+        "search_placeholder": "Search events...",
+        "no_events_found": "No events found",
+        "try_different_search": "Try a different search term",
+        "no_events_yet": "No events yet",
+        "create_first_event": "Create your first event to get started",
+        "date_not_set": "Date not set",
+        "guests": "guests",
+        "delete_confirm": "Are you sure you want to delete this event? This action cannot be undone.",
+        "delete_btn": "Delete",
+        "edit_btn": "Edit",
+        "preview_btn": "Preview Invitation"
+      },
+      "new": {
+        "title": "Create an Event",
+        "subtitle": "Configure your invitation in simple steps",
+        "steps": {
+          "details": "Details",
+          "template": "Template",
+          "guests": "Guests"
+        },
+        "success_event": "Event created successfully",
+        "success_guest": "Guest added successfully",
+        "error_guest": "Error adding guest",
+        "import_csv": "Bulk CSV Import",
+        "add_guest": "Add Manually",
+        "details_title": "Event Information",
+        "details_desc": "Describe your event for personalization",
+        "labels": {
+          "title": "Title *",
+          "date": "Date",
+          "time": "Time (shown on invitation)",
+          "location": "Location",
+          "dress_code": "Dress Code",
+          "description": "Description",
+          "name": "Full Name *",
+          "email": "Email *",
+          "phone": "Phone (optional)",
+          "demo_name": "Event Name",
+          "demo_location": "Location",
+          "demo_dress_code": "Black Tie"
+        },
+        "placeholders": {
+          "title": "Sarah & Mark's Wedding",
+          "time": "19:00",
+          "location": "Versailles Castle, France",
+          "dress_code": "Black Tie",
+          "desc": "Describe your event..."
+        },
+        "buttons": {
+          "continue": "Continue",
+          "creating": "Creating...",
+          "create_template": "Create a Template",
+          "first_template": "Create my first template",
+          "back": "Back",
+          "continue_with_template": "Continue with this template",
+          "skip": "Skip this step",
+          "adding": "Adding...",
+          "add": "Add Guest",
+          "finish": "Finish & Manage Event"
+        },
+        "template_title": "Choose an Invitation Template",
+        "template_desc": "Select one of your saved templates. The template determines the design of the invitations.",
+        "no_templates": "You don't have any saved templates yet.",
+        "guest_list": "Guest List",
+        "guests_added": "guest(s) added",
+        "no_guests_yet": "No guests yet"
+      },
+      "edit": {
+        "title": "Edit Event",
+        "update_btn": "Update",
+        "success": "Event updated successfully",
+        "preview_title": "Live Preview",
+        "no_preview": "No custom template assigned yet.",
+        "select_template": "Select a template"
+      },
+      "details": {
+        "actions": {
+          "delete_event_confirm": "Are you sure you want to delete this event?",
+          "event_deleted": "Event deleted.",
+          "send_bulk_confirm": "Send invitations to all guests who haven't received an email yet?",
+          "sending": "Sending...",
+          "send_invitations": "Send Invitations",
+          "email_sent": "Email sent successfully!",
+          "guest_deleted": "Guest deleted.",
+          "back_to_events": "Back to events",
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "tabs": {
+          "overview": "Overview",
+          "guests": "Guests",
+          "settings": "Settings"
+        },
+        "overview": {
+          "stats_title": "RSVP Responses",
+          "total_guests": "Total Guests",
+          "attending": "Attending",
+          "pending": "Pending",
+          "declined": "Declined",
+          "copy_link": "Copy Link",
+          "link_copied": "Link copied!",
+          "active_template": "Active Template Preview"
+        },
+        "guests": {
+          "title": "Guest List",
+          "subtitle": "Manage your guests and track their individual status",
+          "add_btn": "Add",
+          "import_csv": "Import CSV",
+          "table": {
+            "guest": "Guest",
+            "email": "Email",
+            "whatsapp": "WhatsApp",
+            "rsvp": "RSVP",
+            "actions": "Actions"
+          },
+          "status": {
+            "pending": "Pending",
+            "attending": "Attending",
+            "declined": "Declined"
+          },
+          "send_email": "Send Email",
+          "send_whatsapp": "Send WhatsApp",
+          "delete_confirm": "Delete this guest?"
+        }
+      }
+    },
+    "templates": {
+      "list": {
+        "title": "My Templates",
+        "subtitle": "Create and manage your reusable template designs.",
+        "new_btn": "New Template",
+        "no_templates": "No templates saved",
+        "no_templates_desc": "Code your own customizable template to reuse for your next events.",
+        "create_first": "Create my first template",
+        "delete_confirm": "Are you sure you want to delete this template?",
+        "delete_success": "Template deleted successfully",
+        "preview_btn": "Preview Template",
+        "edit_btn": "Edit Template"
+      },
+      "editor": {
+        "title": "Template Editor",
+        "save_btn": "Save Template",
+        "saving": "Saving...",
+        "success": "Template saved!",
+        "name_placeholder": "Template Name",
+        "mode_code": "Code Mode",
+        "mode_preview": "Preview Mode",
+        "variables_title": "Event Variables",
+        "variables_desc": "Use these variables in your HTML or JS code to inject event data dynamically."
+      }
+    }
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",

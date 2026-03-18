@@ -14,15 +14,18 @@ import { addGuest } from '@/app/actions/guest'
 import { getUserTemplates } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import CSVImporter from '@/components/invitation/CSVImporter'
-
-const STEPS = [
-  { id: 1, label: 'Informations', icon: FileText },
-  { id: 2, label: 'Modèle', icon: LayoutTemplate },
-  { id: 3, label: 'Invités', icon: Calendar },
-]
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function NewEventPage() {
   const router = useRouter()
+  const { t } = useTranslation()
+
+  const STEPS = [
+    { id: 1, label: t('portal.events.new.steps.details'), icon: FileText },
+    { id: 2, label: t('portal.events.new.steps.template'), icon: LayoutTemplate },
+    { id: 3, label: t('portal.events.new.steps.guests'), icon: Calendar },
+  ]
+
   const [step, setStep] = useState(1)
   const [createdEventId, setCreatedEventId] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -60,7 +63,7 @@ export default function NewEventPage() {
     try {
       const event = await createEvent(form)
       setCreatedEventId(event.id)
-      toast.success('Modèle IA généré')
+      toast.success(t('portal.events.new.success_event'))
       setStep(2)
     } catch (e) {
       toast.error(e.message)
@@ -77,7 +80,7 @@ export default function NewEventPage() {
       const g = await addGuest(createdEventId, guestForm)
       setAddedGuests(prev => [...prev, g])
       setGuestForm({ name: '', email: '', phone: '' })
-      toast.success("Invité ajouté avec succès")
+      toast.success(t('portal.events.new.success_guest'))
     } catch (e) {
       toast.error(e.message)
     } finally {
@@ -114,19 +117,19 @@ export default function NewEventPage() {
   }
 
   const demoEvent = {
-    title: form.title || "Nom de l'événement",
+    title: form.title || t('portal.events.new.labels.demo_name'),
     eventDate: form.event_date || new Date().toISOString(),
-    location: form.location || 'Lieu',
-    time: form.time || '19h00',
-    dressCode: form.dress_code || 'Tenue de soirée',
+    location: form.location || t('portal.events.new.labels.demo_location'),
+    time: form.time || '19:00',
+    dressCode: form.dress_code || t('portal.events.new.labels.demo_dress_code'),
   }
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Créer un événement</h1>
-        <p className="text-muted-foreground mt-1">Configurez votre invitation en 3 étapes</p>
+        <h1 className="text-3xl font-bold text-foreground">{t('portal.events.new.title')}</h1>
+        <p className="text-muted-foreground mt-1">{t('portal.events.new.subtitle')}</p>
       </div>
 
       {/* Step indicator */}
@@ -151,41 +154,41 @@ export default function NewEventPage() {
       {step === 1 && (
         <Card>
           <CardHeader>
-            <CardTitle>Informations de l'événement</CardTitle>
-            <CardDescription>Décrivez votre événement pour personnaliser les invitations</CardDescription>
+            <CardTitle>{t('portal.events.new.details_title')}</CardTitle>
+            <CardDescription>{t('portal.events.new.details_desc')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <label className="text-sm font-medium mb-1 block">Titre *</label>
-              <Input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder="Mariage de Marie & Jean" />
+              <label className="text-sm font-medium mb-1 block">{t('portal.events.new.labels.title')}</label>
+              <Input value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} placeholder={t('portal.events.new.placeholders.title')} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Calendar className="w-4 h-4" /> Date</label>
+                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Calendar className="w-4 h-4" /> {t('portal.events.new.labels.date')}</label>
                 <Input type="date" value={form.event_date} onChange={e => setForm(f => ({ ...f, event_date: e.target.value }))} />
               </div>
               <div>
-                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Clock className="w-4 h-4" /> Heure (affiché sur l'invitation)</label>
-                <Input value={form.time} onChange={e => setForm(f => ({ ...f, time: e.target.value }))} placeholder="19h00" />
+                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Clock className="w-4 h-4" /> {t('portal.events.new.labels.time')}</label>
+                <Input value={form.time} onChange={e => setForm(f => ({ ...f, time: e.target.value }))} placeholder={t('portal.events.new.placeholders.time')} />
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><MapPin className="w-4 h-4" /> Lieu</label>
-                <Input value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} placeholder="Château de Versailles, France" />
+                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><MapPin className="w-4 h-4" /> {t('portal.events.new.labels.location')}</label>
+                <Input value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} placeholder={t('portal.events.new.placeholders.location')} />
               </div>
               <div>
-                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Shirt className="w-4 h-4" /> Dress Code</label>
-                <Input value={form.dress_code} onChange={e => setForm(f => ({ ...f, dress_code: e.target.value }))} placeholder="Tenue de gala" />
+                <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Shirt className="w-4 h-4" /> {t('portal.events.new.labels.dress_code')}</label>
+                <Input value={form.dress_code} onChange={e => setForm(f => ({ ...f, dress_code: e.target.value }))} placeholder={t('portal.events.new.placeholders.dress_code')} />
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Description</label>
-              <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Décrivez votre événement..." rows={3} />
+              <label className="text-sm font-medium mb-1 block">{t('portal.events.new.labels.description')}</label>
+              <Textarea value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder={t('portal.events.new.placeholders.desc')} rows={3} />
             </div>
             <div className="flex justify-end pt-2">
               <Button onClick={handleCreateEvent} disabled={!form.title || loading} className="gap-2">
-                {loading ? 'Création...' : 'Continuer'} <ArrowRight className="w-4 h-4" />
+                {loading ? t('portal.events.new.buttons.creating') : t('portal.events.new.buttons.continue')} <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           </CardContent>
@@ -198,15 +201,15 @@ export default function NewEventPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                <span>Choisir un modèle d'invitation</span>
+                <span>{t('portal.events.new.template_title')}</span>
                 <Button asChild size="sm" variant="outline">
                   <Link href="/dashboard/templates/new" target="_blank">
-                    <Plus className="w-4 h-4 mr-2" /> Créer un modèle
+                    <Plus className="w-4 h-4 mr-2" /> {t('portal.events.new.buttons.create_template')}
                   </Link>
                 </Button>
               </CardTitle>
               <CardDescription>
-                Sélectionnez un de vos modèles sauvegardés. Le modèle détermine le design de toutes les invitations envoyées.
+                {t('portal.events.new.template_desc')}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -217,10 +220,10 @@ export default function NewEventPage() {
               ) : templates.length === 0 ? (
                 <div className="text-center py-12 border border-dashed border-border rounded-lg">
                   <LayoutTemplate className="w-10 h-10 mx-auto text-muted-foreground opacity-30 mb-3" />
-                  <p className="text-sm text-muted-foreground mb-4">Vous n'avez pas encore de modèle sauvegardé.</p>
+                  <p className="text-sm text-muted-foreground mb-4">{t('portal.events.new.no_templates')}</p>
                   <Button asChild size="sm">
                     <Link href="/dashboard/templates/new" target="_blank">
-                      <Plus className="w-4 h-4 mr-2" /> Créer mon premier modèle
+                      <Plus className="w-4 h-4 mr-2" /> {t('portal.events.new.buttons.first_template')}
                     </Link>
                   </Button>
                 </div>
@@ -272,9 +275,9 @@ export default function NewEventPage() {
           )}
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep(1)} className="gap-2"><ArrowLeft className="w-4 h-4" /> Retour</Button>
+            <Button variant="outline" onClick={() => setStep(1)} className="gap-2"><ArrowLeft className="w-4 h-4" /> {t('portal.events.new.buttons.back')}</Button>
             <Button onClick={handleGoToStep3} className="gap-2">
-              {selectedTemplate ? 'Continuer avec ce modèle' : 'Passer cette étape'} <ArrowRight className="w-4 h-4" />
+              {selectedTemplate ? t('portal.events.new.buttons.continue_with_template') : t('portal.events.new.buttons.skip')} <ArrowRight className="w-4 h-4" />
             </Button>
           </div>
         </div>
@@ -285,19 +288,19 @@ export default function NewEventPage() {
         <div className="grid lg:grid-cols-2 gap-6">
           <div className="space-y-6">
             <Card>
-              <CardHeader><CardTitle className="text-base">Ajouter manuellement</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-base">{t('portal.events.new.add_guest')}</CardTitle></CardHeader>
               <CardContent className="space-y-3">
-                <Input placeholder="Nom complet *" value={guestForm.name} onChange={e => setGuestForm(g => ({ ...g, name: e.target.value }))} />
-                <Input type="email" placeholder="Email *" value={guestForm.email} onChange={e => setGuestForm(g => ({ ...g, email: e.target.value }))} />
-                <Input placeholder="Téléphone (optionnel)" value={guestForm.phone} onChange={e => setGuestForm(g => ({ ...g, phone: e.target.value }))} />
+                <Input placeholder={t('portal.events.new.labels.name')} value={guestForm.name} onChange={e => setGuestForm(g => ({ ...g, name: e.target.value }))} />
+                <Input type="email" placeholder={t('portal.events.new.labels.email')} value={guestForm.email} onChange={e => setGuestForm(g => ({ ...g, email: e.target.value }))} />
+                <Input placeholder={t('portal.events.new.labels.phone')} value={guestForm.phone} onChange={e => setGuestForm(g => ({ ...g, phone: e.target.value }))} />
                 <Button onClick={handleAddGuest} disabled={!guestForm.name || !guestForm.email || guestLoading} className="w-full">
-                  {guestLoading ? 'Ajout...' : "Ajouter l'invité"}
+                  {guestLoading ? t('portal.events.new.buttons.adding') : t('portal.events.new.buttons.add')}
                 </Button>
               </CardContent>
             </Card>
 
             <Card>
-              <CardHeader><CardTitle className="text-base">Import CSV en masse</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-base">{t('portal.events.new.import_csv')}</CardTitle></CardHeader>
               <CardContent>
                 <CSVImporter onImport={handleCSVImport} loading={guestLoading} />
               </CardContent>
@@ -307,12 +310,12 @@ export default function NewEventPage() {
           <div>
             <Card className="h-full">
               <CardHeader>
-                <CardTitle className="text-base">Liste des invités</CardTitle>
-                <CardDescription>{addedGuests.length} invité(s) ajouté(s)</CardDescription>
+                <CardTitle className="text-base">{t('portal.events.new.guest_list')}</CardTitle>
+                <CardDescription>{addedGuests.length} {t('portal.events.new.guests_added')}</CardDescription>
               </CardHeader>
               <CardContent>
                 {addedGuests.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground"><p className="text-sm">Aucun invité pour l'instant</p></div>
+                  <div className="text-center py-8 text-muted-foreground"><p className="text-sm">{t('portal.events.new.no_guests_yet')}</p></div>
                 ) : (
                   <div className="space-y-2 max-h-64 overflow-y-auto">
                     {addedGuests.map((g, i) => (
@@ -333,9 +336,9 @@ export default function NewEventPage() {
           </div>
 
           <div className="lg:col-span-2 flex justify-between pt-2">
-            <Button variant="outline" onClick={() => setStep(2)} className="gap-2"><ArrowLeft className="w-4 h-4" /> Retour</Button>
+            <Button variant="outline" onClick={() => setStep(2)} className="gap-2"><ArrowLeft className="w-4 h-4" /> {t('portal.events.new.buttons.back')}</Button>
             <Button onClick={handleFinish} className="gap-2">
-              <Check className="w-4 h-4" /> Terminer et gérer l'événement
+              <Check className="w-4 h-4" /> {t('portal.events.new.buttons.finish')}
             </Button>
           </div>
         </div>

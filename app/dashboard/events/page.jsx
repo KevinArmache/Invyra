@@ -15,11 +15,13 @@ import {
   Eye,
   Users
 } from 'lucide-react'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { getEvents, deleteEvent } from '@/app/actions/event'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function EventsPage() {
+  const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [events, setEvents] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -36,7 +38,7 @@ export default function EventsPage() {
   )
 
   async function handleDelete(eventId) {
-    if (!confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+    if (!confirm(t('portal.events.list.delete_confirm'))) {
       return
     }
 
@@ -53,13 +55,13 @@ export default function EventsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Events</h1>
-          <p className="text-muted-foreground mt-1">Manage all your events and invitations</p>
+          <h1 className="text-3xl font-bold text-foreground">{t('portal.events.list.title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('portal.events.list.subtitle')}</p>
         </div>
         <Button asChild>
           <Link href="/dashboard/events/new">
             <Plus size={20} className="mr-2" />
-            Create Event
+            {t('portal.events.list.create_btn')}
           </Link>
         </Button>
       </div>
@@ -68,7 +70,7 @@ export default function EventsPage() {
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input
-          placeholder="Search events..."
+          placeholder={t('portal.events.list.search_placeholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-10"
@@ -87,16 +89,16 @@ export default function EventsPage() {
           <CardContent className="py-16 text-center">
             <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-medium text-foreground mb-2">
-              {search ? 'No events found' : 'No events yet'}
+              {search ? t('portal.events.list.no_events_found') : t('portal.events.list.no_events_yet')}
             </h3>
             <p className="text-muted-foreground mb-4">
-              {search ? 'Try a different search term' : 'Create your first event to get started'}
+              {search ? t('portal.events.list.try_different_search') : t('portal.events.list.create_first_event')}
             </p>
             {!search && (
               <Button asChild>
                 <Link href="/dashboard/events/new">
                   <Plus size={20} className="mr-2" />
-                  Create Event
+                  {t('portal.events.list.create_btn')}
                 </Link>
               </Button>
             )}
@@ -112,7 +114,7 @@ export default function EventsPage() {
                     <Calendar className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" onClick={(e) => { e.preventDefault(); setPreviewEvent(event) }} title="Aperçu de l'invitation">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" onClick={(e) => { e.preventDefault(); setPreviewEvent(event) }} title={t('portal.events.list.preview_btn')}>
                       <Eye size={16} />
                     </Button>
                     <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" title="Éditer">
@@ -140,7 +142,7 @@ export default function EventsPage() {
                         day: 'numeric', 
                         year: 'numeric' 
                       })
-                    : 'Date not set'
+                    : t('portal.events.list.date_not_set')
                   }
                 </p>
 
@@ -153,7 +155,7 @@ export default function EventsPage() {
                 <div className="flex items-center justify-between pt-4 border-t border-border">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Users size={16} />
-                    <span>{event.guest_count || 0} guests</span>
+                    <span>{event.guest_count || 0} {t('portal.events.list.guests')}</span>
                   </div>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                     event.status === 'active' 
@@ -172,6 +174,7 @@ export default function EventsPage() {
       {/* Fullscreen Preview Dialog */}
       <Dialog open={!!previewEvent} onOpenChange={(open) => !open && setPreviewEvent(null)}>
         <DialogContent className="max-w-[95vw] md:max-w-[600px] h-[90vh] p-0 overflow-hidden bg-black border border-border">
+          <DialogTitle className="sr-only">Aperçu de l'invitation</DialogTitle>
           {previewEvent && previewEvent.invitationTemplate ? (
             <div className="w-full h-full overflow-auto custom-scrollbar">
               <InvitationPreview 
@@ -191,9 +194,9 @@ export default function EventsPage() {
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center text-center p-6 text-muted-foreground">
               <Eye className="w-12 h-12 mb-4 opacity-20" />
-              <p>Aucun modèle personnalisé n'a été assigné à cet événement.</p>
+              <p>{t('portal.events.edit.no_preview')}</p>
               <Link href={`/dashboard/events/${previewEvent?.id}/template`} onClick={() => setPreviewEvent(null)} className="mt-4 text-primary hover:underline text-sm">
-                Sélectionner un modèle
+                {t('portal.events.edit.select_template')}
               </Link>
             </div>
           )}

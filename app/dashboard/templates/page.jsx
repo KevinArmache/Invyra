@@ -9,8 +9,10 @@ import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { getUserTemplates, deleteUserTemplate } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function TemplatesPage() {
+  const { t, locale } = useTranslation()
   const [templates, setTemplates] = useState([])
   const [loading, setLoading] = useState(true)
   const [previewTemplate, setPreviewTemplate] = useState(null)
@@ -32,11 +34,11 @@ export default function TemplatesPage() {
   }
 
   async function handleDelete(id) {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce modèle ?')) return
+    if (!confirm(t('portal.templates.list.delete_confirm'))) return
     try {
       await deleteUserTemplate(id)
       loadTemplates()
-      toast.success('Modèle supprimé avec succès.')
+      toast.success(t('portal.templates.list.delete_success'))
     } catch (e) {
       toast.error(e.message)
     }
@@ -47,12 +49,12 @@ export default function TemplatesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Mes Modèles</h1>
-          <p className="text-muted-foreground mt-1">Créez et gérez vos designs réutilisables pour vos invitations.</p>
+          <h1 className="text-3xl font-bold tracking-tight">{t('portal.templates.list.title')}</h1>
+          <p className="text-muted-foreground mt-1">{t('portal.templates.list.subtitle')}</p>
         </div>
         <Button asChild>
           <Link href="/dashboard/templates/new">
-            <Plus className="w-4 h-4 mr-2" /> Nouveau modèle
+            <Plus className="w-4 h-4 mr-2" /> {t('portal.templates.list.new_btn')}
           </Link>
         </Button>
       </div>
@@ -65,13 +67,13 @@ export default function TemplatesPage() {
         <Card className="bg-muted/30 border-dashed">
           <CardContent className="flex flex-col items-center justify-center py-20 text-center">
             <LayoutTemplate className="w-12 h-12 text-muted-foreground mb-4 opacity-50" />
-            <h3 className="text-lg font-medium text-foreground mb-2">Aucun modèle sauvegardé</h3>
+            <h3 className="text-lg font-medium text-foreground mb-2">{t('portal.templates.list.no_templates')}</h3>
             <p className="text-sm text-muted-foreground max-w-sm mb-6">
-              Créez votre propre modèle personnalisable avec l'IA ou à la main, pour le réutiliser lors de vos prochains événements.
+              {t('portal.templates.list.no_templates_desc')}
             </p>
             <Button asChild>
               <Link href="/dashboard/templates/new">
-                <Plus className="w-4 h-4 mr-2" /> Créer mon premier modèle
+                <Plus className="w-4 h-4 mr-2" /> {t('portal.templates.list.create_first')}
               </Link>
             </Button>
           </CardContent>
@@ -101,22 +103,22 @@ export default function TemplatesPage() {
                 
                 {/* Hover overlay for actions */}
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-2 opacity-0 hover:opacity-100 transition-opacity">
-                  <Button variant="secondary" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); setPreviewTemplate(tmpl) }} title="Aperçu">
+                  <Button variant="secondary" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); setPreviewTemplate(tmpl) }} title={t('portal.templates.list.preview_btn')}>
                     <Eye className="w-4 h-4" />
                   </Button>
-                  <Button variant="secondary" size="icon" asChild className="h-9 w-9 rounded-full shadow-lg" title="Éditer">
+                  <Button variant="secondary" size="icon" asChild className="h-9 w-9 rounded-full shadow-lg" title={t('portal.templates.list.edit_btn')}>
                     <Link href={`/dashboard/templates/${tmpl.id}`}>
                       <Edit2 className="w-4 h-4" />
                     </Link>
                   </Button>
-                  <Button variant="destructive" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); handleDelete(tmpl.id) }} title="Supprimer">
+                  <Button variant="destructive" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); handleDelete(tmpl.id) }} title={t('portal.events.list.delete_btn')}>
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
               <CardContent className="p-4 flex flex-col gap-1 items-start bg-card z-10">
                 <h3 className="font-semibold text-lg truncate w-full">{tmpl.name}</h3>
-                <p className="text-xs text-muted-foreground w-full">Créé le {new Date(tmpl.createdAt).toLocaleDateString('fr-FR')}</p>
+                <p className="text-xs text-muted-foreground w-full">{new Date(tmpl.createdAt).toLocaleDateString(locale)}</p>
               </CardContent>
             </Card>
           ))}
@@ -126,7 +128,7 @@ export default function TemplatesPage() {
       {/* Fullscreen Preview Dialog */}
       <Dialog open={!!previewTemplate} onOpenChange={(open) => !open && setPreviewTemplate(null)}>
         <DialogContent className="max-w-[95vw] md:max-w-[600px] h-[90vh] p-0 overflow-hidden bg-black border border-border">
-        <DialogTitle><span className="sr-only">Aperçu du modèle</span></DialogTitle>
+          <DialogTitle className="sr-only">Aperçu du modèle</DialogTitle>
           {previewTemplate && (
             <div className="w-full h-full overflow-auto custom-scrollbar">
               <InvitationPreview 

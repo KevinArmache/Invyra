@@ -210,6 +210,173 @@
     "where": "Où",
     "dear": "Cher(e)"
   },
+  "portal": {
+    "sidebar": {
+      "dashboard": "Tableau de Bord",
+      "events": "Événements",
+      "templates": "Modèles",
+      "analytics": "Statistiques",
+      "settings": "Paramètres",
+      "sign_out": "Déconnexion",
+      "open_sidebar": "Ouvrir le menu"
+    },
+    "events": {
+      "list": {
+        "title": "Événements",
+        "subtitle": "Gérez tous vos événements et invitations",
+        "create_btn": "Créer un Événement",
+        "search_placeholder": "Rechercher des événements...",
+        "no_events_found": "Aucun événement trouvé",
+        "try_different_search": "Essayez un autre terme de recherche",
+        "no_events_yet": "Aucun événement",
+        "create_first_event": "Créez votre premier événement pour commencer",
+        "date_not_set": "Date non définie",
+        "guests": "invités",
+        "delete_confirm": "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est irréversible.",
+        "delete_btn": "Supprimer",
+        "edit_btn": "Éditer",
+        "preview_btn": "Aperçu de l'invitation"
+      },
+      "new": {
+        "title": "Créer un événement",
+        "subtitle": "Configurez votre invitation en étapes simples",
+        "steps": {
+          "details": "Détails",
+          "template": "Modèle",
+          "guests": "Invités"
+        },
+        "success_event": "Événement créé avec succès",
+        "success_guest": "Invité ajouté avec succès",
+        "error_guest": "Erreur lors de l'ajout",
+        "import_csv": "Import CSV en masse",
+        "add_guest": "Ajouter manuellement",
+        "details_title": "Informations de l'événement",
+        "details_desc": "Décrivez votre événement pour la personnalisation",
+        "labels": {
+          "title": "Titre *",
+          "date": "Date",
+          "time": "Heure (affiché sur l'invitation)",
+          "location": "Lieu",
+          "dress_code": "Dress Code",
+          "description": "Description",
+          "name": "Nom complet *",
+          "email": "Email *",
+          "phone": "Téléphone (optionnel)",
+          "demo_name": "Nom de l'événement",
+          "demo_location": "Lieu",
+          "demo_dress_code": "Tenue de soirée"
+        },
+        "placeholders": {
+          "title": "Mariage de Marie & Jean",
+          "time": "19h00",
+          "location": "Château de Versailles, France",
+          "dress_code": "Tenue de gala",
+          "desc": "Décrivez votre événement..."
+        },
+        "buttons": {
+          "continue": "Continuer",
+          "creating": "Création...",
+          "create_template": "Créer un modèle",
+          "first_template": "Créer mon premier modèle",
+          "back": "Retour",
+          "continue_with_template": "Continuer avec ce modèle",
+          "skip": "Passer cette étape",
+          "adding": "Ajout...",
+          "add": "Ajouter l'invité",
+          "finish": "Terminer et gérer l'événement"
+        },
+        "template_title": "Choisir un modèle d'invitation",
+        "template_desc": "Sélectionnez un de vos modèles sauvegardés. Le modèle détermine le design des invitations.",
+        "no_templates": "Vous n'avez pas encore de modèle sauvegardé.",
+        "guest_list": "Liste des invités",
+        "guests_added": "invité(s) ajouté(s)",
+        "no_guests_yet": "Aucun invité pour l'instant"
+      },
+      "edit": {
+        "title": "Modifier l'événement",
+        "update_btn": "Mettre à jour",
+        "success": "Événement mis à jour",
+        "preview_title": "Aperçu en Direct",
+        "no_preview": "Aucun modèle personnalisé n'a été assigné.",
+        "select_template": "Sélectionner un modèle"
+      },
+      "details": {
+        "actions": {
+          "delete_event_confirm": "Voulez-vous vraiment supprimer cet événement ?",
+          "event_deleted": "Événement supprimé.",
+          "send_bulk_confirm": "Envoyer les invitations à tous les invités n'ayant pas encore reçu d'email ?",
+          "sending": "Envoi...",
+          "send_invitations": "Envoyer les invitations",
+          "email_sent": "Email envoyé avec succès !",
+          "guest_deleted": "Invité supprimé.",
+          "back_to_events": "Retour aux événements",
+          "edit": "Éditer",
+          "delete": "Supprimer"
+        },
+        "tabs": {
+          "overview": "Aperçu",
+          "guests": "Invités",
+          "settings": "Paramètres"
+        },
+        "overview": {
+          "stats_title": "Confirmations (RSVP)",
+          "total_guests": "Total Invités",
+          "attending": "Confirmés",
+          "pending": "En attente",
+          "declined": "Refusés",
+          "copy_link": "Copier le lien",
+          "link_copied": "Lien copié !",
+          "active_template": "Aperçu du modèle actif"
+        },
+        "guests": {
+          "title": "Liste des invités",
+          "subtitle": "Gérez vos invités et suivez leurs statuts individuels",
+          "add_btn": "Ajouter",
+          "import_csv": "Importer CSV",
+          "table": {
+            "guest": "Invité",
+            "email": "Email",
+            "whatsapp": "WhatsApp",
+            "rsvp": "RSVP",
+            "actions": "Actions"
+          },
+          "status": {
+            "pending": "En attente",
+            "attending": "Confirmé",
+            "declined": "Refusé"
+          },
+          "send_email": "Envoyer Email",
+          "send_whatsapp": "Envoyer WhatsApp",
+          "delete_confirm": "Supprimer cet invité ?"
+        }
+      }
+    },
+    "templates": {
+      "list": {
+        "title": "Mes Modèles",
+        "subtitle": "Créez et gérez vos designs réutilisables pour vos invitations.",
+        "new_btn": "Nouveau modèle",
+        "no_templates": "Aucun modèle sauvegardé",
+        "no_templates_desc": "Créez votre propre modèle personnalisable par code, pour le réutiliser lors de vos prochains événements.",
+        "create_first": "Créer mon premier modèle",
+        "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce modèle ?",
+        "delete_success": "Modèle supprimé avec succès",
+        "preview_btn": "Aperçu du modèle",
+        "edit_btn": "Éditer le modèle"
+      },
+      "editor": {
+        "title": "Éditeur de Modèle",
+        "save_btn": "Sauvegarder le modèle",
+        "saving": "Sauvegarde...",
+        "success": "Modèle sauvegardé !",
+        "name_placeholder": "Nom du modèle",
+        "mode_code": "Mode Code",
+        "mode_preview": "Mode Aperçu",
+        "variables_title": "Variables d'Événement",
+        "variables_desc": "Utilisez ces variables dans votre code HTML ou JS pour injecter les données de l'événement."
+      }
+    }
+  },
   "common": {
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
