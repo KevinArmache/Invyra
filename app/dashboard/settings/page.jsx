@@ -7,8 +7,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { User, Mail, Building, Key, Phone } from 'lucide-react'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function SettingsPage() {
+  const { t } = useTranslation()
   const { user, mutate } = useUser()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState('')
@@ -46,7 +48,7 @@ export default function SettingsPage() {
     try {
       const updatedUser = await updateProfile(profile.name, profile.company, profile.phone)
       mutate(updatedUser)
-      setSuccess('Profil mis à jour avec succès')
+      setSuccess(t('settings.profile_success'))
     } catch (err) {
       setError(err.message)
     } finally {
@@ -58,12 +60,12 @@ export default function SettingsPage() {
     e.preventDefault()
     
     if (passwords.new !== passwords.confirm) {
-      setError('New passwords do not match')
+      setError(t('settings.password_mismatch'))
       return
     }
 
     if (passwords.new.length < 8) {
-      setError('Password must be at least 8 characters')
+      setError(t('settings.password_length'))
       return
     }
 
@@ -73,7 +75,7 @@ export default function SettingsPage() {
 
     try {
       await changePassword(passwords.current, passwords.new)
-      setSuccess('Mot de passe modifié avec succès')
+      setSuccess(t('settings.password_success'))
       setPasswords({ current: '', new: '', confirm: '' })
     } catch (err) {
       setError(err.message)
@@ -86,8 +88,8 @@ export default function SettingsPage() {
     <div className="max-w-2xl space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Settings</h1>
-        <p className="text-muted-foreground mt-1">Manage your account settings</p>
+        <h1 className="text-3xl font-bold text-foreground">{t('settings.title')}</h1>
+        <p className="text-muted-foreground mt-1">{t('settings.subtitle')}</p>
       </div>
 
       {/* Status Messages */}
@@ -107,16 +109,16 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="w-5 h-5" />
-            Profile
+            {t('settings.profile_title')}
           </CardTitle>
-          <CardDescription>Update your personal information</CardDescription>
+          <CardDescription>{t('settings.profile_desc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleProfileUpdate} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Mail className="w-4 h-4 text-muted-foreground" />
-                Email
+                {t('settings.email')}
               </label>
               <Input
                 type="email"
@@ -124,50 +126,50 @@ export default function SettingsPage() {
                 disabled
                 className="bg-muted"
               />
-              <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+              <p className="text-xs text-muted-foreground">{t('settings.email_desc')}</p>
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground flex items-center gap-2">
                 <User className="w-4 h-4 text-muted-foreground" />
-                Full Name
+                {t('settings.name')}
               </label>
               <Input
                 type="text"
                 value={profile.name}
                 onChange={(e) => setProfile(p => ({ ...p, name: e.target.value }))}
-                placeholder="Your name"
+                placeholder={t('settings.name_placeholder')}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Building className="w-4 h-4 text-muted-foreground" />
-                Company
+                {t('settings.company')}
               </label>
               <Input
                 type="text"
                 value={profile.company}
                 onChange={(e) => setProfile(p => ({ ...p, company: e.target.value }))}
-                placeholder="Your company"
+                placeholder={t('settings.company_placeholder')}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground flex items-center gap-2">
                 <Phone className="w-4 h-4 text-muted-foreground" />
-                Numéro de téléphone
+                {t('settings.phone')}
               </label>
               <Input
                 type="tel"
                 value={profile.phone}
                 onChange={(e) => setProfile(p => ({ ...p, phone: e.target.value }))}
-                placeholder="+33 6 12 34 56 78"
+                placeholder={t('settings.phone_placeholder')}
               />
             </div>
 
             <Button type="submit" disabled={loading}>
-              {loading ? 'Saving...' : 'Save Changes'}
+              {loading ? t('settings.saving') : t('settings.save')}
             </Button>
           </form>
         </CardContent>
@@ -178,50 +180,50 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Key className="w-5 h-5" />
-            Change Password
+            {t('settings.password_title')}
           </CardTitle>
-          <CardDescription>Update your password to keep your account secure</CardDescription>
+          <CardDescription>{t('settings.password_desc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handlePasswordChange} className="space-y-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Current Password
+                {t('settings.current_password')}
               </label>
               <Input
                 type="password"
                 value={passwords.current}
                 onChange={(e) => setPasswords(p => ({ ...p, current: e.target.value }))}
-                placeholder="Enter current password"
+                placeholder={t('settings.current_password_placeholder')}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                New Password
+                {t('settings.new_password')}
               </label>
               <Input
                 type="password"
                 value={passwords.new}
                 onChange={(e) => setPasswords(p => ({ ...p, new: e.target.value }))}
-                placeholder="Enter new password"
+                placeholder={t('settings.new_password_placeholder')}
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Confirm New Password
+                {t('settings.confirm_password')}
               </label>
               <Input
                 type="password"
                 value={passwords.confirm}
                 onChange={(e) => setPasswords(p => ({ ...p, confirm: e.target.value }))}
-                placeholder="Confirm new password"
+                placeholder={t('settings.confirm_password_placeholder')}
               />
             </div>
 
             <Button type="submit" disabled={loading}>
-              {loading ? 'Changing...' : 'Change Password'}
+              {loading ? t('settings.changing') : t('settings.change_password')}
             </Button>
           </form>
         </CardContent>
@@ -230,15 +232,15 @@ export default function SettingsPage() {
       {/* Danger Zone */}
       <Card className="border-destructive/50">
         <CardHeader>
-          <CardTitle className="text-destructive">Danger Zone</CardTitle>
-          <CardDescription>Irreversible actions</CardDescription>
+          <CardTitle className="text-destructive">{t('settings.danger_zone')}</CardTitle>
+          <CardDescription>{t('settings.irreversible')}</CardDescription>
         </CardHeader>
         <CardContent>
           <Button variant="destructive" disabled>
-            Delete Account
+            {t('settings.delete_account')}
           </Button>
           <p className="text-xs text-muted-foreground mt-2">
-            Account deletion is currently disabled. Contact support if you need to delete your account.
+            {t('settings.delete_desc')}
           </p>
         </CardContent>
       </Card>

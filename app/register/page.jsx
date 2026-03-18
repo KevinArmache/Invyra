@@ -113,13 +113,13 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <label htmlFor="phone" className="text-sm font-medium text-foreground">
-                Numéro de téléphone
+                {t('register.phone')}
               </label>
               <Input
                 id="phone"
                 name="phone"
                 type="tel"
-                placeholder="+33 6 12 34 56 78"
+                placeholder={t('register.phone_placeholder')}
                 value={formData.phone}
                 onChange={handleChange}
                 className="bg-background/50"
