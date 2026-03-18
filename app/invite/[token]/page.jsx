@@ -209,6 +209,17 @@ export default function InvitationPage({ params }) {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Developer credit */}
+      <div className="absolute bottom-2 left-0 right-0 text-center z-40 pointer-events-none">
+        <a
+          href="https://github.com/KevinArmache"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pointer-events-auto text-[10px] text-white/30 hover:text-white/60 transition-colors tracking-widest uppercase"
+        >
+          Developed by Kevin Armache
+        </a>
+      </div>
 
     </div>
   )

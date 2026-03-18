@@ -16,9 +16,9 @@ export default function InvitationPreview({ template, event, guestName, onRSVP }
     })
     : null
 
-  if (template.type === 'code') {
-    const rawHtml = template.html || ''
+  if (template.type === 'code' || template.type === 'jsx') {
     const rawCss = template.css || ''
+    const rawHtml = template.html || ''
 
     // Inject variables
     const htmlContent = rawHtml
@@ -31,27 +31,33 @@ export default function InvitationPreview({ template, event, guestName, onRSVP }
       .replace(/{{EVENT_DATE}}/g, formattedDate || 'Date')
       .replace(/{{DRESS_CODE}}/g, event.dressCode || event.dress_code || 'Non précisé')
 
+    // Build a complete HTML document to load inside an iframe
+    // This isolates the template's CSS from the rest of the app
+    const iframeDoc = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden; }
+${rawCss}
+</style>
+</head>
+<body>
+${htmlContent}
+</body>
+</html>`
+
     return (
-      <div className="w-full h-full relative" style={{ overflow: 'auto', background: template.bgColor || '#000' }}>
-        <style dangerouslySetInnerHTML={{ __html: rawCss }} />
-        <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
-        {onRSVP && (
-          <div className="absolute bottom-6 left-0 right-0 flex justify-center z-50 pointer-events-none">
-            <button
-              onClick={onRSVP}
-              className="pointer-events-auto px-6 py-3 font-semibold tracking-widest uppercase text-sm transition-transform hover:scale-105"
-              style={{
-                background: template.primaryColor || '#d4af37',
-                color: '#000',
-                borderRadius: '4px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
-              }}
-            >
-              {template.buttonLabel || 'RSVP'}
-            </button>
-          </div>
-        )}
-      </div>
+      <iframe
+        srcDoc={iframeDoc}
+        title="Invitation Preview"
+        className="w-full h-full border-0"
+        style={{ minHeight: '100%', display: 'block' }}
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+        scrolling="yes"
+      />
     )
   }
 
