@@ -252,6 +252,21 @@ export default function DashboardLayout({ children }) {
           <main className="p-4 lg:p-8 flex-1">
             {children}
           </main>
+
+          {/* Footer */}
+          <footer className="px-4 lg:px-8 py-4 border-t border-border flex items-center justify-center">
+            <p className="text-xs text-muted-foreground text-center">
+              &copy; {new Date().getFullYear()} Invyra. {t('landing.footer.rights')}{' '}
+              <a
+                href="https://instagram.com/kevinarmache"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-primary hover:underline transition-colors"
+              >
+                Kevin Armache
+              </a>
+            </p>
+          </footer>
         </div>
       </div>
     </TooltipProvider>

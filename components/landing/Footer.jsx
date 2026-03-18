@@ -97,7 +97,15 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {currentYear} {t('landing.footer.rights')}
+            © {currentYear} Invyra. {t('landing.footer.rights')}{' '}
+            <a
+              href="https://instagram.com/kevinarmache"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-primary hover:underline transition-colors"
+            >
+              Kevin Armache
+            </a>
           </p>
           <div className="flex items-center gap-6">
             <a 
@@ -112,7 +120,7 @@ export default function Footer() {
               </svg>
             </a>
             <a 
-              href="https://instagram.com" 
+              href="https://www.instagram.com/kevinarmache" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-foreground transition-colors"

@@ -17,14 +17,28 @@ const DEFAULT_HTML = `<div class="invitation-wrapper">
       <p class="description">Nous avons l'honneur de vous inviter à cet événement exceptionnel.</p>
       
       <div class="details">
-        <div class="detail-item">
-          <span class="icon">📅</span>
-          <span>{{EVENT_DATE}}</span>
-        </div>
-        <div class="detail-item">
-          <span class="icon">📍</span>
-          <span>{{EVENT_LOCATION}}</span>
-        </div>
+   
+  <div class="detail-item">
+    <span class="icon">📅</span>
+    <span>{{EVENT_DATE}}</span>
+  </div>
+
+  <div class="detail-item">
+    <span class="icon">📍</span>
+    <span>{{EVENT_LOCATION}}</span>
+  </div>
+
+  <div class="detail-item">
+    <span class="icon">👗</span>
+    <span>{{DRESS_CODE}}</span>
+  </div>
+
+  <div class="detail-item">
+    <span class="icon">⏰</span>
+    <span>{{TIME}}</span>
+  </div>
+</div>
+
       </div>
     </div>
 
@@ -47,7 +61,7 @@ const DEFAULT_HTML = `<div class="invitation-wrapper">
     </div>
 
     <div class="footer">
-      <p>Developed by Kevin Armache</p>
+      <p>Developed by <a href="https://instagram.com/kevinarmache" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:underline;opacity:0.7;">Kevin Armache</a></p>
     </div>
   </div>
 </div>`
