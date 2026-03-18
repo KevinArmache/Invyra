@@ -13,11 +13,11 @@ import { getEventById, updateEvent } from '@/app/actions/event'
 import { getUserTemplates } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { toast } from 'sonner'
+
 export default function EditEventPage({ params }) {
   const { id } = use(params)
   const router = useRouter()
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const [event, setEvent] = useState(null)
   const [eventLoading, setEventLoading] = useState(true)
   const [activeMode, setActiveMode] = useState('edit')
