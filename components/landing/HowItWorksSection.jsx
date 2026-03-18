@@ -3,34 +3,38 @@
 import { motion } from 'framer-motion'
 import { PenLine, Wand2, Send, BarChart3 } from 'lucide-react'
 
-const steps = [
-  {
-    icon: PenLine,
-    step: '01',
-    title: 'Create Your Event',
-    description: 'Enter your event details - date, location, and a description of the vibe you want to create.'
-  },
-  {
-    icon: Wand2,
-    step: '02',
-    title: 'AI Generates Magic',
-    description: 'Our AI analyzes your theme and generates a custom 3D animation with particles, lighting, and effects.'
-  },
-  {
-    icon: Send,
-    step: '03',
-    title: 'Invite Your Guests',
-    description: 'Add your guest list and send personalized invitations with unique animated experiences.'
-  },
-  {
-    icon: BarChart3,
-    step: '04',
-    title: 'Track Responses',
-    description: 'Monitor RSVPs in real-time, see who viewed their invitation, and manage your guest list.'
-  }
-]
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function HowItWorksSection() {
+  const { t } = useTranslation()
+
+  const steps = [
+    {
+      icon: PenLine,
+      step: '01',
+      title: t('landing.how_it_works.steps.1.title'),
+      description: t('landing.how_it_works.steps.1.desc')
+    },
+    {
+      icon: Wand2,
+      step: '02',
+      title: t('landing.how_it_works.steps.2.title'),
+      description: t('landing.how_it_works.steps.2.desc')
+    },
+    {
+      icon: Send,
+      step: '03',
+      title: t('landing.how_it_works.steps.3.title'),
+      description: t('landing.how_it_works.steps.3.desc')
+    },
+    {
+      icon: BarChart3,
+      step: '04',
+      title: t('landing.how_it_works.steps.4.title'),
+      description: t('landing.how_it_works.steps.4.desc')
+    }
+  ]
+
   return (
     <section id="how-it-works" className="py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -42,10 +46,10 @@ export default function HowItWorksSection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            How It <span className="text-gradient">Works</span>
+            {t('landing.how_it_works.title')}<span className="text-gradient">{t('landing.how_it_works.title_highlight')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Create stunning invitations in just four simple steps
+            {t('landing.how_it_works.subtitle')}
           </p>
         </motion.div>
 

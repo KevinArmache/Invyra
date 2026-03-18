@@ -219,5 +219,154 @@
     "close": "Close",
     "search": "Search...",
     "no_results": "No results"
+  },
+  "landing": {
+    "hero": {
+      "tagline": "Custom Invitation Editor",
+      "title_1": "Create",
+      "title_highlight": "Unique Invitations",
+      "subtitle": "Create your digital invitations from scratch. Use our complete code editor (HTML, CSS, JS) to bring your interactive invitations to life and amaze your guests.",
+      "cta_primary": "Start Creating Free",
+      "cta_secondary": "See How It Works",
+      "stats": {
+        "events": "Events Created",
+        "events_value": "10K+",
+        "rsvp": "RSVP Rate",
+        "rsvp_value": "98%",
+        "themes": "Creative Freedom",
+        "themes_value": "100%"
+      }
+    },
+    "features": {
+      "title": "Everything You Need for ",
+      "title_highlight": "Your Events",
+      "subtitle": "From custom creation to engagement analytics, Invyra provides professional tools to invite with elegance.",
+      "items": {
+        "ai": {
+          "title": "Total Control (HTML/CSS)",
+          "desc": "Design anything you want using a powerful web editor built for absolute customization."
+        },
+        "themes": {
+          "title": "Interactive Experience",
+          "desc": "Write your own JavaScript to create fluid animations and engage your guests on a whole new level."
+        },
+        "guests": {
+          "title": "Intuitive Guest Management",
+          "desc": "Import your list from an Excel (CSV) file or enter it manually. Handle plus-ones with ease."
+        },
+        "emails": {
+          "title": "WhatsApp & Email Delivery",
+          "desc": "Distribute unique named links to your guests. Your invitation's design will display perfectly."
+        },
+        "analytics": {
+          "title": "Real-Time RSVP Tracking",
+          "desc": "Get notified as soon as a loved one views the invitation or confirms their attendance, right on your dashboard."
+        },
+        "preview": {
+          "title": "Live Preview",
+          "desc": "Edit your code and instantly see the visual result in real-time thanks to the split preview panel."
+        },
+        "effects": {
+          "title": "Dynamic Personalization",
+          "desc": "Insert variable tags (e.g., Guest Name) directly into the code to generate highly personalized messages."
+        },
+        "security": {
+          "title": "Guaranteed Privacy",
+          "desc": "Each guest receives a uniquely tokenized secure access link to ensure your ceremony remains strictly private."
+        }
+      }
+    },
+    "how_it_works": {
+      "title": "How It ",
+      "title_highlight": "Works",
+      "subtitle": "Create and distribute your invitations in 4 simple steps.",
+      "steps": {
+        "1": {
+          "title": "Create your event",
+          "desc": "Set the date, reception location, and key details of your ceremony."
+        },
+        "2": {
+          "title": "Code your template",
+          "desc": "Open the editor and shape the complete look and behavior of the invitation using HTML, CSS, and JS."
+        },
+        "3": {
+          "title": "Invite your loved ones",
+          "desc": "Complete your guest list and automatically send them a link via Email bursts or WhatsApp."
+        },
+        "4": {
+          "title": "Track responses",
+          "desc": "Stay in control: see who opened the message and track all attendance confirmations (RSVP)."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Simple, Transparent ",
+      "title_highlight": "Pricing",
+      "subtitle": "Choose the perfect plan for your event size. Professional tools, no hidden fees.",
+      "plans": {
+        "free": {
+          "name": "Free",
+          "desc": "Perfect to test the platform",
+          "price": "$0",
+          "period": "forever",
+          "cta": "Try for Free",
+          "features": [
+            "1 event max",
+            "Up to 15 guests",
+            "Standard code editor",
+            "Basic delivery tracking",
+            "Blank templates"
+          ]
+        },
+        "pro": {
+          "name": "Pro Event",
+          "desc": "For memorable celebrations",
+          "price": "$19",
+          "period": "per event",
+          "cta": "Start Creating",
+          "features": [
+            "Unlimited guests",
+            "Advanced Template Editor",
+            "Live Preview",
+            "Mass email delivery",
+            "Priority support"
+          ]
+        },
+        "enterprise": {
+          "name": "Agencies / Pro",
+          "desc": "For Event Planners",
+          "price": "Custom",
+          "period": "contact us",
+          "cta": "Contact Sales",
+          "features": [
+            "Unlimited events",
+            "White-label (No Invyra logo)",
+            "Large template storage",
+            "Multi-user accounts",
+            "API access"
+          ]
+        }
+      }
+    },
+    "footer": {
+      "description": "Create fully customizable digital event invitations. Bring your modern designs to life for authentic ceremonies.",
+      "rights": "Invyra. All rights reserved. Developed by Kevin Armache.",
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal",
+      "links": {
+        "features": "Features",
+        "pricing": "Pricing",
+        "themes": "Themes",
+        "examples": "Examples",
+        "about": "About",
+        "blog": "Blog",
+        "careers": "Careers",
+        "contact": "Contact",
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "cookies": "Cookies"
+      }
+    }
   }
 }

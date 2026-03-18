@@ -2,28 +2,31 @@
 
 import Link from 'next/link'
 
-const footerLinks = {
-  product: [
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'Themes', href: '/themes' },
-    { name: 'Examples', href: '/examples' }
-  ],
-  company: [
-    { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Contact', href: '/contact' }
-  ],
-  legal: [
-    { name: 'Privacy', href: '/privacy' },
-    { name: 'Terms', href: '/terms' },
-    { name: 'Cookies', href: '/cookies' }
-  ]
-}
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const { t } = useTranslation()
+
+  const footerLinks = {
+    product: [
+      { name: t('landing.footer.links.features'), href: '#features' },
+      { name: t('landing.footer.links.pricing'), href: '#pricing' },
+      { name: t('landing.footer.links.themes'), href: '/themes' },
+      { name: t('landing.footer.links.examples'), href: '/examples' }
+    ],
+    company: [
+      { name: t('landing.footer.links.about'), href: '/about' },
+      { name: t('landing.footer.links.blog'), href: '/blog' },
+      { name: t('landing.footer.links.careers'), href: '/careers' },
+      { name: t('landing.footer.links.contact'), href: '/contact' }
+    ],
+    legal: [
+      { name: t('landing.footer.links.privacy'), href: '/privacy' },
+      { name: t('landing.footer.links.terms'), href: '/terms' },
+      { name: t('landing.footer.links.cookies'), href: '/cookies' }
+    ]
+  }
 
   return (
     <footer className="py-16 px-4 sm:px-6 lg:px-8 border-t border-border/50">
@@ -35,14 +38,13 @@ export default function Footer() {
               <span className="text-2xl font-bold text-gradient">Invyra</span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-xs">
-              Create stunning, cinematic event invitations powered by AI. 
-              Transform your events into unforgettable experiences.
+              {t('landing.footer.description')}
             </p>
           </div>
 
           {/* Product Links */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Product</h4>
+            <h4 className="text-sm font-semibold text-foreground mb-4">{t('landing.footer.product')}</h4>
             <ul className="space-y-3">
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
@@ -59,7 +61,7 @@ export default function Footer() {
 
           {/* Company Links */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Company</h4>
+            <h4 className="text-sm font-semibold text-foreground mb-4">{t('landing.footer.company')}</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
@@ -76,7 +78,7 @@ export default function Footer() {
 
           {/* Legal Links */}
           <div>
-            <h4 className="text-sm font-semibold text-foreground mb-4">Legal</h4>
+            <h4 className="text-sm font-semibold text-foreground mb-4">{t('landing.footer.legal')}</h4>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
@@ -95,7 +97,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            {currentYear} Invyra. All rights reserved. Developed by Kevin Armache.
+            &copy; {currentYear} {t('landing.footer.rights')}
           </p>
           <div className="flex items-center gap-6">
             <a 

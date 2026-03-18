@@ -219,5 +219,154 @@
     "close": "Fermer",
     "search": "Rechercher...",
     "no_results": "Aucun résultat"
+  },
+  "landing": {
+    "hero": {
+      "tagline": "Éditeur d'Invitations Sur-Mesure",
+      "title_1": "Créez des Invitations",
+      "title_highlight": "Uniques",
+      "subtitle": "Créez vos faire-part numériques de A à Z. Utilisez notre éditeur de code complet (HTML, CSS, JS) pour donner vie à vos invitations interactives et surprendre vos invités.",
+      "cta_primary": "Créer Gratuitement",
+      "cta_secondary": "Comment Ça Marche ?",
+      "stats": {
+        "events": "Événements Créés",
+        "events_value": "10K+",
+        "rsvp": "Taux de Réponse",
+        "rsvp_value": "98%",
+        "themes": "Liberté Créative",
+        "themes_value": "100%"
+      }
+    },
+    "features": {
+      "title": "Tout le nécessaire pour vos ",
+      "title_highlight": "Événements",
+      "subtitle": "De la création sur-mesure aux statistiques d'engagement, Invyra met à votre disposition des outils professionnels pour inviter avec élégance.",
+      "items": {
+        "ai": {
+          "title": "Contrôle Total (HTML/CSS)",
+          "desc": "Concevez le design de votre choix grâce à un éditeur web puissant, pensé pour une personnalisation absolue."
+        },
+        "themes": {
+          "title": "Expérience Interactive",
+          "desc": "Intégrez vos propres scripts JavaScript pour créer des animations fluides et engager vos invités."
+        },
+        "guests": {
+          "title": "Gestion des Invités Intuitive",
+          "desc": "Importez votre liste depuis un fichier Excel (CSV) ou saisissez-la manuellement. Gérez facilement les accompagnants."
+        },
+        "emails": {
+          "title": "Envoi WhatsApp & Email",
+          "desc": "Distribuez des liens nominatifs uniques à vos invités. Le design de votre faire-part s'affichera de manière parfaite."
+        },
+        "analytics": {
+          "title": "Suivi RSVP en Temps Réel",
+          "desc": "Soyez notifié dès qu'un proche consulte l'invitation ou confirme sa présence, directement sur votre tableau de bord."
+        },
+        "preview": {
+          "title": "Aperçu en Direct",
+          "desc": "Modifiez votre code et observez le résultat visuel en temps réel grâce à la prévisualisation scindée."
+        },
+        "effects": {
+          "title": "Personnalisation Dynamique",
+          "desc": "Insérez des balises de variables (ex: Nom de l'invité) directement dans le code pour générer des messages ultra-personnalisés."
+        },
+        "security": {
+          "title": "Confidentialité Assurée",
+          "desc": "Chaque invité reçoit un lien d'accès tokenisé sécurisé pour garantir que votre cérémonie reste strictement privée."
+        }
+      }
+    },
+    "how_it_works": {
+      "title": "Comment ",
+      "title_highlight": "Ça Marche",
+      "subtitle": "Créez et diffusez vos invitations en 4 étapes simples.",
+      "steps": {
+        "1": {
+          "title": "Créez l'événement",
+          "desc": "Définissez la date, le lieu de réception et les informations clés de votre cérémonie."
+        },
+        "2": {
+          "title": "Codez votre modèle",
+          "desc": "Ouvrez l'éditeur et façonnez l'apparence complète de l'invitation avec HTML, CSS et JavaScript."
+        },
+        "3": {
+          "title": "Invitez vos proches",
+          "desc": "Complétez votre liste de convives et envoyez-leur automatiquement un lien par vagues d'Emails ou par WhatsApp."
+        },
+        "4": {
+          "title": "Suivez les retours",
+          "desc": "Gardez le contrôle : visualisez qui a ouvert le message et suivez les confirmations de présence (RSVP)."
+        }
+      }
+    },
+    "pricing": {
+      "title": "Tarifs Simples et ",
+      "title_highlight": "Transparents",
+      "subtitle": "Choisissez la dimension parfaite pour votre événement. Nos outils restent accessibles, sans aucun frais caché.",
+      "plans": {
+        "free": {
+          "name": "Découverte",
+          "desc": "Idéal pour tester la plateforme",
+          "price": "0€",
+          "period": "à vie",
+          "cta": "Essayer Gratuitement",
+          "features": [
+            "1 événement max",
+            "Jusqu'à 15 invités",
+            "Éditeur de code standard",
+            "Suivi des envois de base",
+            "Modèles vierges"
+          ]
+        },
+        "pro": {
+          "name": "Événement Premium",
+          "desc": "Pour une célébration inoubliable",
+          "price": "19€",
+          "period": "par événement",
+          "cta": "Créer mon Événement",
+          "features": [
+            "Invités illimités",
+            "Éditeur de Modèle Avancé",
+            "Aperçu Direct",
+            "Envois d'emails massifs",
+            "Support client prioritaire"
+          ]
+        },
+        "enterprise": {
+          "name": "Agences / Pro",
+          "desc": "Pour les Wedding Planners",
+          "price": "Sur devis",
+          "period": "nous contacter",
+          "cta": "Prendre RDV",
+          "features": [
+            "Événements illimités",
+            "Retrait de la mention Invyra",
+            "Enregistrement de gros modèles",
+            "Multi-utilisateurs",
+            "Accès API"
+          ]
+        }
+      }
+    },
+    "footer": {
+      "description": "Créez des invitations événementielles entièrement sur-mesure. Donnez vie à vos faire-part modernes pour des cérémonies authentiques.",
+      "rights": "Invyra. Tous droits réservés. Développé par Kevin Armache.",
+      "product": "Produit",
+      "company": "Entreprise",
+      "legal": "Légal",
+      "links": {
+        "features": "Fonctionnalités",
+        "pricing": "Tarifs",
+        "themes": "Thèmes",
+        "examples": "Exemples",
+        "about": "À Propos",
+        "blog": "Blog",
+        "careers": "Carrières",
+        "contact": "Contact",
+        "privacy": "Confidentialité",
+        "terms": "Conditions Globales",
+        "cookies": "Gestion des Cookies"
+      }
+    }
   }
 }

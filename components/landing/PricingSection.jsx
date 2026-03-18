@@ -5,60 +5,46 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Check } from 'lucide-react'
 
-const plans = [
-  {
-    name: 'Free',
-    price: '$0',
-    period: 'forever',
-    description: 'Perfect for trying out Invyra',
-    features: [
-      '1 event',
-      'Up to 25 guests',
-      '3 animation themes',
-      'Basic analytics',
-      'Email support'
-    ],
-    cta: 'Get Started',
-    href: '/register',
-    popular: false
-  },
-  {
-    name: 'Pro',
-    price: '$19',
-    period: 'per event',
-    description: 'For memorable celebrations',
-    features: [
-      'Unlimited guests',
-      'All animation themes',
-      'AI-generated animations',
-      'Advanced analytics',
-      'Custom branding',
-      'Priority support'
-    ],
-    cta: 'Start Creating',
-    href: '/register',
-    popular: true
-  },
-  {
-    name: 'Enterprise',
-    price: 'Custom',
-    period: 'contact us',
-    description: 'For event planners & agencies',
-    features: [
-      'Unlimited events',
-      'Unlimited guests',
-      'Custom animations',
-      'White-label solution',
-      'API access',
-      'Dedicated support'
-    ],
-    cta: 'Contact Sales',
-    href: '/contact',
-    popular: false
-  }
-]
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function PricingSection() {
+  const { t } = useTranslation()
+
+  const safeFeatures = (arr) => Array.isArray(arr) ? arr : []
+
+  const plans = [
+    {
+      name: t('landing.pricing.plans.free.name'),
+      price: t('landing.pricing.plans.free.price'),
+      period: t('landing.pricing.plans.free.period'),
+      description: t('landing.pricing.plans.free.desc'),
+      features: safeFeatures(t('landing.pricing.plans.free.features')),
+      cta: t('landing.pricing.plans.free.cta'),
+      href: '/register',
+      popular: false
+    },
+    {
+      name: t('landing.pricing.plans.pro.name'),
+      price: t('landing.pricing.plans.pro.price'),
+      period: t('landing.pricing.plans.pro.period'),
+      description: t('landing.pricing.plans.pro.desc'),
+      features: safeFeatures(t('landing.pricing.plans.pro.features')),
+      cta: t('landing.pricing.plans.pro.cta'),
+      href: '/register',
+      popular: true
+    },
+    {
+      name: t('landing.pricing.plans.enterprise.name'),
+      price: t('landing.pricing.plans.enterprise.price'),
+      period: t('landing.pricing.plans.enterprise.period'),
+      description: t('landing.pricing.plans.enterprise.desc'),
+      features: safeFeatures(t('landing.pricing.plans.enterprise.features')),
+      cta: t('landing.pricing.plans.enterprise.cta'),
+      href: '/contact',
+      popular: false
+    }
+  ]
+
   return (
     <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-card/30">
       <div className="max-w-7xl mx-auto">
@@ -70,10 +56,10 @@ export default function PricingSection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Simple, Transparent <span className="text-gradient">Pricing</span>
+            {t('landing.pricing.title')}<span className="text-gradient">{t('landing.pricing.title_highlight')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Choose the plan that fits your event. No hidden fees, no surprises.
+            {t('landing.pricing.subtitle')}
           </p>
         </motion.div>
 

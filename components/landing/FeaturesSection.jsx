@@ -12,48 +12,7 @@ import {
   Lock
 } from 'lucide-react'
 
-const features = [
-  {
-    icon: Wand2,
-    title: 'AI-Generated Animations',
-    description: 'Describe your vision, and our AI creates stunning 3D animations tailored to your event theme.'
-  },
-  {
-    icon: Palette,
-    title: 'Cinematic Themes',
-    description: 'Choose from elegant, romantic, modern, or festive themes with beautiful particle effects and lighting.'
-  },
-  {
-    icon: Users,
-    title: 'Guest Management',
-    description: 'Easily manage your guest list, track RSVPs, and handle plus-ones with our intuitive dashboard.'
-  },
-  {
-    icon: Mail,
-    title: 'Personalized Emails',
-    description: 'Each guest receives a unique invitation link with their personalized animated experience.'
-  },
-  {
-    icon: BarChart3,
-    title: 'Real-Time Analytics',
-    description: 'Track invitation views, RSVP responses, and engagement metrics in real-time.'
-  },
-  {
-    icon: Zap,
-    title: 'Instant Preview',
-    description: 'See your invitation come to life instantly as you customize colors, text, and animations.'
-  },
-  {
-    icon: Sparkles,
-    title: '3D Particle Effects',
-    description: 'Mesmerizing particle systems that dance and flow, creating an immersive visual experience.'
-  },
-  {
-    icon: Lock,
-    title: 'Private & Secure',
-    description: 'Your event details are encrypted and each invitation uses unique, secure access tokens.'
-  }
-]
+import { useTranslation } from '@/utils/i18n/Context'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -75,6 +34,51 @@ const itemVariants = {
 }
 
 export default function FeaturesSection() {
+  const { t } = useTranslation()
+
+  const features = [
+    {
+      icon: Wand2,
+      title: t('landing.features.items.ai.title'),
+      description: t('landing.features.items.ai.desc')
+    },
+    {
+      icon: Palette,
+      title: t('landing.features.items.themes.title'),
+      description: t('landing.features.items.themes.desc')
+    },
+    {
+      icon: Users,
+      title: t('landing.features.items.guests.title'),
+      description: t('landing.features.items.guests.desc')
+    },
+    {
+      icon: Mail,
+      title: t('landing.features.items.emails.title'),
+      description: t('landing.features.items.emails.desc')
+    },
+    {
+      icon: BarChart3,
+      title: t('landing.features.items.analytics.title'),
+      description: t('landing.features.items.analytics.desc')
+    },
+    {
+      icon: Zap,
+      title: t('landing.features.items.preview.title'),
+      description: t('landing.features.items.preview.desc')
+    },
+    {
+      icon: Sparkles,
+      title: t('landing.features.items.effects.title'),
+      description: t('landing.features.items.effects.desc')
+    },
+    {
+      icon: Lock,
+      title: t('landing.features.items.security.title'),
+      description: t('landing.features.items.security.desc')
+    }
+  ]
+
   return (
     <section id="features" className="py-24 px-4 sm:px-6 lg:px-8 bg-card/30">
       <div className="max-w-7xl mx-auto">
@@ -86,12 +90,11 @@ export default function FeaturesSection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            Everything You Need for{' '}
-            <span className="text-gradient">Perfect Invitations</span>
+            {t('landing.features.title')}
+            <span className="text-gradient">{t('landing.features.title_highlight')}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            From AI-powered design to smart analytics, Invyra provides all the tools 
-            to create memorable event experiences.
+            {t('landing.features.subtitle')}
           </p>
         </motion.div>
 

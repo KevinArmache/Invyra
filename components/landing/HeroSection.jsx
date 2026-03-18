@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     setMounted(true)
@@ -27,7 +29,7 @@ export default function HeroSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-8">
             <Sparkles size={16} />
-            <span className="text-sm font-medium">AI-Powered Beautiful Invitations</span>
+            <span className="text-sm font-medium">{t('landing.hero.tagline')}</span>
           </div>
         </motion.div>
         
@@ -37,10 +39,8 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Create{' '}
-          <span className="text-gradient">Unforgettable</span>
-          <br />
-          Event Invitations
+          {t('landing.hero.title_1')}{' '}
+          <span className="text-gradient">{t('landing.hero.title_highlight')}</span>
         </motion.h1>
         
         <motion.p
@@ -49,9 +49,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          Transform your events into memorable experiences. Our AI generates stunning 
-          templates that bring your invitations to life, leaving a lasting impression 
-          on every guest.
+          {t('landing.hero.subtitle')}
         </motion.p>
         
         <motion.div
@@ -62,13 +60,13 @@ export default function HeroSection() {
         >
           <Button size="lg" asChild className="group">
             <Link href="/register">
-              Start Creating Free
+              {t('landing.hero.cta_primary')}
               <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </Button>
           <Button size="lg" variant="outline" asChild>
             <Link href="#how-it-works">
-              See How It Works
+              {t('landing.hero.cta_secondary')}
             </Link>
           </Button>
         </motion.div>
@@ -81,16 +79,16 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.8 }}
         >
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-primary">10K+</div>
-            <div className="text-sm text-muted-foreground mt-1">Events Created</div>
+            <div className="text-3xl sm:text-4xl font-bold text-primary">{t('landing.hero.stats.events_value')}</div>
+            <div className="text-sm text-muted-foreground mt-1">{t('landing.hero.stats.events')}</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-primary">98%</div>
-            <div className="text-sm text-muted-foreground mt-1">RSVP Rate</div>
+            <div className="text-3xl sm:text-4xl font-bold text-primary">{t('landing.hero.stats.rsvp_value')}</div>
+            <div className="text-sm text-muted-foreground mt-1">{t('landing.hero.stats.rsvp')}</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-primary">20+</div>
-            <div className="text-sm text-muted-foreground mt-1">Template Themes</div>
+            <div className="text-3xl sm:text-4xl font-bold text-primary">{t('landing.hero.stats.themes_value')}</div>
+            <div className="text-sm text-muted-foreground mt-1">{t('landing.hero.stats.themes')}</div>
           </div>
         </motion.div>
       </div>
