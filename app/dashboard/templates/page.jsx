@@ -10,8 +10,10 @@ import { toast } from 'sonner'
 import { getUserTemplates, deleteUserTemplate } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { useTranslation } from '@/utils/i18n/Context'
+import { useUser } from '@/hooks/useUser'
 
 export default function TemplatesPage() {
+  const { user } = useUser()
   const { t, locale } = useTranslation()
   const [templates, setTemplates] = useState([])
   const [loading, setLoading] = useState(true)
@@ -106,14 +108,18 @@ export default function TemplatesPage() {
                   <Button variant="secondary" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); setPreviewTemplate(tmpl) }} title={t('portal.templates.list.preview_btn')}>
                     <Eye className="w-4 h-4" />
                   </Button>
-                  <Button variant="secondary" size="icon" asChild className="h-9 w-9 rounded-full shadow-lg" title={t('portal.templates.list.edit_btn')}>
-                    <Link href={`/dashboard/templates/${tmpl.id}`}>
-                      <Edit2 className="w-4 h-4" />
-                    </Link>
-                  </Button>
-                  <Button variant="destructive" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); handleDelete(tmpl.id) }} title={t('portal.events.list.delete_btn')}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                  {user?.role === 'admin' && (
+                    <>
+                      <Button variant="secondary" size="icon" asChild className="h-9 w-9 rounded-full shadow-lg" title={t('portal.templates.list.edit_btn')}>
+                        <Link href={`/dashboard/templates/${tmpl.id}`}>
+                          <Edit2 className="w-4 h-4" />
+                        </Link>
+                      </Button>
+                      <Button variant="destructive" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); handleDelete(tmpl.id) }} title={t('portal.events.list.delete_btn')}>
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
               <CardContent className="p-4 flex flex-col gap-1 items-start bg-card z-10">

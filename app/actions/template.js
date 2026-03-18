@@ -111,8 +111,12 @@ export async function getUserTemplates() {
   if (!user) return []
 
   const templates = await prisma.customTemplate.findMany({
-    where: { userId: user.userId },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
+    include: {
+      user: {
+        select: { name: true }
+      }
+    }
   })
 
   return templates
@@ -122,10 +126,13 @@ export async function deleteUserTemplate(templateId) {
   const user = await getSession()
   if (!user) throw new Error('Unauthorized')
 
+  if (user.role !== 'admin') {
+    throw new Error('Seuls les administrateurs peuvent supprimer un modèle')
+  }
+
   await prisma.customTemplate.deleteMany({
     where: {
-      id: templateId,
-      userId: user.userId
+      id: templateId
     }
   })
 
@@ -137,10 +144,7 @@ export async function getUserTemplateById(templateId) {
   if (!user) throw new Error('Unauthorized')
 
   const tmpl = await prisma.customTemplate.findFirst({
-    where: {
-      id: templateId,
-      userId: user.userId
-    }
+    where: { id: templateId }
   })
 
   if (!tmpl) throw new Error('Modèle non trouvé')
@@ -151,15 +155,16 @@ export async function updateUserTemplate(templateId, name, templateConfig) {
   const user = await getSession()
   if (!user) throw new Error('Unauthorized')
 
+  if (user.role !== 'admin') {
+    throw new Error('Seuls les administrateurs peuvent modifier un modèle')
+  }
+
   if (!name) throw new Error('Le nom du modèle est requis')
 
   const existing = await prisma.customTemplate.findFirst({
-    where: {
-      id: templateId,
-      userId: user.userId
-    }
+    where: { id: templateId }
   })
-  if (!existing) throw new Error('Modèle non trouvé ou non autorisé')
+  if (!existing) throw new Error('Modèle non trouvé')
 
   const tmpl = await prisma.customTemplate.update({
     where: { id: templateId },
