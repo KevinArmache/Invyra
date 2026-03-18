@@ -6,10 +6,15 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslation } from '@/utils/i18n/Context'
+import { Canvas } from '@react-three/fiber'
+import { useTheme } from 'next-themes'
+import Icosahedron from '@/components/3d/Icosahedron'
+import YoRHaSatelliteRings from '@/components/3d/YoRHaSatelliteRings'
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false)
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   useEffect(() => {
     setMounted(true)
@@ -19,6 +24,21 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      
+      {/* 3D Background */}
+      {mounted && (
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
+          <Canvas camera={{ position: [0, 0, 10], fov: 45 }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1} />
+            {theme === 'light' ? (
+              <YoRHaSatelliteRings color="#000000" />
+            ) : (
+              <Icosahedron color="#d4af37" />
+            )}
+          </Canvas>
+        </div>
+      )}
       
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto pt-20">
