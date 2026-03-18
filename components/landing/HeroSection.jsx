@@ -2,17 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { motion } from 'framer-motion'
-
-const HeroScene = dynamic(() => import('@/components/3d/HeroScene'), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-background" />
-  )
-})
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false)
@@ -26,9 +18,6 @@ export default function HeroSection() {
       {/* Background gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
       
-      {/* 3D Scene */}
-      {mounted && <HeroScene />}
-      
       {/* Content */}
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto pt-20">
         <motion.div
@@ -38,7 +27,7 @@ export default function HeroSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary mb-8">
             <Sparkles size={16} />
-            <span className="text-sm font-medium">AI-Powered Cinematic Invitations</span>
+            <span className="text-sm font-medium">AI-Powered Beautiful Invitations</span>
           </div>
         </motion.div>
         
@@ -60,8 +49,8 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          Transform your events into cinematic experiences. Our AI generates stunning 
-          3D animations that bring your invitations to life, leaving a lasting impression 
+          Transform your events into memorable experiences. Our AI generates stunning 
+          templates that bring your invitations to life, leaving a lasting impression 
           on every guest.
         </motion.p>
         
@@ -100,8 +89,8 @@ export default function HeroSection() {
             <div className="text-sm text-muted-foreground mt-1">RSVP Rate</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl sm:text-4xl font-bold text-primary">50+</div>
-            <div className="text-sm text-muted-foreground mt-1">Animation Themes</div>
+            <div className="text-3xl sm:text-4xl font-bold text-primary">20+</div>
+            <div className="text-sm text-muted-foreground mt-1">Template Themes</div>
           </div>
         </motion.div>
       </div>

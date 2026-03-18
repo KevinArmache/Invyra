@@ -95,7 +95,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            {currentYear} Invyra. All rights reserved.
+            {currentYear} Invyra. All rights reserved. Developed by Kevin Armache.
           </p>
           <div className="flex items-center gap-6">
             <a 

@@ -1,390 +1,430 @@
 'use client'
 
-import { useState, use, useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useRouter } from 'next/navigation'
+import { getEventById, updateEvent, deleteEvent } from '@/app/actions/event'
+import { getGuests, sendBulkInvitations } from '@/app/actions/guest'
+import { getUserTemplates } from '@/app/actions/template'
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { 
-  ArrowLeft, 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Eye, 
-  CheckCircle,
-  XCircle,
-  Clock,
-  Plus,
-  Pencil,
-  Send,
-  Trash2,
-  ExternalLink,
-  Wand2
-} from 'lucide-react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { getEventById } from '@/app/actions/event'
-import { getGuests, addGuest, deleteGuest, sendInvitationEmail } from '@/app/actions/guest'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import RSVPTracker from '@/components/invitation/RSVPTracker'
+import CSVImporter from '@/components/invitation/CSVImporter'
+import InvitationPreview from '@/components/invitation/InvitationPreview'
+import { addGuest, deleteGuest } from '@/app/actions/guest'
+import { Calendar, MapPin, Users, Mail, Edit, Trash2, ArrowLeft, RefreshCw, Eye, UserPlus, CheckCircle, XCircle, HelpCircle, Clock, LayoutTemplate, Replace, Check, X } from 'lucide-react'
 
 export default function EventDetailPage({ params }) {
+  const router = useRouter()
   const { id } = use(params)
-  const [isAddGuestOpen, setIsAddGuestOpen] = useState(false)
-  const [guestForm, setGuestForm] = useState({ name: '', email: '', phone: '' })
-  const [addingGuest, setAddingGuest] = useState(false)
+  
   const [event, setEvent] = useState(null)
   const [guests, setGuests] = useState([])
-  const [eventLoading, setEventLoading] = useState(true)
-  const [guestsLoading, setGuestsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [deleting, setDeleting] = useState(false)
+  const [sendingBulk, setSendingBulk] = useState(false)
+  const [activeTab, setActiveTab] = useState('overview')
+  const [showAddGuest, setShowAddGuest] = useState(false)
+  const [newGuest, setNewGuest] = useState({ name: '', email: '', phone: '' })
+
+  // Template switcher state
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false)
+  const [savedTemplates, setSavedTemplates] = useState([])
+  const [selectedForSwap, setSelectedForSwap] = useState(null)
+  const [swapping, setSwapping] = useState(false)
+
+  const loadData = async () => {
+    try {
+      setLoading(true)
+      const [eData, gData] = await Promise.all([
+        getEventById(id),
+        getGuests(id)
+      ])
+      setEvent(eData)
+      setGuests(gData)
+    } catch (err) {
+      console.error(err)
+      router.push('/dashboard/events')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    getEventById(id).then(data => { setEvent(data); setEventLoading(false) }).catch(() => setEventLoading(false))
-    getGuests(id).then(data => { setGuests(data || []); setGuestsLoading(false) }).catch(() => setGuestsLoading(false))
+    loadData()
   }, [id])
 
-  async function handleAddGuest(e) {
-    e.preventDefault()
-    setAddingGuest(true)
+  async function openTemplatePicker() {
+    setShowTemplatePicker(true)
+    setSelectedForSwap(null)
+    const templates = await getUserTemplates()
+    setSavedTemplates(templates)
+  }
 
+  async function handleApplyTemplate() {
+    if (!selectedForSwap) return
+    setSwapping(true)
     try {
-      const guest = await addGuest(id, guestForm)
-      setGuests(prev => [guest, ...prev])
-      setGuestForm({ name: '', email: '', phone: '' })
-      setIsAddGuestOpen(false)
-      // Refresh event stats
-      getEventById(id).then(data => setEvent(data))
-    } catch (error) {
-      console.error('Failed to add guest:', error)
+      await updateEvent(id, { invitation_template: selectedForSwap.config })
+      setEvent(prev => ({ ...prev, invitationTemplate: selectedForSwap.config }))
+      setShowTemplatePicker(false)
+      setSelectedForSwap(null)
+    } catch (e) {
+      alert(e.message)
     } finally {
-      setAddingGuest(false)
+      setSwapping(false)
     }
   }
 
-  async function handleDeleteGuest(guestId) {
-    if (!confirm('Are you sure you want to remove this guest?')) return
+  async function handleDeleteEvent() {
+    if (!confirm("Voulez-vous vraiment supprimer cet événement ?")) return
+    setDeleting(true)
+    try {
+      await deleteEvent(id)
+      router.push('/dashboard/events')
+    } catch (e) {
+      alert("Erreur: " + e.message)
+      setDeleting(false)
+    }
+  }
 
+  async function handleSendBulk() {
+    if (!confirm("Envoyer les invitations à tous les invités n'ayant pas encore reçu d'email ?")) return
+    setSendingBulk(true)
+    try {
+      const res = await sendBulkInvitations(id)
+      alert(`${res.sentCount} invitations envoyées !`)
+      loadData()
+    } catch (e) {
+      alert("Erreur: " + e.message)
+    } finally {
+      setSendingBulk(false)
+    }
+  }
+
+  async function handleAddGuest() {
+    if (!newGuest.name || !newGuest.email) return
+    try {
+      await addGuest(id, newGuest)
+      setNewGuest({ name: '', email: '', phone: '' })
+      setShowAddGuest(false)
+      loadData()
+    } catch (e) {
+      alert(e.message)
+    }
+  }
+
+  async function handleRemoveGuest(guestId) {
+    if (!confirm("Supprimer cet invité ?")) return
     try {
       await deleteGuest(guestId)
-      setGuests(prev => prev.filter(g => g.id !== guestId))
-      getEventById(id).then(data => setEvent(data))
-    } catch (error) {
-      console.error('Failed to delete guest:', error)
+      loadData()
+    } catch (e) {
+      alert(e.message)
     }
   }
 
-  async function handleSendInvitation(guestId) {
-    try {
-      await sendInvitationEmail(guestId)
-      getGuests(id).then(data => setGuests(data || []))
-    } catch (error) {
-      console.error('Failed to send invitation:', error)
-      alert('Failed to send invitation. Make sure RESEND_API_KEY is configured.')
-    }
+  if (loading) {
+    return <div className="h-40 flex items-center justify-center"><RefreshCw className="w-6 h-6 animate-spin text-muted-foreground" /></div>
   }
 
-  if (eventLoading) {
-    return (
-      <div className="space-y-8">
-        <div className="h-8 w-48 bg-muted animate-pulse rounded" />
-        <div className="h-64 bg-muted animate-pulse rounded-xl" />
-      </div>
-    )
-  }
+  if (!event) return null
 
-  if (!event && !eventLoading) {
-    return (
-      <div className="text-center py-16">
-        <h2 className="text-2xl font-bold text-foreground mb-4">Event not found</h2>
-        <Button asChild>
-          <Link href="/dashboard/events">Back to Events</Link>
-        </Button>
-      </div>
-    )
-  }
+  const isSent = (guest) => guest.invitationSentAt !== null
 
-  const confirmedCount = guests.filter(g => g.rsvpStatus === 'confirmed').length
-  const declinedCount = guests.filter(g => g.rsvpStatus === 'declined').length
-  const pendingCount = guests.filter(g => !g.rsvpStatus).length
-  const viewedCount = guests.filter(g => g.invitationViewedAt).length
+  const demoEvent = {
+    title: event.title,
+    eventDate: event.eventDate,
+    location: event.location,
+    time: event.time || '',
+    dressCode: event.dressCode || event.dress_code || '',
+  }
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-        <div className="flex items-start gap-4">
-          <Button variant="ghost" size="icon" asChild>
-            <Link href="/dashboard/events">
-              <ArrowLeft size={20} />
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">{event.title}</h1>
-            <div className="flex flex-wrap items-center gap-4 mt-2 text-muted-foreground">
-              {event.eventDate && (
-                <span className="flex items-center gap-1">
-                  <Calendar size={16} />
-                  {new Date(event.eventDate).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
-                </span>
-              )}
-              {event.location && (
-                <span className="flex items-center gap-1">
-                  <MapPin size={16} />
-                  {event.location}
-                </span>
-              )}
-            </div>
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+        <div>
+          <Link href="/dashboard/events" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 mb-2">
+            <ArrowLeft className="w-4 h-4" /> Retour aux événements
+          </Link>
+          <h1 className="text-3xl font-bold tracking-tight">{event.title}</h1>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
+            {event.eventDate && (
+              <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {format(new Date(event.eventDate), 'PPP', { locale: fr })}</span>
+            )}
+            {event.location && (
+              <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {event.location}</span>
+            )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" asChild>
-            <Link href={`/dashboard/events/${id}/edit`}>
-              <Pencil size={16} className="mr-2" />
-              Edit
-            </Link>
-          </Button>
-          <Button asChild>
-            <Link href={`/dashboard/events/${id}/preview`}>
-              <Eye size={16} className="mr-2" />
-              Preview
-            </Link>
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                <Users className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-foreground">{guests.length}</div>
-                <div className="text-sm text-muted-foreground">Total Guests</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-foreground">{confirmedCount}</div>
-                <div className="text-sm text-muted-foreground">Confirmed</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-yellow-500" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-foreground">{pendingCount}</div>
-                <div className="text-sm text-muted-foreground">Pending</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <Eye className="w-5 h-5 text-blue-500" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold text-foreground">{viewedCount}</div>
-                <div className="text-sm text-muted-foreground">Viewed</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* AI Animation */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Wand2 className="w-5 h-5 text-primary" />
-              <CardTitle>AI Animation</CardTitle>
-            </div>
-            <Button variant="outline" asChild>
-              <Link href={`/dashboard/events/${id}/animation`}>
-                Customize Animation
-              </Link>
+        <div className="flex flex-wrap gap-2">
+          {event.invitationTemplate ? (
+            <Button variant="secondary" onClick={handleSendBulk} disabled={sendingBulk}>
+              <Mail className="w-4 h-4 mr-2" />
+              {sendingBulk ? 'Envoi...' : 'Envoyer les invitations'}
             </Button>
-          </div>
-          <CardDescription>
-            Current theme: <span className="text-primary capitalize">{event.theme}</span>
-          </CardDescription>
-        </CardHeader>
-      </Card>
+          ) : null}
+          <Button variant="destructive" onClick={handleDeleteEvent} disabled={deleting}>
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
 
-      {/* Guest List */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Guest List</CardTitle>
-              <CardDescription>Manage your event guests and track RSVPs</CardDescription>
-            </div>
-            <Dialog open={isAddGuestOpen} onOpenChange={setIsAddGuestOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus size={16} className="mr-2" />
-                  Add Guest
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Add New Guest</DialogTitle>
-                  <DialogDescription>
-                    Add a guest to your event. They will receive a unique invitation link.
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleAddGuest} className="space-y-4 mt-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Name *</label>
-                    <Input
-                      placeholder="John Doe"
-                      value={guestForm.name}
-                      onChange={(e) => setGuestForm(prev => ({ ...prev, name: e.target.value }))}
-                      required
-                    />
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList>
+          <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
+          <TabsTrigger value="guests">Invités ({guests.length})</TabsTrigger>
+          <TabsTrigger value="settings">Paramètres</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6 mt-6">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle>Suivi des réponses RSVP</CardTitle>
+              <CardDescription>Statistiques en temps réel des réponses de vos invités</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <RSVPTracker guests={guests} />
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* ── Template Card ────────────────────── */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center justify-between">
+                  <span>Modèle d'invitation</span>
+                  <Button size="sm" variant="outline" onClick={openTemplatePicker} className="gap-1.5 text-xs">
+                    <Replace className="w-3.5 h-3.5" />
+                    {event.invitationTemplate ? 'Changer le modèle' : 'Choisir un modèle'}
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {event.invitationTemplate ? (
+                  <>
+                    {/* Mini preview of current template */}
+                    <div className="relative h-48 rounded-lg overflow-hidden border border-border shadow-sm">
+                      <InvitationPreview
+                        template={event.invitationTemplate}
+                        event={demoEvent}
+                        guestName="Exemple Invité"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-green-500 font-medium bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20">
+                      <CheckCircle className="w-4 h-4" /> Modèle actif
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-6 border border-dashed border-border rounded-lg space-y-2">
+                    <LayoutTemplate className="w-8 h-8 mx-auto text-muted-foreground opacity-30" />
+                    <p className="text-sm text-muted-foreground">Aucun modèle sélectionné</p>
+                    <p className="text-xs text-muted-foreground">Choisissez un modèle pour envoyer vos invitations</p>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Email *</label>
-                    <Input
-                      type="email"
-                      placeholder="john@example.com"
-                      value={guestForm.email}
-                      onChange={(e) => setGuestForm(prev => ({ ...prev, email: e.target.value }))}
-                      required
-                    />
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Résumé de l'événement</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {event.description && (
+                  <div>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Description</span>
+                    <p className="text-sm mt-1">{event.description}</p>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Phone</label>
-                    <Input
-                      placeholder="+1 (555) 123-4567"
-                      value={guestForm.phone}
-                      onChange={(e) => setGuestForm(prev => ({ ...prev, phone: e.target.value }))}
-                    />
+                )}
+                {event.customMessage && (
+                  <div>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Message aux invités</span>
+                    <p className="text-sm mt-1 italic">"{event.customMessage}"</p>
                   </div>
-                  <div className="flex justify-end gap-2">
-                    <Button type="button" variant="outline" onClick={() => setIsAddGuestOpen(false)}>
-                      Cancel
-                    </Button>
-                    <Button type="submit" disabled={addingGuest}>
-                      {addingGuest ? 'Adding...' : 'Add Guest'}
-                    </Button>
-                  </div>
-                </form>
-              </DialogContent>
-            </Dialog>
+                )}
+              </CardContent>
+            </Card>
           </div>
-        </CardHeader>
-        <CardContent>
-          {guestsLoading ? (
-            <div className="space-y-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-16 bg-muted animate-pulse rounded-lg" />
-              ))}
-            </div>
-          ) : guests.length === 0 ? (
-            <div className="text-center py-12">
-              <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-foreground mb-2">No guests yet</h3>
-              <p className="text-muted-foreground mb-4">Add your first guest to start sending invitations</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {guests.map((guest) => (
-                <div 
-                  key={guest.id}
-                  className="flex items-center justify-between p-4 rounded-lg border border-border hover:bg-card/50 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-primary font-medium">
-                        {guest.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-foreground">{guest.name}</h4>
-                      <p className="text-sm text-muted-foreground">{guest.email}</p>
-                    </div>
+        </TabsContent>
+
+        <TabsContent value="guests" className="mt-6 space-y-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Liste des invités</CardTitle>
+                <CardDescription>Gérez vos invités et suivez leurs statuts individuels</CardDescription>
+              </div>
+              <Button size="sm" onClick={() => setShowAddGuest(!showAddGuest)}>
+                {showAddGuest ? 'Fermer' : <><UserPlus className="w-4 h-4 mr-2" /> Ajouter</>}
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {showAddGuest && (
+                <div className="grid md:grid-cols-2 gap-6 mb-6 p-4 bg-muted/30 rounded-lg border border-border">
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-medium">Ajout manuel</h3>
+                    <Input placeholder="Nom *" value={newGuest.name} onChange={e => setNewGuest(g => ({ ...g, name: e.target.value }))} className="bg-background" />
+                    <Input placeholder="Email *" type="email" value={newGuest.email} onChange={e => setNewGuest(g => ({ ...g, email: e.target.value }))} className="bg-background" />
+                    <Input placeholder="Téléphone" value={newGuest.phone} onChange={e => setNewGuest(g => ({ ...g, phone: e.target.value }))} className="bg-background" />
+                    <Button onClick={handleAddGuest} disabled={!newGuest.name || !newGuest.email}>Ajouter</Button>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      guest.rsvpStatus === 'confirmed' 
-                        ? 'bg-green-500/20 text-green-400'
-                        : guest.rsvpStatus === 'declined'
-                        ? 'bg-red-500/20 text-red-400'
-                        : 'bg-yellow-500/20 text-yellow-400'
-                    }`}>
-                      {guest.rsvpStatus || 'pending'}
-                    </span>
-                    {guest.invitationViewedAt && (
-                      <span className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Eye size={12} />
-                        Viewed
-                      </span>
-                    )}
-                    <div className="flex items-center gap-1">
-                      <Button 
-                        variant="ghost" 
-                        size="icon"
-                        onClick={() => handleSendInvitation(guest.id)}
-                        title="Send invitation email"
-                      >
-                        <Send size={16} />
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon"
-                        asChild
-                        title="View invitation"
-                      >
-                        <Link href={`/invite/${guest.invitationToken}`} target="_blank">
-                          <ExternalLink size={16} />
-                        </Link>
-                      </Button>
-                      <Button 
-                        variant="ghost" 
-                        size="icon"
-                        onClick={() => handleDeleteGuest(guest.id)}
-                        title="Remove guest"
-                      >
-                        <Trash2 size={16} className="text-destructive" />
-                      </Button>
-                    </div>
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-medium">Import CSV</h3>
+                    <CSVImporter 
+                      onImport={async (gs) => {
+                        for (const g of gs) {
+                          await addGuest(id, g).catch(()=>{})
+                        }
+                        loadData()
+                        setShowAddGuest(false)
+                      }} 
+                    />
                   </div>
                 </div>
-              ))}
+              )}
+
+              <div className="border rounded-md overflow-hidden">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-muted text-muted-foreground text-xs uppercase">
+                    <tr>
+                      <th className="px-4 py-3 font-medium">Nom</th>
+                      <th className="px-4 py-3 font-medium">Contact</th>
+                      <th className="px-4 py-3 font-medium">Invitation</th>
+                      <th className="px-4 py-3 font-medium">RSVP</th>
+                      <th className="px-4 py-3 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border">
+                    {guests.map((g) => (
+                      <tr key={g.id} className="hover:bg-muted/30 transition-colors">
+                        <td className="px-4 py-3 font-medium">{g.name}</td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          {g.email}
+                          {g.phone && <div className="text-xs">{g.phone}</div>}
+                        </td>
+                        <td className="px-4 py-3">
+                          {isSent(g) ? (
+                            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-blue-500/10 text-blue-500 border border-blue-500/20">
+                              <Mail className="w-3 h-3" /> Envoyée
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground border border-border">
+                              <Clock className="w-3 h-3" /> En attente
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3">
+                          {g.rsvpStatus === 'confirmed' && <span className="inline-flex items-center gap-1 text-green-500 text-xs font-medium"><CheckCircle className="w-3 h-3" /> Confirmé</span>}
+                          {g.rsvpStatus === 'declined' && <span className="inline-flex items-center gap-1 text-red-500 text-xs font-medium"><XCircle className="w-3 h-3" /> Décliné</span>}
+                          {g.rsvpStatus === 'maybe' && <span className="inline-flex items-center gap-1 text-yellow-500 text-xs font-medium"><HelpCircle className="w-3 h-3" /> Peut-être</span>}
+                          {(!g.rsvpStatus || g.rsvpStatus === 'pending') && <span className="text-muted-foreground text-xs">—</span>}
+                        </td>
+                        <td className="px-4 py-3 text-right">
+                          <Button variant="ghost" size="icon" onClick={() => handleRemoveGuest(g.id)} className="h-8 w-8 text-destructive hover:bg-destructive/10">
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                    {guests.length === 0 && (
+                      <tr>
+                        <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
+                          Aucun invité ajouté pour le moment.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="settings" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Paramètres avancés</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">La modification des paramètres avancés est disponible via le wizard ou la page d'édition globale.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* ── Template Picker Modal ─────────────────── */}
+      {showTemplatePicker && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={e => { if(e.target === e.currentTarget) setShowTemplatePicker(false) }}>
+          <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div className="p-6 border-b border-border flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold">Choisir un modèle</h2>
+                <p className="text-sm text-muted-foreground mt-0.5">Sélectionnez un modèle pour l'appliquer à cet événement</p>
+              </div>
+              <div className="flex gap-2">
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/dashboard/templates/new" target="_blank">+ Nouveau modèle</Link>
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => setShowTemplatePicker(false)}>
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
-          )}
-        </CardContent>
-      </Card>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              {savedTemplates.length === 0 ? (
+                <div className="text-center py-12">
+                  <LayoutTemplate className="w-10 h-10 mx-auto text-muted-foreground opacity-30 mb-3" />
+                  <p className="text-sm text-muted-foreground mb-4">Aucun modèle sauvegardé</p>
+                  <Button asChild size="sm">
+                    <Link href="/dashboard/templates/new" target="_blank">Créer mon premier modèle</Link>
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {savedTemplates.map(tmpl => (
+                    <button
+                      key={tmpl.id}
+                      onClick={() => setSelectedForSwap(tmpl)}
+                      className={`relative rounded-xl overflow-hidden border-2 transition-all aspect-[3/4] ${
+                        selectedForSwap?.id === tmpl.id
+                          ? 'border-primary ring-2 ring-primary'
+                          : 'border-border hover:border-primary/40'
+                      }`}
+                    >
+                      <div className="absolute inset-0 scale-[0.55] origin-top pointer-events-none" style={{ width: '182%', height: '182%' }}>
+                        <InvitationPreview template={tmpl.config} event={demoEvent} guestName="Marie Dupont" />
+                      </div>
+                      {selectedForSwap?.id === tmpl.id && (
+                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                          <Check className="w-3.5 h-3.5 text-primary-foreground" />
+                        </div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1.5">
+                        <p className="text-xs text-white font-medium truncate">{tmpl.name}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {savedTemplates.length > 0 && (
+              <div className="p-4 border-t border-border flex justify-end gap-3">
+                <Button variant="outline" onClick={() => setShowTemplatePicker(false)}>Annuler</Button>
+                <Button onClick={handleApplyTemplate} disabled={!selectedForSwap || swapping}>
+                  {swapping ? 'Application...' : 'Appliquer ce modèle'}
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

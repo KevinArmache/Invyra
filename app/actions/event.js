@@ -115,6 +115,8 @@ export async function updateEvent(id, data) {
         theme: data.theme !== undefined ? data.theme : undefined,
         customMessage: data.custom_message !== undefined ? data.custom_message : undefined,
         animationConfig: data.animation_config !== undefined ? data.animation_config : undefined,
+        invitationTemplate: data.invitation_template !== undefined ? data.invitation_template : undefined,
+        emailTemplate: data.email_template !== undefined ? data.email_template : undefined,
         status: data.status !== undefined ? data.status : undefined,
       }
     })

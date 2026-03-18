@@ -17,6 +17,18 @@ model User {
   
   // Relations
   events    Event[]
+  templates CustomTemplate[]
+}
+
+model CustomTemplate {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  name      String
+  config    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Event {
@@ -29,6 +41,8 @@ model Event {
   theme           String   @default("elegant")
   customMessage   String?
   animationConfig Json?
+  invitationTemplate Json?
+  emailTemplate  String?
   status          String   @default("draft")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

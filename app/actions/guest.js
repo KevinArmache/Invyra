@@ -223,3 +223,46 @@ export async function sendInvitationEmail(guestId) {
     throw new Error(error.message || 'Failed to send invitation')
   }
 }
+
+// ──────────────────────────────────────────────
+// Send Bulk Invitations
+// ──────────────────────────────────────────────
+export async function sendBulkInvitations(eventId) {
+  try {
+    const user = await getSession()
+    if (!user) throw new Error('Unauthorized')
+
+    const event = await prisma.event.findFirst({
+      where: { id: eventId, userId: user.userId },
+      include: { guests: true }
+    })
+    if (!event) throw new Error('Event not found')
+
+    const unsentGuests = event.guests.filter(g => !g.invitationSentAt)
+    let sentCount = 0
+
+    if (!process.env.RESEND_API_KEY) {
+      // Fake send if no API key
+      for (const guest of unsentGuests) {
+        await prisma.guest.update({ where: { id: guest.id }, data: { invitationSentAt: new Date() } })
+        sentCount++
+      }
+      return { success: true, sentCount, message: `Simulated sending to ${sentCount} guests.` }
+    }
+
+    // Real send
+    for (const guest of unsentGuests) {
+      try {
+        await sendInvitationEmail(guest.id)
+        sentCount++
+      } catch (e) {
+        console.error(`Failed to send email to ${guest.email}`, e)
+      }
+    }
+
+    return { success: true, sentCount }
+  } catch (error) {
+    console.error('Bulk send error:', error)
+    throw new Error(error.message || 'Failed to send bulk invitations')
+  }
+}

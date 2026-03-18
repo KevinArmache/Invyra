@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  LayoutTemplate
 } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { useTranslation } from '@/lib/i18n/Context'
@@ -44,6 +45,7 @@ export default function DashboardLayout({ children }) {
   const navigation = [
     { name: t('sidebar.dashboard'), href: '/dashboard', icon: LayoutDashboard },
     { name: t('sidebar.events'), href: '/dashboard/events', icon: Calendar },
+    { name: 'Modèles', href: '/dashboard/templates', icon: LayoutTemplate },
     { name: t('sidebar.analytics'), href: '/dashboard/analytics', icon: BarChart3 },
     { name: t('sidebar.settings'), href: '/dashboard/settings', icon: Settings },
   ]
