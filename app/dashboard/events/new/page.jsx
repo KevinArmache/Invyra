@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { toast } from 'sonner'
-import { FileText, ArrowRight, ArrowLeft, Sparkles, Check, Plus, LayoutTemplate, Clock, Calendar } from 'lucide-react'
+import { FileText, ArrowRight, ArrowLeft, Sparkles, Check, Plus, LayoutTemplate, Clock, Calendar, MapPin, Shirt } from 'lucide-react'
 import { createEvent, updateEvent } from '@/app/actions/event'
 import { addGuest } from '@/app/actions/guest'
 import { getUserTemplates } from '@/app/actions/template'
@@ -236,12 +236,14 @@ export default function NewEventPage() {
                         }`}
                     >
                       {/* Mini preview */}
-                      <div className="absolute inset-0 scale-[0.55] origin-top pointer-events-none" style={{ width: '182%', height: '182%' }}>
-                        <InvitationPreview
-                          template={tmpl.config}
-                          event={demoEvent}
-                          guestName="Marie Dupont"
-                        />
+                      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        <div style={{ width: '182%', height: '182%', transform: 'scale(0.55)', transformOrigin: 'top left', position: 'absolute', top: 0, left: 0 }}>
+                          <InvitationPreview
+                            template={tmpl.config}
+                            event={demoEvent}
+                            guestName="Marie Dupont"
+                          />
+                        </div>
                       </div>
                       {selectedTemplate?.id === tmpl.id && (
                         <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center">

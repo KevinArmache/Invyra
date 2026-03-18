@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Plus, Trash2, LayoutTemplate, Eye, Edit2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { getUserTemplates, deleteUserTemplate } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
@@ -126,6 +126,7 @@ export default function TemplatesPage() {
       {/* Fullscreen Preview Dialog */}
       <Dialog open={!!previewTemplate} onOpenChange={(open) => !open && setPreviewTemplate(null)}>
         <DialogContent className="max-w-[95vw] md:max-w-[600px] h-[90vh] p-0 overflow-hidden bg-black border border-border">
+        <DialogTitle><span className="sr-only">Aperçu du modèle</span></DialogTitle>
           {previewTemplate && (
             <div className="w-full h-full overflow-auto custom-scrollbar">
               <InvitationPreview 

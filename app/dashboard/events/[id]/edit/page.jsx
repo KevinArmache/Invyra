@@ -86,7 +86,6 @@ export default function EditEventPage({ params }) {
 
   async function handleSubmit(e) {
     if (e) e.preventDefault()
-    setError('')
     setLoading(true)
 
     try {
@@ -155,11 +154,8 @@ export default function EditEventPage({ params }) {
         </div>
       </div>
 
-      {error && (
-        <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-lg border border-destructive/20">
-          {error}
-        </div>
-      )}
+
+
 
       <div className="flex-1 flex flex-col min-h-0">
         {/* Toggle Mode on Mobile */}
