@@ -408,7 +408,7 @@ export default function CodeTemplateEditor({ template, onChange }) {
         <p className="font-semibold text-foreground flex items-center gap-1.5">
           <Code className="w-3.5 h-3.5 text-primary" /> Éditeur de Modèle Personnalisé
         </p>
-        <p>Variables disponibles : <code className="text-primary text-[10px]">{'{{EVENT_TITLE}}'}</code>, <code className="text-primary text-[10px]">{'{{GUEST_NAME}}'}</code>, <code className="text-primary text-[10px]">{'{{EVENT_LOCATION}}'}</code>, <code className="text-primary text-[10px]">{'{{EVENT_DATE}}'}</code>, <code className="text-primary text-[10px]">{'{{DRESS_CODE}}'}</code>,<code className="text-primary text-[10px]">{'{{TIME}}'}</code></p>
+        <p>Variables disponibles : <code className="text-primary text-[10px]">{'{{EVENT_TITLE}}'}</code>, <code className="text-primary text-[10px]">{'{{GUEST_NAME}}'}</code>, <code className="text-primary text-[10px]">{'{{EVENT_LOCATION}}'}</code>, <code className="text-primary text-[10px]">{'{{EVENT_DATE}}'}</code>, <code className="text-primary text-[10px]">{'{{DRESS_CODE}}'}</code>, <code className="text-primary text-[10px]">{'{{TIME}}'}</code></p>
         <p className="text-[10px] opacity-70">L'onglet JS est automatiquement injecté dans l'iframe. Il gère le RSVP via <code>postMessage</code>.</p>
       </div>
 
