@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getEventById, updateEvent } from '@/app/actions/event'
 import { generateTemplateWithAI } from '@/app/actions/template'
-import { TEMPLATE_PRESETS } from '@/lib/template-presets'
+import { TEMPLATE_PRESETS } from '@/utils/template-presets'
 import { ArrowLeft, Save, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -18,13 +18,13 @@ import InvitationPreview from '@/components/invitation/InvitationPreview'
 export default function TemplateConfigurationPage({ params }) {
   const router = useRouter()
   const { id } = use(params)
-  
+
   const [event, setEvent] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [aiPrompt, setAiPrompt] = useState('')
   const [aiLoading, setAiLoading] = useState(false)
-  
+
   // Current working copy of the template
   const [template, setTemplate] = useState(null)
   const [activeTab, setActiveTab] = useState('editor')
@@ -94,7 +94,7 @@ export default function TemplateConfigurationPage({ params }) {
                 <TabsTrigger value="gallery">Galerie & IA</TabsTrigger>
               </TabsList>
             </div>
-            
+
             <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
               <TabsContent value="editor" className="mt-0 h-full">
                 <TemplateEditor template={template} onChange={setTemplate} />
@@ -105,14 +105,14 @@ export default function TemplateConfigurationPage({ params }) {
                   <CodeTemplateEditor template={template} onChange={setTemplate} />
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="gallery" className="mt-0 space-y-8">
                 {/* AI Generator Box */}
                 <div className="p-4 bg-muted/30 border border-primary/20 rounded-lg space-y-3">
                   <h3 className="font-semibold text-sm flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-primary" /> Assistant IA
                   </h3>
-                  <Textarea 
+                  <Textarea
                     placeholder="Décrivez l'ambiance... ex: 'Un thème de plage tropicale, avec du bleu azur et du sable doré'."
                     value={aiPrompt}
                     onChange={e => setAiPrompt(e.target.value)}
@@ -123,14 +123,14 @@ export default function TemplateConfigurationPage({ params }) {
                     {aiLoading ? 'Génération...' : 'Générer ce modèle'}
                   </Button>
                 </div>
-                
+
                 {/* Preset Gallery */}
-                <TemplateGallery 
-                  selectedId={null} 
+                <TemplateGallery
+                  selectedId={null}
                   onSelect={(_, tmpl) => {
                     setTemplate(tmpl)
                     setActiveTab('editor')
-                  }} 
+                  }}
                 />
               </TabsContent>
             </div>
@@ -140,10 +140,10 @@ export default function TemplateConfigurationPage({ params }) {
         {/* Live Preview Area */}
         <div className="relative rounded-xl border border-border overflow-hidden bg-muted/20 h-full shadow-inner flex items-center justify-center p-4 sm:p-8">
           <div className="w-full max-w-[600px] aspect-[3/4] max-h-full rounded-md overflow-hidden shadow-2xl relative">
-            <InvitationPreview 
-              template={template} 
-              event={event} 
-              guestName="Exemple Invité" 
+            <InvitationPreview
+              template={template}
+              event={event}
+              guestName="Exemple Invité"
             />
           </div>
         </div>

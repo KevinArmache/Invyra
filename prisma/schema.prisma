@@ -14,10 +14,12 @@ model User {
   company   String?
   password  String
   createdAt DateTime @default(now())
-  
+
   // Relations
   events    Event[]
   templates CustomTemplate[]
+
+  @@map("users")
 }
 
 model CustomTemplate {
@@ -27,53 +29,55 @@ model CustomTemplate {
   config    Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Event {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId          String   @db.ObjectId
-  title           String
-  description     String?
-  eventDate       DateTime?
-  location        String?
-  theme           String   @default("elegant")
-  customMessage   String?
-  animationConfig Json?
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String    @db.ObjectId
+  title              String
+  description        String?
+  eventDate          DateTime?
+  location           String?
+  customMessage      String?
+  animationConfig    Json?
   invitationTemplate Json?
-  emailTemplate  String?
-  status          String   @default("draft")
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  
+  emailTemplate      String?
+  status             String    @default("draft")
+  autoSend           Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
   // Relations
-  user            User     @relation(fields: [userId], references: [id])
-  guests          Guest[]
+  user   User    @relation(fields: [userId], references: [id])
+  guests Guest[]
 }
 
 model Guest {
-  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
-  eventId              String   @db.ObjectId
-  name                 String
-  email                String
-  phone                String?
-  dietaryRestrictions  String?
-  plusOne              Boolean  @default(false)
-  notes                String?
-  
-  invitationToken      String   @unique
-  rsvpStatus           String?
-  
-  invitationSentAt     DateTime?
-  invitationViewedAt   DateTime?
-  rsvpRespondedAt      DateTime?
-  
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  
+  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
+  eventId             String  @db.ObjectId
+  name                String
+  email               String
+  phone               String?
+  dietaryRestrictions String?
+  plusOne             Boolean @default(false)
+  notes               String?
+
+  invitationToken String  @unique
+  rsvpStatus      String?
+
+  invitationSentAt   DateTime? // Conservé pour compatibilité ou générique
+  emailSentAt        DateTime?
+  whatsappSentAt     DateTime?
+  invitationViewedAt DateTime?
+  rsvpRespondedAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   // Relations
-  event                Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
   @@unique([eventId, email]) // Un email par eventier
 }

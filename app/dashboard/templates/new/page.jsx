@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 
 const VARIABLE_TAGS = [
@@ -25,6 +26,7 @@ export default function NewTemplatePage() {
   const [saving, setSaving] = useState(false)
   const [html, setHtml] = useState(DEFAULT_HTML)
   const [css, setCss] = useState(DEFAULT_CSS)
+  const [activeMode, setActiveMode] = useState('edit')
 
   // Build the template config object from current HTML/CSS
   const templateConfig = {
@@ -91,65 +93,78 @@ export default function NewTemplatePage() {
         </div>
       </div>
 
-      <div className="flex-1 grid lg:grid-cols-[440px_1fr] gap-5 min-h-0">
-        {/* Left: HTML/CSS Editor */}
-        <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
-          {/* Header */}
-          <div className="px-4 py-3 border-b border-border bg-muted/20 flex items-center gap-2">
-            <Code className="w-4 h-4 text-primary" />
-            <span className="text-sm font-semibold">Éditeur HTML / CSS</span>
-          </div>
-
-          {/* Variables reference */}
-          <div className="px-4 py-2 border-b border-border bg-muted/10 flex flex-wrap gap-1.5">
-            {VARIABLE_TAGS.map(v => (
-              <span key={v.tag} title={v.desc} className="bg-primary/10 text-primary text-[10px] font-mono px-1.5 py-0.5 rounded cursor-help border border-primary/20">
-                {v.tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-            <div className="space-y-1">
-              <Label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Structure HTML</Label>
-              <Textarea
-                value={html}
-                onChange={e => setHtml(e.target.value)}
-                className="font-mono text-xs bg-background leading-relaxed resize-none"
-                style={{ minHeight: '280px' }}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <Label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Styles CSS</Label>
-              <Textarea
-                value={css}
-                onChange={e => setCss(e.target.value)}
-                className="font-mono text-xs bg-background leading-relaxed resize-none"
-                style={{ minHeight: '280px' }}
-              />
-            </div>
-
-            <Button onClick={handleApplyPreview} variant="secondary" className="w-full">
-              Actualiser l'aperçu
-            </Button>
-          </div>
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* Toggle Mode on Mobile */}
+        <div className="lg:hidden mb-4">
+          <Tabs value={activeMode} onValueChange={setActiveMode}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="edit">Mode Édition</TabsTrigger>
+              <TabsTrigger value="preview">Mode Aperçu</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
+        
+        <div className="flex-1 grid lg:grid-cols-[440px_1fr] gap-5 min-h-0">
+          {/* Left: HTML/CSS Editor */}
+          <div className={`border border-border rounded-xl shadow-sm overflow-hidden flex flex-col h-full bg-card ${activeMode === 'edit' ? 'flex' : 'hidden lg:flex'}`}>
+            {/* Header */}
+            <div className="px-4 py-3 border-b border-border bg-muted/20 flex items-center gap-2">
+              <Code className="w-4 h-4 text-primary" />
+              <span className="text-sm font-semibold">Éditeur HTML / CSS</span>
+            </div>
 
-        {/* Right: Live Preview */}
-        <div className="relative rounded-xl border border-border overflow-hidden bg-muted/20 h-full shadow-inner flex items-center justify-center p-0">
-          <div className="w-full h-full overflow-auto">
-            <InvitationPreview
-              template={templateConfig}
-              event={demoEvent}
-              guestName="Marie Dupont"
-            />
+            {/* Variables reference */}
+            <div className="px-4 py-2 border-b border-border bg-muted/10 flex flex-wrap gap-1.5">
+              {VARIABLE_TAGS.map(v => (
+                <span key={v.tag} title={v.desc} className="bg-primary/10 text-primary text-[10px] font-mono px-1.5 py-0.5 rounded cursor-help border border-primary/20">
+                  {v.tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Structure HTML</Label>
+                <Textarea
+                  value={html}
+                  onChange={e => setHtml(e.target.value)}
+                  className="font-mono text-xs bg-background leading-relaxed resize-none"
+                  style={{ minHeight: '280px' }}
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Styles CSS</Label>
+                <Textarea
+                  value={css}
+                  onChange={e => setCss(e.target.value)}
+                  className="font-mono text-xs bg-background leading-relaxed resize-none"
+                  style={{ minHeight: '280px' }}
+                />
+              </div>
+
+              <Button onClick={handleApplyPreview} variant="secondary" className="w-full">
+                Actualiser l'aperçu
+              </Button>
+            </div>
+          </div>
+
+          {/* Right: Live Preview */}
+          <div className={`relative rounded-xl border border-border overflow-hidden bg-muted/20 h-full shadow-inner flex items-center justify-center p-0 ${activeMode === 'preview' ? 'flex' : 'hidden lg:flex'}`}>
+            <div className="w-full h-full overflow-auto">
+              <InvitationPreview
+                template={templateConfig}
+                event={demoEvent}
+                guestName="Marie Dupont"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
   )
 }
+
 
 // ─── Default HTML Template (Long, detailed with RSVP form) ───────────────────
 const DEFAULT_HTML = `<div class="page">

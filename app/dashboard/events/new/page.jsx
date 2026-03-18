@@ -86,7 +86,7 @@ export default function NewEventPage() {
     setGuestLoading(true)
     try {
       for (const g of guests) {
-        await addGuest(createdEventId, g).catch(() => {})
+        await addGuest(createdEventId, g).catch(() => { })
       }
       setAddedGuests(prev => [...prev, ...guests])
     } finally {
@@ -130,13 +130,12 @@ export default function NewEventPage() {
       <div className="flex items-center gap-2">
         {STEPS.map((s, i) => (
           <div key={s.id} className="flex items-center gap-2">
-            <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              step === s.id
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${step === s.id
                 ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30'
                 : step > s.id
-                ? 'bg-primary/20 text-primary'
-                : 'bg-muted text-muted-foreground'
-            }`}>
+                  ? 'bg-primary/20 text-primary'
+                  : 'bg-muted text-muted-foreground'
+              }`}>
               {step > s.id ? <Check className="w-4 h-4" /> : <s.icon className="w-4 h-4" />}
               <span className="hidden sm:inline">{s.label}</span>
             </div>
@@ -160,7 +159,7 @@ export default function NewEventPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Calendar className="w-4 h-4" /> Date</label>
-                <Input type="datetime-local" value={form.event_date} onChange={e => setForm(f => ({ ...f, event_date: e.target.value }))} />
+                <Input type="date" value={form.event_date} onChange={e => setForm(f => ({ ...f, event_date: e.target.value }))} />
               </div>
               <div>
                 <label className="text-sm font-medium mb-1 block flex items-center gap-1"><Clock className="w-4 h-4" /> Heure (affiché sur l'invitation)</label>
@@ -228,11 +227,10 @@ export default function NewEventPage() {
                     <button
                       key={tmpl.id}
                       onClick={() => setSelectedTemplate(tmpl)}
-                      className={`relative rounded-lg overflow-hidden border-2 transition-all aspect-[3/4] ${
-                        selectedTemplate?.id === tmpl.id
+                      className={`relative rounded-lg overflow-hidden border-2 transition-all aspect-[3/4] ${selectedTemplate?.id === tmpl.id
                           ? 'border-primary ring-2 ring-primary scale-[0.98]'
                           : 'border-border hover:border-primary/40'
-                      }`}
+                        }`}
                     >
                       {/* Mini preview */}
                       <div className="absolute inset-0 scale-[0.55] origin-top pointer-events-none" style={{ width: '182%', height: '182%' }}>

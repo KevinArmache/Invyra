@@ -7,17 +7,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Wand2 } from 'lucide-react'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ArrowLeft, Save, Check, X, LayoutTemplate } from 'lucide-react'
 import { getEventById, updateEvent } from '@/app/actions/event'
-
-const themes = [
-  { id: 'elegant', name: 'Elegant', description: 'Classic gold particles with soft lighting', color: '#d4af37' },
-  { id: 'romantic', name: 'Romantic', description: 'Rose gold hues with floating hearts', color: '#c9a27e' },
-  { id: 'modern', name: 'Modern', description: 'Clean geometric shapes with sleek animations', color: '#8b9dc3' },
-  { id: 'festive', name: 'Festive', description: 'Colorful confetti and celebration vibes', color: '#ff6b6b' },
-  { id: 'nature', name: 'Nature', description: 'Organic leaves and earthy tones', color: '#6b8e6b' },
-  { id: 'cosmic', name: 'Cosmic', description: 'Starry night with galaxy particles', color: '#4a4e69' },
-]
+import { getUserTemplates } from '@/app/actions/template'
+import InvitationPreview from '@/components/invitation/InvitationPreview'
+import { TEMPLATE_PRESETS } from '@/utils/template-presets'
 
 export default function EditEventPage({ params }) {
   const { id } = use(params)
@@ -26,6 +21,13 @@ export default function EditEventPage({ params }) {
   const [error, setError] = useState('')
   const [event, setEvent] = useState(null)
   const [eventLoading, setEventLoading] = useState(true)
+  const [activeMode, setActiveMode] = useState('edit')
+
+  // Template picker
+  const [showTemplatePicker, setShowTemplatePicker] = useState(false)
+  const [savedTemplates, setSavedTemplates] = useState([])
+  const [selectedForSwap, setSelectedForSwap] = useState(null)
+  const [swapping, setSwapping] = useState(false)
 
   useEffect(() => {
     getEventById(id).then(data => { setEvent(data); setEventLoading(false) }).catch(() => setEventLoading(false))
@@ -36,7 +38,8 @@ export default function EditEventPage({ params }) {
     description: '',
     event_date: '',
     location: '',
-    theme: 'elegant',
+    time: '',
+    dress_code: '',
     custom_message: '',
     status: 'draft'
   })
@@ -48,7 +51,8 @@ export default function EditEventPage({ params }) {
         description: event.description || '',
         event_date: event.eventDate ? new Date(event.eventDate).toISOString().slice(0, 16) : '',
         location: event.location || '',
-        theme: event.theme || 'elegant',
+        time: event.time || '',
+        dress_code: event.dressCode || event.dress_code || '',
         custom_message: event.customMessage || '',
         status: event.status || 'draft'
       })
@@ -59,8 +63,30 @@ export default function EditEventPage({ params }) {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
+  async function openTemplatePicker() {
+    setShowTemplatePicker(true)
+    setSelectedForSwap(null)
+    const templates = await getUserTemplates()
+    setSavedTemplates(templates)
+  }
+
+  async function handleApplyTemplate() {
+    if (!selectedForSwap) return
+    setSwapping(true)
+    try {
+      await updateEvent(id, { invitation_template: selectedForSwap.config })
+      setEvent(prev => ({ ...prev, invitationTemplate: selectedForSwap.config }))
+      setShowTemplatePicker(false)
+      setSelectedForSwap(null)
+    } catch (e) {
+      alert(e.message)
+    } finally {
+      setSwapping(false)
+    }
+  }
+
   async function handleSubmit(e) {
-    e.preventDefault()
+    if (e) e.preventDefault()
     setError('')
     setLoading(true)
 
@@ -85,180 +111,228 @@ export default function EditEventPage({ params }) {
   if (!event) {
     return (
       <div className="text-center py-16">
-        <h2 className="text-2xl font-bold text-foreground mb-4">Event not found</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-4">Événement introuvable</h2>
         <Button asChild>
-          <Link href="/dashboard/events">Back to Events</Link>
+          <Link href="/dashboard/events">Retour aux événements</Link>
         </Button>
       </div>
     )
   }
 
+  // Derive template config (will update when event.invitationTemplate changes)
+  const activeTemplate = event.invitationTemplate || TEMPLATE_PRESETS[0].template
+
+  // Derive dummy event for preview
+  const previewEvent = {
+    title: formData.title || 'Mon Événement',
+    description: formData.description,
+    eventDate: formData.event_date || new Date().toISOString(),
+    location: formData.location || 'Lieu',
+    time: formData.time || '19h00',
+    dressCode: formData.dress_code || 'Tenue correcte exigée',
+    customMessage: formData.custom_message,
+  }
+
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="h-[calc(100vh-5rem)] flex flex-col gap-4">
       {/* Header */}
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild>
-          <Link href={`/dashboard/events/${id}`}>
-            <ArrowLeft size={20} />
-          </Link>
-        </Button>
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">Edit Event</h1>
-          <p className="text-muted-foreground mt-1">Update your event details</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" asChild>
+            <Link href={`/dashboard/events/${id}`}>
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Éditer l'événement</h1>
+            <p className="text-xs text-muted-foreground mt-1">Modification de : {formData.title}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button onClick={handleSubmit} disabled={loading} className="gap-2">
+            <Save className="w-4 h-4" /> {loading ? 'Enregistrement...' : 'Sauvegarder et quitter'}
+          </Button>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {error && (
-          <div className="p-4 text-sm text-destructive bg-destructive/10 rounded-lg border border-destructive/20">
-            {error}
-          </div>
-        )}
-
-        {/* Basic Details */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Event Details</CardTitle>
-            <CardDescription>Basic information about your event</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="title" className="text-sm font-medium text-foreground">
-                Event Title *
-              </label>
-              <Input
-                id="title"
-                name="title"
-                placeholder="e.g., Sarah & John's Wedding"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="description" className="text-sm font-medium text-foreground">
-                Description
-              </label>
-              <Textarea
-                id="description"
-                name="description"
-                placeholder="Tell your guests what to expect..."
-                value={formData.description}
-                onChange={handleChange}
-                rows={3}
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label htmlFor="event_date" className="text-sm font-medium text-foreground">
-                  Event Date
-                </label>
-                <Input
-                  id="event_date"
-                  name="event_date"
-                  type="datetime-local"
-                  value={formData.event_date}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="location" className="text-sm font-medium text-foreground">
-                  Location
-                </label>
-                <Input
-                  id="location"
-                  name="location"
-                  placeholder="e.g., The Grand Ballroom, NYC"
-                  value={formData.location}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="status" className="text-sm font-medium text-foreground">
-                Status
-              </label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-                className="w-full h-10 px-3 rounded-md border border-input bg-background text-foreground"
-              >
-                <option value="draft">Draft</option>
-                <option value="active">Active</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Theme Selection */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Wand2 className="w-5 h-5 text-primary" />
-              Animation Theme
-            </CardTitle>
-            <CardDescription>Choose a visual style for your invitation</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {themes.map((theme) => (
-                <button
-                  key={theme.id}
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, theme: theme.id }))}
-                  className={`p-4 rounded-lg border-2 text-left transition-all ${
-                    formData.theme === theme.id
-                      ? 'border-primary bg-primary/5'
-                      : 'border-border hover:border-primary/30'
-                  }`}
-                >
-                  <div 
-                    className="w-8 h-8 rounded-full mb-3"
-                    style={{ backgroundColor: theme.color }}
-                  />
-                  <h4 className="font-medium text-foreground">{theme.name}</h4>
-                  <p className="text-xs text-muted-foreground mt-1">{theme.description}</p>
-                </button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Custom Message */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Custom Message</CardTitle>
-            <CardDescription>Add a personal message to display on the invitation</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Textarea
-              name="custom_message"
-              placeholder="We are thrilled to invite you to celebrate with us..."
-              value={formData.custom_message}
-              onChange={handleChange}
-              rows={4}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Actions */}
-        <div className="flex items-center justify-end gap-4">
-          <Button type="button" variant="outline" asChild>
-            <Link href={`/dashboard/events/${id}`}>Cancel</Link>
-          </Button>
-          <Button type="submit" disabled={loading}>
-            {loading ? 'Saving...' : 'Save Changes'}
-          </Button>
+      {error && (
+        <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-lg border border-destructive/20">
+          {error}
         </div>
-      </form>
+      )}
+
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* Toggle Mode on Mobile */}
+        <div className="lg:hidden mb-4">
+          <Tabs value={activeMode} onValueChange={setActiveMode}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="edit">Paramètres</TabsTrigger>
+              <TabsTrigger value="preview">Aperçu en direct</TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+        
+        <div className="flex-1 grid lg:grid-cols-[1fr_450px] xl:grid-cols-[1fr_500px] gap-6 min-h-0">
+          {/* Left: Form */}
+          <div className={`overflow-y-auto space-y-6 pb-20 custom-scrollbar ${activeMode === 'edit' ? 'block' : 'hidden lg:block'}`}>
+            <Card>
+              <CardHeader>
+                <CardTitle>Informations principales</CardTitle>
+                <CardDescription>Les détails qui apparaîtront sur l'invitation</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <label htmlFor="title" className="text-sm font-medium text-foreground">Titre de l'événement *</label>
+                  <Input id="title" name="title" value={formData.title} onChange={handleChange} required />
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="description" className="text-sm font-medium text-foreground">Description</label>
+                  <Textarea id="description" name="description" value={formData.description} onChange={handleChange} rows={3} />
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="event_date" className="text-sm font-medium text-foreground">Date de l'événement</label>
+                    <Input id="event_date" name="event_date" type="datetime-local" value={formData.event_date} onChange={handleChange} />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="time" className="text-sm font-medium text-foreground">Heure (affichée)</label>
+                    <Input id="time" name="time" placeholder="19h00" value={formData.time} onChange={handleChange} />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label htmlFor="location" className="text-sm font-medium text-foreground">Lieu</label>
+                    <Input id="location" name="location" value={formData.location} onChange={handleChange} />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="dress_code" className="text-sm font-medium text-foreground">Dress Code</label>
+                    <Input id="dress_code" name="dress_code" value={formData.dress_code} onChange={handleChange} />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label htmlFor="status" className="text-sm font-medium text-foreground">Statut</label>
+                  <select id="status" name="status" value={formData.status} onChange={handleChange} className="w-full h-10 px-3 rounded-md border border-input bg-background text-foreground">
+                    <option value="draft">Brouillon</option>
+                    <option value="active">Actif</option>
+                    <option value="completed">Terminé</option>
+                    <option value="cancelled">Annulé</option>
+                  </select>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Message personnalisé</CardTitle>
+                <CardDescription>Un message chaleureux pour accompagner l'invitation (Optionnel)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Textarea name="custom_message" value={formData.custom_message} onChange={handleChange} rows={4} />
+              </CardContent>
+            </Card>
+
+            {/* Template Picker Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span>Modèle d'invitation</span>
+                  <button
+                    type="button"
+                    onClick={openTemplatePicker}
+                    className="text-xs text-primary hover:underline font-medium"
+                  >
+                    {event.invitationTemplate ? 'Changer le modèle' : 'Choisir un modèle'}
+                  </button>
+                </CardTitle>
+                <CardDescription>Le modèle utilisé pour l'affichage de l'invitation</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {event.invitationTemplate ? (
+                  <div className="flex items-center gap-2 text-xs text-green-500 font-medium bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20">
+                    <Check className="w-4 h-4" /> Modèle actif — visible dans l'aperçu à droite
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">Aucun modèle sélectionné. Un modèle par défaut est utilisé.</p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Right: Live Preview */}
+          <div className={`relative rounded-xl border border-border overflow-hidden bg-muted/20 h-full shadow-inner flex items-center justify-center p-0 lg:p-4 ${activeMode === 'preview' ? 'flex' : 'hidden lg:flex'}`}>
+            <div className="w-full h-full max-w-[450px] shadow-2xl rounded-lg overflow-hidden border border-border/50">
+              <InvitationPreview
+                template={activeTemplate}
+                event={previewEvent}
+                guestName="Exemple Invité"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Template Picker Modal */}
+      {showTemplatePicker && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={e => { if (e.target === e.currentTarget) setShowTemplatePicker(false) }}
+        >
+          <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div className="p-6 border-b border-border flex items-center justify-between">
+              <div>
+                <h2 className="text-xl font-bold">Choisir un modèle</h2>
+                <p className="text-sm text-muted-foreground mt-0.5">Sélectionnez un modèle pour l'appliquer à cet événement</p>
+              </div>
+              <button type="button" onClick={() => setShowTemplatePicker(false)} className="p-2 rounded-md hover:bg-muted">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              {savedTemplates.length === 0 ? (
+                <div className="text-center py-12">
+                  <LayoutTemplate className="w-10 h-10 mx-auto text-muted-foreground opacity-30 mb-3" />
+                  <p className="text-sm text-muted-foreground mb-4">Aucun modèle sauvegardé</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {savedTemplates.map(tmpl => (
+                    <button
+                      key={tmpl.id}
+                      type="button"
+                      onClick={() => setSelectedForSwap(tmpl)}
+                      className={`relative rounded-xl overflow-hidden border-2 transition-all aspect-[3/4] ${
+                        selectedForSwap?.id === tmpl.id ? 'border-primary ring-2 ring-primary' : 'border-border hover:border-primary/40'
+                      }`}
+                    >
+                      <div className="absolute inset-0 pointer-events-none" style={{ transform: 'scale(0.55)', transformOrigin: 'top left', width: '182%', height: '182%' }}>
+                        <InvitationPreview template={tmpl.config} event={previewEvent} guestName="Marie Dupont" />
+                      </div>
+                      {selectedForSwap?.id === tmpl.id && (
+                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                          <Check className="w-3.5 h-3.5 text-primary-foreground" />
+                        </div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1.5">
+                        <p className="text-xs text-white font-medium truncate">{tmpl.name}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {savedTemplates.length > 0 && (
+              <div className="p-4 border-t border-border flex justify-end gap-3">
+                <button type="button" onClick={() => setShowTemplatePicker(false)} className="px-4 py-2 text-sm border border-border rounded-md hover:bg-muted">Annuler</button>
+                <button type="button" onClick={handleApplyTemplate} disabled={!selectedForSwap || swapping} className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50">
+                  {swapping ? 'Application...' : 'Appliquer ce modèle'}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

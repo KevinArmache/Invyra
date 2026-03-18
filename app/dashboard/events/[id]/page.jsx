@@ -3,9 +3,9 @@
 import { use, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { getEventById, updateEvent, deleteEvent } from '@/app/actions/event'
+import { getEventById, deleteEvent } from '@/app/actions/event'
 import { getGuests, sendBulkInvitations } from '@/app/actions/guest'
-import { getUserTemplates } from '@/app/actions/template'
+import { sendInvitationEmail, generateWhatsAppLink, markWhatsAppSent } from '@/app/actions/notify'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -16,12 +16,12 @@ import RSVPTracker from '@/components/invitation/RSVPTracker'
 import CSVImporter from '@/components/invitation/CSVImporter'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { addGuest, deleteGuest } from '@/app/actions/guest'
-import { Calendar, MapPin, Users, Mail, Edit, Trash2, ArrowLeft, RefreshCw, Eye, UserPlus, CheckCircle, XCircle, HelpCircle, Clock, LayoutTemplate, Replace, Check, X } from 'lucide-react'
+import { Calendar, MapPin, Mail, Edit, Trash2, ArrowLeft, RefreshCw, UserPlus, CheckCircle, XCircle, HelpCircle, Clock, LayoutTemplate, MessageCircle } from 'lucide-react'
 
 export default function EventDetailPage({ params }) {
   const router = useRouter()
   const { id } = use(params)
-  
+
   const [event, setEvent] = useState(null)
   const [guests, setGuests] = useState([])
   const [loading, setLoading] = useState(true)
@@ -30,12 +30,6 @@ export default function EventDetailPage({ params }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [showAddGuest, setShowAddGuest] = useState(false)
   const [newGuest, setNewGuest] = useState({ name: '', email: '', phone: '' })
-
-  // Template switcher state
-  const [showTemplatePicker, setShowTemplatePicker] = useState(false)
-  const [savedTemplates, setSavedTemplates] = useState([])
-  const [selectedForSwap, setSelectedForSwap] = useState(null)
-  const [swapping, setSwapping] = useState(false)
 
   const loadData = async () => {
     try {
@@ -58,28 +52,6 @@ export default function EventDetailPage({ params }) {
     loadData()
   }, [id])
 
-  async function openTemplatePicker() {
-    setShowTemplatePicker(true)
-    setSelectedForSwap(null)
-    const templates = await getUserTemplates()
-    setSavedTemplates(templates)
-  }
-
-  async function handleApplyTemplate() {
-    if (!selectedForSwap) return
-    setSwapping(true)
-    try {
-      await updateEvent(id, { invitation_template: selectedForSwap.config })
-      setEvent(prev => ({ ...prev, invitationTemplate: selectedForSwap.config }))
-      setShowTemplatePicker(false)
-      setSelectedForSwap(null)
-    } catch (e) {
-      alert(e.message)
-    } finally {
-      setSwapping(false)
-    }
-  }
-
   async function handleDeleteEvent() {
     if (!confirm("Voulez-vous vraiment supprimer cet événement ?")) return
     setDeleting(true)
@@ -97,12 +69,35 @@ export default function EventDetailPage({ params }) {
     setSendingBulk(true)
     try {
       const res = await sendBulkInvitations(id)
-      alert(`${res.sentCount} invitations envoyées !`)
+      alert(res.message)
       loadData()
     } catch (e) {
       alert("Erreur: " + e.message)
     } finally {
       setSendingBulk(false)
+    }
+  }
+
+  async function handleSendSingleEmail(guestId) {
+    try {
+      await sendInvitationEmail(guestId)
+      alert("Email envoyé avec succès !")
+      loadData()
+    } catch (e) {
+      alert("Erreur lors de l'envoi: " + e.message)
+    }
+  }
+
+  async function handleSendWhatsApp(guestId) {
+    try {
+      const res = await generateWhatsAppLink(guestId)
+      window.open(res.link, '_blank')
+      
+      // On marque comme envoyé dans la foulée (ou on pourrait demander confirmation)
+      await markWhatsAppSent(guestId)
+      loadData()
+    } catch (e) {
+      alert("Erreur WhatsApp: " + e.message)
     }
   }
 
@@ -169,6 +164,11 @@ export default function EventDetailPage({ params }) {
               {sendingBulk ? 'Envoi...' : 'Envoyer les invitations'}
             </Button>
           ) : null}
+          <Button variant="outline" asChild>
+            <Link href={`/dashboard/events/${id}/edit`}>
+              <Edit className="w-4 h-4 mr-2" /> Éditer
+            </Link>
+          </Button>
           <Button variant="destructive" onClick={handleDeleteEvent} disabled={deleting}>
             <Trash2 className="w-4 h-4" />
           </Button>
@@ -199,16 +199,17 @@ export default function EventDetailPage({ params }) {
               <CardHeader>
                 <CardTitle className="text-lg flex items-center justify-between">
                   <span>Modèle d'invitation</span>
-                  <Button size="sm" variant="outline" onClick={openTemplatePicker} className="gap-1.5 text-xs">
-                    <Replace className="w-3.5 h-3.5" />
-                    {event.invitationTemplate ? 'Changer le modèle' : 'Choisir un modèle'}
+                  <Button size="sm" variant="outline" asChild className="gap-1.5 text-xs">
+                    <Link href={`/dashboard/events/${id}/edit`}>
+                      <Edit className="w-3.5 h-3.5" />
+                      {event.invitationTemplate ? 'Changer le modèle' : 'Choisir un modèle'}
+                    </Link>
                   </Button>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {event.invitationTemplate ? (
                   <>
-                    {/* Mini preview of current template */}
                     <div className="relative h-48 rounded-lg overflow-hidden border border-border shadow-sm">
                       <InvitationPreview
                         template={event.invitationTemplate}
@@ -275,14 +276,14 @@ export default function EventDetailPage({ params }) {
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-sm font-medium">Import CSV</h3>
-                    <CSVImporter 
+                    <CSVImporter
                       onImport={async (gs) => {
                         for (const g of gs) {
-                          await addGuest(id, g).catch(()=>{})
+                          await addGuest(id, g).catch(() => { })
                         }
                         loadData()
                         setShowAddGuest(false)
-                      }} 
+                      }}
                     />
                   </div>
                 </div>
@@ -292,9 +293,9 @@ export default function EventDetailPage({ params }) {
                 <table className="w-full text-sm text-left">
                   <thead className="bg-muted text-muted-foreground text-xs uppercase">
                     <tr>
-                      <th className="px-4 py-3 font-medium">Nom</th>
-                      <th className="px-4 py-3 font-medium">Contact</th>
-                      <th className="px-4 py-3 font-medium">Invitation</th>
+                      <th className="px-4 py-3 font-medium">Invité</th>
+                      <th className="px-4 py-3 font-medium">Email</th>
+                      <th className="px-4 py-3 font-medium">WhatsApp</th>
                       <th className="px-4 py-3 font-medium">RSVP</th>
                       <th className="px-4 py-3 text-right">Actions</th>
                     </tr>
@@ -302,27 +303,48 @@ export default function EventDetailPage({ params }) {
                   <tbody className="divide-y divide-border">
                     {guests.map((g) => (
                       <tr key={g.id} className="hover:bg-muted/30 transition-colors">
-                        <td className="px-4 py-3 font-medium">{g.name}</td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {g.email}
-                          {g.phone && <div className="text-xs">{g.phone}</div>}
+                        <td className="px-4 py-3 font-medium">
+                          {g.name}
+                          {g.plusOne && <span className="ml-2 text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full">+1</span>}
                         </td>
-                        <td className="px-4 py-3">
-                          {isSent(g) ? (
-                            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-blue-500/10 text-blue-500 border border-blue-500/20">
-                              <Mail className="w-3 h-3" /> Envoyée
+                        <td className="px-4 py-3 text-muted-foreground">
+                          <div className="text-xs mb-1 truncate max-w-[150px]">{g.email}</div>
+                          {g.emailSentAt || g.invitationSentAt ? (
+                            <span className="inline-flex items-center gap-1 text-[10px] font-medium bg-blue-500/10 text-blue-500 px-1.5 py-0.5 rounded border border-blue-500/20">
+                              <CheckCircle className="w-3 h-3" /> Envoyé {format(new Date(g.emailSentAt || g.invitationSentAt), 'dd/MM')}
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground border border-border">
-                              <Clock className="w-3 h-3" /> En attente
-                            </span>
+                            <Button variant="outline" size="sm" className="h-6 text-[10px] px-2" onClick={() => handleSendSingleEmail(g.id)}>
+                              <Mail className="w-3 h-3 mr-1" /> Envoyer
+                            </Button>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 text-muted-foreground">
+                          <div className="text-xs mb-1">{g.phone || <span className="text-muted-foreground/50">Aucun</span>}</div>
+                          {g.phone && (
+                            g.whatsappSentAt ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-medium bg-green-500/10 text-green-500 px-1.5 py-0.5 rounded border border-green-500/20">
+                                <CheckCircle className="w-3 h-3" /> Envoyé {format(new Date(g.whatsappSentAt), 'dd/MM')}
+                              </span>
+                            ) : (
+                              <Button variant="outline" size="sm" className="h-6 text-[10px] px-2 text-green-600 border-green-200 hover:bg-green-50" onClick={() => handleSendWhatsApp(g.id)}>
+                                <MessageCircle className="w-3 h-3 mr-1" /> WhatsApp
+                              </Button>
+                            )
                           )}
                         </td>
                         <td className="px-4 py-3">
-                          {g.rsvpStatus === 'confirmed' && <span className="inline-flex items-center gap-1 text-green-500 text-xs font-medium"><CheckCircle className="w-3 h-3" /> Confirmé</span>}
+                          {g.rsvpStatus === 'confirmed' && <span className="inline-flex items-center gap-1 text-green-600 text-xs font-medium"><CheckCircle className="w-3 h-3" /> Confirmé</span>}
                           {g.rsvpStatus === 'declined' && <span className="inline-flex items-center gap-1 text-red-500 text-xs font-medium"><XCircle className="w-3 h-3" /> Décliné</span>}
-                          {g.rsvpStatus === 'maybe' && <span className="inline-flex items-center gap-1 text-yellow-500 text-xs font-medium"><HelpCircle className="w-3 h-3" /> Peut-être</span>}
+                          {g.rsvpStatus === 'maybe' && <span className="inline-flex items-center gap-1 text-yellow-600 text-xs font-medium"><HelpCircle className="w-3 h-3" /> Peut-être</span>}
                           {(!g.rsvpStatus || g.rsvpStatus === 'pending') && <span className="text-muted-foreground text-xs">—</span>}
+                          
+                          {(g.dietaryRestrictions || g.notes) && (
+                            <div className="text-[10px] mt-1 text-muted-foreground max-w-[150px] truncate" title={`${g.dietaryRestrictions || ''} ${g.notes || ''}`}>
+                              {g.dietaryRestrictions && <span className="mr-1">🍽️ {g.dietaryRestrictions}</span>}
+                              {g.notes && <span>📝 {g.notes}</span>}
+                            </div>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-right">
                           <Button variant="ghost" size="icon" onClick={() => handleRemoveGuest(g.id)} className="h-8 w-8 text-destructive hover:bg-destructive/10">
@@ -357,74 +379,6 @@ export default function EventDetailPage({ params }) {
         </TabsContent>
       </Tabs>
 
-      {/* ── Template Picker Modal ─────────────────── */}
-      {showTemplatePicker && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={e => { if(e.target === e.currentTarget) setShowTemplatePicker(false) }}>
-          <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
-            <div className="p-6 border-b border-border flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold">Choisir un modèle</h2>
-                <p className="text-sm text-muted-foreground mt-0.5">Sélectionnez un modèle pour l'appliquer à cet événement</p>
-              </div>
-              <div className="flex gap-2">
-                <Button asChild size="sm" variant="outline">
-                  <Link href="/dashboard/templates/new" target="_blank">+ Nouveau modèle</Link>
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => setShowTemplatePicker(false)}>
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-6">
-              {savedTemplates.length === 0 ? (
-                <div className="text-center py-12">
-                  <LayoutTemplate className="w-10 h-10 mx-auto text-muted-foreground opacity-30 mb-3" />
-                  <p className="text-sm text-muted-foreground mb-4">Aucun modèle sauvegardé</p>
-                  <Button asChild size="sm">
-                    <Link href="/dashboard/templates/new" target="_blank">Créer mon premier modèle</Link>
-                  </Button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {savedTemplates.map(tmpl => (
-                    <button
-                      key={tmpl.id}
-                      onClick={() => setSelectedForSwap(tmpl)}
-                      className={`relative rounded-xl overflow-hidden border-2 transition-all aspect-[3/4] ${
-                        selectedForSwap?.id === tmpl.id
-                          ? 'border-primary ring-2 ring-primary'
-                          : 'border-border hover:border-primary/40'
-                      }`}
-                    >
-                      <div className="absolute inset-0 scale-[0.55] origin-top pointer-events-none" style={{ width: '182%', height: '182%' }}>
-                        <InvitationPreview template={tmpl.config} event={demoEvent} guestName="Marie Dupont" />
-                      </div>
-                      {selectedForSwap?.id === tmpl.id && (
-                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                          <Check className="w-3.5 h-3.5 text-primary-foreground" />
-                        </div>
-                      )}
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1.5">
-                        <p className="text-xs text-white font-medium truncate">{tmpl.name}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {savedTemplates.length > 0 && (
-              <div className="p-4 border-t border-border flex justify-end gap-3">
-                <Button variant="outline" onClick={() => setShowTemplatePicker(false)}>Annuler</Button>
-                <Button onClick={handleApplyTemplate} disabled={!selectedForSwap || swapping}>
-                  {swapping ? 'Application...' : 'Appliquer ce modèle'}
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

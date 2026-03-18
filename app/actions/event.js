@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/utils/prisma'
 import { getSession } from '@/app/actions/auth'
 
 export async function getEvents() {
@@ -72,7 +72,7 @@ export async function createEvent(data) {
     const user = await getSession()
     if (!user) throw new Error('Unauthorized')
 
-    const { title, description, event_date, location, theme, custom_message } = data
+    const { title, description, event_date, location, custom_message } = data
     if (!title) throw new Error('Title is required')
 
     const event = await prisma.event.create({
@@ -82,7 +82,6 @@ export async function createEvent(data) {
         description: description || null,
         eventDate: event_date ? new Date(event_date) : null,
         location: location || null,
-        theme: theme || 'elegant',
         customMessage: custom_message || null,
         status: 'draft'
       }
@@ -112,7 +111,6 @@ export async function updateEvent(id, data) {
         description: data.description !== undefined ? data.description : undefined,
         eventDate: data.event_date ? new Date(data.event_date) : undefined,
         location: data.location !== undefined ? data.location : undefined,
-        theme: data.theme !== undefined ? data.theme : undefined,
         customMessage: data.custom_message !== undefined ? data.custom_message : undefined,
         animationConfig: data.animation_config !== undefined ? data.animation_config : undefined,
         invitationTemplate: data.invitation_template !== undefined ? data.invitation_template : undefined,

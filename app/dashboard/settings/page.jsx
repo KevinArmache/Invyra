@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useUser } from '@/hooks/useUser'
+import { updateProfile, changePassword } from '@/app/actions/auth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -31,20 +32,10 @@ export default function SettingsPage() {
     setSuccess('')
 
     try {
-      const res = await fetch('/api/auth/update-profile', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(profile)
-      })
-
-      if (res.ok) {
-        setSuccess('Profile updated successfully')
-      } else {
-        const data = await res.json()
-        setError(data.error || 'Failed to update profile')
-      }
+      await updateProfile(profile.name, profile.company)
+      setSuccess('Profil mis à jour avec succès')
     } catch (err) {
-      setError('An error occurred')
+      setError(err.message)
     } finally {
       setLoading(false)
     }
@@ -68,24 +59,11 @@ export default function SettingsPage() {
     setSuccess('')
 
     try {
-      const res = await fetch('/api/auth/change-password', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          currentPassword: passwords.current,
-          newPassword: passwords.new
-        })
-      })
-
-      if (res.ok) {
-        setSuccess('Password changed successfully')
-        setPasswords({ current: '', new: '', confirm: '' })
-      } else {
-        const data = await res.json()
-        setError(data.error || 'Failed to change password')
-      }
+      await changePassword(passwords.current, passwords.new)
+      setSuccess('Mot de passe modifié avec succès')
+      setPasswords({ current: '', new: '', confirm: '' })
     } catch (err) {
-      setError('An error occurred')
+      setError(err.message)
     } finally {
       setLoading(false)
     }

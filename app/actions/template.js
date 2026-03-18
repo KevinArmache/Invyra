@@ -1,10 +1,10 @@
 'use server'
 
 import Groq from 'groq-sdk'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/utils/prisma'
 import { getSession } from '@/app/actions/auth'
 
-import { TEMPLATE_PRESETS } from '@/lib/template-presets'
+import { TEMPLATE_PRESETS } from '@/utils/template-presets'
 
 // ──────────────────────────────────────────────
 // AI Template Generation
@@ -57,7 +57,6 @@ Return ONLY valid JSON with exactly these fields:
 Return ONLY the JSON. No markdown, no explanation.`
 
     const userPrompt = `Event: ${event?.title || 'Event'}
-Type: ${event?.theme || 'elegant'}
 Description: ${prompt}
 Generate a beautiful, cohesive invitation template.`
 
@@ -155,7 +154,7 @@ export async function saveUserTemplate(name, templateConfig) {
       config: templateConfig
     }
   })
-  
+
   return tmpl
 }
 
@@ -167,7 +166,7 @@ export async function getUserTemplates() {
     where: { userId: user.userId },
     orderBy: { createdAt: 'desc' }
   })
-  
+
   return templates
 }
 
@@ -176,13 +175,53 @@ export async function deleteUserTemplate(templateId) {
   if (!user) throw new Error('Unauthorized')
 
   await prisma.customTemplate.deleteMany({
-    where: { 
+    where: {
       id: templateId,
       userId: user.userId
     }
   })
-  
+
   return { success: true }
+}
+
+export async function getUserTemplateById(templateId) {
+  const user = await getSession()
+  if (!user) throw new Error('Unauthorized')
+
+  const tmpl = await prisma.customTemplate.findFirst({
+    where: {
+      id: templateId,
+      userId: user.userId
+    }
+  })
+
+  if (!tmpl) throw new Error('Modèle non trouvé')
+  return tmpl
+}
+
+export async function updateUserTemplate(templateId, name, templateConfig) {
+  const user = await getSession()
+  if (!user) throw new Error('Unauthorized')
+
+  if (!name) throw new Error('Le nom du modèle est requis')
+
+  const existing = await prisma.customTemplate.findFirst({
+    where: {
+      id: templateId,
+      userId: user.userId
+    }
+  })
+  if (!existing) throw new Error('Modèle non trouvé ou non autorisé')
+
+  const tmpl = await prisma.customTemplate.update({
+    where: { id: templateId },
+    data: {
+      name,
+      config: templateConfig
+    }
+  })
+
+  return tmpl
 }
 
 // ──────────────────────────────────────────────

@@ -2,15 +2,17 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Plus, Trash2, LayoutTemplate } from 'lucide-react'
+import { Plus, Trash2, LayoutTemplate, Eye, Edit2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { getUserTemplates, deleteUserTemplate } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 
 export default function TemplatesPage() {
   const [templates, setTemplates] = useState([])
   const [loading, setLoading] = useState(true)
+  const [previewTemplate, setPreviewTemplate] = useState(null)
 
   useEffect(() => {
     loadTemplates()
@@ -95,9 +97,17 @@ export default function TemplatesPage() {
                   />
                 </div>
                 
-                {/* Delete overlay */}
-                <div className="absolute inset-0 flex items-start justify-end p-2 opacity-0 hover:opacity-100 transition-opacity">
-                  <Button variant="destructive" size="icon" className="h-8 w-8 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); handleDelete(tmpl.id) }}>
+                {/* Hover overlay for actions */}
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-2 opacity-0 hover:opacity-100 transition-opacity">
+                  <Button variant="secondary" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); setPreviewTemplate(tmpl) }} title="Aperçu">
+                    <Eye className="w-4 h-4" />
+                  </Button>
+                  <Button variant="secondary" size="icon" asChild className="h-9 w-9 rounded-full shadow-lg" title="Éditer">
+                    <Link href={`/dashboard/templates/${tmpl.id}`}>
+                      <Edit2 className="w-4 h-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="destructive" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); handleDelete(tmpl.id) }} title="Supprimer">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
@@ -110,6 +120,21 @@ export default function TemplatesPage() {
           ))}
         </div>
       )}
+
+      {/* Fullscreen Preview Dialog */}
+      <Dialog open={!!previewTemplate} onOpenChange={(open) => !open && setPreviewTemplate(null)}>
+        <DialogContent className="max-w-[95vw] md:max-w-[600px] h-[90vh] p-0 overflow-hidden bg-black border border-border">
+          {previewTemplate && (
+            <div className="w-full h-full overflow-auto custom-scrollbar">
+              <InvitationPreview 
+                template={previewTemplate.config} 
+                event={{ title: previewTemplate.name, eventDate: new Date().toISOString(), location: 'Lieu de l\'événement', time: '19h00', dressCode: 'Tenue de soirée' }} 
+                guestName="Marie Dupont"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

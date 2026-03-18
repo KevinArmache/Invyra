@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getUserTemplates } from '@/app/actions/template'
-import { TEMPLATE_PRESETS } from '@/lib/template-presets'
+import { TEMPLATE_PRESETS } from '@/utils/template-presets'
 import InvitationPreview from './InvitationPreview'
 import { Plus } from 'lucide-react'
 
@@ -30,11 +30,10 @@ export default function TemplateGallery({ selectedId, onSelect }) {
               <button
                 key={preset.id}
                 onClick={() => onSelect(preset.id, preset.config)}
-                className={`relative rounded-lg overflow-hidden border-2 transition-all hover:scale-[1.03] active:scale-[0.97] aspect-[3/4] ${
-                  selectedId === preset.id
+                className={`relative rounded-lg overflow-hidden border-2 transition-all hover:scale-[1.03] active:scale-[0.97] aspect-[3/4] ${selectedId === preset.id
                     ? 'border-primary shadow-lg shadow-primary/30 ring-2 ring-primary/40'
                     : 'border-border hover:border-primary/40'
-                }`}
+                  }`}
               >
                 <div className="absolute inset-0 scale-75 origin-top pointer-events-none">
                   <InvitationPreview
@@ -68,11 +67,10 @@ export default function TemplateGallery({ selectedId, onSelect }) {
               <button
                 key={preset.id}
                 onClick={() => onSelect(preset.id, preset.template)}
-                className={`relative rounded-lg overflow-hidden border-2 transition-all hover:scale-[1.03] active:scale-[0.97] aspect-[3/4] ${
-                  selectedId === preset.id
+                className={`relative rounded-lg overflow-hidden border-2 transition-all hover:scale-[1.03] active:scale-[0.97] aspect-[3/4] ${selectedId === preset.id
                     ? 'border-primary shadow-lg shadow-primary/30 ring-2 ring-primary/40'
                     : 'border-border hover:border-primary/40'
-                }`}
+                  }`}
               >
                 {/* Mini preview */}
                 <div className="absolute inset-0 scale-75 origin-top pointer-events-none">

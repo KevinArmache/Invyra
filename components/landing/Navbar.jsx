@@ -6,7 +6,7 @@ import { useUser } from '@/hooks/useUser'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
-import { useTranslation } from '@/lib/i18n/Context'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -72,22 +72,22 @@ export default function Navbar() {
       {isOpen && (
         <div className="md:hidden bg-card/95 backdrop-blur-xl border-b border-border">
           <div className="px-4 py-4 space-y-4">
-            <Link 
-              href="#features" 
+            <Link
+              href="#features"
               className="block text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {t('nav.features')}
             </Link>
-            <Link 
-              href="#how-it-works" 
+            <Link
+              href="#how-it-works"
               className="block text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {t('nav.how_it_works')}
             </Link>
-            <Link 
-              href="#pricing" 
+            <Link
+              href="#pricing"
               className="block text-muted-foreground hover:text-foreground transition-colors"
               onClick={() => setIsOpen(false)}
             >

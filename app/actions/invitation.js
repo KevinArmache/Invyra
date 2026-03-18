@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/utils/prisma'
 
 export async function getInvitationByToken(token) {
   try {
@@ -32,7 +32,6 @@ export async function getInvitationByToken(token) {
         description: guest.event.description,
         date: guest.event.eventDate,
         location: guest.event.location,
-        theme: guest.event.theme,
         animation_config: guest.event.animationConfig,
         custom_message: guest.event.customMessage
       }
@@ -62,8 +61,8 @@ export async function updateRsvpStatus(token, data) {
       }
     })
 
-    return { 
-      success: true, 
+    return {
+      success: true,
       guest: { id: guest.id, name: guest.name, rsvp_status: guest.rsvpStatus }
     }
   } catch (error) {

@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { register } from '@/app/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { useTranslation } from '@/lib/i18n/Context'
+import { useTranslation } from '@/utils/i18n/Context'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
 export default function RegisterPage() {
@@ -41,13 +42,7 @@ export default function RegisterPage() {
 
     setLoading(true)
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Registration failed')
+      await register(formData.name, formData.email, formData.password, formData.company)
       router.push('/dashboard')
     } catch (err) {
       setError(err.message)

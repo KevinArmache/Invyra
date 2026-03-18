@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useUser } from '@/hooks/useUser'
+import { logout } from '@/app/actions/auth'
 import { Button } from '@/components/ui/button'
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  Users, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  Calendar,
+  Users,
+  BarChart3,
   Settings,
   LogOut,
   Menu,
@@ -19,7 +20,7 @@ import {
   LayoutTemplate
 } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
-import { useTranslation } from '@/lib/i18n/Context'
+import { useTranslation } from '@/utils/i18n/Context'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 export default function DashboardLayout({ children }) {
@@ -50,10 +51,8 @@ export default function DashboardLayout({ children }) {
     { name: t('sidebar.settings'), href: '/dashboard/settings', icon: Settings },
   ]
 
-  async function logout() {
-    await fetch('/api/auth/logout', { method: 'POST' })
-    mutate(null)
-    router.push('/login')
+  async function handleLogout() {
+    await logout()
   }
 
   useEffect(() => {
@@ -77,7 +76,7 @@ export default function DashboardLayout({ children }) {
       <div className="min-h-screen bg-background flex">
         {/* Mobile sidebar backdrop */}
         {sidebarOpen && (
-          <div 
+          <div
             className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
@@ -102,13 +101,13 @@ export default function DashboardLayout({ children }) {
                 I.
               </Link>
             )}
-            <button 
+            <button
               className="hidden lg:flex items-center justify-center w-8 h-8 rounded-md text-sidebar-foreground hover:bg-sidebar-accent shrink-0"
               onClick={toggleCollapse}
             >
               {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
             </button>
-            <button 
+            <button
               className="lg:hidden p-2 text-sidebar-foreground hover:bg-sidebar-accent rounded-md"
               onClick={() => setSidebarOpen(false)}
             >
@@ -187,15 +186,15 @@ export default function DashboardLayout({ children }) {
                 </div>
               )}
             </div>
-            
+
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   className={`w-full text-muted-foreground hover:text-foreground
                     ${isCollapsed && !sidebarOpen ? 'justify-center px-0' : 'justify-start'}
                   `}
-                  onClick={logout}
+                  onClick={handleLogout}
                 >
                   <LogOut size={20} className={!isCollapsed || sidebarOpen ? "mr-3 shrink-0" : "shrink-0"} />
                   {(!isCollapsed || sidebarOpen) && <span className="whitespace-nowrap overflow-hidden">{t('sidebar.sign_out')}</span>}

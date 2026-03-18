@@ -15,18 +15,16 @@ import {
   Eye,
   Users
 } from 'lucide-react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { getEvents, deleteEvent } from '@/app/actions/event'
+import InvitationPreview from '@/components/invitation/InvitationPreview'
+import { TEMPLATE_PRESETS } from '@/utils/template-presets'
 
 export default function EventsPage() {
   const [search, setSearch] = useState('')
   const [events, setEvents] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [previewEvent, setPreviewEvent] = useState(null)
 
   useEffect(() => {
     getEvents().then(data => {
@@ -114,34 +112,19 @@ export default function EventsPage() {
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Calendar className="w-6 h-6 text-primary" />
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100 transition-opacity">
-                        <MoreVertical size={20} />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/events/${event.id}`}>
-                          <Eye size={16} className="mr-2" />
-                          View
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/events/${event.id}/edit`}>
-                          <Pencil size={16} className="mr-2" />
-                          Edit
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        className="text-destructive"
-                        onClick={() => handleDelete(event.id)}
-                      >
-                        <Trash2 size={16} className="mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" onClick={(e) => { e.preventDefault(); setPreviewEvent(event) }} title="Aperçu de l'invitation">
+                      <Eye size={16} />
+                    </Button>
+                    <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" title="Éditer">
+                      <Link href={`/dashboard/events/${event.id}/edit`}>
+                        <Pencil size={16} />
+                      </Link>
+                    </Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={(e) => { e.preventDefault(); handleDelete(event.id) }} title="Supprimer">
+                      <Trash2 size={16} />
+                    </Button>
+                  </div>
                 </div>
 
                 <Link href={`/dashboard/events/${event.id}`}>
@@ -186,6 +169,28 @@ export default function EventsPage() {
           ))}
         </div>
       )}
+
+      {/* Fullscreen Preview Dialog */}
+      <Dialog open={!!previewEvent} onOpenChange={(open) => !open && setPreviewEvent(null)}>
+        <DialogContent className="max-w-[95vw] md:max-w-[600px] h-[90vh] p-0 overflow-hidden bg-black border border-border">
+          {previewEvent && (
+            <div className="w-full h-full overflow-auto custom-scrollbar">
+              <InvitationPreview 
+                template={previewEvent.invitationTemplate || TEMPLATE_PRESETS[0].template} 
+                event={{
+                  title: previewEvent.title,
+                  eventDate: previewEvent.eventDate,
+                  location: previewEvent.location,
+                  time: previewEvent.time,
+                  dressCode: previewEvent.dressCode || previewEvent.dress_code,
+                  customMessage: previewEvent.customMessage
+                }} 
+                guestName="Exemple Invité"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

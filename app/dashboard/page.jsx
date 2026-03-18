@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Calendar, Users, Eye, CheckCircle, Plus, ArrowRight } from 'lucide-react'
 import { getEvents } from '@/app/actions/event'
-import { useTranslation } from '@/lib/i18n/Context'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function DashboardPage() {
   const [events, setEvents] = useState([])
@@ -19,7 +19,7 @@ export default function DashboardPage() {
       setIsLoading(false)
     }).catch(() => setIsLoading(false))
   }, [])
-  
+
   const stats = events.reduce((acc, event) => ({
     totalEvents: acc.totalEvents + 1,
     totalGuests: acc.totalGuests + (parseInt(event.guest_count) || 0),
@@ -124,7 +124,7 @@ export default function DashboardPage() {
           ) : (
             <div className="space-y-4">
               {recentEvents.map((event) => (
-                <Link 
+                <Link
                   key={event.id}
                   href={`/dashboard/events/${event.id}`}
                   className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-card/50 transition-all"
@@ -136,12 +136,12 @@ export default function DashboardPage() {
                     <div>
                       <h4 className="font-medium text-foreground">{event.title}</h4>
                       <p className="text-sm text-muted-foreground">
-                        {event.event_date 
-                          ? new Date(event.event_date).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', { 
-                              month: 'short', 
-                              day: 'numeric', 
-                              year: 'numeric' 
-                            })
+                        {event.event_date
+                          ? new Date(event.event_date).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })
                           : 'Date not set'
                         }
                         {event.location && ` • ${event.location}`}
@@ -157,11 +157,10 @@ export default function DashboardPage() {
                       <div className="font-medium text-foreground">{event.confirmed_count || 0}</div>
                       <div className="text-muted-foreground">{t('dashboard.confirmed_rsvps')}</div>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      event.status === 'active' 
-                        ? 'bg-green-500/20 text-green-400' 
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${event.status === 'active'
+                        ? 'bg-green-500/20 text-green-400'
                         : 'bg-muted text-muted-foreground'
-                    }`}>
+                      }`}>
                       {event.status}
                     </span>
                   </div>

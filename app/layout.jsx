@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { I18nProvider } from '@/lib/i18n/Context'
+import { I18nProvider } from '@/utils/i18n/Context'
 
 import './globals.css'
 
