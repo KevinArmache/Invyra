@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { toast } from 'sonner'
 import { Calendar, MapPin, FileText, ArrowRight, ArrowLeft, Sparkles, Check, Plus, LayoutTemplate, Clock, Shirt } from 'lucide-react'
 import { createEvent, updateEvent } from '@/app/actions/event'
 import { addGuest } from '@/app/actions/guest'
@@ -59,9 +61,10 @@ export default function NewEventPage() {
     try {
       const event = await createEvent(form)
       setCreatedEventId(event.id)
+      toast.success('Modèle IA généré')
       setStep(2)
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     } finally {
       setLoading(false)
     }
@@ -75,8 +78,9 @@ export default function NewEventPage() {
       const g = await addGuest(createdEventId, guestForm)
       setAddedGuests(prev => [...prev, g])
       setGuestForm({ name: '', email: '', phone: '' })
+      toast.success("Invité ajouté avec succès")
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     } finally {
       setGuestLoading(false)
     }

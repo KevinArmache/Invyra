@@ -6,6 +6,7 @@ import { Plus, Trash2, LayoutTemplate, Eye, Edit2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { toast } from 'sonner'
 import { getUserTemplates, deleteUserTemplate } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 
@@ -35,8 +36,9 @@ export default function TemplatesPage() {
     try {
       await deleteUserTemplate(id)
       loadTemplates()
+      toast.success('Modèle supprimé avec succès.')
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     }
   }
 

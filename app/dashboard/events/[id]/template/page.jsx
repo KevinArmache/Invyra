@@ -9,6 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import CodeTemplateEditor from '@/components/invitation/CodeTemplateEditor'
 import TemplateGallery from '@/components/invitation/TemplateGallery'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { ArrowLeft, Save, Sparkles } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
 
 export default function TemplateConfigurationPage({ params }) {
   const router = useRouter()
@@ -36,9 +40,10 @@ export default function TemplateConfigurationPage({ params }) {
     setSaving(true)
     try {
       await updateEvent(id, { invitation_template: template })
+      toast.success('Le modèle a été enregistré pour cet événement.')
       router.push(`/dashboard/events/${id}`)
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     } finally {
       setSaving(false)
     }
@@ -51,8 +56,9 @@ export default function TemplateConfigurationPage({ params }) {
       const res = await generateTemplateWithAI(null, aiPrompt)
       setTemplate(res.template)
       setActiveTab('code')
+      toast.success('Modèle généré avec succès !')
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     } finally {
       setAiLoading(false)
     }

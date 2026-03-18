@@ -17,6 +17,7 @@ import CSVImporter from '@/components/invitation/CSVImporter'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { addGuest, deleteGuest } from '@/app/actions/guest'
 import { Calendar, MapPin, Mail, Edit, Trash2, ArrowLeft, RefreshCw, UserPlus, CheckCircle, XCircle, HelpCircle, Clock, LayoutTemplate, MessageCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function EventDetailPage({ params }) {
   const router = useRouter()
@@ -57,9 +58,10 @@ export default function EventDetailPage({ params }) {
     setDeleting(true)
     try {
       await deleteEvent(id)
+      toast.success("Événement supprimé.")
       router.push('/dashboard/events')
     } catch (e) {
-      alert("Erreur: " + e.message)
+      toast.error("Erreur: " + e.message)
       setDeleting(false)
     }
   }
@@ -69,10 +71,10 @@ export default function EventDetailPage({ params }) {
     setSendingBulk(true)
     try {
       const res = await sendBulkInvitations(id)
-      alert(res.message)
+      toast.success(res.message)
       loadData()
     } catch (e) {
-      alert("Erreur: " + e.message)
+      toast.error("Erreur: " + e.message)
     } finally {
       setSendingBulk(false)
     }
@@ -81,10 +83,10 @@ export default function EventDetailPage({ params }) {
   async function handleSendSingleEmail(guestId) {
     try {
       await sendInvitationEmail(guestId)
-      alert("Email envoyé avec succès !")
+      toast.success("Email envoyé avec succès !")
       loadData()
     } catch (e) {
-      alert("Erreur lors de l'envoi: " + e.message)
+      toast.error("Erreur lors de l'envoi: " + e.message)
     }
   }
 
@@ -97,7 +99,7 @@ export default function EventDetailPage({ params }) {
       await markWhatsAppSent(guestId)
       loadData()
     } catch (e) {
-      alert("Erreur WhatsApp: " + e.message)
+      toast.error("Erreur WhatsApp: " + e.message)
     }
   }
 
@@ -108,8 +110,9 @@ export default function EventDetailPage({ params }) {
       setNewGuest({ name: '', email: '', phone: '' })
       setShowAddGuest(false)
       loadData()
+      toast.success("Invité ajouté.")
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     }
   }
 
@@ -117,9 +120,10 @@ export default function EventDetailPage({ params }) {
     if (!confirm("Supprimer cet invité ?")) return
     try {
       await deleteGuest(guestId)
+      toast.success("Invité supprimé.")
       loadData()
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     }
   }
 

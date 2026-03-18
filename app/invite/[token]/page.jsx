@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle, XCircle, HelpCircle, MailOpen } from 'lucide-react'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { getInvitationByToken, updateRsvpStatus } from '@/app/actions/invitation'
+import { toast } from 'sonner'
 
 export default function InvitationPage({ params }) {
   const { token } = use(params)
@@ -54,7 +55,7 @@ export default function InvitationPage({ params }) {
       // L'utilisateur ne sera plus interrompu par un bloc JS du navigateur.
     } catch (err) {
       console.error('RSVP failed:', err)
-      alert("Une erreur est survenue lors de l'envoi de votre réponse.")
+      toast.error("Une erreur est survenue lors de l'envoi de votre réponse.")
     }
   }
 

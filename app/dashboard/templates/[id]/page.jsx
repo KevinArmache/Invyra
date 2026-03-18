@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import CodeTemplateEditor from '@/components/invitation/CodeTemplateEditor'
+import { toast } from 'sonner'
 
 export default function EditTemplatePage({ params }) {
   const router = useRouter()
@@ -42,22 +43,23 @@ export default function EditTemplatePage({ params }) {
       }
       setLoading(false)
     }).catch(e => {
-      alert(e.message)
+      toast.error(e.message)
       router.push('/dashboard/templates')
     })
   }, [id, router])
 
   async function handleSave() {
     if (!saveName.trim()) {
-      alert('Veuillez donner un nom à votre modèle.')
+      toast.warning('Veuillez donner un nom à votre modèle.')
       return
     }
     setSaving(true)
     try {
       await updateUserTemplate(id, saveName.trim(), templateConfig)
+      toast.success('Modèle mis à jour !')
       router.push('/dashboard/templates')
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     } finally {
       setSaving(false)
     }

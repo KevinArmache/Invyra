@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { I18nProvider } from '@/utils/i18n/Context'
+import { Toaster } from '@/components/ui/sonner'
 
 import './globals.css'
 
@@ -49,6 +50,7 @@ export default function RootLayout({ children }) {
       <body className="font-sans antialiased" suppressHydrationWarning>
         <I18nProvider>
           {children}
+          <Toaster position="top-center" richColors />
           <Analytics />
         </I18nProvider>
       </body>

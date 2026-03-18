@@ -12,6 +12,7 @@ import { ArrowLeft, Save, Check, X, LayoutTemplate } from 'lucide-react'
 import { getEventById, updateEvent } from '@/app/actions/event'
 import { getUserTemplates } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
+import { toast } from 'sonner'
 export default function EditEventPage({ params }) {
   const { id } = use(params)
   const router = useRouter()
@@ -77,7 +78,7 @@ export default function EditEventPage({ params }) {
       setShowTemplatePicker(false)
       setSelectedForSwap(null)
     } catch (e) {
-      alert(e.message)
+      toast.error(e.message)
     } finally {
       setSwapping(false)
     }
@@ -90,9 +91,10 @@ export default function EditEventPage({ params }) {
 
     try {
       await updateEvent(id, formData)
+      toast.success('Modifications enregistrées')
       router.push(`/dashboard/events/${id}`)
-    } catch (err) {
-      setError(err.message)
+    } catch (e) {
+      toast.error(e.message)
     } finally {
       setLoading(false)
     }
