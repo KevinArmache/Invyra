@@ -71,10 +71,24 @@ export async function sendInvitationEmail(guestId) {
   return { success: true }
 }
 
+import { getSession } from '@/app/actions/auth'
+
 /**
  * Génère le message et le lien WhatsApp
  */
 export async function generateWhatsAppLink(guestId) {
+  const session = await getSession()
+  if (!session) throw new Error("Non authentifié")
+
+  const currentUser = await prisma.user.findUnique({
+    where: { id: session.userId },
+    select: { phone: true }
+  })
+
+  if (!currentUser?.phone) {
+    throw new Error("Veuillez renseigner votre numéro de téléphone dans les paramètres pour pouvoir envoyer des invitations WhatsApp")
+  }
+
   const guest = await prisma.guest.findUnique({
     where: { id: guestId },
     include: { event: true }

@@ -14,7 +14,10 @@ import { Calendar, MapPin, Mail, Edit, Trash2, ArrowLeft, RefreshCw } from 'luci
 import { toast } from 'sonner'
 import TabOverview from '@/components/dashboard/event-details/TabOverview'
 import TabGuests from '@/components/dashboard/event-details/TabGuests'
+import CollaboratorModal from '@/components/dashboard/CollaboratorModal'
 import { useTranslation } from '@/utils/i18n/Context'
+import { getCollaborators } from '@/app/actions/collaborator'
+import { Users } from 'lucide-react'
 
 export default function EventDetailPage({ params }) {
   const router = useRouter()
@@ -23,17 +26,20 @@ export default function EventDetailPage({ params }) {
 
   const [event, setEvent] = useState(null)
   const [guests, setGuests] = useState([])
+  const [collaborators, setCollaborators] = useState([])
   const [loading, setLoading] = useState(true)
   const [deleting, setDeleting] = useState(false)
   const [sendingBulk, setSendingBulk] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
+  const [showCollabModal, setShowCollabModal] = useState(false)
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true)
-      const [eData, gData] = await Promise.all([getEventById(id), getGuests(id)])
+      const [eData, gData, cData] = await Promise.all([getEventById(id), getGuests(id), getCollaborators(id)])
       setEvent(eData)
       setGuests(gData)
+      setCollaborators(cData)
     } catch (err) {
       console.error(err)
       router.push('/dashboard/events')
@@ -141,6 +147,9 @@ export default function EventDetailPage({ params }) {
               {sendingBulk ? t('portal.events.details.actions.sending') : t('portal.events.details.actions.send_invitations')}
             </Button>
           )}
+          <Button variant="outline" onClick={() => setShowCollabModal(true)} className="gap-2">
+            <Users className="w-4 h-4" /> Collaborateurs ({collaborators.length})
+          </Button>
           <Button variant="outline" asChild>
             <Link href={`/dashboard/events/${id}/edit`}><Edit className="w-4 h-4 mr-2" /> {t('portal.events.details.actions.edit')}</Link>
           </Button>
@@ -171,6 +180,13 @@ export default function EventDetailPage({ params }) {
           />
         </TabsContent>
       </Tabs>
+
+      <CollaboratorModal
+        open={showCollabModal}
+        onClose={() => setShowCollabModal(false)}
+        eventId={id}
+        initialCollaborators={collaborators}
+      />
     </div>
   )
 }

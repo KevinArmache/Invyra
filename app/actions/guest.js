@@ -1,17 +1,29 @@
 'use server'
 
 import { prisma } from '@/utils/prisma'
-import { getSession } from '@/app/actions/auth'
+import { getSession, isEventOwnerOrAdmin, canAccessEvent } from '@/app/actions/auth'
+import { getMyCollaboratorRole } from '@/app/actions/collaborator'
 import { nanoid } from 'nanoid'
 import { sendInvitationEmail } from './notify'
 
+// ─── Helper de vérification des droits ───────────────────────────────────────
+async function checkEditorAccess(eventId) {
+  const isOwnerOrAdmin = await isEventOwnerOrAdmin(eventId)
+  if (!isOwnerOrAdmin) {
+    const role = await getMyCollaboratorRole(eventId)
+    if (role !== 'editor') {
+      throw new Error("Accès refusé. Seul le propriétaire ou un éditeur peut modifier les invités.")
+    }
+  }
+}
+
 export async function getGuests(eventId) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    const hasAccess = await canAccessEvent(eventId)
+    if (!hasAccess) throw new Error('Unauthorized')
 
-    const event = await prisma.event.findFirst({
-      where: { id: eventId, userId: user.userId }
+    const event = await prisma.event.findUnique({
+      where: { id: eventId }
     })
     if (!event) throw new Error('Event not found')
 
@@ -29,11 +41,10 @@ export async function getGuests(eventId) {
 
 export async function addGuest(eventId, data) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    await checkEditorAccess(eventId)
 
-    const event = await prisma.event.findFirst({
-      where: { id: eventId, userId: user.userId }
+    const event = await prisma.event.findUnique({
+      where: { id: eventId }
     })
     if (!event) throw new Error('Event not found')
 
@@ -75,16 +86,12 @@ export async function addGuest(eventId, data) {
 
 export async function updateGuest(guestId, data) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
-
-    const guest = await prisma.guest.findFirst({
-      where: {
-        id: guestId,
-        event: { userId: user.userId }
-      }
+    const guest = await prisma.guest.findUnique({
+      where: { id: guestId }
     })
     if (!guest) throw new Error('Guest not found')
+
+    await checkEditorAccess(guest.eventId)
 
     const updated = await prisma.guest.update({
       where: { id: guestId },
@@ -109,16 +116,12 @@ export async function updateGuest(guestId, data) {
 
 export async function deleteGuest(guestId) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
-
-    const guest = await prisma.guest.findFirst({
-      where: {
-        id: guestId,
-        event: { userId: user.userId }
-      }
+    const guest = await prisma.guest.findUnique({
+      where: { id: guestId }
     })
     if (!guest) throw new Error('Guest not found')
+
+    await checkEditorAccess(guest.eventId)
 
     await prisma.guest.delete({
       where: { id: guestId }
@@ -138,11 +141,10 @@ export async function deleteGuest(guestId) {
 // ──────────────────────────────────────────────
 export async function sendBulkInvitations(eventId) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    await checkEditorAccess(eventId)
 
-    const event = await prisma.event.findFirst({
-      where: { id: eventId, userId: user.userId },
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
       include: { guests: true }
     })
     if (!event) throw new Error('Event not found')

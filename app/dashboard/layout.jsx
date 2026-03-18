@@ -17,7 +17,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  LayoutTemplate
+  LayoutTemplate,
+  Shield
 } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { useTranslation } from '@/utils/i18n/Context'
@@ -140,6 +141,31 @@ export default function DashboardLayout({ children }) {
                 )}
               </Tooltip>
             ))}
+
+            {/* Bouton Admin — visible seulement si role === 'admin' */}
+            {user.role === 'admin' && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    href="/admin"
+                    className={`flex items-center rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-400 transition-colors border border-red-500/20 mt-2
+                      ${isCollapsed && !sidebarOpen ? 'justify-center p-3' : 'gap-3 px-4 py-3'}
+                    `}
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <Shield size={22} className="shrink-0" />
+                    {(!isCollapsed || sidebarOpen) && (
+                      <span className="whitespace-nowrap overflow-hidden font-medium">Admin Panel</span>
+                    )}
+                  </Link>
+                </TooltipTrigger>
+                {isCollapsed && !sidebarOpen && (
+                  <TooltipContent side="right" className="font-medium bg-popover text-popover-foreground ml-2">
+                    Admin Panel
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            )}
           </nav>
 
           {/* Language switcher + User section */}

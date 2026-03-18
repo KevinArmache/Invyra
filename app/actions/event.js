@@ -1,7 +1,8 @@
 'use server'
 
 import { prisma } from '@/utils/prisma'
-import { getSession } from '@/app/actions/auth'
+import { getSession, isEventOwnerOrAdmin, canAccessEvent } from '@/app/actions/auth'
+import { getMyCollaboratorRole } from '@/app/actions/collaborator'
 
 export async function getEvents() {
   try {
@@ -9,7 +10,12 @@ export async function getEvents() {
     if (!user) throw new Error('Unauthorized')
 
     const events = await prisma.event.findMany({
-      where: { userId: user.userId },
+      where: {
+        OR: [
+          { userId: user.userId },
+          { collaborators: { some: { userId: user.userId, accepted: true } } }
+        ]
+      },
       orderBy: { createdAt: 'desc' },
       include: {
         _count: {
@@ -39,8 +45,11 @@ export async function getEventById(id) {
     const user = await getSession()
     if (!user) throw new Error('Unauthorized')
 
-    const event = await prisma.event.findFirst({
-      where: { id, userId: user.userId },
+    const hasAccess = await canAccessEvent(id)
+    if (!hasAccess) throw new Error('Accès refusé')
+
+    const event = await prisma.event.findUnique({
+      where: { id },
       include: {
         _count: {
           select: { guests: true }
@@ -99,8 +108,16 @@ export async function updateEvent(id, data) {
     const user = await getSession()
     if (!user) throw new Error('Unauthorized')
 
-    const existing = await prisma.event.findFirst({
-      where: { id, userId: user.userId }
+    const isOwnerOrAdmin = await isEventOwnerOrAdmin(id)
+    if (!isOwnerOrAdmin) {
+      const role = await getMyCollaboratorRole(id)
+      if (role !== 'editor') {
+        throw new Error("Seul le propriétaire ou un éditeur peut modifier cet événement.")
+      }
+    }
+
+    const existing = await prisma.event.findUnique({
+      where: { id }
     })
     if (!existing) throw new Error('Event not found')
 
@@ -131,8 +148,11 @@ export async function deleteEvent(id) {
     const user = await getSession()
     if (!user) throw new Error('Unauthorized')
 
-    const existing = await prisma.event.findFirst({
-      where: { id, userId: user.userId }
+    const isOwnerOrAdmin = await isEventOwnerOrAdmin(id)
+    if (!isOwnerOrAdmin) throw new Error("Seul le propriétaire de l'événement ou un administrateur peut le supprimer.")
+
+    const existing = await prisma.event.findUnique({
+      where: { id }
     })
     if (!existing) throw new Error('Event not found')
 

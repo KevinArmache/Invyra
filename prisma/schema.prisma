@@ -12,12 +12,16 @@ model User {
   email     String   @unique
   name      String?
   company   String?
+  phone     String?
   password  String
+  role      String   @default("user") // "user" | "admin"
+  suspended Boolean  @default(false)
   createdAt DateTime @default(now())
 
   // Relations
-  events    Event[]
-  templates CustomTemplate[]
+  events         Event[]
+  templates      CustomTemplate[]
+  collaborations EventCollaborator[]
 
   @@map("users")
 }
@@ -40,6 +44,8 @@ model Event {
   description        String?
   eventDate          DateTime?
   location           String?
+  time               String?
+  dressCode          String?
   customMessage      String?
   animationConfig    Json?
   invitationTemplate Json?
@@ -50,8 +56,25 @@ model Event {
   updatedAt          DateTime  @updatedAt
 
   // Relations
-  user   User    @relation(fields: [userId], references: [id])
-  guests Guest[]
+  user          User                @relation(fields: [userId], references: [id])
+  guests        Guest[]
+  collaborators EventCollaborator[]
+}
+
+model EventCollaborator {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventId     String   @db.ObjectId
+  userId      String   @db.ObjectId
+  role        String   @default("editor") // "editor" | "viewer"
+  inviteToken String?  @unique
+  accepted    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+  @@map("event_collaborators")
 }
 
 model Guest {
@@ -67,7 +90,7 @@ model Guest {
   invitationToken String  @unique
   rsvpStatus      String?
 
-  invitationSentAt   DateTime? // Conservé pour compatibilité ou générique
+  invitationSentAt   DateTime?
   emailSentAt        DateTime?
   whatsappSentAt     DateTime?
   invitationViewedAt DateTime?
@@ -79,5 +102,5 @@ model Guest {
   // Relations
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-  @@unique([eventId, email]) // Un email par eventier
+  @@unique([eventId, email])
 }

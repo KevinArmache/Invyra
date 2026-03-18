@@ -16,7 +16,8 @@ export default function RegisterPage() {
     email: '',
     password: '',
     confirmPassword: '',
-    company: ''
+    company: '',
+    phone: ''
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -42,7 +43,7 @@ export default function RegisterPage() {
 
     setLoading(true)
     try {
-      await register(formData.name, formData.email, formData.password, formData.company)
+      await register(formData.name, formData.email, formData.password, formData.company, formData.phone)
       router.push('/dashboard')
     } catch (err) {
       setError(err.message)
@@ -106,6 +107,21 @@ export default function RegisterPage() {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                className="bg-background/50"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="phone" className="text-sm font-medium text-foreground">
+                Numéro de téléphone
+              </label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="+33 6 12 34 56 78"
+                value={formData.phone}
+                onChange={handleChange}
                 className="bg-background/50"
               />
             </div>

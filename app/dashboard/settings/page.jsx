@@ -1,23 +1,35 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUser } from '@/hooks/useUser'
 import { updateProfile, changePassword } from '@/app/actions/auth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { User, Mail, Building, Key } from 'lucide-react'
+import { User, Mail, Building, Key, Phone } from 'lucide-react'
 
 export default function SettingsPage() {
-  const { user } = useUser()
+  const { user, mutate } = useUser()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
   
   const [profile, setProfile] = useState({
     name: user?.name || '',
-    company: user?.company || ''
+    company: user?.company || '',
+    phone: user?.phone || ''
   })
+
+  // Synchroniser le formulaire quand les données de l'utilisateur sont chargées
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        name: user.name || '',
+        company: user.company || '',
+        phone: user.phone || ''
+      })
+    }
+  }, [user])
 
   const [passwords, setPasswords] = useState({
     current: '',
@@ -32,7 +44,8 @@ export default function SettingsPage() {
     setSuccess('')
 
     try {
-      await updateProfile(profile.name, profile.company)
+      const updatedUser = await updateProfile(profile.name, profile.company, profile.phone)
+      mutate(updatedUser)
       setSuccess('Profil mis à jour avec succès')
     } catch (err) {
       setError(err.message)
@@ -137,6 +150,19 @@ export default function SettingsPage() {
                 value={profile.company}
                 onChange={(e) => setProfile(p => ({ ...p, company: e.target.value }))}
                 placeholder="Your company"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                <Phone className="w-4 h-4 text-muted-foreground" />
+                Numéro de téléphone
+              </label>
+              <Input
+                type="tel"
+                value={profile.phone}
+                onChange={(e) => setProfile(p => ({ ...p, phone: e.target.value }))}
+                placeholder="+33 6 12 34 56 78"
               />
             </div>
 
