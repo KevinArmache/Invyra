@@ -4,15 +4,13 @@ import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getEventById, updateEvent } from '@/app/actions/event'
-import { generateTemplateWithAI } from '@/app/actions/template'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import CodeTemplateEditor from '@/components/invitation/CodeTemplateEditor'
 import TemplateGallery from '@/components/invitation/TemplateGallery'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Save, Sparkles } from 'lucide-react'
-import { Textarea } from '@/components/ui/textarea'
+import { ArrowLeft, Save } from 'lucide-react'
 
 export default function TemplateConfigurationPage({ params }) {
   const router = useRouter()
@@ -21,8 +19,6 @@ export default function TemplateConfigurationPage({ params }) {
   const [event, setEvent] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [aiPrompt, setAiPrompt] = useState('')
-  const [aiLoading, setAiLoading] = useState(false)
 
   // Current working copy of the template
   const [template, setTemplate] = useState(null)
@@ -49,20 +45,7 @@ export default function TemplateConfigurationPage({ params }) {
     }
   }
 
-  async function handleGenerateAI() {
-    if (!aiPrompt) return
-    setAiLoading(true)
-    try {
-      const res = await generateTemplateWithAI(null, aiPrompt)
-      setTemplate(res.template)
-      setActiveTab('code')
-      toast.success('Modèle généré avec succès !')
-    } catch (e) {
-      toast.error(e.message)
-    } finally {
-      setAiLoading(false)
-    }
-  }
+
 
   if (loading) return null
 
@@ -91,7 +74,7 @@ export default function TemplateConfigurationPage({ params }) {
             <div className="p-3 border-b border-border bg-muted/20">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="code">Code HTML/CSS</TabsTrigger>
-                <TabsTrigger value="gallery">Galerie & IA</TabsTrigger>
+                <TabsTrigger value="gallery">Galerie (Thèmes)</TabsTrigger>
               </TabsList>
             </div>
 
@@ -103,22 +86,7 @@ export default function TemplateConfigurationPage({ params }) {
               </TabsContent>
 
               <TabsContent value="gallery" className="mt-0 space-y-8">
-                {/* AI Generator Box */}
-                <div className="p-4 bg-muted/30 border border-primary/20 rounded-lg space-y-3">
-                  <h3 className="font-semibold text-sm flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-primary" /> Assistant IA
-                  </h3>
-                  <Textarea
-                    placeholder="Décrivez l'ambiance... ex: 'Un thème de plage tropicale, avec du bleu azur et du sable doré'."
-                    value={aiPrompt}
-                    onChange={e => setAiPrompt(e.target.value)}
-                    className="text-sm bg-background resize-none"
-                    rows={3}
-                  />
-                  <Button size="sm" onClick={handleGenerateAI} disabled={!aiPrompt || aiLoading} className="w-full">
-                    {aiLoading ? 'Génération...' : 'Générer ce modèle'}
-                  </Button>
-                </div>
+
 
                 {/* Preset Gallery */}
                 <TemplateGallery

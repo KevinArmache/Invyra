@@ -77,6 +77,7 @@ export default function EditEventPage({ params }) {
       setEvent(prev => ({ ...prev, invitationTemplate: selectedForSwap.config }))
       setShowTemplatePicker(false)
       setSelectedForSwap(null)
+      toast.success("Modèle appliqué avec succès à l'événement.")
     } catch (e) {
       toast.error(e.message)
     } finally {

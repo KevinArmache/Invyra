@@ -90,11 +90,13 @@ export default function NewEventPage() {
 
   async function handleCSVImport(guests) {
     setGuestLoading(true)
+    let addedCount = 0
     try {
       for (const g of guests) {
-        await addGuest(createdEventId, g).catch(() => { })
+        await addGuest(createdEventId, g).then(() => addedCount++).catch(() => {})
       }
       setAddedGuests(prev => [...prev, ...guests])
+      toast.success(`${addedCount} invités importés avec succès.`)
     } finally {
       setGuestLoading(false)
     }

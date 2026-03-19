@@ -30,8 +30,12 @@ export default function EditTemplatePage({ params }) {
   }
 
   async function handleSave(name, config) {
-    await updateUserTemplate(id, name, config)
-    toast.success('Modèle mis à jour !')
+    try {
+      await updateUserTemplate(id, name, config)
+      toast.success('Modèle mis à jour !')
+    } catch (e) {
+      toast.error(e.message)
+    }
   }
 
   return (

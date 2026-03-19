@@ -4,7 +4,7 @@ import { prisma } from '@/utils/prisma'
 import { getSession, isEventOwnerOrAdmin, canAccessEvent } from '@/app/actions/auth'
 import { getMyCollaboratorRole } from '@/app/actions/collaborator'
 import { nanoid } from 'nanoid'
-import { sendInvitationEmail } from './notify'
+import { sendInvitationEmail, sendBulkInvitationEmails } from './notify'
 
 // ─── Helper de vérification des droits ───────────────────────────────────────
 async function checkEditorAccess(eventId) {
@@ -134,35 +134,18 @@ export async function deleteGuest(guestId) {
   }
 }
 
-// Suppression de l'ancienne fonction locale sendInvitationEmail (remplacée par celle de notify.js)
-
 // ──────────────────────────────────────────────
 // Send Bulk Invitations
 // ──────────────────────────────────────────────
 export async function sendBulkInvitations(eventId) {
   try {
     await checkEditorAccess(eventId)
-
-    const event = await prisma.event.findUnique({
-      where: { id: eventId },
-      include: { guests: true }
-    })
-    if (!event) throw new Error('Event not found')
-
-    const unsentGuests = event.guests.filter(g => !g.invitationSentAt)
-    let sentCount = 0
-
-    // Envoi via notify.js
-    for (const guest of unsentGuests) {
-      try {
-        await sendInvitationEmail(guest.id)
-        sentCount++
-      } catch (e) {
-        console.error(`Failed to send email to ${guest.email}`, e)
-      }
+    const result = await sendBulkInvitationEmails(eventId)
+    return { 
+      success: true, 
+      sentCount: result.sent, 
+      message: result.message || `${result.sent} invitations envoyées avec succès.` 
     }
-
-    return { success: true, sentCount, message: `${sentCount} invitations envoyées avec succès.` }
   } catch (error) {
     console.error('Bulk send error:', error)
     throw new Error(error.message || 'Failed to send bulk invitations')

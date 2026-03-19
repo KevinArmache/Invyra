@@ -6,8 +6,12 @@ import TemplateEditorForm from '@/components/dashboard/TemplateEditorForm'
 
 export default function NewTemplatePage() {
   async function handleSave(name, config) {
-    await saveUserTemplate(name, config)
-    toast.success('Modèle créé avec succès !')
+    try {
+      await saveUserTemplate(name, config)
+      toast.success('Modèle créé avec succès !')
+    } catch (e) {
+      toast.error(e.message)
+    }
   }
 
   return <TemplateEditorForm onSave={handleSave} />
