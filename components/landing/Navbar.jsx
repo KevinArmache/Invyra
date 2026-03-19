@@ -29,9 +29,9 @@ export default function Navbar() {
             <Link href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
               {t('nav.how_it_works')}
             </Link>
-            <Link href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+            {/* <Link href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
               {t('nav.pricing')}
-            </Link>
+            </Link> */}
           </div>
 
           <div className="hidden md:flex items-center gap-3">
@@ -86,6 +86,7 @@ export default function Navbar() {
             >
               {t('nav.how_it_works')}
             </Link>
+            {/*
             <Link
               href="#pricing"
               className="block text-muted-foreground hover:text-foreground transition-colors"
@@ -93,6 +94,7 @@ export default function Navbar() {
             >
               {t('nav.pricing')}
             </Link>
+            */}
             <div className="pt-4 space-y-2">
               {user ? (
                 <Button asChild className="w-full">

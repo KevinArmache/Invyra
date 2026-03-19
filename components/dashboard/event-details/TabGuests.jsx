@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Mail, Trash2, UserPlus, CheckCircle, XCircle, HelpCircle, MessageCircle, Clock, Send, RefreshCw } from 'lucide-react'
+import { Mail, Trash2, UserPlus, CheckCircle, XCircle, HelpCircle, MessageCircle, Clock, Send, RefreshCw, Search } from 'lucide-react'
 import CSVImporter from '@/components/invitation/CSVImporter'
 import { addGuest } from '@/app/actions/guest'
 import { toast } from 'sonner'
@@ -78,42 +78,28 @@ function GuestRow({ g, onSendSingleEmail, onSendWhatsApp, onRemoveGuest }) {
       {/* Actions de notification */}
       <div className="flex items-center gap-2 shrink-0">
         {/* Email */}
-        {emailSent ? (
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-blue-400 bg-blue-400/10 border border-blue-400/20 px-2.5 py-1.5 rounded-lg">
-            <CheckCircle className="w-3.5 h-3.5" />
-            Email ✓
-          </span>
-        ) : (
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleSendEmail}
-            disabled={isSending}
-            className="h-8 gap-1.5 text-xs border-border hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-all"
-          >
-            {isSending ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-            Email
-          </Button>
-        )}
+        <Button
+          size="sm"
+          variant={emailSent ? "secondary" : "outline"}
+          onClick={handleSendEmail}
+          disabled={isSending}
+          className={`h-8 gap-1.5 text-xs transition-all ${emailSent ? 'text-blue-500 bg-blue-500/10 border-blue-500/20 hover:bg-blue-500/20' : 'border-border hover:border-primary/50 hover:text-primary hover:bg-primary/5'}`}
+        >
+          {isSending ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : emailSent ? <CheckCircle className="w-3.5 h-3.5" /> : <Send className="w-3.5 h-3.5" />}
+          {emailSent ? 'Renvoyer' : 'Email'}
+        </Button>
 
         {/* WhatsApp */}
         {g.phone && (
-          whatsappSent ? (
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2.5 py-1.5 rounded-lg">
-              <CheckCircle className="w-3.5 h-3.5" />
-              WA ✓
-            </span>
-          ) : (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => onSendWhatsApp(g.id)}
-              className="h-8 gap-1.5 text-xs border-emerald-500/30 text-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/15 hover:border-emerald-500/60 transition-all"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              WhatsApp
-            </Button>
-          )
+          <Button
+            size="sm"
+            variant={whatsappSent ? "secondary" : "outline"}
+            onClick={() => onSendWhatsApp(g.id)}
+            className={`h-8 gap-1.5 text-xs transition-all ${whatsappSent ? 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20' : 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5 hover:bg-emerald-500/15 hover:border-emerald-500/60'}`}
+          >
+            {whatsappSent ? <CheckCircle className="w-3.5 h-3.5" /> : <MessageCircle className="w-3.5 h-3.5" />}
+            {whatsappSent ? 'Renvoyer' : 'WhatsApp'}
+          </Button>
         )}
 
         {/* Supprimer */}
@@ -134,6 +120,7 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
   const { t } = useTranslation()
   const [showAddGuest, setShowAddGuest] = useState(false)
   const [newGuest, setNewGuest] = useState({ name: '', email: '', phone: '' })
+  const [searchQuery, setSearchQuery] = useState('')
 
   async function handleAddGuest() {
     if (!newGuest.name || !newGuest.email) return
@@ -198,6 +185,19 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
           </div>
         )}
 
+        {/* Search Bar */}
+        <div className="px-6 pb-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input 
+              placeholder="Rechercher un invité par nom ou email..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 bg-muted/20 border-border/50"
+            />
+          </div>
+        </div>
+
         {/* Guest List */}
         <div className="rounded-b-xl overflow-hidden">
           {guests.length === 0 ? (
@@ -209,15 +209,25 @@ export default function TabGuests({ guests, eventId, onRefresh, onSendSingleEmai
               <p className="text-xs text-muted-foreground/70 mt-1">{t('portal.events.details.guests.add_btn')}</p>
             </div>
           ) : (
-            guests.map(g => (
-              <GuestRow
-                key={g.id}
-                g={g}
-                onSendSingleEmail={onSendSingleEmail}
-                onSendWhatsApp={onSendWhatsApp}
-                onRemoveGuest={onRemoveGuest}
-              />
-            ))
+            guests.filter(g => 
+              g.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+              g.email.toLowerCase().includes(searchQuery.toLowerCase())
+            ).length === 0 ? (
+              <div className="text-center py-8 text-sm text-muted-foreground">Aucun invité ne correspond à votre recherche.</div>
+            ) : (
+              guests.filter(g => 
+                g.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                g.email.toLowerCase().includes(searchQuery.toLowerCase())
+              ).map(g => (
+                <GuestRow
+                  key={g.id}
+                  g={g}
+                  onSendSingleEmail={onSendSingleEmail}
+                  onSendWhatsApp={onSendWhatsApp}
+                  onRemoveGuest={onRemoveGuest}
+                />
+              ))
+            )
           )}
         </div>
       </CardContent>

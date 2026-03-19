@@ -205,3 +205,44 @@ export async function changePassword(currentPassword, newPassword) {
   return { success: true }
 }
 
+// ─── Suppression de compte ────────────────────────────────────────────────────────────
+
+export async function deleteMyAccount() {
+  const session = await getSession()
+  if (!session) throw new Error('Non authentifié')
+
+  const user = await prisma.user.findUnique({ where: { id: session.userId } })
+  if (!user) throw new Error('Utilisateur introuvable')
+
+  // 1. Trouver un administrateur pour lui réassigner les templates créés par l'utilisateur
+  // Cela empêchera la suppression en cascade des templates (bibliothèque communautaire)
+  let admin = await prisma.user.findFirst({
+    where: { role: 'admin', id: { not: user.id } }
+  })
+
+  // S'il n'y a aucun admin, créer un compte Ghost (système) 
+  if (!admin) {
+    const passwordHash = await hashPassword('GhostInvyra!2026')
+    admin = await prisma.user.create({
+      data: {
+        email: `ghost_${Date.now()}@invyra.local`,
+        name: 'Invyra System',
+        password: passwordHash,
+        role: 'admin'
+      }
+    })
+  }
+
+  // 2. Réassignation des templates
+  await prisma.customTemplate.updateMany({
+    where: { userId: user.id },
+    data: { userId: admin.id }
+  })
+
+  // 3. Suppression du compte de l'utilisateur (événements, collaborateurs, etc seront effacés en cascade)
+  await prisma.user.delete({ where: { id: user.id } })
+
+  // 4. Déconnexion
+  await clearSession()
+  return { success: true }
+}

@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useUser } from '@/hooks/useUser'
-import { updateProfile, changePassword } from '@/app/actions/auth'
+import { updateProfile, changePassword, deleteMyAccount } from '@/app/actions/auth'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -12,6 +13,7 @@ import { useTranslation } from '@/utils/i18n/Context'
 export default function SettingsPage() {
   const { t } = useTranslation()
   const { user, mutate } = useUser()
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
@@ -80,6 +82,27 @@ export default function SettingsPage() {
     } catch (err) {
       setError(err.message)
     } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleDeleteAccount() {
+    const confirmWord = window.prompt(t('settings.delete_prompt') || 'Tapez SUPPRIMER pour confirmer la suppression définitive de votre compte :')
+    if (confirmWord !== 'SUPPRIMER') {
+      if (confirmWord !== null) {
+        setError(t('settings.delete_cancel') || 'Suppression annulée : le mot de confirmation est incorrect.')
+      }
+      return
+    }
+
+    setLoading(true)
+    setError('')
+    try {
+      await deleteMyAccount()
+      // Redirection après suppression
+      router.push('/')
+    } catch (err) {
+      setError(err.message)
       setLoading(false)
     }
   }
@@ -236,7 +259,7 @@ export default function SettingsPage() {
           <CardDescription>{t('settings.irreversible')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="destructive" disabled>
+          <Button variant="destructive" disabled={loading} onClick={handleDeleteAccount}>
             {t('settings.delete_account')}
           </Button>
           <p className="text-xs text-muted-foreground mt-2">
