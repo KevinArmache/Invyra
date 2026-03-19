@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Mail, Trash2, UserPlus, CheckCircle, XCircle, HelpCircle, MessageCircle, Clock, Send } from 'lucide-react'
+import { Mail, Trash2, UserPlus, CheckCircle, XCircle, HelpCircle, MessageCircle, Clock, Send, RefreshCw } from 'lucide-react'
 import CSVImporter from '@/components/invitation/CSVImporter'
 import { addGuest } from '@/app/actions/guest'
 import { toast } from 'sonner'
@@ -37,8 +37,15 @@ function RSVPBadge({ status }) {
 }
 
 function GuestRow({ g, onSendSingleEmail, onSendWhatsApp, onRemoveGuest }) {
+  const [isSending, setIsSending] = useState(false)
   const emailSent = !!(g.emailSentAt || g.invitationSentAt)
   const whatsappSent = !!g.whatsappSentAt
+
+  async function handleSendEmail() {
+    setIsSending(true)
+    await onSendSingleEmail(g.id)
+    setIsSending(false)
+  }
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 py-3.5 border-b border-border last:border-0 hover:bg-muted/20 transition-colors group">
@@ -80,10 +87,11 @@ function GuestRow({ g, onSendSingleEmail, onSendWhatsApp, onRemoveGuest }) {
           <Button
             size="sm"
             variant="outline"
-            onClick={() => onSendSingleEmail(g.id)}
+            onClick={handleSendEmail}
+            disabled={isSending}
             className="h-8 gap-1.5 text-xs border-border hover:border-primary/50 hover:text-primary hover:bg-primary/5 transition-all"
           >
-            <Send className="w-3.5 h-3.5" />
+            {isSending ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             Email
           </Button>
         )}

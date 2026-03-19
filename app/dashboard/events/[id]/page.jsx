@@ -143,7 +143,7 @@ export default function EventDetailPage({ params }) {
         <div className="flex flex-wrap gap-2">
           {event.invitationTemplate && (
             <Button variant="secondary" onClick={handleSendBulk} disabled={sendingBulk}>
-              <Mail className="w-4 h-4 mr-2" />
+              {sendingBulk ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Mail className="w-4 h-4 mr-2" />}
               {sendingBulk ? t('portal.events.details.actions.sending') : t('portal.events.details.actions.send_invitations')}
             </Button>
           )}
