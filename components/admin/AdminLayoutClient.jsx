@@ -6,11 +6,18 @@ import { LayoutDashboard, Users, Shield, Menu, X, ChevronLeft, ChevronRight, Log
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Button } from '@/components/ui/button'
 import { logout } from '@/app/actions/auth'
+import { useTranslation } from '@/utils/i18n/Context'
 
 export default function AdminLayoutClient({ user, children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isClient, setIsClient] = useState(false)
+  const { locale, changeLocale } = useTranslation()
+
+  const navigation = [
+    { name: locale === 'fr' ? "Vue d'ensemble" : 'Overview', href: '/admin', icon: LayoutDashboard },
+    { name: locale === 'fr' ? 'Utilisateurs' : 'Users', href: '/admin/users', icon: Users },
+  ]
 
   useEffect(() => {
     setIsClient(true)
@@ -23,11 +30,6 @@ export default function AdminLayoutClient({ user, children }) {
     setIsCollapsed(newState)
     localStorage.setItem('invyra_admin_sidebar_collapsed', String(newState))
   }
-
-  const navigation = [
-    { name: 'Vue d\'ensemble', href: '/admin', icon: LayoutDashboard },
-    { name: 'Utilisateurs', href: '/admin/users', icon: Users },
-  ]
 
   async function handleLogout() {
     await logout()
@@ -48,13 +50,13 @@ export default function AdminLayoutClient({ user, children }) {
 
         {/* Sidebar */}
         <aside className={`
-          fixed top-0 left-0 z-50 h-[100dvh] flex flex-col bg-sidebar border-r border-sidebar-border
+          fixed top-0 left-0 z-50 h-dvh flex flex-col bg-sidebar border-r border-sidebar-border
           transform transition-all duration-300 ease-in-out
           lg:translate-x-0 ${sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'}
           ${isCollapsed && !sidebarOpen ? 'lg:w-[88px]' : 'lg:w-64'}
         `}>
           {/* Logo & Toggle */}
-          <div className="flex flex-shrink-0 items-center justify-between h-16 px-4 border-b border-sidebar-border">
+          <div className="flex shrink-0 items-center justify-between h-16 px-4 border-b border-sidebar-border">
             {(!isCollapsed || sidebarOpen) && (
               <div className="flex items-center gap-2 overflow-hidden">
                 <div className="w-8 h-8 shrink-0 rounded-lg bg-red-500/20 flex items-center justify-center">
@@ -125,14 +127,37 @@ export default function AdminLayoutClient({ user, children }) {
               </TooltipTrigger>
               {isCollapsed && !sidebarOpen && (
                 <TooltipContent side="right" className="font-medium bg-popover text-popover-foreground ml-2">
-                  Retour au Dashboard
+                  {locale === 'fr' ? 'Retour au Dashboard' : 'Back to Dashboard'}
                 </TooltipContent>
               )}
             </Tooltip>
           </nav>
 
-          {/* User section */}
-          <div className="flex-shrink-0 p-3 border-t border-sidebar-border space-y-3">
+          {/* Language switcher + User section */}
+          <div className="shrink-0 p-3 border-t border-sidebar-border space-y-3">
+            <div className={`flex items-center gap-1 bg-sidebar-accent/40 rounded-lg p-1 ${isCollapsed && !sidebarOpen ? 'flex-col' : 'flex-row'}`}>
+              {['fr', 'en'].map(code => (
+                <Tooltip key={code}>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => changeLocale(code)}
+                      className={`flex-1 flex items-center justify-center py-1.5 text-xs font-bold rounded-md transition-all duration-200
+                        ${isCollapsed && !sidebarOpen ? 'w-full p-2' : 'gap-1.5'}
+                        ${locale === code ? 'bg-primary text-primary-foreground shadow-sm' : 'text-sidebar-foreground hover:bg-sidebar-accent'}
+                      `}
+                    >
+                      <span className="uppercase">{code}</span>
+                    </button>
+                  </TooltipTrigger>
+                  {isCollapsed && !sidebarOpen && (
+                    <TooltipContent side="right" className="ml-2 font-medium">
+                      {code === 'fr' ? 'Français' : 'English'}
+                    </TooltipContent>
+                  )}
+                </Tooltip>
+              ))}
+            </div>
+
             <div className={`flex items-center ${isCollapsed && !sidebarOpen ? 'justify-center py-2' : 'px-2'}`}>
               <div className="w-10 h-10 shrink-0 rounded-full bg-red-500/20 flex items-center justify-center">
                 <span className="text-red-500 font-medium">
@@ -161,12 +186,12 @@ export default function AdminLayoutClient({ user, children }) {
                   onClick={handleLogout}
                 >
                   <LogOut size={20} className={!isCollapsed || sidebarOpen ? "mr-3 shrink-0" : "shrink-0"} />
-                  {(!isCollapsed || sidebarOpen) && <span className="whitespace-nowrap overflow-hidden">Déconnexion</span>}
+                  {(!isCollapsed || sidebarOpen) && <span className="whitespace-nowrap overflow-hidden">{locale === 'fr' ? 'Déconnexion' : 'Sign out'}</span>}
                 </Button>
               </TooltipTrigger>
               {isCollapsed && !sidebarOpen && (
                 <TooltipContent side="right" className="ml-2 font-medium">
-                  Déconnexion
+                  {locale === 'fr' ? 'Déconnexion' : 'Sign out'}
                 </TooltipContent>
               )}
             </Tooltip>
@@ -180,11 +205,11 @@ export default function AdminLayoutClient({ user, children }) {
             <button
               className="p-2 -ml-2 text-muted-foreground hover:text-foreground shrink-0"
               onClick={() => setSidebarOpen(true)}
-              aria-label="Ouvrir le menu"
+              aria-label={locale === 'fr' ? 'Ouvrir le menu' : 'Open menu'}
             >
               <Menu size={24} />
             </button>
-            <span className="ml-4 font-bold">Admin Panel</span>
+            <span className="ml-4 font-bold">{locale === 'fr' ? 'Panneau admin' : 'Admin panel'}</span>
           </header>
 
           {/* Page content */}

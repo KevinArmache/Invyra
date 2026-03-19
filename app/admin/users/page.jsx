@@ -1,11 +1,18 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { getAllUsers } from '@/app/actions/admin'
 import UsersTable from '@/components/admin/UsersTable'
 import { Users } from 'lucide-react'
+import { useTranslation } from '@/utils/i18n/Context'
 
-export const metadata = { title: 'Utilisateurs — Invyra Admin' }
+export default function AdminUsersPage() {
+  const { t } = useTranslation()
+  const [users, setUsers] = useState([])
 
-export default async function AdminUsersPage() {
-  const users = await getAllUsers()
+  useEffect(() => {
+    getAllUsers().then((data) => setUsers(data || [])).catch(() => setUsers([]))
+  }, [])
 
   return (
     <div className="space-y-6">
@@ -13,10 +20,10 @@ export default async function AdminUsersPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
             <Users className="w-8 h-8 text-primary" />
-            Gestion des utilisateurs
+            {t('portal.admin.users_management')}
           </h1>
           <p className="text-muted-foreground mt-1">
-            {users.length} utilisateur{users.length > 1 ? 's' : ''} inscrit{users.length > 1 ? 's' : ''}
+            {t('portal.admin.users_count').replace('{count}', String(users.length))}
           </p>
         </div>
       </div>

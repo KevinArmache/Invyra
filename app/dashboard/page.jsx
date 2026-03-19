@@ -48,8 +48,8 @@ export default function DashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{t('dashboard.total_events')}</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.total_events')}</CardTitle>
             <Calendar className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -58,8 +58,8 @@ export default function DashboardPage() {
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{t('dashboard.total_guests')}</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.total_guests')}</CardTitle>
             <Users className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -68,8 +68,8 @@ export default function DashboardPage() {
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{t('dashboard.invitations_viewed')}</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.invitations_viewed')}</CardTitle>
             <Eye className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -78,8 +78,8 @@ export default function DashboardPage() {
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{t('dashboard.confirmed_rsvps')}</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.confirmed_rsvps')}</CardTitle>
             <CheckCircle className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -127,15 +127,15 @@ export default function DashboardPage() {
                 <Link
                   key={event.id}
                   href={`/dashboard/events/${event.id}`}
-                  className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-card/50 transition-all"
+                  className="flex flex-col gap-4 p-4 rounded-lg border border-border hover:border-primary/30 hover:bg-card/50 transition-all sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex min-w-0 items-center gap-4">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                       <Calendar className="w-6 h-6 text-primary" />
                     </div>
-                    <div>
-                      <h4 className="font-medium text-foreground">{event.title}</h4>
-                      <p className="text-sm text-muted-foreground">
+                    <div className="min-w-0">
+                      <h4 className="font-medium text-foreground break-words">{event.title}</h4>
+                      <p className="text-sm text-muted-foreground break-words">
                         {event.event_date
                           ? new Date(event.event_date).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
                             month: 'short',
@@ -148,16 +148,16 @@ export default function DashboardPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-6 text-sm">
+                  <div className="flex w-full flex-wrap items-center gap-x-5 gap-y-3 text-sm sm:w-auto sm:justify-end">
                     <div className="text-center">
                       <div className="font-medium text-foreground">{event.guest_count || 0}</div>
-                      <div className="text-muted-foreground">{t('dashboard.guests')}</div>
+                      <div className="text-xs leading-tight text-muted-foreground whitespace-normal">{t('dashboard.guests')}</div>
                     </div>
                     <div className="text-center">
                       <div className="font-medium text-foreground">{event.confirmed_count || 0}</div>
-                      <div className="text-muted-foreground">{t('dashboard.confirmed_rsvps')}</div>
+                      <div className="text-xs leading-tight text-muted-foreground whitespace-normal">{t('dashboard.confirmed_rsvps')}</div>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${event.status === 'active'
+                    <span className={`inline-flex max-w-full items-center justify-center whitespace-normal break-words px-2.5 py-1 rounded-full text-xs font-medium leading-tight ${event.status === 'active'
                         ? 'bg-green-500/20 text-green-400'
                         : 'bg-muted text-muted-foreground'
                       }`}>

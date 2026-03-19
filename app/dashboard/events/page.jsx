@@ -107,32 +107,33 @@ export default function EventsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredEvents.map((event) => (
-            <Card key={event.id} className="group hover:border-primary/30 transition-all">
+            <Card key={event.id} className="hover:border-primary/30 transition-all">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Calendar className="w-6 h-6 text-primary" />
                   </div>
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" onClick={(e) => { e.preventDefault(); setPreviewEvent(event) }} title={t('portal.events.list.preview_btn')}>
-                      <Eye size={16} />
-                    </Button>
-                    <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" title="Éditer">
-                      <Link href={`/dashboard/events/${event.id}/edit`}>
-                        <Pencil size={16} />
-                      </Link>
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={(e) => { e.preventDefault(); handleDelete(event.id) }} title="Supprimer">
-                      <Trash2 size={16} />
-                    </Button>
-                  </div>
                 </div>
 
                 <Link href={`/dashboard/events/${event.id}`}>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 hover:text-primary transition-colors">
+                  <h3 className="text-lg font-semibold text-foreground mb-3 hover:text-primary transition-colors wrap-break-word">
                     {event.title}
                   </h3>
                 </Link>
+
+                <div className="mb-4 flex flex-wrap items-center gap-1">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" onClick={(e) => { e.preventDefault(); setPreviewEvent(event) }} title={t('portal.events.list.preview_btn')}>
+                    <Eye size={16} />
+                  </Button>
+                  <Button variant="ghost" size="icon" asChild className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted" title={t('portal.events.list.edit_btn')}>
+                    <Link href={`/dashboard/events/${event.id}/edit`}>
+                      <Pencil size={16} />
+                    </Link>
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10" onClick={(e) => { e.preventDefault(); handleDelete(event.id) }} title={t('portal.events.list.delete_btn')}>
+                    <Trash2 size={16} />
+                  </Button>
+                </div>
 
                 <p className="text-sm text-muted-foreground mb-4">
                   {event.eventDate 
@@ -147,17 +148,17 @@ export default function EventsPage() {
                 </p>
 
                 {event.location && (
-                  <p className="text-sm text-muted-foreground mb-4 truncate">
+                  <p className="text-sm text-muted-foreground mb-4 wrap-break-word">
                     {event.location}
                   </p>
                 )}
 
-                <div className="flex items-center justify-between pt-4 border-t border-border">
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-border">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Users size={16} />
                     <span>{event.guest_count || 0} {t('portal.events.list.guests')}</span>
                   </div>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  <span className={`inline-flex max-w-full items-center justify-center whitespace-normal wrap-break-word px-2.5 py-1 rounded-full text-xs font-medium leading-tight ${
                     event.status === 'active' 
                       ? 'bg-green-500/20 text-green-400' 
                       : 'bg-muted text-muted-foreground'
