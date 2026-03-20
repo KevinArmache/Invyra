@@ -84,7 +84,7 @@ export default function TemplatesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {templates.map(tmpl => (
             <Card key={tmpl.id} className="overflow-hidden flex flex-col hover:border-primary/40 transition-colors">
-              <div className="relative aspect-[3/4] bg-muted/20 border-b border-border overflow-hidden">
+              <div className="relative aspect-3/4 bg-muted/20 border-b border-border overflow-hidden">
                 {/* Scaled preview centered inside the card */}
                 <div
                   className="absolute pointer-events-none"
@@ -104,7 +104,7 @@ export default function TemplatesPage() {
                 </div>
                 
                 {/* Hover overlay for actions */}
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-2 opacity-0 hover:opacity-100 transition-opacity">
+                <div className="hidden lg:flex absolute inset-0 bg-black/40 items-center justify-center gap-2 opacity-0 hover:opacity-100 transition-opacity">
                   <Button variant="secondary" size="icon" className="h-9 w-9 rounded-full shadow-lg" onClick={(e) => { e.preventDefault(); setPreviewTemplate(tmpl) }} title={t('portal.templates.list.preview_btn')}>
                     <Eye className="w-4 h-4" />
                   </Button>
@@ -124,6 +124,40 @@ export default function TemplatesPage() {
               </div>
               <CardContent className="p-4 flex flex-col gap-1 items-start bg-card z-10">
                 <h3 className="font-semibold text-lg truncate w-full">{tmpl.name}</h3>
+
+                {/* Buttons visible on mobile/tablet (no hover overlay) */}
+                <div className="w-full flex gap-2 justify-start lg:hidden mt-2">
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="h-9 w-9 rounded-full shadow"
+                    onClick={(e) => { e.preventDefault(); setPreviewTemplate(tmpl) }}
+                    title={t('portal.templates.list.preview_btn')}
+                  >
+                    <Eye className="w-4 h-4" />
+                  </Button>
+
+                  {user?.role === 'admin' && (
+                    <>
+                      <Button variant="secondary" size="icon" asChild className="h-9 w-9 rounded-full shadow">
+                        <Link href={`/dashboard/templates/${tmpl.id}`} title={t('portal.templates.list.edit_btn')}>
+                          <Edit2 className="w-4 h-4" />
+                        </Link>
+                      </Button>
+
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="h-9 w-9 rounded-full shadow"
+                        onClick={(e) => { e.preventDefault(); handleDelete(tmpl.id) }}
+                        title={t('portal.events.list.delete_btn')}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )}
+                </div>
+
                 <p className="text-xs text-muted-foreground w-full">{new Date(tmpl.createdAt).toLocaleDateString(locale)}</p>
               </CardContent>
             </Card>
