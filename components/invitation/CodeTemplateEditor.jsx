@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { Button } from '@/components/ui/button'
 import { Eye, Code, Palette, Zap, Copy, Check, RotateCcw } from 'lucide-react'
+const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false })
 
 const DEFAULT_HTML = `<div class="invitation-wrapper">
   <div class="invitation-card">
@@ -410,106 +412,124 @@ body {
   to { opacity:1; transform: translateY(0); }
 }`
 
-const DEFAULT_JS = `// Ce script est injecté et gère la communication (RSVP via postMessage).
+const DEFAULT_JS = `// RSVP template script: uniquement l'essentiel (init, clics, "Merci", modification, postMessage).
 document.addEventListener('DOMContentLoaded', function() {
+  // ─────────────────────────────────────────────────────────────────────────────
+  // DOM: éléments RSVP attendus par le template
+  // ─────────────────────────────────────────────────────────────────────────────
   var formSection = document.getElementById('rsvp-form');
   var successSection = document.getElementById('rsvp-success');
   var statusMsg = document.getElementById('rsvp-status-msg');
   var editBtn = document.getElementById('rsvp-edit-btn');
-  
-  // Vérifier si l'invité a déjà répondu (données injectées par la plateforme)
-  if (window.GUEST_DATA && window.GUEST_DATA.rsvp_status) {
+  var rsvpButtons = Array.prototype.slice.call(document.querySelectorAll('[data-rsvp]'));
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Etat local (pour "Modifier ma réponse" et éviter les double-soumissions)
+  // ─────────────────────────────────────────────────────────────────────────────
+  var currentStatus = null;
+  var isSubmitting = false;
+
+  function setButtonsDisabled(disabled) {
+    rsvpButtons.forEach(function(btn) {
+      btn.disabled = !!disabled;
+      btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    });
+  }
+
+  // Garantit "une seule réponse à la fois" côté UI (un seul bouton avec la classe active).
+  function setActiveStatus(status) {
+    rsvpButtons.forEach(function(btn) {
+      btn.classList.remove('active');
+      if (btn.getAttribute('data-rsvp') === status) btn.classList.add('active');
+    });
+  }
+
+  function updateStatusMessage(status) {
+    if (!statusMsg) return;
+    if (status === 'confirmed') statusMsg.innerHTML = '🎉 Présence confirmée !';
+    else if (status === 'declined') statusMsg.innerHTML = '😔 Vous avez décliné.';
+    else statusMsg.innerHTML = '🤔 Réponse : Peut-être.';
+  }
+
+  function showSuccess(status) {
+    currentStatus = status;
     if (formSection) formSection.style.display = 'none';
     if (successSection) successSection.style.display = 'block';
-    
-    if (statusMsg) {
-      var s = window.GUEST_DATA.rsvp_status;
-      if (s === 'confirmed') statusMsg.innerHTML = '🎉 Présence confirmée !';
-      else if (s === 'declined') statusMsg.innerHTML = '😔 Vous avez décliné.';
-      else statusMsg.innerHTML = '🤔 Réponse en attente (Peut-être).';
-    }
-    
-    // Marquer le bon bouton comme actif
-    document.querySelectorAll('[data-rsvp]').forEach(function(b) {
-      if (b.getAttribute('data-rsvp') === window.GUEST_DATA.rsvp_status) {
-        b.classList.add('active');
-      }
+
+    // Marque visuellement la réponse sélectionnée
+    setActiveStatus(status);
+    updateStatusMessage(status);
+  }
+
+  function showForm() {
+    if (formSection) formSection.style.display = 'block';
+    if (successSection) successSection.style.display = 'none';
+
+    // Repartir avec la dernière réponse sélectionnée (modifiable)
+    setActiveStatus(currentStatus);
+    setButtonsDisabled(false);
+  }
+
+  // 1) Initialisation au chargement de la page (si l'invité a déjà répondu)
+  var initialStatus =
+    window.GUEST_DATA && window.GUEST_DATA.rsvp_status ? window.GUEST_DATA.rsvp_status : null;
+
+  if (initialStatus) {
+    showSuccess(initialStatus);
+    // Bloque toute nouvelle sélection tant que l'on n'a pas cliqué "Modifier"
+    setButtonsDisabled(true);
+  } else {
+    setButtonsDisabled(false);
+  }
+
+  // 2) Modification possible: revenir sur le formulaire RSVP
+  if (editBtn) {
+    editBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      isSubmitting = false;
+      showForm();
     });
   }
 
-  // Gérer le clic sur "Modifier ma réponse"
-  if (editBtn) {
-    editBtn.addEventListener('click', function() {
-      if (formSection) formSection.style.display = 'block';
-      if (successSection) successSection.style.display = 'none';
-    });
-  }
-  
-  // Gestion clics sur les boutons RSVP rapides
-  document.querySelectorAll('[data-rsvp]').forEach(function(btn) {
+  // 3) Gestion des clics sur les boutons RSVP + communication parent via postMessage
+  rsvpButtons.forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
-      var status = this.getAttribute('data-rsvp');
-      
-      document.querySelectorAll('[data-rsvp]').forEach(function(b) { b.classList.remove('active'); });
-      this.classList.add('active');
-      
-      window.parent.postMessage({
-        type: 'RSVP_SUBMIT',
-        data: { rsvp_status: status, dietary_restrictions: '', plus_one: false, notes: '' }
-      }, '*');
-      
-      setTimeout(function() {
-        if (formSection) formSection.style.display = 'none';
-        if (successSection) successSection.style.display = 'block';
-        if (statusMsg) {
-          if (status === 'confirmed') statusMsg.innerHTML = '🎉 Présence confirmée !';
-          else if (status === 'declined') statusMsg.innerHTML = '😔 Vous avez décliné.';
-          else statusMsg.innerHTML = '🤔 Réponse : Peut-être.';
-        }
-      }, 500);
-    });
-  });
-  // Gestion des formulaires classiques (Bouton Envoyer ma réponse)
-  document.addEventListener('submit', function(e) {
-    if (e.target.tagName.toLowerCase() === 'form') {
-      e.preventDefault();
-      var formData = new FormData(e.target);
-      var rStatus = formData.get('rsvp_status') || 'confirmed';
-      
-      // Update btn state visually
-      var submitBtn = e.target.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        submitBtn.innerHTML = 'Enregistrement...';
-        submitBtn.style.opacity = '0.7';
+
+      // Empêche les double-soumissions (ex: clics rapides)
+      if (isSubmitting) return;
+
+      var status = btn.getAttribute('data-rsvp');
+      if (!status) return;
+
+      isSubmitting = true;
+
+      // Garantit l'unicité de sélection dans l'UI
+      setActiveStatus(status);
+      setButtonsDisabled(true);
+
+      // Envoie la réponse à la plateforme (parent de l'iframe)
+      if (window.parent && window.parent.postMessage) {
+        window.parent.postMessage(
+          {
+            type: 'RSVP_SUBMIT',
+            data: {
+              rsvp_status: status,
+              dietary_restrictions: '',
+              plus_one: false,
+              notes: ''
+            }
+          },
+          '*'
+        );
       }
 
-      window.parent.postMessage({
-        type: 'RSVP_SUBMIT',
-        data: {
-          rsvp_status: rStatus,
-          dietary_restrictions: formData.get('dietary_restrictions') || '',
-          plus_one: formData.get('plus_one') === 'on',
-          notes: formData.get('notes') || ''
-        }
-      }, '*');
-
+      // 4) Affiche la section "Merci" après la réponse
       setTimeout(function() {
-        if (formSection) formSection.style.display = 'none';
-        if (successSection) successSection.style.display = 'block';
-        if (statusMsg) {
-          if (rStatus === 'confirmed') statusMsg.innerHTML = '🎉 Présence confirmée !';
-          else if (rStatus === 'declined') statusMsg.innerHTML = '😔 Vous avez décliné.';
-          else statusMsg.innerHTML = '🤔 Réponse : Peut-être.';
-        }
-        
-        // Mettre à jour les couleurs des boutons radio customs si existants
-        document.querySelectorAll('[data-rsvp]').forEach(function(b) {
-            b.classList.remove('active');
-            if (b.getAttribute('data-rsvp') === rStatus) b.classList.add('active');
-        });
+        showSuccess(status);
+        isSubmitting = false;
       }, 500);
-    }
+    });
   });
 });`
 
@@ -608,7 +628,7 @@ export default function CodeTemplateEditor({ template, onChange }) {
       </div>
 
       {/* Code Editor Area */}
-      <div className="flex-1 relative flex flex-col min-h-0">
+      <div className="flex-1 relative flex flex-col min-h-0 overflow-hidden">
         <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border border-border border-b-0 rounded-t-lg">
           <span className={`text-xs font-mono font-semibold ${activeTabData?.color}`}>
             {activeTabData?.label.toLowerCase()}.{activeTab === 'html' ? 'html' : activeTab === 'css' ? 'css' : 'js'}
@@ -622,14 +642,33 @@ export default function CodeTemplateEditor({ template, onChange }) {
           </button>
         </div>
 
-        <textarea
-          value={activeTabData?.content || ''}
-          onChange={e => activeTabData?.onChange(e.target.value)}
-          spellCheck={false}
-          className="flex-1 w-full font-mono text-xs bg-[#1e1e2e] text-[#cdd6f4] border border-border rounded-b-lg p-4 resize-none focus:outline-none focus:ring-1 focus:ring-primary/40 min-h-[300px] custom-scrollbar leading-relaxed"
-          placeholder="// Votre code ici..."
-          style={{ tabSize: 2 }}
-        />
+        <div className="flex-1 min-h-0 rounded-b-lg overflow-hidden border border-border border-t-0 bg-[#1e1e2e]">
+          <MonacoEditor
+            key={activeTab}
+            height="100%"
+            defaultLanguage={activeTab === 'html' ? 'html' : activeTab === 'css' ? 'css' : 'javascript'}
+            language={activeTab === 'html' ? 'html' : activeTab === 'css' ? 'css' : 'javascript'}
+            value={activeTabData?.content || ''}
+            onChange={val => activeTabData?.onChange(val ?? '')}
+            theme="vs-dark"
+            options={{
+              minimap: { enabled: false },
+              fontSize: 12,
+              fontFamily:
+                'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+              lineNumbers: 'on',
+              scrollBeyondLastLine: false,
+              wordWrap: 'on',
+              tabSize: 2,
+              automaticLayout: true,
+            }}
+            loading={
+              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
+                Chargement de l'éditeur...
+              </div>
+            }
+          />
+        </div>
       </div>
 
       {/* Footer Actions */}
