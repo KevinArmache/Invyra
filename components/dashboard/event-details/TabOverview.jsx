@@ -1,8 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { format } from 'date-fns'
-import { fr as dateFr, enUS as dateEn } from 'date-fns/locale'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Edit, CheckCircle, LayoutTemplate } from 'lucide-react'

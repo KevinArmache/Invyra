@@ -11,6 +11,25 @@ import { useTheme } from "next-themes";
 import Icosahedron from "@/components/3d/Icosahedron";
 import YoRHaSatelliteRings from "@/components/3d/YoRHaSatelliteRings";
 
+function ScrollIndicator({ className }) {
+  return (
+    <motion.div
+      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1, delay: 1.2 }}
+    >
+      <div className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-muted-foreground/40 bg-background/40 p-2 backdrop-blur-sm">
+        <motion.div
+          className="h-1.5 w-1.5 rounded-full bg-primary"
+          animate={{ y: [0, 12, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false);
   const { t } = useTranslation();
@@ -23,7 +42,7 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
 
       {/* 3D Background */}
       {mounted && (
@@ -128,51 +147,11 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator (mobile/tablet) */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 lg:hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-      >
-        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/40 bg-background/40 backdrop-blur-sm flex items-start justify-center p-2">
-          <motion.div
-            className="w-1.5 h-1.5 rounded-full bg-primary"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </div>
-      </motion.div>
+      <ScrollIndicator className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2 lg:hidden" />
 
       {/* Scroll indicators (desktop only) */}
-      <motion.div
-        className="absolute bottom-8 left-6 z-20 hidden lg:block"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-      >
-        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/40 bg-background/40 backdrop-blur-sm flex items-start justify-center p-2">
-          <motion.div
-            className="w-1.5 h-1.5 rounded-full bg-primary"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </div>
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-8 right-6 z-20 hidden lg:block"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-      >
-        <div className="w-6 h-10 rounded-full border-2 border-muted-foreground/40 bg-background/40 backdrop-blur-sm flex items-start justify-center p-2">
-          <motion.div
-            className="w-1.5 h-1.5 rounded-full bg-primary"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </div>
-      </motion.div>
+      <ScrollIndicator className="absolute bottom-8 left-6 z-20 hidden lg:block" />
+      <ScrollIndicator className="absolute bottom-8 right-6 z-20 hidden lg:block" />
     </section>
   );
 }

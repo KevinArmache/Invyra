@@ -16,7 +16,7 @@ const languages = [
   { code: 'fr', name: 'Français' }
 ]
 
-export function LanguageSwitcher({ variant = 'default' }) {
+export function LanguageSwitcher() {
   const { locale, changeLocale } = useTranslation()
 
   return (

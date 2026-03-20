@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Calendar, Users, Eye, CheckCircle, Plus, ArrowRight } from 'lucide-react'
 import { getEvents } from '@/app/actions/event'
@@ -49,7 +49,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.total_events')}</CardTitle>
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground wrap-break-word">{t('dashboard.total_events')}</CardTitle>
             <Calendar className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -59,7 +59,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.total_guests')}</CardTitle>
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground wrap-break-word">{t('dashboard.total_guests')}</CardTitle>
             <Users className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -69,7 +69,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.invitations_viewed')}</CardTitle>
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground wrap-break-word">{t('dashboard.invitations_viewed')}</CardTitle>
             <Eye className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -79,7 +79,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between gap-2 pb-2">
-            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground break-words">{t('dashboard.confirmed_rsvps')}</CardTitle>
+            <CardTitle className="text-sm font-medium leading-snug text-muted-foreground wrap-break-word">{t('dashboard.confirmed_rsvps')}</CardTitle>
             <CheckCircle className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
@@ -134,8 +134,8 @@ export default function DashboardPage() {
                       <Calendar className="w-6 h-6 text-primary" />
                     </div>
                     <div className="min-w-0">
-                      <h4 className="font-medium text-foreground break-words">{event.title}</h4>
-                      <p className="text-sm text-muted-foreground break-words">
+                      <h4 className="font-medium text-foreground wrap-break-word">{event.title}</h4>
+                      <p className="text-sm text-muted-foreground wrap-break-word">
                         {event.event_date
                           ? new Date(event.event_date).toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
                             month: 'short',
@@ -157,7 +157,7 @@ export default function DashboardPage() {
                       <div className="font-medium text-foreground">{event.confirmed_count || 0}</div>
                       <div className="text-xs leading-tight text-muted-foreground whitespace-normal">{t('dashboard.confirmed_rsvps')}</div>
                     </div>
-                    <span className={`inline-flex max-w-full items-center justify-center whitespace-normal break-words px-2.5 py-1 rounded-full text-xs font-medium leading-tight ${event.status === 'active'
+                    <span className={`inline-flex max-w-full items-center justify-center whitespace-normal wrap-break-word px-2.5 py-1 rounded-full text-xs font-medium leading-tight ${event.status === 'active'
                         ? 'bg-green-500/20 text-green-400'
                         : 'bg-muted text-muted-foreground'
                       }`}>
