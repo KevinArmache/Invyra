@@ -119,7 +119,7 @@ ${scriptContent}
   return (
     <iframe
       srcDoc={iframeDoc}
-      title="Invitation Preview"
+      title="Invitation preview"
       className="w-full h-full border-0"
       style={{ minHeight: '100%', display: 'block' }}
       sandbox="allow-same-origin allow-scripts allow-popups allow-forms"

@@ -9,13 +9,13 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata = {
-  title: 'Invyra - Custom HTML/JS Event Invitations',
+  title: 'Invyra - Custom HTML/JS event invitations',
   description: 'Create stunning, custom event invitations. Transform your events into unforgettable experiences with clean HTML/CSS/JS designs, personalized messaging, and smart RSVP tracking.',
   generator: 'Invyra',
   keywords: ['invitations', 'events', 'HTML', 'CSS', 'JS', 'custom designs', 'RSVP', 'wedding invitations', 'event management'],
   authors: [{ name: 'Invyra' }],
   openGraph: {
-    title: 'Invyra - Custom HTML/JS Event Invitations',
+    title: 'Invyra - Custom HTML/JS event invitations',
     description: 'Create stunning, custom HTML/JS event invitations.',
     type: 'website',
   },

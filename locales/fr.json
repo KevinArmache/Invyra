@@ -3,7 +3,7 @@
     "features": "Fonctionnalités",
     "how_it_works": "Comment ça marche",
     "pricing": "Tarifs",
-    "sign_in": "Se Connecter",
+    "sign_in": "Se connecter",
     "get_started": "Commencer",
     "dashboard": "Tableau de Bord",
     "language": "Langue"
@@ -17,12 +17,12 @@
     "open_sidebar": "Ouvrir le menu"
   },
   "login": {
-    "title": "Bon Retour !",
+    "title": "Bon retour !",
     "subtitle": "Connectez-vous à votre compte pour continuer",
     "email": "Email",
     "password": "Mot de Passe",
     "password_placeholder": "Entrez votre mot de passe",
-    "submit": "Se Connecter",
+    "submit": "Se connecter",
     "submitting": "Connexion...",
     "no_account": "Vous n'avez pas de compte ?",
     "create_one": "En créer un"
@@ -30,7 +30,7 @@
   "register": {
     "title": "Créer un Compte",
     "subtitle": "Commencez à créer des invitations magnifiques",
-    "name": "Nom Complet",
+    "name": "Nom complet",
     "name_placeholder": "Votre nom",
     "email": "Email",
     "password": "Mot de Passe",
@@ -38,7 +38,7 @@
     "submit": "Créer le Compte",
     "submitting": "Création...",
     "has_account": "Vous avez déjà un compte ?",
-    "sign_in": "Se Connecter",
+    "sign_in": "Se connecter",
     "phone": "Numéro de téléphone",
     "phone_placeholder": "+33 6 12 34 56 78"
   },
@@ -80,28 +80,28 @@
     "title": "Tableau de Bord",
     "welcome": "Bon retour ! Voici un aperçu de vos événements.",
     "create_event": "Créer un Événement",
-    "total_events": "Total Événements",
-    "total_guests": "Total Invités",
-    "invitations_viewed": "Invitations Vues",
+    "total_events": "Total événements",
+    "total_guests": "Total invités",
+    "invitations_viewed": "Invitations vues",
     "confirmed_rsvps": "RSVP Confirmés",
-    "recent_events": "Événements Récents",
+    "recent_events": "Événements récents",
     "no_events": "Aucun événement pour l'instant. Créez votre premier !",
-    "view_all": "Voir Tous les Événements",
+    "view_all": "Voir tous les événements",
     "view": "Voir",
     "guests": "invités",
-    "quick_actions": "Actions Rapides",
-    "new_event": "Nouvel Événement",
+    "quick_actions": "Actions rapides",
+    "new_event": "Nouvel événement",
     "new_event_desc": "Créez un nouvel événement et commencez à inviter vos invités.",
     "manage_events": "Gérer les Événements",
     "manage_events_desc": "Consultez et gérez tous vos événements existants."
   },
   "events": {
-    "title": "Mes Événements",
+    "title": "Mes événements",
     "subtitle": "Gérez toutes vos invitations numériques",
-    "new_event": "Nouvel Événement",
+    "new_event": "Nouvel événement",
     "no_events": "Aucun événement trouvé",
     "no_events_desc": "Commencez par créer votre premier événement.",
-    "create_first": "Créer mon Premier Événement",
+    "create_first": "Créer mon premier événement",
     "view": "Voir",
     "edit": "Modifier",
     "delete": "Supprimer",
@@ -120,7 +120,7 @@
     "animate": "Animer l'Invitation",
     "preview": "Prévisualiser",
     "share": "Partager",
-    "guests_confirmed": "Invités Confirmés",
+    "guests_confirmed": "Invités confirmés",
     "views": "Vues",
     "rsvp_link": "Lien RSVP",
     "copy_link": "Copier le lien",
@@ -134,7 +134,7 @@
     "no_description": "Aucune description disponible."
   },
   "new_event": {
-    "title": "Nouvel Événement",
+    "title": "Nouvel événement",
     "subtitle": "Créez un nouvel événement et personnalisez votre invitation",
     "back": "Retour",
     "event_title": "Titre de l'Événement",
@@ -147,7 +147,7 @@
     "theme_placeholder": "Ex: Romantique, Moderne, Traditionnel...",
     "description": "Description",
     "description_placeholder": "Décrivez votre événement...",
-    "guest_count": "Nombre d'Invités Estimé",
+    "guest_count": "Nombre d'invités estimé",
     "create": "Créer l'Événement",
     "creating": "Création en cours..."
   },
@@ -155,20 +155,20 @@
   "analytics": {
     "title": "Analytiques",
     "subtitle": "Statistiques d'utilisation de vos événements",
-    "total_events": "Total Événements",
-    "total_views": "Total Vues",
-    "total_guests": "Total Invités",
-    "total_confirmed": "Total Confirmés"
+    "total_events": "Total événements",
+    "total_views": "Total vues",
+    "total_guests": "Total invités",
+    "total_confirmed": "Total confirmés"
   },
   "editor": {
     "title": "Éditeur d'Animation",
     "back_events": "Retour aux Événements",
     "live_preview": "Aperçu en Direct",
-    "full_preview": "Aperçu Plein Écran",
+    "full_preview": "Aperçu plein écran",
     "save_changes": "Enregistrer",
     "saving": "Enregistrement...",
     "saved": "✓ Enregistré !",
-    "generate": "Générer Animation",
+    "generate": "Générer animation",
     "generating": "Génération...",
     "hide_controls": "Masquer les Contrôles",
     "show_controls": "Afficher les Contrôles"
@@ -179,7 +179,7 @@
     "placeholder": "Ex: 'Mariage romantique au coucher du soleil avec des tons dorés chauds et de délicats pétales flottants'..."
   },
   "manual": {
-    "title": "Contrôles Manuels",
+    "title": "Contrôles manuels",
     "description": "Ajustez précisément les paramètres d'animation manuellement",
     "colors_title": "Couleurs",
     "primary": "Primaire",
@@ -196,7 +196,7 @@
     "text_blocks": "Blocs de Texte",
     "bg_color": "Couleur de Fond",
     "bg_opacity": "Opacité du Fond",
-    "padding": "Marge Interne",
+    "padding": "Marge interne",
     "border_color": "Couleur de Bordure",
     "border_size": "Taille de Bordure",
     "border_radius": "Arrondi de Bordure",
@@ -206,13 +206,13 @@
     "speed": "Vitesse",
     "shape": "Forme",
     "blending": "Mode de Fusion",
-    "decorative_shapes": "Formes Décoratives",
+    "decorative_shapes": "Formes décoratives",
     "thickness": "Épaisseur",
     "metalness": "Métal",
     "roughness": "Rugosité",
     "emissive": "Émissif",
     "opacity": "Opacité",
-    "wireframe": "Mode Filaire",
+    "wireframe": "Mode filaire",
     "camera_parallax": "Caméra & Parallax",
     "enable_parallax": "Activer le Parallax de la Souris",
     "intensity": "Intensité",
@@ -222,10 +222,10 @@
     "bar_progress": "Barre de Progression",
     "environment": "Environnement & Décor",
     "hdri_preset": "Préréglage HDRI",
-    "show_panorama": "Afficher le Panorama Complet",
-    "stars": "Étoiles (Espace)",
-    "sparkles": "Scintillements (Ambiance)",
-    "clouds": "Nuages Volumétriques",
+    "show_panorama": "Afficher le panorama complet",
+    "stars": "Étoiles (espace)",
+    "sparkles": "Scintillements (ambiance)",
+    "clouds": "Nuages volumétriques",
     "darken_overlay": "Assombrissement de l'Arrière-plan",
     "font_style": "Style de Police"
   },
@@ -333,7 +333,7 @@
           "date": "Date",
           "time": "Heure (affiché sur l'invitation)",
           "location": "Lieu",
-          "dress_code": "Dress Code",
+          "dress_code": "Dress code",
           "description": "Description",
           "name": "Nom complet *",
           "email": "Email *",
@@ -396,7 +396,7 @@
         },
         "overview": {
           "stats_title": "Confirmations (RSVP)",
-          "total_guests": "Total Invités",
+          "total_guests": "Total invités",
           "attending": "Confirmés",
           "pending": "En attente",
           "declined": "Refusés",
@@ -421,7 +421,7 @@
             "attending": "Confirmé",
             "declined": "Refusé"
           },
-          "send_email": "Envoyer Email",
+          "send_email": "Envoyer email",
           "send_whatsapp": "Envoyer WhatsApp",
           "delete_confirm": "Supprimer cet invité ?"
         }
@@ -429,7 +429,7 @@
     },
     "templates": {
       "list": {
-        "title": "Mes Modèles",
+        "title": "Mes modèles",
         "subtitle": "Créez et gérez vos designs réutilisables pour vos invitations.",
         "new_btn": "Nouveau modèle",
         "no_templates": "Aucun modèle sauvegardé",
@@ -446,8 +446,8 @@
         "saving": "Sauvegarde...",
         "success": "Modèle sauvegardé !",
         "name_placeholder": "Nom du modèle",
-        "mode_code": "Mode Code",
-        "mode_preview": "Mode Aperçu",
+        "mode_code": "Mode code",
+        "mode_preview": "Mode aperçu",
         "variables_title": "Variables d'Événement",
         "variables_desc": "Utilisez ces variables dans votre code HTML ou JS pour injecter les données de l'événement."
       }
@@ -465,18 +465,18 @@
   },
   "landing": {
     "hero": {
-      "tagline": "Éditeur d'Invitations Sur-Mesure",
+      "tagline": "Éditeur d'invitations sur-mesure",
       "title_1": "Créez des Invitations",
       "title_highlight": "Uniques",
       "subtitle": "Créez vos faire-part numériques de A à Z. Utilisez notre éditeur de code complet (HTML, CSS, JS) pour donner vie à vos invitations interactives et surprendre vos invités.",
-      "cta_primary": "Créer Gratuitement",
-      "cta_secondary": "Comment Ça Marche ?",
+      "cta_primary": "Créer gratuitement",
+      "cta_secondary": "Comment ça marche ?",
       "stats": {
-        "events": "Événements Créés",
+        "events": "Événements créés",
         "events_value": "10K+",
         "rsvp": "Taux de Réponse",
         "rsvp_value": "98%",
-        "themes": "Liberté Créative",
+        "themes": "Liberté créative",
         "themes_value": "100%"
       }
     },
@@ -486,23 +486,23 @@
       "subtitle": "De la création sur-mesure aux statistiques d'engagement, Invyra met à votre disposition des outils professionnels pour inviter avec élégance.",
       "items": {
         "ai": {
-          "title": "Contrôle Total (HTML/CSS)",
+          "title": "Contrôle total (HTML/CSS)",
           "desc": "Concevez le design de votre choix grâce à un éditeur web puissant, pensé pour une personnalisation absolue."
         },
         "themes": {
-          "title": "Expérience Interactive",
+          "title": "Expérience interactive",
           "desc": "Intégrez vos propres scripts JavaScript pour créer des animations fluides et engager vos invités."
         },
         "guests": {
-          "title": "Gestion des Invités Intuitive",
+          "title": "Gestion des invités intuitive",
           "desc": "Importez votre liste depuis un fichier Excel (CSV) ou saisissez-la manuellement. Gérez facilement les accompagnants."
         },
         "emails": {
-          "title": "Envoi WhatsApp & Email",
+          "title": "Envoi WhatsApp & email",
           "desc": "Distribuez des liens nominatifs uniques à vos invités. Le design de votre faire-part s'affichera de manière parfaite."
         },
         "analytics": {
-          "title": "Suivi RSVP en Temps Réel",
+          "title": "Suivi RSVP en temps réel",
           "desc": "Soyez notifié dès qu'un proche consulte l'invitation ou confirme sa présence, directement sur votre tableau de bord."
         },
         "preview": {
@@ -510,18 +510,18 @@
           "desc": "Modifiez votre code et observez le résultat visuel en temps réel grâce à la prévisualisation scindée."
         },
         "effects": {
-          "title": "Personnalisation Dynamique",
+          "title": "Personnalisation dynamique",
           "desc": "Insérez des balises de variables (ex: Nom de l'invité) directement dans le code pour générer des messages ultra-personnalisés."
         },
         "security": {
-          "title": "Confidentialité Assurée",
+          "title": "Confidentialité assurée",
           "desc": "Chaque invité reçoit un lien d'accès tokenisé sécurisé pour garantir que votre cérémonie reste strictement privée."
         }
       }
     },
     "how_it_works": {
       "title": "Comment ",
-      "title_highlight": "Ça Marche",
+      "title_highlight": "ça marche",
       "subtitle": "Créez et diffusez vos invitations en 4 étapes simples.",
       "steps": {
         "1": {
@@ -543,7 +543,7 @@
       }
     },
     "pricing": {
-      "title": "Tarifs Simples et ",
+      "title": "Tarifs simples et ",
       "title_highlight": "Transparents",
       "subtitle": "Choisissez la dimension parfaite pour votre événement. Nos outils restent accessibles, sans aucun frais caché.",
       "plans": {
@@ -552,7 +552,7 @@
           "desc": "Idéal pour tester la plateforme",
           "price": "0€",
           "period": "à vie",
-          "cta": "Essayer Gratuitement",
+          "cta": "Essayer gratuitement",
           "features": [
             "1 événement max",
             "Jusqu'à 15 invités",
@@ -562,22 +562,22 @@
           ]
         },
         "pro": {
-          "name": "Événement Premium",
+          "name": "Événement premium",
           "desc": "Pour une célébration inoubliable",
           "price": "19€",
           "period": "par événement",
           "cta": "Créer mon Événement",
           "features": [
             "Invités illimités",
-            "Éditeur de Modèle Avancé",
-            "Aperçu Direct",
+            "Éditeur de modèle avancé",
+            "Aperçu direct",
             "Envois d'emails massifs",
             "Support client prioritaire"
           ]
         },
         "enterprise": {
           "name": "Agences / Pro",
-          "desc": "Pour les Wedding Planners",
+          "desc": "Pour les wedding planners",
           "price": "Sur devis",
           "period": "nous contacter",
           "cta": "Prendre RDV",
@@ -592,23 +592,18 @@
       }
     },
     "footer": {
-      "description": "Créez des invitations événementielles entièrement sur-mesure. Donnez vie à vos faire-part modernes pour des cérémonies authentiques.",
+      "brand": "Invyra",
+      "headline": "Créez vos invitations digitales en quelques clics.",
+      "description": "Personnalisez votre design, partagez-le en un instant et suivez vos réponses en temps réel.",
       "rights": "Tous droits réservés. Développé par",
-      "product": "Produit",
-      "company": "Entreprise",
-      "legal": "Légal",
+      "explore": "Explorer",
+      "help": "Support",
       "links": {
         "features": "Fonctionnalités",
         "pricing": "Tarifs",
-        "themes": "Thèmes",
-        "examples": "Exemples",
-        "about": "À Propos",
-        "blog": "Blog",
-        "careers": "Carrières",
-        "contact": "Contact",
-        "privacy": "Confidentialité",
-        "terms": "Conditions Globales",
-        "cookies": "Gestion des Cookies"
+        "themes": "Thèmes disponibles",
+        "examples": "Exemples d'invitations",
+        "contact": "Support"
       }
     }
   }

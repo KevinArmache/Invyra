@@ -1,10 +1,10 @@
 {
   "nav": {
     "features": "Features",
-    "how_it_works": "How It Works",
+    "how_it_works": "How it works",
     "pricing": "Pricing",
-    "sign_in": "Sign In",
-    "get_started": "Get Started",
+    "sign_in": "Sign in",
+    "get_started": "Get started",
     "dashboard": "Dashboard",
     "language": "Language"
   },
@@ -13,7 +13,7 @@
     "events": "Events",
     "analytics": "Analytics",
     "settings": "Settings",
-    "sign_out": "Sign Out",
+    "sign_out": "Sign out",
     "open_sidebar": "Open sidebar"
   },
   "login": {
@@ -28,18 +28,18 @@
     "create_one": "Create one"
   },
   "register": {
-    "title": "Create an Account",
+    "title": "Create an account",
     "subtitle": "Start creating beautiful invitations",
-    "name": "Full Name",
+    "name": "Full name",
     "name_placeholder": "Your name",
     "email": "Email",
     "password": "Password",
     "password_placeholder": "Create a strong password",
-    "submit": "Create Account",
+    "submit": "Create account",
     "submitting": "Creating...",
     "has_account": "Already have an account?",
-    "sign_in": "Sign In",
-    "phone": "Phone Number",
+    "sign_in": "Sign in",
+    "phone": "Phone number",
     "phone_placeholder": "+1 234 567 8900"
   },
   "settings": {
@@ -50,58 +50,58 @@
     "profile_desc": "Update your personal information",
     "email": "Email",
     "email_desc": "Email cannot be changed",
-    "name": "Full Name",
+    "name": "Full name",
     "name_placeholder": "Your name",
     "company": "Company",
     "company_placeholder": "Your company",
-    "phone": "Phone Number",
+    "phone": "Phone number",
     "phone_placeholder": "+1 234 567 8900",
-    "save": "Save Changes",
+    "save": "Save changes",
     "saving": "Saving...",
-    "password_title": "Change Password",
+    "password_title": "Change password",
     "password_desc": "Update your password to keep your account secure",
-    "current_password": "Current Password",
+    "current_password": "Current password",
     "current_password_placeholder": "Enter current password",
-    "new_password": "New Password",
+    "new_password": "New password",
     "new_password_placeholder": "Enter new password",
-    "confirm_password": "Confirm New Password",
+    "confirm_password": "Confirm new password",
     "confirm_password_placeholder": "Confirm new password",
-    "change_password": "Change Password",
+    "change_password": "Change password",
     "changing": "Changing...",
     "password_success": "Password changed successfully",
     "password_mismatch": "New passwords do not match",
     "password_length": "Password must be at least 8 characters",
-    "danger_zone": "Danger Zone",
+    "danger_zone": "Danger zone",
     "irreversible": "Irreversible actions",
-    "delete_account": "Delete Account",
+    "delete_account": "Delete account",
     "delete_desc": "Account deletion is currently disabled. Contact support if you need to delete your account."
   },
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome back! Here is an overview of your events.",
-    "create_event": "Create Event",
-    "total_events": "Total Events",
-    "total_guests": "Total Guests",
-    "invitations_viewed": "Invitations Viewed",
+    "create_event": "Create event",
+    "total_events": "Total events",
+    "total_guests": "Total guests",
+    "invitations_viewed": "Invitations viewed",
     "confirmed_rsvps": "Confirmed RSVPs",
-    "recent_events": "Recent Events",
+    "recent_events": "Recent events",
     "no_events": "No events yet. Create your first one!",
-    "view_all": "View All Events",
+    "view_all": "View all events",
     "view": "View",
     "guests": "guests",
-    "quick_actions": "Quick Actions",
-    "new_event": "New Event",
+    "quick_actions": "Quick actions",
+    "new_event": "New event",
     "new_event_desc": "Create a new event and start inviting your guests.",
-    "manage_events": "Manage Events",
+    "manage_events": "Manage events",
     "manage_events_desc": "View and manage all your existing events."
   },
   "events": {
-    "title": "My Events",
+    "title": "My events",
     "subtitle": "Manage all your digital invitations",
-    "new_event": "New Event",
+    "new_event": "New event",
     "no_events": "No events found",
     "no_events_desc": "Start by creating your first event.",
-    "create_first": "Create My First Event",
+    "create_first": "Create my first event",
     "view": "View",
     "edit": "Edit",
     "delete": "Delete",
@@ -114,18 +114,18 @@
     "filter_past": "Past"
   },
   "event_detail": {
-    "back": "Back to Events",
+    "back": "Back to events",
     "edit": "Edit",
     "delete": "Delete",
-    "animate": "Animate Invitation",
+    "animate": "Animate invitation",
     "preview": "Preview",
     "share": "Share",
-    "guests_confirmed": "Guests Confirmed",
+    "guests_confirmed": "Guests confirmed",
     "views": "Views",
-    "rsvp_link": "RSVP Link",
+    "rsvp_link": "RSVP link",
     "copy_link": "Copy link",
     "copied": "Copied!",
-    "event_info": "Event Information",
+    "event_info": "Event information",
     "date": "Date",
     "time": "Time",
     "location": "Location",
@@ -134,10 +134,10 @@
     "no_description": "No description available."
   },
   "new_event": {
-    "title": "New Event",
+    "title": "New event",
     "subtitle": "Create a new event and customize your invitation",
     "back": "Back",
-    "event_title": "Event Title",
+    "event_title": "Event title",
     "event_title_placeholder": "E.g., John & Mary's Wedding",
     "event_date": "Date",
     "event_time": "Time",
@@ -147,87 +147,87 @@
     "theme_placeholder": "E.g., Romantic, Modern, Traditional...",
     "description": "Description",
     "description_placeholder": "Describe your event...",
-    "guest_count": "Estimated Guest Count",
-    "create": "Create Event",
+    "guest_count": "Estimated guest count",
+    "create": "Create event",
     "creating": "Creating..."
   },
 
   "analytics": {
     "title": "Analytics",
     "subtitle": "Usage statistics for your events",
-    "total_events": "Total Events",
-    "total_views": "Total Views",
-    "total_guests": "Total Guests",
-    "total_confirmed": "Total Confirmed"
+    "total_events": "Total events",
+    "total_views": "Total views",
+    "total_guests": "Total guests",
+    "total_confirmed": "Total confirmed"
   },
   "editor": {
-    "title": "Animation Editor",
-    "back_events": "Back to Events",
-    "live_preview": "Live Preview",
-    "full_preview": "Full Preview",
-    "save_changes": "Save Changes",
+    "title": "Animation editor",
+    "back_events": "Back to events",
+    "live_preview": "Live preview",
+    "full_preview": "Full preview",
+    "save_changes": "Save changes",
     "saving": "Saving...",
     "saved": "✓ Saved!",
-    "generate": "Generate Animation",
+    "generate": "Generate animation",
     "generating": "Generating...",
-    "hide_controls": "Hide Controls",
-    "show_controls": "Show Controls"
+    "hide_controls": "Hide controls",
+    "show_controls": "Show controls"
   },
   "ai": {
-    "title": "AI Animation Generator",
+    "title": "AI animation generator",
     "description": "Describe the mood and style you want, and AI will generate the animation settings",
     "placeholder": "E.g., 'Romantic sunset wedding with warm golden tones and gentle floating petals'..."
   },
   "manual": {
-    "title": "Manual Controls",
+    "title": "Manual controls",
     "description": "Fine-tune the animation settings manually",
     "colors_title": "Colors",
     "primary": "Primary",
     "secondary": "Secondary",
     "accent": "Accent",
-    "text_color": "Text Color",
-    "bg_image_title": "Background Image",
+    "text_color": "Text color",
+    "bg_image_title": "Background image",
     "bg_image_desc": "Overrides the default background color/gradient. Leave empty to use theme colors.",
-    "bg_audio_title": "Background Audio (Optional)",
+    "bg_audio_title": "Background audio (optional)",
     "bg_audio_desc": "Will loop automatically.",
-    "animate_bg": "Animate Bg (Pan & Zoom)",
+    "animate_bg": "Animate bg (pan & zoom)",
     "apply": "Apply",
-    "card_container": "Card Container (HTML)",
-    "text_blocks": "Text Blocks (Headers & Message)",
-    "bg_color": "Bg Color",
-    "bg_opacity": "Bg Opacity",
+    "card_container": "Card container (HTML)",
+    "text_blocks": "Text blocks (headers & message)",
+    "bg_color": "Bg color",
+    "bg_opacity": "Bg opacity",
     "padding": "Padding",
-    "border_color": "Border Color",
-    "border_size": "Border Size",
-    "border_radius": "Border Radius",
+    "border_color": "Border color",
+    "border_size": "Border size",
+    "border_radius": "Border radius",
     "particles": "Particles",
     "count": "Count",
     "size": "Size",
     "speed": "Speed",
     "shape": "Shape",
-    "blending": "Blending Mode",
-    "decorative_shapes": "Decorative Shapes",
+    "blending": "Blending mode",
+    "decorative_shapes": "Decorative shapes",
     "thickness": "Thickness",
     "metalness": "Metalness",
     "roughness": "Roughness",
     "emissive": "Emissive",
     "opacity": "Opacity",
-    "wireframe": "Wireframe Mode",
+    "wireframe": "Wireframe mode",
     "camera_parallax": "Camera & Parallax",
-    "enable_parallax": "Enable Mouse Parallax",
+    "enable_parallax": "Enable mouse parallax",
     "intensity": "Intensity",
-    "depth": "Target Depth",
-    "loading_screen": "Loading Screen",
-    "bar_bg": "Bar Background",
-    "bar_progress": "Progress Bar",
+    "depth": "Target depth",
+    "loading_screen": "Loading screen",
+    "bar_bg": "Bar background",
+    "bar_progress": "Progress bar",
     "environment": "Environment & Scenery",
     "hdri_preset": "HDRI Preset",
-    "show_panorama": "Show Full Panorama",
+    "show_panorama": "Show full panorama",
     "stars": "Stars (Space)",
     "sparkles": "Sparkles (Magic)",
-    "clouds": "Volumetric Clouds",
-    "darken_overlay": "Background Darken Overlay",
-    "font_style": "Font Style"
+    "clouds": "Volumetric clouds",
+    "darken_overlay": "Background darken overlay",
+    "font_style": "Font style"
   },
   "scene": {
     "click_open": "Click to Open",
@@ -300,7 +300,7 @@
       "list": {
         "title": "Events",
         "subtitle": "Manage all your events and invitations",
-        "create_btn": "Create Event",
+        "create_btn": "Create event",
         "search_placeholder": "Search events...",
         "no_events_found": "No events found",
         "try_different_search": "Try a different search term",
@@ -311,10 +311,10 @@
         "delete_confirm": "Are you sure you want to delete this event? This action cannot be undone.",
         "delete_btn": "Delete",
         "edit_btn": "Edit",
-        "preview_btn": "Preview Invitation"
+        "preview_btn": "Preview invitation"
       },
       "new": {
-        "title": "Create an Event",
+        "title": "Create an event",
         "subtitle": "Configure your invitation in simple steps",
         "steps": {
           "details": "Details",
@@ -324,21 +324,21 @@
         "success_event": "Event created successfully",
         "success_guest": "Guest added successfully",
         "error_guest": "Error adding guest",
-        "import_csv": "Bulk CSV Import",
-        "add_guest": "Add Manually",
-        "details_title": "Event Information",
+        "import_csv": "Bulk CSV import",
+        "add_guest": "Add manually",
+        "details_title": "Event information",
         "details_desc": "Describe your event for personalization",
         "labels": {
           "title": "Title *",
           "date": "Date",
           "time": "Time (shown on invitation)",
           "location": "Location",
-          "dress_code": "Dress Code",
+          "dress_code": "Dress code",
           "description": "Description",
-          "name": "Full Name *",
+          "name": "Full name *",
           "email": "Email *",
           "phone": "Phone (optional)",
-          "demo_name": "Event Name",
+          "demo_name": "Event name",
           "demo_location": "Location",
           "demo_dress_code": "Black Tie"
         },
@@ -352,27 +352,27 @@
         "buttons": {
           "continue": "Continue",
           "creating": "Creating...",
-          "create_template": "Create a Template",
+          "create_template": "Create a template",
           "first_template": "Create my first template",
           "back": "Back",
           "continue_with_template": "Continue with this template",
           "skip": "Skip this step",
           "adding": "Adding...",
-          "add": "Add Guest",
-          "finish": "Finish & Manage Event"
+          "add": "Add guest",
+          "finish": "Finish & manage event"
         },
-        "template_title": "Choose an Invitation Template",
+        "template_title": "Choose an invitation template",
         "template_desc": "Select one of your saved templates. The template determines the design of the invitations.",
         "no_templates": "You don't have any saved templates yet.",
-        "guest_list": "Guest List",
+        "guest_list": "Guest list",
         "guests_added": "guest(s) added",
         "no_guests_yet": "No guests yet"
       },
       "edit": {
-        "title": "Edit Event",
+        "title": "Edit event",
         "update_btn": "Update",
         "success": "Event updated successfully",
-        "preview_title": "Live Preview",
+        "preview_title": "Live preview",
         "no_preview": "No custom template assigned yet.",
         "select_template": "Select a template"
       },
@@ -382,7 +382,7 @@
           "event_deleted": "Event deleted.",
           "send_bulk_confirm": "Send invitations to all guests who haven't received an email yet?",
           "sending": "Sending...",
-          "send_invitations": "Send Invitations",
+          "send_invitations": "Send invitations",
           "email_sent": "Email sent successfully!",
           "guest_deleted": "Guest deleted.",
           "back_to_events": "Back to events",
@@ -395,17 +395,17 @@
           "settings": "Settings"
         },
         "overview": {
-          "stats_title": "RSVP Responses",
-          "total_guests": "Total Guests",
+          "stats_title": "RSVP responses",
+          "total_guests": "Total guests",
           "attending": "Attending",
           "pending": "Pending",
           "declined": "Declined",
-          "copy_link": "Copy Link",
+          "copy_link": "Copy link",
           "link_copied": "Link copied!",
-          "active_template": "Active Template Preview"
+          "active_template": "Active template preview"
         },
         "guests": {
-          "title": "Guest List",
+          "title": "Guest list",
           "subtitle": "Manage your guests and track their individual status",
           "add_btn": "Add",
           "import_csv": "Import CSV",
@@ -421,7 +421,7 @@
             "attending": "Attending",
             "declined": "Declined"
           },
-          "send_email": "Send Email",
+          "send_email": "Send email",
           "send_whatsapp": "Send WhatsApp",
           "delete_confirm": "Delete this guest?"
         }
@@ -429,26 +429,26 @@
     },
     "templates": {
       "list": {
-        "title": "My Templates",
+        "title": "My templates",
         "subtitle": "Create and manage your reusable template designs.",
-        "new_btn": "New Template",
+        "new_btn": "New template",
         "no_templates": "No templates saved",
         "no_templates_desc": "Code your own customizable template to reuse for your next events.",
         "create_first": "Create my first template",
         "delete_confirm": "Are you sure you want to delete this template?",
         "delete_success": "Template deleted successfully",
-        "preview_btn": "Preview Template",
-        "edit_btn": "Edit Template"
+        "preview_btn": "Preview template",
+        "edit_btn": "Edit template"
       },
       "editor": {
-        "title": "Template Editor",
-        "save_btn": "Save Template",
+        "title": "Template editor",
+        "save_btn": "Save template",
         "saving": "Saving...",
         "success": "Template saved!",
-        "name_placeholder": "Template Name",
-        "mode_code": "Code Mode",
-        "mode_preview": "Preview Mode",
-        "variables_title": "Event Variables",
+        "name_placeholder": "Template name",
+        "mode_code": "Code mode",
+        "mode_preview": "Preview mode",
+        "variables_title": "Event variables",
         "variables_desc": "Use these variables in your HTML or JS code to inject event data dynamically."
       }
     }
@@ -465,63 +465,63 @@
   },
   "landing": {
     "hero": {
-      "tagline": "Custom Invitation Editor",
+      "tagline": "Custom invitation editor",
       "title_1": "Create",
-      "title_highlight": "Unique Invitations",
+      "title_highlight": "unique invitations",
       "subtitle": "Create your digital invitations from scratch. Use our complete code editor (HTML, CSS, JS) to bring your interactive invitations to life and amaze your guests.",
-      "cta_primary": "Start Creating Free",
-      "cta_secondary": "See How It Works",
+      "cta_primary": "Start creating free",
+      "cta_secondary": "See how it works",
       "stats": {
-        "events": "Events Created",
+        "events": "Events created",
         "events_value": "10K+",
-        "rsvp": "RSVP Rate",
+        "rsvp": "RSVP rate",
         "rsvp_value": "98%",
-        "themes": "Creative Freedom",
+        "themes": "Creative freedom",
         "themes_value": "100%"
       }
     },
     "features": {
-      "title": "Everything You Need for ",
-      "title_highlight": "Your Events",
+      "title": "Everything you need for ",
+      "title_highlight": "your events",
       "subtitle": "From custom creation to engagement analytics, Invyra provides professional tools to invite with elegance.",
       "items": {
         "ai": {
-          "title": "Total Control (HTML/CSS)",
+          "title": "Total control (HTML/CSS)",
           "desc": "Design anything you want using a powerful web editor built for absolute customization."
         },
         "themes": {
-          "title": "Interactive Experience",
+          "title": "Interactive experience",
           "desc": "Write your own JavaScript to create fluid animations and engage your guests on a whole new level."
         },
         "guests": {
-          "title": "Intuitive Guest Management",
+          "title": "Intuitive guest management",
           "desc": "Import your list from an Excel (CSV) file or enter it manually. Handle plus-ones with ease."
         },
         "emails": {
-          "title": "WhatsApp & Email Delivery",
+          "title": "WhatsApp & email delivery",
           "desc": "Distribute unique named links to your guests. Your invitation's design will display perfectly."
         },
         "analytics": {
-          "title": "Real-Time RSVP Tracking",
+          "title": "Real-time RSVP tracking",
           "desc": "Get notified as soon as a loved one views the invitation or confirms their attendance, right on your dashboard."
         },
         "preview": {
-          "title": "Live Preview",
+          "title": "Live preview",
           "desc": "Edit your code and instantly see the visual result in real-time thanks to the split preview panel."
         },
         "effects": {
-          "title": "Dynamic Personalization",
-          "desc": "Insert variable tags (e.g., Guest Name) directly into the code to generate highly personalized messages."
+          "title": "Dynamic personalization",
+          "desc": "Insert variable tags (e.g., guest name) directly into the code to generate highly personalized messages."
         },
         "security": {
-          "title": "Guaranteed Privacy",
+          "title": "Guaranteed privacy",
           "desc": "Each guest receives a uniquely tokenized secure access link to ensure your ceremony remains strictly private."
         }
       }
     },
     "how_it_works": {
-      "title": "How It ",
-      "title_highlight": "Works",
+      "title": "How it ",
+      "title_highlight": "works",
       "subtitle": "Create and distribute your invitations in 4 simple steps.",
       "steps": {
         "1": {
@@ -543,8 +543,8 @@
       }
     },
     "pricing": {
-      "title": "Simple, Transparent ",
-      "title_highlight": "Pricing",
+      "title": "Simple, transparent ",
+      "title_highlight": "pricing",
       "subtitle": "Choose the perfect plan for your event size. Professional tools, no hidden fees.",
       "plans": {
         "free": {
@@ -552,7 +552,7 @@
           "desc": "Perfect to test the platform",
           "price": "$0",
           "period": "forever",
-          "cta": "Try for Free",
+          "cta": "Try for free",
           "features": [
             "1 event max",
             "Up to 15 guests",
@@ -562,28 +562,28 @@
           ]
         },
         "pro": {
-          "name": "Pro Event",
+          "name": "Pro event",
           "desc": "For memorable celebrations",
           "price": "$19",
           "period": "per event",
-          "cta": "Start Creating",
+          "cta": "Start creating",
           "features": [
             "Unlimited guests",
-            "Advanced Template Editor",
-            "Live Preview",
+            "Advanced template editor",
+            "Live preview",
             "Mass email delivery",
             "Priority support"
           ]
         },
         "enterprise": {
           "name": "Agencies / Pro",
-          "desc": "For Event Planners",
+          "desc": "For event planners",
           "price": "Custom",
           "period": "contact us",
-          "cta": "Contact Sales",
+          "cta": "Contact sales",
           "features": [
             "Unlimited events",
-            "White-label (No Invyra logo)",
+            "White-label (no Invyra logo)",
             "Large template storage",
             "Multi-user accounts",
             "API access"
@@ -592,23 +592,18 @@
       }
     },
     "footer": {
-      "description": "Create fully customizable digital event invitations. Bring your modern designs to life for authentic ceremonies.",
+      "brand": "Invyra",
+      "headline": "Create your digital invitations in just a few clicks.",
+      "description": "Customize your design, share it instantly, and track responses in real time.",
       "rights": "All rights reserved. Developed by",
-      "product": "Product",
-      "company": "Company",
-      "legal": "Legal",
+      "explore": "Explore",
+      "help": "Support",
       "links": {
         "features": "Features",
         "pricing": "Pricing",
-        "themes": "Themes",
-        "examples": "Examples",
-        "about": "About",
-        "blog": "Blog",
-        "careers": "Careers",
-        "contact": "Contact",
-        "privacy": "Privacy",
-        "terms": "Terms",
-        "cookies": "Cookies"
+        "themes": "Themes available",
+        "examples": "Invitation examples",
+        "contact": "Support"
       }
     }
   }

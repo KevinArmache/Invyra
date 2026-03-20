@@ -48,7 +48,7 @@ export default function TabOverview({ event, guests, demoEvent }) {
                   />
                 </div>
                 <div className="flex items-center gap-2 text-xs text-green-500 font-medium bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20">
-                  <CheckCircle className="w-4 h-4" /> {t('portal.templates.list.no_templates') === 'Aucun modèle sauvegardé' ? 'Modèle actif' : 'Active Template'}
+                  <CheckCircle className="w-4 h-4" /> {t('portal.templates.list.no_templates') === 'Aucun modèle sauvegardé' ? 'Modèle actif' : 'Active template'}
                 </div>
               </>
             ) : (
