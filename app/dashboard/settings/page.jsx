@@ -87,6 +87,11 @@ export default function SettingsPage() {
   }
 
   async function handleDeleteAccount() {
+    if (user?.role === 'admin') {
+      setError("Un compte administrateur ne peut pas etre supprime depuis les parametres.")
+      return
+    }
+
     const confirmWord = window.prompt(t('settings.delete_prompt') || 'Tapez SUPPRIMER pour confirmer la suppression définitive de votre compte :')
     if (confirmWord !== 'SUPPRIMER') {
       if (confirmWord !== null) {
@@ -259,12 +264,17 @@ export default function SettingsPage() {
           <CardDescription>{t('settings.irreversible')}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="destructive" disabled={loading} onClick={handleDeleteAccount}>
+          <Button variant="destructive" disabled={loading || user?.role === 'admin'} onClick={handleDeleteAccount}>
             {t('settings.delete_account')}
           </Button>
           <p className="text-xs text-muted-foreground mt-2">
             {t('settings.delete_desc')}
           </p>
+          {user?.role === 'admin' && (
+            <p className="text-xs text-amber-400 mt-2">
+              Les comptes admin ne peuvent pas etre supprimes depuis cette section.
+            </p>
+          )}
         </CardContent>
       </Card>
     </div>

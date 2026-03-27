@@ -5,13 +5,40 @@ import { getAllUsers } from '@/app/actions/admin'
 import UsersTable from '@/components/admin/UsersTable'
 import { Users } from 'lucide-react'
 import { useTranslation } from '@/utils/i18n/Context'
+import { toast } from 'sonner'
 
 export default function AdminUsersPage() {
   const { t } = useTranslation()
   const [users, setUsers] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    getAllUsers().then((data) => setUsers(data || [])).catch(() => setUsers([]))
+    let alive = true
+
+    async function load() {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await getAllUsers()
+        if (!alive) return
+        setUsers(data || [])
+      } catch (e) {
+        if (!alive) return
+        const message = e?.message || "Impossible de charger la liste des utilisateurs."
+        setUsers([])
+        setError(message)
+        toast.error(message)
+      } finally {
+        if (!alive) return
+        setLoading(false)
+      }
+    }
+
+    load()
+    return () => {
+      alive = false
+    }
   }, [])
 
   return (
@@ -28,7 +55,19 @@ export default function AdminUsersPage() {
         </div>
       </div>
 
-      <UsersTable initialUsers={users} />
+      {error && (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          {error}
+        </div>
+      )}
+
+      {loading ? (
+        <div className="rounded-xl border border-border bg-card p-10 text-center text-sm text-muted-foreground">
+          Chargement...
+        </div>
+      ) : (
+        <UsersTable initialUsers={users} />
+      )}
     </div>
   )
 }

@@ -248,6 +248,9 @@ export async function deleteMyAccount() {
 
   const user = await prisma.user.findUnique({ where: { id: session.userId } });
   if (!user) throw new Error("Utilisateur introuvable");
+  if (user.role === "admin") {
+    throw new Error("Un compte administrateur ne peut pas être supprimé depuis les paramètres.");
+  }
 
   // 1. Trouver un administrateur pour lui réassigner les templates créés par l'utilisateur
   // Cela empêchera la suppression en cascade des templates (bibliothèque communautaire)

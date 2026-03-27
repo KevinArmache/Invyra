@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { updateUserRole, suspendUser, deleteUserAdmin } from '@/app/actions/admin'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
 import { useTranslation } from '@/utils/i18n/Context'
+import { Input } from '@/components/ui/input'
 
 function RoleBadge({ role }) {
   const { t } = useTranslation()
@@ -32,8 +33,14 @@ function RoleBadge({ role }) {
 
 export default function UsersTable({ initialUsers }) {
   const { t, locale } = useTranslation()
-  const [users, setUsers] = useState(initialUsers)
+  const [users, setUsers] = useState(initialUsers ?? [])
   const [isPending, startTransition] = useTransition()
+  const [query, setQuery] = useState('')
+
+  // Resync when data arrives from parent (fetch in AdminUsersPage)
+  useEffect(() => {
+    setUsers(initialUsers ?? [])
+  }, [initialUsers])
 
   function refresh(updatedUser) {
     setUsers(prev => prev.map(u => u.id === updatedUser.id ? { ...u, ...updatedUser } : u))
@@ -82,8 +89,29 @@ export default function UsersTable({ initialUsers }) {
     })
   }
 
+  const normalizedQuery = query.trim().toLowerCase()
+  const filteredUsers = users.filter((user) => {
+    if (!normalizedQuery) return true
+    const name = (user.name || '').toLowerCase()
+    const email = (user.email || '').toLowerCase()
+    const company = (user.company || '').toLowerCase()
+    return (
+      name.includes(normalizedQuery) ||
+      email.includes(normalizedQuery) ||
+      company.includes(normalizedQuery)
+    )
+  })
+
   return (
     <div className="bg-card border border-border rounded-xl overflow-hidden">
+      <div className="p-4 border-b border-border">
+        <Input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={locale === 'fr' ? 'Rechercher un utilisateur...' : 'Search a user...'}
+        />
+      </div>
       {isPending && (
         <div className="px-6 py-2 bg-primary/5 border-b border-border flex items-center gap-2 text-xs text-primary">
           <RefreshCw className="w-3 h-3 animate-spin" /> {t('portal.admin.updating')}
@@ -101,7 +129,7 @@ export default function UsersTable({ initialUsers }) {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {filteredUsers.map(user => (
             <tr key={user.id} className="border-b border-border/50 last:border-0 hover:bg-muted/20 transition-colors">
               <td className="px-6 py-4">
                 <div>
@@ -158,7 +186,7 @@ export default function UsersTable({ initialUsers }) {
           ))}
         </tbody>
       </table>
-      {users.length === 0 && (
+      {filteredUsers.length === 0 && (
         <div className="py-16 text-center text-muted-foreground text-sm">{t('portal.admin.no_users')}</div>
       )}
     </div>

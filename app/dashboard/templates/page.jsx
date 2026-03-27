@@ -11,6 +11,7 @@ import { getUserTemplates, deleteUserTemplate } from '@/app/actions/template'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { useTranslation } from '@/utils/i18n/Context'
 import { useUser } from '@/hooks/useUser'
+import { Input } from '@/components/ui/input'
 
 export default function TemplatesPage() {
   const { user } = useUser()
@@ -18,6 +19,7 @@ export default function TemplatesPage() {
   const [templates, setTemplates] = useState([])
   const [loading, setLoading] = useState(true)
   const [previewTemplate, setPreviewTemplate] = useState(null)
+  const [query, setQuery] = useState('')
 
   useEffect(() => {
     loadTemplates()
@@ -46,6 +48,12 @@ export default function TemplatesPage() {
     }
   }
 
+  const normalizedQuery = query.trim().toLowerCase()
+  const filteredTemplates = templates.filter((tmpl) => {
+    if (!normalizedQuery) return true
+    return (tmpl.name || '').toLowerCase().includes(normalizedQuery)
+  })
+
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
@@ -59,6 +67,15 @@ export default function TemplatesPage() {
             <Plus className="w-4 h-4 mr-2" /> {t('portal.templates.list.new_btn')}
           </Link>
         </Button>
+      </div>
+
+      <div className="max-w-md">
+        <Input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={locale === 'fr' ? 'Rechercher un modele...' : 'Search a template...'}
+        />
       </div>
 
       {loading ? (
@@ -80,9 +97,20 @@ export default function TemplatesPage() {
             </Button>
           </CardContent>
         </Card>
+      ) : filteredTemplates.length === 0 ? (
+        <Card className="bg-muted/30 border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-16 text-center">
+            <h3 className="text-lg font-medium text-foreground mb-2">
+              {locale === 'fr' ? 'Aucun modele trouve' : 'No template found'}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {locale === 'fr' ? 'Essaie un autre mot-cle.' : 'Try another keyword.'}
+            </p>
+          </CardContent>
+        </Card>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {templates.map(tmpl => (
+          {filteredTemplates.map(tmpl => (
             <Card key={tmpl.id} className="overflow-hidden flex flex-col hover:border-primary/40 transition-colors">
               <div className="relative aspect-3/4 bg-muted/20 border-b border-border overflow-hidden">
                 {/* Scaled preview centered inside the card */}
