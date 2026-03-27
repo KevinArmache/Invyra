@@ -21,7 +21,7 @@ model User {
   // Relations
   events         Event[]
   templates      Template[]
-  collaborations EventCollaborator[]
+  collaborations Event_Collaborator[]
 
   @@map("users")
 }
