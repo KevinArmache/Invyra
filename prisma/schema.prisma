@@ -58,14 +58,14 @@ model Event {
   updatedAt          DateTime  @updatedAt
 
   // Relations
-  user          User                @relation(fields: [userId], references: [id])
+  user          User                 @relation(fields: [userId], references: [id])
   guests        Guest[]
-  collaborators EventCollaborator[]
+  collaborators Event_Collaborator[]
 
   @@map("events")
 }
 
-model EventCollaborator {
+model Event_Collaborator {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   eventId     String   @db.ObjectId
   userId      String   @db.ObjectId
