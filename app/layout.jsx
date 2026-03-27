@@ -33,15 +33,15 @@ export const metadata = {
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
+        url: "/logo-favicon.png",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/icon-dark-32x32.png",
+        url: "/logo-favicon.png",
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/icon.svg",
+        url: "/logo-favicon.png",
         type: "image/svg+xml",
       },
     ],
