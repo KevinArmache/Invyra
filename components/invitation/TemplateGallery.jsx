@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getUserTemplates } from "@/app/actions/template";
+import { getTemplates } from "@/app/actions/template";
 import InvitationPreview from "./InvitationPreview";
 
 export default function TemplateGallery({ selectedId, onSelect }) {
@@ -9,7 +9,7 @@ export default function TemplateGallery({ selectedId, onSelect }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getUserTemplates()
+    getTemplates()
       .then((tmpls) => setTemplates(tmpls))
       .catch(console.error)
       .finally(() => setLoading(false));
