@@ -74,7 +74,9 @@
     "danger_zone": "Zone de Danger",
     "irreversible": "Actions irréversibles",
     "delete_account": "Supprimer le Compte",
-    "delete_desc": "La suppression de compte est actuellement désactivée. Contactez le support si vous devez supprimer votre compte."
+    "delete_desc": "La suppression de compte est actuellement possible. Contactez le support si vous avez des problèmes pour supprimer votre compte.",
+    "delete_prompt": "Tapez SUPPRIMER pour confirmer la suppression définitive de votre compte :",
+    "delete_cancel": "Suppression annulée : le mot de confirmation est incorrect."
   },
   "dashboard": {
     "title": "Tableau de Bord",

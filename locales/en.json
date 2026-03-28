@@ -74,7 +74,9 @@
     "danger_zone": "Danger zone",
     "irreversible": "Irreversible actions",
     "delete_account": "Delete account",
-    "delete_desc": "Account deletion is currently disabled. Contact support if you need to delete your account."
+    "delete_prompt": "Type DELETE to confirm the irreversible deletion of your account:",
+    "delete_cancel": "Deletion cancelled: the confirmation word is incorrect.",
+    "delete_desc": "Account deletion is currently enabled. Contact support if you have any issues with deleting your account."
   },
   "dashboard": {
     "title": "Dashboard",

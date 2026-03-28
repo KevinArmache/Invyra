@@ -177,7 +177,7 @@ export async function canAccessEvent(eventId) {
   if (!event) return false;
   if (event.userId === session.userId) return true;
 
-  const collab = await prisma.eventCollaborator.findFirst({
+  const collab = await prisma.event_Collaborator.findFirst({
     where: { eventId, userId: session.userId, accepted: true },
   });
   return !!collab;
@@ -245,11 +245,13 @@ export async function changePassword(currentPassword, newPassword) {
 export async function deleteMyAccount() {
   const session = await getSession();
   if (!session) throw new Error("Non authentifié");
-
+  console.log(session);
   const user = await prisma.user.findUnique({ where: { id: session.userId } });
   if (!user) throw new Error("Utilisateur introuvable");
   if (user.role === "admin") {
-    throw new Error("Un compte administrateur ne peut pas être supprimé depuis les paramètres.");
+    throw new Error(
+      "Un compte administrateur ne peut pas être supprimé depuis les paramètres.",
+    );
   }
 
   // 1. Trouver un administrateur pour lui réassigner les templates créés par l'utilisateur
@@ -272,7 +274,7 @@ export async function deleteMyAccount() {
   }
 
   // 2. Réassignation des templates
-  await prisma.customTemplate.updateMany({
+  await prisma.template.updateMany({
     where: { userId: user.id },
     data: { userId: admin.id },
   });
