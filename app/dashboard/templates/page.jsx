@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { getTemplates, deleteUserTemplate } from "@/app/actions/template";
+import { getTemplates, deleteTemplate } from "@/app/actions/template";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { useTranslation } from "@/utils/i18n/Context";
 import { useUser } from "@/hooks/useUser";
@@ -46,7 +46,7 @@ export default function TemplatesPage() {
   async function handleDelete(id) {
     if (!confirm(t("portal.templates.list.delete_confirm"))) return;
     try {
-      await deleteUserTemplate(id);
+      await deleteTemplate(id);
       loadTemplates();
       toast.success(t("portal.templates.list.delete_success"));
     } catch (e) {

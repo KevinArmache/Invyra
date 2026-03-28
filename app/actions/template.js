@@ -34,7 +34,7 @@ export async function getTemplates() {
   });
 }
 
-export async function deleteUserTemplate(templateId) {
+export async function deleteTemplate(templateId) {
   const user = await getSession();
   if (!user) throw new Error("Unauthorized");
 
