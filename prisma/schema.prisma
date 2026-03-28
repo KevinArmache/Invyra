@@ -1,100 +1,121 @@
+// --- Configuration de la base de données ---
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider = "mongodb" // On utilise MongoDB comme base de données
+  url      = env("DATABASE_URL") // URL de connexion stockée dans les variables d'environnement
 }
 
+// --- Générateur Prisma Client ---
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js" // Génère un client JS pour interagir avec la DB
 }
 
+// --- Modèle Utilisateur ---
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  // ID unique de l'utilisateur, auto-généré par MongoDB
+
+  email String @unique
+  // Email unique pour l'identification / login
+
   name      String?
-  company   String?
-  phone     String?
-  password  String
-  role      String   @default("user") // "user" | "admin"
-  suspended Boolean  @default(false)
-  createdAt DateTime @default(now())
+  company   String? // Société de l'utilisateur (optionnel)
+  phone     String? // Téléphone (optionnel)
+  password  String // Mot de passe hashé
+  role      String   @default("user") // Rôle : "user" ou "admin"
+  suspended Boolean  @default(false) // Indique si le compte est suspendu
+  createdAt DateTime @default(now()) // Date de création du compte
 
   // Relations
-  events         Event[]
-  templates      Template[]
-  collaborations Event_Collaborator[]
+  events         Event[] // Événements créés par cet utilisateur
+  templates      Template[] // Templates créés par cet utilisateur
+  collaborations Event_Collaborator[] // Événements où l'utilisateur est collaborateur
 
-  @@map("users")
+  @@map("users") // Nom réel de la collection dans MongoDB
 }
 
+// --- Modèle Template ---
 model Template {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  name      String
-  config    Json
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String? @db.ObjectId
+  // Référence vers le propriétaire du template, nullable pour ne pas supprimer le template si l'utilisateur est supprimé
+
+  name      String // Nom du template
+  config    Json // Configuration / design du template en JSON
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
+  // Relation vers l'utilisateur, pas de cascade => le template reste si l'utilisateur est supprimé
 
-  @@map("templates")
+  @@map("templates") // Nom réel de la collection dans MongoDB
 }
 
+// --- Modèle Event (Événement) ---
 model Event {
-  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String    @db.ObjectId
-  title              String
-  description        String?
-  eventDate          DateTime?
-  location           String?
-  time               String?
-  dressCode          String?
-  customMessage      String?
-  animationConfig    Json?
-  invitationTemplate Json?
-  emailTemplate      String?
-  status             String    @default("draft")
-  autoSend           Boolean   @default(false)
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  // Propriétaire / créateur de l'événement
+
+  title              String // Titre de l'événement
+  description        String? // Description optionnelle
+  eventDate          DateTime? // Date de l'événement
+  location           String? // Lieu
+  time               String? // Heure
+  dressCode          String? // Code vestimentaire
+  customMessage      String? // Message personnalisé pour les invités
+  animationConfig    Json? // Configuration d'animations (JSON)
+  invitationTemplate Json? // Template d'invitation spécifique
+  emailTemplate      String? // Template d'email
+  status             String    @default("draft") // État : draft | sent | etc.
+  autoSend           Boolean   @default(false) // Envoi automatique activé ?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 
   // Relations
   user          User                 @relation(fields: [userId], references: [id])
-  guests        Guest[]
-  collaborators Event_Collaborator[]
+  guests        Guest[] // Liste des invités
+  collaborators Event_Collaborator[] // Collaborateurs de l'événement
 
   @@map("events")
 }
 
+// --- Modèle Event_Collaborator (Collaborateurs) ---
 model Event_Collaborator {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   eventId     String   @db.ObjectId
   userId      String   @db.ObjectId
-  role        String   @default("editor") // "editor" | "viewer"
-  inviteToken String?  @unique
-  accepted    Boolean  @default(false)
+  role        String   @default("editor") // "editor" ou "viewer"
+  inviteToken String?  @unique // Token d'invitation unique
+  accepted    Boolean  @default(false) // Si l'invitation a été acceptée
   createdAt   DateTime @default(now())
 
+  // Relations
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Si l'événement est supprimé, le collaborateur est supprimé
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // Si l'utilisateur est supprimé, ce lien est supprimé
+  // Un utilisateur ne peut être collaborateur qu'une seule fois par événement
 
   @@unique([eventId, userId])
   @@map("event_collaborators")
 }
 
+// --- Modèle Guest (Invité) ---
 model Guest {
   id                  String  @id @default(auto()) @map("_id") @db.ObjectId
   eventId             String  @db.ObjectId
   name                String
   email               String
   phone               String?
-  dietaryRestrictions String?
-  plusOne             Boolean @default(false)
-  notes               String?
+  dietaryRestrictions String? // Allergies / régime alimentaire
+  plusOne             Boolean @default(false) // Si l'invité amène un accompagnant
+  notes               String? // Notes supplémentaires
 
-  invitationToken String  @unique
-  rsvpStatus      String?
+  invitationToken String  @unique // Token unique pour RSVP
+  rsvpStatus      String? // Statut RSVP : accepted | declined | pending
 
-  invitationSentAt   DateTime?
+  invitationSentAt   DateTime? // Dates de suivi des invitations
   emailSentAt        DateTime?
   whatsappSentAt     DateTime?
   invitationViewedAt DateTime?
@@ -105,6 +126,8 @@ model Guest {
 
   // Relations
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  // Si l'événement est supprimé, les invités liés sont supprimés
+  // Un invité ne peut pas avoir deux fois le même email pour un événement donné
 
   @@unique([eventId, email])
   @@map("guests")
