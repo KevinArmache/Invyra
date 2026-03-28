@@ -25,6 +25,11 @@ model User {
   suspended Boolean  @default(false) // Indique si le compte est suspendu
   createdAt DateTime @default(now()) // Date de création du compte
 
+  // 🔥 Abonnement
+  // plan        String   @default("free") // "free" | "premium"
+  // isPremium   Boolean  @default(false)
+  // premiumUntil DateTime? // date d’expiration
+
   // Relations
   events         Event[] // Événements créés par cet utilisateur
   templates      Template[] // Templates créés par cet utilisateur
