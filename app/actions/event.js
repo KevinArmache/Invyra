@@ -10,7 +10,8 @@ import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 
 const PLAN_LIMITS = {
   free: 1,
-  premium: Infinity,
+  premium: 1,
+  enterprise: Infinity,
 };
 
 export async function canCreateEvent() {
