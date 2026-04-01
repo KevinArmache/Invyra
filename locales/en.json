@@ -566,8 +566,8 @@
         "pro": {
           "name": "Pro event",
           "desc": "For memorable celebrations",
-          "price": "$19",
-          "period": "per event",
+          "price": "1$",
+          "period": "per person",
           "cta": "Start creating",
           "features": [
             "Unlimited guests",

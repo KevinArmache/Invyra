@@ -1,88 +1,137 @@
-'use server'
+"use server";
 
-import { prisma } from '@/utils/prisma'
-import { getSession, isEventOwnerOrAdmin, canAccessEvent } from '@/app/actions/auth'
-import { getMyCollaboratorRole } from '@/app/actions/collaborator'
+import { prisma } from "@/utils/prisma";
+import {
+  getSession,
+  isEventOwnerOrAdmin,
+  canAccessEvent,
+} from "@/app/actions/auth";
+import { getMyCollaboratorRole } from "@/app/actions/collaborator";
+
+const PLAN_LIMITS = {
+  free: 1,
+  premium: Infinity,
+};
+
+export async function canCreateEvent() {
+  const session = await getSession();
+  if (!session) throw new Error("Unauthorized");
+
+  // 🔒 Toujours récupérer depuis la DB (jamais depuis le frontend)
+  const user = await prisma.user.findUnique({
+    where: { id: session.userId },
+    select: { plan: true, role: true }, // 👈 important (admin ici)
+  });
+
+  if (!user) throw new Error("User not found");
+
+  // 🚀 ADMIN = bypass total
+  if (user.role === "admin") {
+    return true;
+  }
+
+  const eventCount = await prisma.event.count({
+    where: { userId: session.userId },
+  });
+
+  const limit = PLAN_LIMITS[user.plan] ?? 0;
+
+  return eventCount < limit;
+}
 
 export async function getEvents() {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    const user = await getSession();
+    if (!user) throw new Error("Unauthorized");
 
     const events = await prisma.event.findMany({
       where: {
         OR: [
           { userId: user.userId },
-          { collaborators: { some: { userId: user.userId, accepted: true } } }
-        ]
+          { collaborators: { some: { userId: user.userId, accepted: true } } },
+        ],
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       include: {
         _count: {
-          select: { guests: true }
+          select: { guests: true },
         },
         guests: {
-          select: { rsvpStatus: true, invitationViewedAt: true }
-        }
-      }
-    })
+          select: { rsvpStatus: true, invitationViewedAt: true },
+        },
+      },
+    });
 
-    return events.map(e => ({
+    return events.map((e) => ({
       ...e,
       guest_count: e._count.guests,
-      confirmed_count: e.guests.filter(g => g.rsvpStatus === 'confirmed').length,
-      viewed_count: e.guests.filter(g => g.invitationViewedAt !== null).length,
-      guests: undefined
-    }))
+      confirmed_count: e.guests.filter((g) => g.rsvpStatus === "confirmed")
+        .length,
+      viewed_count: e.guests.filter((g) => g.invitationViewedAt !== null)
+        .length,
+      guests: undefined,
+    }));
   } catch (error) {
-    console.error('Error fetching events:', error)
-    throw new Error('Failed to fetch events')
+    console.error("Error fetching events:", error);
+    throw new Error("Failed to fetch events");
   }
 }
 
 export async function getEventById(id) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    const user = await getSession();
+    if (!user) throw new Error("Unauthorized");
 
-    const hasAccess = await canAccessEvent(id)
-    if (!hasAccess) throw new Error('Accès refusé')
+    const hasAccess = await canAccessEvent(id);
+    if (!hasAccess) throw new Error("Accès refusé");
 
     const event = await prisma.event.findUnique({
       where: { id },
       include: {
         _count: {
-          select: { guests: true }
+          select: { guests: true },
         },
         guests: {
-          select: { rsvpStatus: true, invitationViewedAt: true }
-        }
-      }
-    })
+          select: { rsvpStatus: true, invitationViewedAt: true },
+        },
+      },
+    });
 
-    if (!event) throw new Error('Event not found')
+    if (!event) throw new Error("Event not found");
 
     return {
       ...event,
       guest_count: event._count.guests,
-      confirmed_count: event.guests.filter(g => g.rsvpStatus === 'confirmed').length,
-      declined_count: event.guests.filter(g => g.rsvpStatus === 'declined').length,
-      viewed_count: event.guests.filter(g => g.invitationViewedAt !== null).length,
-      guests: undefined
-    }
+      confirmed_count: event.guests.filter((g) => g.rsvpStatus === "confirmed")
+        .length,
+      declined_count: event.guests.filter((g) => g.rsvpStatus === "declined")
+        .length,
+      viewed_count: event.guests.filter((g) => g.invitationViewedAt !== null)
+        .length,
+      guests: undefined,
+    };
   } catch (error) {
-    console.error('Error fetching event:', error)
-    throw new Error('Failed to fetch event')
+    console.error("Error fetching event:", error);
+    throw new Error("Failed to fetch event");
   }
 }
 
 export async function createEvent(data) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    const user = await getSession();
+    if (!user) throw new Error("Unauthorized");
 
-    const { title, description, event_date, location, custom_message } = data
-    if (!title) throw new Error('Title is required')
+    // ✅ Vérification plan
+    const allowed = await canCreateEvent();
+
+    if (!allowed) {
+      throw new Error(
+        "Limite atteinte : passez à un plan premium pour créer plus d'événements.",
+      );
+    }
+
+    const { title, description, event_date, location, custom_message } = data;
+    if (!title) throw new Error("Title is required");
 
     const event = await prisma.event.create({
       data: {
@@ -92,77 +141,91 @@ export async function createEvent(data) {
         eventDate: event_date ? new Date(event_date) : null,
         location: location || null,
         customMessage: custom_message || null,
-        status: 'draft'
-      }
-    })
+        status: "draft",
+      },
+    });
 
-    return event
+    return event;
   } catch (error) {
-    console.error('Error creating event:', error)
-    throw new Error('Failed to create event')
+    console.error("Error creating event:", error);
+    throw Error("Failed to create event");
   }
 }
 
 export async function updateEvent(id, data) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    const user = await getSession();
+    if (!user) throw new Error("Unauthorized");
 
-    const isOwnerOrAdmin = await isEventOwnerOrAdmin(id)
+    const isOwnerOrAdmin = await isEventOwnerOrAdmin(id);
     if (!isOwnerOrAdmin) {
-      const role = await getMyCollaboratorRole(id)
-      if (role !== 'editor') {
-        throw new Error("Seul le propriétaire ou un éditeur peut modifier cet événement.")
+      const role = await getMyCollaboratorRole(id);
+      if (role !== "editor") {
+        throw new Error(
+          "Seul le propriétaire ou un éditeur peut modifier cet événement.",
+        );
       }
     }
 
     const existing = await prisma.event.findUnique({
-      where: { id }
-    })
-    if (!existing) throw new Error('Event not found')
+      where: { id },
+    });
+    if (!existing) throw new Error("Event not found");
 
     const updated = await prisma.event.update({
       where: { id },
       data: {
         title: data.title !== undefined ? data.title : undefined,
-        description: data.description !== undefined ? data.description : undefined,
+        description:
+          data.description !== undefined ? data.description : undefined,
         eventDate: data.event_date ? new Date(data.event_date) : undefined,
         location: data.location !== undefined ? data.location : undefined,
-        customMessage: data.custom_message !== undefined ? data.custom_message : undefined,
-        animationConfig: data.animation_config !== undefined ? data.animation_config : undefined,
-        invitationTemplate: data.invitation_template !== undefined ? data.invitation_template : undefined,
-        emailTemplate: data.email_template !== undefined ? data.email_template : undefined,
+        customMessage:
+          data.custom_message !== undefined ? data.custom_message : undefined,
+        animationConfig:
+          data.animation_config !== undefined
+            ? data.animation_config
+            : undefined,
+        invitationTemplate:
+          data.invitation_template !== undefined
+            ? data.invitation_template
+            : undefined,
+        emailTemplate:
+          data.email_template !== undefined ? data.email_template : undefined,
         status: data.status !== undefined ? data.status : undefined,
-      }
-    })
+      },
+    });
 
-    return updated
+    return updated;
   } catch (error) {
-    console.error('Error updating event:', error)
-    throw new Error('Failed to update event')
+    console.error("Error updating event:", error);
+    throw new Error("Failed to update event");
   }
 }
 
 export async function deleteEvent(id) {
   try {
-    const user = await getSession()
-    if (!user) throw new Error('Unauthorized')
+    const user = await getSession();
+    if (!user) throw new Error("Unauthorized");
 
-    const isOwnerOrAdmin = await isEventOwnerOrAdmin(id)
-    if (!isOwnerOrAdmin) throw new Error("Seul le propriétaire de l'événement ou un administrateur peut le supprimer.")
+    const isOwnerOrAdmin = await isEventOwnerOrAdmin(id);
+    if (!isOwnerOrAdmin)
+      throw new Error(
+        "Seul le propriétaire de l'événement ou un administrateur peut le supprimer.",
+      );
 
     const existing = await prisma.event.findUnique({
-      where: { id }
-    })
-    if (!existing) throw new Error('Event not found')
+      where: { id },
+    });
+    if (!existing) throw new Error("Event not found");
 
     await prisma.event.delete({
-      where: { id }
-    })
+      where: { id },
+    });
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    console.error('Error deleting event:', error)
-    throw new Error('Failed to delete event')
+    console.error("Error deleting event:", error);
+    throw new Error("Failed to delete event");
   }
 }

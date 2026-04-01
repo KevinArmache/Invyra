@@ -45,8 +45,8 @@ export async function getSession() {
   return payload;
 }
 
-export async function setSession(userId, email, name, role) {
-  const token = await createToken({ userId, email, name, role });
+export async function setSession(userId, email, name, role, plan) {
+  const token = await createToken({ userId, email, name, role, plan });
   const cookieStore = await cookies();
 
   cookieStore.set("auth-token", token, {
@@ -81,9 +81,15 @@ export async function login(email, password) {
   const isValid = await verifyPassword(password, user.password);
   if (!isValid) throw new Error("Email ou mot de passe invalide");
 
-  await setSession(user.id, user.email, user.name, user.role);
+  await setSession(user.id, user.email, user.name, user.role, user.plan);
 
-  return { id: user.id, email: user.email, name: user.name, role: user.role };
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    role: user.role,
+    plan: user.plan,
+  };
 }
 
 export async function register(name, email, password, company, phone) {
@@ -106,11 +112,18 @@ export async function register(name, email, password, company, phone) {
       company: company || null,
       phone: phone || null,
       role: "user",
+      plan: "free",
     },
   });
 
-  await setSession(user.id, user.email, user.name, user.role);
-  return { id: user.id, email: user.email, name: user.name, role: user.role };
+  await setSession(user.id, user.email, user.name, user.role, user.plan);
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    role: user.role,
+    plan: user.plan,
+  };
 }
 
 export async function logout() {

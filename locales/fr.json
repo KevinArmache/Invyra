@@ -566,8 +566,8 @@
         "pro": {
           "name": "Événement premium",
           "desc": "Pour une célébration inoubliable",
-          "price": "19€",
-          "period": "par événement",
+          "price": "1$",
+          "period": "par personne",
           "cta": "Créer mon Événement",
           "features": [
             "Invités illimités",
