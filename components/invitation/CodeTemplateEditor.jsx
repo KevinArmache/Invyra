@@ -1,10 +1,12 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
-import { Button } from '@/components/ui/button'
-import { Eye, Code, Palette, Zap, Copy, Check, RotateCcw } from 'lucide-react'
-const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false })
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { Button } from "@/components/ui/button";
+import { Eye, Code, Palette, Zap, Copy, Check, RotateCcw } from "lucide-react";
+const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
+  ssr: false,
+});
 
 const DEFAULT_HTML = `<div class="invitation-wrapper">
   <div class="invitation-card">
@@ -169,7 +171,7 @@ const DEFAULT_HTML = `<div class="invitation-wrapper">
     </div>
 
   </div>
-</div>`
+</div>`;
 
 const DEFAULT_CSS = `/* RESET */
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -410,7 +412,7 @@ body {
 @keyframes fadeIn {
   from { opacity:0; transform: translateY(10px); }
   to { opacity:1; transform: translateY(0); }
-}`
+}`;
 
 const DEFAULT_JS = `// RSVP template script: uniquement l'essentiel (init, clics, "Merci", modification, postMessage).
 document.addEventListener('DOMContentLoaded', function() {
@@ -531,97 +533,134 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 500);
     });
   });
-});`
+});`;
 
 export default function CodeTemplateEditor({ template, onChange }) {
-  const [activeTab, setActiveTab] = useState('html')
-  const [html, setHtml] = useState(template?.html || DEFAULT_HTML)
-  const [css, setCss] = useState(template?.css || DEFAULT_CSS)
-  const [js, setJs] = useState(template?.js || DEFAULT_JS)
-  const [copied, setCopied] = useState(null)
+  const [activeTab, setActiveTab] = useState("html");
+  const [html, setHtml] = useState(template?.html || DEFAULT_HTML);
+  const [css, setCss] = useState(template?.css || DEFAULT_CSS);
+  const [js, setJs] = useState(template?.js || DEFAULT_JS);
+  const [copied, setCopied] = useState(null);
 
   // Si on reçoit un nouveau template depuis l'IA, mettre à jour les champs
   useEffect(() => {
-    if (template?.html && template.html !== html) setHtml(template.html)
-    if (template?.css && template.css !== css) setCss(template.css)
-    if (template?.js && template.js !== js) setJs(template.js || DEFAULT_JS)
-  }, [template?.html, template?.css, template?.js])
+    if (template?.html && template.html !== html) setHtml(template.html);
+    if (template?.css && template.css !== css) setCss(template.css);
+    if (template?.js && template.js !== js) setJs(template.js || DEFAULT_JS);
+  }, [template?.html, template?.css, template?.js]);
 
   // Appliquer les changements au parent en temps réel
   function applyChanges(newHtml = html, newCss = css, newJs = js) {
     onChange({
-      type: 'code',
+      type: "code",
       html: newHtml,
       css: newCss,
       js: newJs,
-    })
+    });
   }
 
   function handleHtmlChange(val) {
-    setHtml(val)
-    applyChanges(val, css, js)
+    setHtml(val);
+    applyChanges(val, css, js);
   }
   function handleCssChange(val) {
-    setCss(val)
-    applyChanges(html, val, js)
+    setCss(val);
+    applyChanges(html, val, js);
   }
   function handleJsChange(val) {
-    setJs(val)
-    applyChanges(html, css, val)
+    setJs(val);
+    applyChanges(html, css, val);
   }
 
   function handleReset() {
-    if (!confirm('Réinitialiser avec le modèle par défaut ?')) return
-    setHtml(DEFAULT_HTML)
-    setCss(DEFAULT_CSS)
-    setJs(DEFAULT_JS)
-    applyChanges(DEFAULT_HTML, DEFAULT_CSS, DEFAULT_JS)
+    if (!confirm("Réinitialiser avec le modèle par défaut ?")) return;
+    setHtml(DEFAULT_HTML);
+    setCss(DEFAULT_CSS);
+    setJs(DEFAULT_JS);
+    applyChanges(DEFAULT_HTML, DEFAULT_CSS, DEFAULT_JS);
   }
 
   async function handleCopy(content, key) {
-    await navigator.clipboard.writeText(content)
-    setCopied(key)
-    setTimeout(() => setCopied(null), 2000)
+    await navigator.clipboard.writeText(content);
+    setCopied(key);
+    setTimeout(() => setCopied(null), 2000);
   }
 
   const tabs = [
-    { key: 'html', label: 'HTML', icon: Code, color: 'text-orange-400', content: html, onChange: handleHtmlChange },
-    { key: 'css', label: 'CSS', icon: Palette, color: 'text-blue-400', content: css, onChange: handleCssChange },
-    { key: 'js', label: 'JavaScript (RSVP)', icon: Zap, color: 'text-yellow-400', content: js, onChange: handleJsChange },
-  ]
+    {
+      key: "html",
+      label: "HTML",
+      icon: Code,
+      color: "text-orange-400",
+      content: html,
+      onChange: handleHtmlChange,
+    },
+    {
+      key: "css",
+      label: "CSS",
+      icon: Palette,
+      color: "text-blue-400",
+      content: css,
+      onChange: handleCssChange,
+    },
+    {
+      key: "js",
+      label: "JavaScript (RSVP)",
+      icon: Zap,
+      color: "text-yellow-400",
+      content: js,
+      onChange: handleJsChange,
+    },
+  ];
 
-  const activeTabData = tabs.find(t => t.key === activeTab)
+  const activeTabData = tabs.find((t) => t.key === activeTab);
 
   // Force apply on mount in case switching from another template type
   useEffect(() => {
-    applyChanges()
+    applyChanges();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
     <div className="flex flex-col h-full gap-3">
-
       {/* Info Banner */}
       <div className="bg-muted/30 border border-border rounded-lg p-3 text-xs text-muted-foreground space-y-1">
         <p className="font-semibold text-foreground flex items-center gap-1.5">
-          <Code className="w-3.5 h-3.5 text-primary" /> Éditeur de Modèle Personnalisé
+          <Code className="w-3.5 h-3.5 text-primary" /> Éditeur de Modèle
+          Personnalisé
         </p>
-        <p>Variables disponibles : <code className="text-primary text-[10px]">{'{{EVENT_TITLE}}'}</code>, <code className="text-primary text-[10px]">{'{{GUEST_NAME}}'}</code>, <code className="text-primary text-[10px]">{'{{EVENT_LOCATION}}'}</code>, <code className="text-primary text-[10px]">{'{{EVENT_DATE}}'}</code>, <code className="text-primary text-[10px]">{'{{DRESS_CODE}}'}</code>, <code className="text-primary text-[10px]">{'{{TIME}}'}</code></p>
-        <p className="text-[10px] opacity-70">L'onglet JS est automatiquement injecté dans l'iframe. Il gère le RSVP via <code>postMessage</code>.</p>
+        <p>
+          Variables disponibles :{" "}
+          <code className="text-primary text-[10px]">{"{{EVENT_TITLE}}"}</code>,{" "}
+          <code className="text-primary text-[10px]">{"{{GUEST_NAME}}"}</code>,{" "}
+          <code className="text-primary text-[10px]">
+            {"{{EVENT_LOCATION}}"}
+          </code>
+          , <code className="text-primary text-[10px]">{"{{EVENT_DATE}}"}</code>
+          , <code className="text-primary text-[10px]">{"{{DRESS_CODE}}"}</code>
+          , <code className="text-primary text-[10px]">{"{{TIME}}"}</code>
+        </p>
+        <p className="text-[10px] opacity-70">
+          L'onglet JS est automatiquement injecté dans l'iframe. Il gère le RSVP
+          via <code>postMessage</code>.
+        </p>
       </div>
 
       {/* Tab Headers */}
       <div className="flex items-center gap-1 p-1 bg-muted/20 border border-border rounded-lg">
-        {tabs.map(tab => (
+        {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold transition-all ${activeTab === tab.key
-              ? 'bg-card border border-border shadow-sm text-foreground'
-              : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
-              }`}
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold transition-all ${
+              activeTab === tab.key
+                ? "bg-card border border-border shadow-sm text-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+            }`}
           >
-            <tab.icon className={`w-3 h-3 ${activeTab === tab.key ? tab.color : ''}`} />
+            <tab.icon
+              className={`w-3 h-3 ${activeTab === tab.key ? tab.color : ""}`}
+            />
             {tab.label}
           </button>
         ))}
@@ -630,15 +669,22 @@ export default function CodeTemplateEditor({ template, onChange }) {
       {/* Code Editor Area */}
       <div className="flex-1 relative flex flex-col min-h-0 overflow-hidden">
         <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border border-border border-b-0 rounded-t-lg">
-          <span className={`text-xs font-mono font-semibold ${activeTabData?.color}`}>
-            {activeTabData?.label.toLowerCase()}.{activeTab === 'html' ? 'html' : activeTab === 'css' ? 'css' : 'js'}
+          <span
+            className={`text-xs font-mono font-semibold ${activeTabData?.color}`}
+          >
+            {activeTabData?.label.toLowerCase()}.
+            {activeTab === "html" ? "html" : activeTab === "css" ? "css" : "js"}
           </span>
           <button
-            onClick={() => handleCopy(activeTabData?.content || '', activeTab)}
+            onClick={() => handleCopy(activeTabData?.content || "", activeTab)}
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            {copied === activeTab ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
-            {copied === activeTab ? 'Copié' : 'Copier'}
+            {copied === activeTab ? (
+              <Check className="w-3 h-3 text-green-400" />
+            ) : (
+              <Copy className="w-3 h-3" />
+            )}
+            {copied === activeTab ? "Copié" : "Copier"}
           </button>
         </div>
 
@@ -646,19 +692,31 @@ export default function CodeTemplateEditor({ template, onChange }) {
           <MonacoEditor
             key={activeTab}
             height="100%"
-            defaultLanguage={activeTab === 'html' ? 'html' : activeTab === 'css' ? 'css' : 'javascript'}
-            language={activeTab === 'html' ? 'html' : activeTab === 'css' ? 'css' : 'javascript'}
-            value={activeTabData?.content || ''}
-            onChange={val => activeTabData?.onChange(val ?? '')}
+            defaultLanguage={
+              activeTab === "html"
+                ? "html"
+                : activeTab === "css"
+                  ? "css"
+                  : "javascript"
+            }
+            language={
+              activeTab === "html"
+                ? "html"
+                : activeTab === "css"
+                  ? "css"
+                  : "javascript"
+            }
+            value={activeTabData?.content || ""}
+            onChange={(val) => activeTabData?.onChange(val ?? "")}
             theme="vs-dark"
             options={{
               minimap: { enabled: false },
               fontSize: 12,
               fontFamily:
                 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-              lineNumbers: 'on',
+              lineNumbers: "on",
               scrollBeyondLastLine: false,
-              wordWrap: 'on',
+              wordWrap: "on",
               tabSize: 2,
               automaticLayout: true,
             }}
@@ -692,5 +750,5 @@ export default function CodeTemplateEditor({ template, onChange }) {
         </Button>
       </div>
     </div>
-  )
+  );
 }
