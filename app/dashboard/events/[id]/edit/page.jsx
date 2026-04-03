@@ -150,7 +150,7 @@ export default function EditEventPage({ params }) {
     description: formData.description,
     eventDate: formData.event_date || new Date().toISOString(),
     location: formData.location || "Lieu",
-    time: formData.time || "19h00",
+    time: formData.time || "19:00",
     dressCode: formData.dress_code || "Tenue correcte exigée",
     customMessage: formData.custom_message,
   };
@@ -262,7 +262,7 @@ export default function EditEventPage({ params }) {
                     <Input
                       id="time"
                       name="time"
-                      placeholder="19h00"
+                      placeholder="19:00"
                       value={formData.time}
                       onChange={handleChange}
                     />

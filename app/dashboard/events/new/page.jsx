@@ -226,7 +226,7 @@ export default function NewEventPage() {
                   {t("portal.events.new.labels.date")}
                 </label>
                 <Input
-                  type="date"
+                  type="datetime-local"
                   value={form.event_date}
                   onChange={(e) =>
                     setForm((f) => ({ ...f, event_date: e.target.value }))

@@ -133,13 +133,18 @@ export async function createEvent(data) {
 
     const { title, description, event_date, location, custom_message } = data;
     if (!title) throw new Error("Title is required");
-
+    console.log(data);
+    let adjustedDate = null;
+    if (event_date) {
+      adjustedDate = new Date(event_date); // Crée la date depuis la string
+      adjustedDate.setHours(adjustedDate.getHours() + 1); // Ajoute 1 heure
+    }
     const event = await prisma.event.create({
       data: {
         userId: user.userId,
         title,
         description: description || null,
-        eventDate: event_date ? new Date(event_date) : null,
+        eventDate: adjustedDate,
         location: location || null,
         customMessage: custom_message || null,
         status: "draft",
@@ -173,13 +178,20 @@ export async function updateEvent(id, data) {
     });
     if (!existing) throw new Error("Event not found");
 
+    // ⚡ Ajuste event_date +1 heure
+    let adjustedDate = undefined;
+    if (data.event_date) {
+      adjustedDate = new Date(data.event_date);
+      adjustedDate.setHours(adjustedDate.getHours() + 1);
+    }
+
     const updated = await prisma.event.update({
       where: { id },
       data: {
         title: data.title !== undefined ? data.title : undefined,
         description:
           data.description !== undefined ? data.description : undefined,
-        eventDate: data.event_date ? new Date(data.event_date) : undefined,
+        eventDate: adjustedDate,
         location: data.location !== undefined ? data.location : undefined,
         customMessage:
           data.custom_message !== undefined ? data.custom_message : undefined,

@@ -1,34 +1,51 @@
-'use client'
+"use client";
 
 // InvitationPreview.jsx — HTML/CSS pure invitation renderer from a template JSON
 
-export default function InvitationPreview({ template, event, guestName, rsvpData, onRSVPSubmit, readOnly }) {
-  if (!template || !event) return null
+export default function InvitationPreview({
+  template,
+  event,
+  guestName,
+  rsvpData,
+  onRSVPSubmit,
+  readOnly,
+}) {
+  if (!template || !event) return null;
 
   // Ensure backward compatibility or graceful fallback if template is empty
-  const rawHtml = template.html || '<div style="padding:4rem;text-align:center;"><h1>{{EVENT_TITLE}}</h1><p>Invité: {{GUEST_NAME}}</p></div>'
-  const rawCss = template.css || 'body { background: #111; color: #fff; font-family: sans-serif; }'
+  const rawHtml =
+    template.html ||
+    '<div style="padding:4rem;text-align:center;"><h1>{{EVENT_TITLE}}</h1><p>Invité: {{GUEST_NAME}}</p></div>';
+  const rawCss =
+    template.css ||
+    "body { background: #111; color: #fff; font-family: sans-serif; }";
 
   const formattedDate = event.eventDate
-    ? new Date(event.eventDate).toLocaleDateString('fr-FR', {
-      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-    })
-    : null
-
+    ? new Date(event.eventDate).toLocaleDateString("fr-FR", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      })
+    : null;
+  console.log(event);
   // Inject variables
   const htmlContent = rawHtml
-    .replace(/{{EVENT_NAME}}/g, event.title || "Nom de l'événement")
     .replace(/{{EVENT_TITLE}}/g, event.title || "Nom de l'événement")
-    .replace(/{{GUEST_NAME}}/g, guestName || 'Prénom Nom')
-    .replace(/{{LOCATION}}/g, event.location || 'Lieu')
-    .replace(/{{EVENT_LOCATION}}/g, event.location || 'Lieu')
-    .replace(/{{TIME}}/g, event.time || (formattedDate || 'Date & Heure'))
-    .replace(/{{EVENT_DATE}}/g, formattedDate || 'Date')
-    .replace(/{{DRESS_CODE}}/g, event.dressCode || event.dress_code || 'Non précisé')
+    .replace(/{{GUEST_NAME}}/g, guestName || "Prénom Nom")
+    .replace(/{{LOCATION}}/g, event.location || "Lieu")
+    .replace(/{{EVENT_LOCATION}}/g, event.location || "Lieu")
+    .replace(/{{TIME}}/g, event.time || formattedDate || "Date & Heure")
+    .replace(/{{EVENT_DATE}}/g, formattedDate || "Date")
+    .replace(
+      /{{DRESS_CODE}}/g,
+      event.dressCode || event.dress_code || "Non précisé",
+    );
 
   const scriptContent = readOnly
-    ? '' // En aperçu galerie : pas d'interaction
-    : (template.js || `
+    ? "" // En aperçu galerie : pas d'interaction
+    : template.js ||
+      `
   // Script de secours générique si le template ne fournit pas de JS
   document.addEventListener('DOMContentLoaded', function() {
     var formSection = document.getElementById('rsvp-form');
@@ -92,7 +109,7 @@ export default function InvitationPreview({ template, event, guestName, rsvpData
         window.parent.postMessage({ type: 'RSVP_SUBMIT', data: { rsvp_status: 'declined' } }, '*');
       }
     });
-  });`)
+  });`;
 
   const iframeDoc = `<!DOCTYPE html>
 <html lang="fr">
@@ -114,16 +131,16 @@ ${htmlContent}
 ${scriptContent}
 </script>
 </body>
-</html>`
+</html>`;
 
   return (
     <iframe
       srcDoc={iframeDoc}
       title="Invitation preview"
       className="w-full h-full border-0"
-      style={{ minHeight: '100%', display: 'block' }}
+      style={{ minHeight: "100%", display: "block" }}
       sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
       scrolling="yes"
     />
-  )
+  );
 }
