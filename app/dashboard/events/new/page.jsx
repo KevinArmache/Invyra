@@ -27,9 +27,9 @@ import {
   MapPin,
   Shirt,
 } from "lucide-react";
-import { createEvent, updateEvent } from "@/app/actions/event";
+import { createEvent } from "@/app/actions/event";
 import { addGuest } from "@/app/actions/guest";
-import { getTemplates } from "@/app/actions/template";
+import { assignTemplateToEvent, getTemplates } from "@/app/actions/template";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import CSVImporter from "@/components/invitation/CSVImporter";
 import { useTranslation } from "@/utils/i18n/Context";
@@ -87,6 +87,7 @@ export default function NewEventPage() {
     if (!form.title) return;
     setLoading(true);
     try {
+      console.log(form);
       const event = await createEvent(form);
       setCreatedEventId(event.id);
       toast.success(t("portal.events.new.success_event"));
@@ -134,9 +135,7 @@ export default function NewEventPage() {
     // Save the selected template config to the event before proceeding
     if (selectedTemplate && createdEventId) {
       try {
-        await updateEvent(createdEventId, {
-          invitation_template: selectedTemplate.config,
-        });
+        await assignTemplateToEvent(createdEventId, selectedTemplate.id);
       } catch (e) {
         console.error("Failed to save template:", e);
       }

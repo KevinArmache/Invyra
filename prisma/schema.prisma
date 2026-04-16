@@ -1,17 +1,17 @@
 // --- Configuration de la base de données ---
 datasource db {
-  provider = "mongodb" // On utilise MongoDB comme base de données
-  url      = env("DATABASE_URL") // URL de connexion stockée dans les variables d'environnement
+  provider = "postgresql"
 }
 
 // --- Générateur Prisma Client ---
 generator client {
-  provider = "prisma-client-js" // Génère un client JS pour interagir avec la DB
+  provider = "prisma-client"
+  output   = "./generated/prisma"
 }
 
 // --- Modèle Utilisateur ---
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(cuid())
   // ID unique de l'utilisateur, auto-généré par MongoDB
 
   email String @unique
@@ -39,8 +39,10 @@ model User {
 
 // --- Modèle Template ---
 model Template {
-  id     String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId String? @db.ObjectId
+  id               String  @id @default(cuid())
+  userId           String?
+  eventId          String? @unique
+  sourceTemplateId String?
   // Référence vers le propriétaire du template, nullable pour ne pas supprimer le template si l'utilisateur est supprimé
 
   name      String // Nom du template
@@ -48,7 +50,10 @@ model Template {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User? @relation(fields: [userId], references: [id])
+  user           User?      @relation(fields: [userId], references: [id])
+  event          Event?     @relation("EventTemplateCopy", fields: [eventId], references: [id], onDelete: Cascade)
+  sourceTemplate Template?  @relation("TemplateCopies", fields: [sourceTemplateId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  eventCopies    Template[] @relation("TemplateCopies")
   // Relation vers l'utilisateur, pas de cascade => le template reste si l'utilisateur est supprimé
 
   @@map("templates") // Nom réel de la collection dans MongoDB
@@ -56,8 +61,8 @@ model Template {
 
 // --- Modèle Event (Événement) ---
 model Event {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
+  id     String @id @default(cuid())
+  userId String
   // Propriétaire / créateur de l'événement
 
   title              String // Titre de l'événement
@@ -79,15 +84,16 @@ model Event {
   user          User                 @relation(fields: [userId], references: [id])
   guests        Guest[] // Liste des invités
   collaborators Event_Collaborator[] // Collaborateurs de l'événement
+  templateCopy  Template?            @relation("EventTemplateCopy")
 
   @@map("events")
 }
 
 // --- Modèle Event_Collaborator (Collaborateurs) ---
 model Event_Collaborator {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  eventId     String   @db.ObjectId
-  userId      String   @db.ObjectId
+  id          String   @id @default(cuid())
+  eventId     String
+  userId      String
   role        String   @default("editor") // "editor" ou "viewer"
   inviteToken String?  @unique // Token d'invitation unique
   accepted    Boolean  @default(false) // Si l'invitation a été acceptée
@@ -107,8 +113,8 @@ model Event_Collaborator {
 
 // --- Modèle Guest (Invité) ---
 model Guest {
-  id                  String  @id @default(auto()) @map("_id") @db.ObjectId
-  eventId             String  @db.ObjectId
+  id                  String  @id @default(cuid())
+  eventId             String
   name                String
   email               String
   phone               String?

@@ -1,53 +1,52 @@
-'use client'
+"use client";
 
-import { use, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { getEventById, updateEvent } from '@/app/actions/event'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import CodeTemplateEditor from '@/components/invitation/CodeTemplateEditor'
-import TemplateGallery from '@/components/invitation/TemplateGallery'
-import InvitationPreview from '@/components/invitation/InvitationPreview'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, Save } from 'lucide-react'
+import { use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { getEventById, updateEvent } from "@/app/actions/event";
+import { assignTemplateToEvent } from "@/app/actions/template";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CodeTemplateEditor from "@/components/invitation/CodeTemplateEditor";
+import TemplateGallery from "@/components/invitation/TemplateGallery";
+import InvitationPreview from "@/components/invitation/InvitationPreview";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Save } from "lucide-react";
 
 export default function TemplateConfigurationPage({ params }) {
-  const router = useRouter()
-  const { id } = use(params)
+  const router = useRouter();
+  const { id } = use(params);
 
-  const [event, setEvent] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   // Current working copy of the template
-  const [template, setTemplate] = useState(null)
-  const [activeTab, setActiveTab] = useState('code')
+  const [template, setTemplate] = useState(null);
+  const [activeTab, setActiveTab] = useState("code");
 
   useEffect(() => {
-    getEventById(id).then(e => {
-      setEvent(e)
-      setTemplate(e.invitationTemplate || { type: 'code', html: '', css: '' })
-      setLoading(false)
-    })
-  }, [id])
+    getEventById(id).then((e) => {
+      setEvent(e);
+      setTemplate(e.invitationTemplate || { type: "code", html: "", css: "" });
+      setLoading(false);
+    });
+  }, [id]);
 
   async function handleSaveEventTemplate() {
-    setSaving(true)
+    setSaving(true);
     try {
-      await updateEvent(id, { invitation_template: template })
-      toast.success('Le modèle a été enregistré pour cet événement.')
-      router.push(`/dashboard/events/${id}`)
+      await updateEvent(id, { invitation_template: template });
+      toast.success("Le modèle a été enregistré pour cet événement.");
+      router.push(`/dashboard/events/${id}`);
     } catch (e) {
-      toast.error(e.message)
+      toast.error(e.message);
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 
-
-
-  if (loading) return null
+  if (loading) return null;
 
   return (
     <div className="h-[calc(100vh-8rem)] flex flex-col gap-4">
@@ -55,22 +54,35 @@ export default function TemplateConfigurationPage({ params }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link href={`/dashboard/events/${id}`}><ArrowLeft className="w-5 h-5" /></Link>
+            <Link href={`/dashboard/events/${id}`}>
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">Configurer l'invitation</h1>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Configurer l'invitation
+            </h1>
             <p className="text-sm text-muted-foreground">{event?.title}</p>
           </div>
         </div>
-        <Button onClick={handleSaveEventTemplate} disabled={saving} className="gap-2 shrink-0">
-          <Save className="w-4 h-4" /> {saving ? 'Enregistrement...' : 'Enregistrer et quitter'}
+        <Button
+          onClick={handleSaveEventTemplate}
+          disabled={saving}
+          className="gap-2 shrink-0"
+        >
+          <Save className="w-4 h-4" />{" "}
+          {saving ? "Enregistrement..." : "Enregistrer et quitter"}
         </Button>
       </div>
 
       <div className="flex-1 grid lg:grid-cols-[400px_1fr] xl:grid-cols-[450px_1fr] gap-6 min-h-0">
         {/* Controls Sidebar */}
         <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="h-full flex flex-col"
+          >
             <div className="p-3 border-b border-border bg-muted/20">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="code">Code HTML/CSS</TabsTrigger>
@@ -81,19 +93,29 @@ export default function TemplateConfigurationPage({ params }) {
             <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
               <TabsContent value="code" className="mt-0 h-full">
                 <div className="mb-4">
-                  <CodeTemplateEditor template={template} onChange={setTemplate} />
+                  <CodeTemplateEditor
+                    template={template}
+                    onChange={setTemplate}
+                  />
                 </div>
               </TabsContent>
 
               <TabsContent value="gallery" className="mt-0 space-y-8">
-
-
                 {/* Preset Gallery */}
                 <TemplateGallery
                   selectedId={null}
-                  onSelect={(_, tmpl) => {
-                    setTemplate(tmpl)
-                    setActiveTab('code')
+                  onSelect={async (templateId, tmpl) => {
+                    try {
+                      const result = await assignTemplateToEvent(
+                        id,
+                        templateId,
+                      );
+                      setTemplate(result.template || tmpl);
+                      toast.success("Copie du modèle appliquée à l'événement.");
+                    } catch (e) {
+                      toast.error(e.message);
+                    }
+                    setActiveTab("code");
                   }}
                 />
               </TabsContent>
@@ -113,5 +135,5 @@ export default function TemplateConfigurationPage({ params }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

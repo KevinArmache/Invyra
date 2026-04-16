@@ -54,6 +54,9 @@ export async function getEvents() {
       },
       orderBy: { createdAt: "desc" },
       include: {
+        templateCopy: {
+          select: { config: true },
+        },
         _count: {
           select: { guests: true },
         },
@@ -65,6 +68,8 @@ export async function getEvents() {
 
     return events.map((e) => ({
       ...e,
+      invitationTemplate: e.templateCopy?.config || e.invitationTemplate,
+      templateCopy: undefined,
       guest_count: e._count.guests,
       confirmed_count: e.guests.filter((g) => g.rsvpStatus === "confirmed")
         .length,
@@ -89,6 +94,9 @@ export async function getEventById(id) {
     const event = await prisma.event.findUnique({
       where: { id },
       include: {
+        templateCopy: {
+          select: { id: true, config: true },
+        },
         _count: {
           select: { guests: true },
         },
@@ -102,6 +110,9 @@ export async function getEventById(id) {
 
     return {
       ...event,
+      invitationTemplate:
+        event.templateCopy?.config || event.invitationTemplate,
+      templateCopy: undefined,
       guest_count: event._count.guests,
       confirmed_count: event.guests.filter((g) => g.rsvpStatus === "confirmed")
         .length,
@@ -131,7 +142,15 @@ export async function createEvent(data) {
       );
     }
 
-    const { title, description, event_date, location, custom_message } = data;
+    const {
+      title,
+      description,
+      event_date,
+      location,
+      time,
+      dress_code,
+      custom_message,
+    } = data;
     if (!title) throw new Error("Title is required");
     console.log(data);
     let adjustedDate = null;
@@ -146,6 +165,8 @@ export async function createEvent(data) {
         description: description || null,
         eventDate: adjustedDate,
         location: location || null,
+        time: time || null,
+        dressCode: dress_code || null,
         customMessage: custom_message || null,
         status: "draft",
       },
@@ -175,6 +196,7 @@ export async function updateEvent(id, data) {
 
     const existing = await prisma.event.findUnique({
       where: { id },
+      include: { templateCopy: { select: { id: true } } },
     });
     if (!existing) throw new Error("Event not found");
 
@@ -185,6 +207,24 @@ export async function updateEvent(id, data) {
       adjustedDate.setHours(adjustedDate.getHours() + 1);
     }
 
+    if (data.invitation_template !== undefined) {
+      if (existing.templateCopy?.id) {
+        await prisma.template.update({
+          where: { id: existing.templateCopy.id },
+          data: { config: data.invitation_template },
+        });
+      } else {
+        await prisma.template.create({
+          data: {
+            userId: existing.userId,
+            eventId: existing.id,
+            name: `Copie de ${existing.title}`,
+            config: data.invitation_template,
+          },
+        });
+      }
+    }
+
     const updated = await prisma.event.update({
       where: { id },
       data: {
@@ -193,23 +233,28 @@ export async function updateEvent(id, data) {
           data.description !== undefined ? data.description : undefined,
         eventDate: adjustedDate,
         location: data.location !== undefined ? data.location : undefined,
+        time: data.time !== undefined ? data.time : undefined,
+        dressCode: data.dress_code !== undefined ? data.dress_code : undefined,
         customMessage:
           data.custom_message !== undefined ? data.custom_message : undefined,
         animationConfig:
           data.animation_config !== undefined
             ? data.animation_config
             : undefined,
-        invitationTemplate:
-          data.invitation_template !== undefined
-            ? data.invitation_template
-            : undefined,
+        invitationTemplate: undefined,
         emailTemplate:
           data.email_template !== undefined ? data.email_template : undefined,
         status: data.status !== undefined ? data.status : undefined,
       },
     });
 
-    return updated;
+    return {
+      ...updated,
+      invitationTemplate:
+        data.invitation_template !== undefined
+          ? data.invitation_template
+          : updated.invitationTemplate,
+    };
   } catch (error) {
     console.error("Error updating event:", error);
     throw new Error("Failed to update event");
@@ -232,8 +277,14 @@ export async function deleteEvent(id) {
     });
     if (!existing) throw new Error("Event not found");
 
-    await prisma.event.delete({
-      where: { id },
+    await prisma.$transaction(async (tx) => {
+      await tx.template.deleteMany({
+        where: { eventId: id },
+      });
+
+      await tx.event.delete({
+        where: { id },
+      });
     });
 
     return { success: true };

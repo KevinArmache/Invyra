@@ -7,7 +7,13 @@ export async function getInvitationByToken(token) {
     const guest = await prisma.guest.findUnique({
       where: { invitationToken: token },
       include: {
-        event: true
+        event: {
+          include: {
+            templateCopy: {
+              select: { config: true },
+            },
+          },
+        },
       }
     })
 
@@ -41,7 +47,7 @@ export async function getInvitationByToken(token) {
         time: guest.event.time,
         dressCode: guest.event.dressCode,
         customMessage: guest.event.customMessage,
-        invitationTemplate: guest.event.invitationTemplate  // ← CRITIQUE: chargement du modèle
+        invitationTemplate: guest.event.templateCopy?.config || guest.event.invitationTemplate
       }
     }
   } catch (error) {

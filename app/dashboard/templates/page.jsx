@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Trash2, LayoutTemplate, Eye, Edit2 } from "lucide-react";
+import { Plus, Trash2, LayoutTemplate, Eye, Edit2, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -152,7 +152,7 @@ export default function TemplatesPage() {
                       title: tmpl.name,
                       eventDate: new Date().toISOString(),
                       location: "Lieu de l'événement",
-                      time: "19h00",
+                      time: "19:00",
                       dressCode: "Tenue de soirée",
                     }}
                     guestName="Marie Dupont"
@@ -257,6 +257,17 @@ export default function TemplatesPage() {
                 <p className="text-xs text-muted-foreground w-full">
                   {new Date(tmpl.createdAt).toLocaleDateString(locale)}
                 </p>
+                <div
+                  className="mt-1 inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground"
+                  title={
+                    locale === "fr"
+                      ? "Nombre de fois où ce modèle a été sélectionné"
+                      : "Number of times this template was selected"
+                  }
+                >
+                  <BarChart3 className="w-3 h-3" />
+                  <span>{tmpl._count?.eventCopies ?? 0}</span>
+                </div>
               </CardContent>
             </Card>
           ))}
@@ -278,7 +289,7 @@ export default function TemplatesPage() {
                   title: previewTemplate.name,
                   eventDate: new Date().toISOString(),
                   location: "Lieu de l'événement",
-                  time: "19h00",
+                  time: "19:00",
                   dressCode: "Tenue de soirée",
                 }}
                 guestName="Marie Dupont"

@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Save, Check, X, LayoutTemplate } from "lucide-react";
 import { getEventById, updateEvent } from "@/app/actions/event";
-import { getTemplates } from "@/app/actions/template";
+import { assignTemplateToEvent, getTemplates } from "@/app/actions/template";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { toast } from "sonner";
 
@@ -86,14 +86,14 @@ export default function EditEventPage({ params }) {
     if (!selectedForSwap) return;
     setSwapping(true);
     try {
-      await updateEvent(id, { invitation_template: selectedForSwap.config });
+      const result = await assignTemplateToEvent(id, selectedForSwap.id);
       setEvent((prev) => ({
         ...prev,
-        invitationTemplate: selectedForSwap.config,
+        invitationTemplate: result.template,
       }));
       setShowTemplatePicker(false);
       setSelectedForSwap(null);
-      toast.success("Modèle appliqué avec succès à l'événement.");
+      toast.success("Copie du modèle appliquée à l'événement.");
     } catch (e) {
       toast.error(e.message);
     } finally {

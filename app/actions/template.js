@@ -30,6 +30,16 @@ export async function getTemplates() {
   if (!user) return [];
 
   return await prisma.template.findMany({
+    where: {
+      eventId: null,
+    },
+    include: {
+      _count: {
+        select: {
+          eventCopies: true,
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
 }
@@ -42,10 +52,20 @@ export async function deleteTemplate(templateId) {
     throw new Error("Seuls les administrateurs peuvent supprimer un modèle");
   }
 
-  await prisma.template.deleteMany({
-    where: {
-      id: templateId,
-    },
+  await prisma.$transaction(async (tx) => {
+    // Detach event copies that still reference this source template
+    // before deleting it to satisfy FK constraints in PostgreSQL.
+    await tx.template.updateMany({
+      where: { sourceTemplateId: templateId },
+      data: { sourceTemplateId: null },
+    });
+
+    await tx.template.deleteMany({
+      where: {
+        id: templateId,
+        eventId: null,
+      },
+    });
   });
 
   return { success: true };
@@ -56,7 +76,7 @@ export async function getUserTemplateById(templateId) {
   if (!user) throw new Error("Unauthorized");
 
   const tmpl = await prisma.template.findFirst({
-    where: { id: templateId },
+    where: { id: templateId, eventId: null },
   });
 
   if (!tmpl) throw new Error("Modèle non trouvé");
@@ -74,7 +94,7 @@ export async function updateUserTemplate(templateId, name, templateConfig) {
   if (!name) throw new Error("Le nom du modèle est requis");
 
   const existing = await prisma.template.findFirst({
-    where: { id: templateId },
+    where: { id: templateId, eventId: null },
   });
   if (!existing) throw new Error("Modèle non trouvé");
 
@@ -97,14 +117,65 @@ export async function saveTemplate(eventId, template) {
   if (!user) throw new Error("Unauthorized");
 
   const event = await prisma.event.findFirst({
-    where: { id: eventId, userId: user.userId },
+    where: { id: eventId },
+    include: { templateCopy: true },
   });
   if (!event) throw new Error("Event not found");
 
-  await prisma.event.update({
-    where: { id: eventId },
-    data: { invitationTemplate: template },
-  });
+  if (event.templateCopy) {
+    await prisma.template.update({
+      where: { id: event.templateCopy.id },
+      data: { config: template },
+    });
+  } else {
+    await prisma.template.create({
+      data: {
+        userId: event.userId,
+        eventId: event.id,
+        name: `Copie de ${event.title}`,
+        config: template,
+      },
+    });
+  }
 
   return { success: true };
+}
+
+export async function assignTemplateToEvent(eventId, templateId) {
+  const user = await getSession();
+  if (!user) throw new Error("Unauthorized");
+
+  const event = await prisma.event.findFirst({
+    where: { id: eventId },
+    include: { templateCopy: true },
+  });
+  if (!event) throw new Error("Event not found");
+
+  const template = await prisma.template.findFirst({
+    where: {
+      id: templateId,
+      eventId: null,
+    },
+  });
+  if (!template) throw new Error("Modèle introuvable");
+
+  await prisma.$transaction(async (tx) => {
+    if (event.templateCopy) {
+      await tx.template.delete({
+        where: { id: event.templateCopy.id },
+      });
+    }
+
+    await tx.template.create({
+      data: {
+        userId: event.userId,
+        eventId: event.id,
+        sourceTemplateId: template.id,
+        name: `${template.name} (copie - ${event.title})`,
+        config: template.config,
+      },
+    });
+  });
+
+  return { success: true, template: template.config };
 }
