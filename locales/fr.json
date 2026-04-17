@@ -81,7 +81,7 @@
   "dashboard": {
     "title": "Tableau de Bord",
     "welcome": "Bon retour ! Voici un aperçu de vos événements.",
-    "create_event": "Créer un Événement",
+    "create_event": "Créer un événement",
     "total_events": "Total événements",
     "total_guests": "Total invités",
     "invitations_viewed": "Invitations vues",
