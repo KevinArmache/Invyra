@@ -32,6 +32,13 @@ function templateStatusBadgeKey(status) {
   return "status_draft_badge";
 }
 
+/** Édition / suppression : admin ou créateur du modèle */
+function canManageTemplateCard(user, tmpl) {
+  if (!user || !tmpl) return false;
+  if (user.role === "admin") return true;
+  return tmpl.userId != null && tmpl.userId === user.id;
+}
+
 export default function TemplatesPage() {
   const { user } = useUser();
   const { t, locale } = useTranslation();
@@ -186,7 +193,7 @@ export default function TemplatesPage() {
                   >
                     <Eye className="w-4 h-4" />
                   </Button>
-                  {user?.role === "admin" && (
+                  {canManageTemplateCard(user, tmpl) && (
                     <>
                       <Button
                         variant="secondary"
@@ -244,7 +251,7 @@ export default function TemplatesPage() {
                     <Eye className="w-4 h-4" />
                   </Button>
 
-                  {user?.role === "admin" && (
+                  {canManageTemplateCard(user, tmpl) && (
                     <>
                       <Button
                         variant="secondary"

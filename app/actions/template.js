@@ -17,6 +17,13 @@ function assertTemplateStatus(value) {
   return value;
 }
 
+/** Admin ou propriétaire du modèle réutilisable (userId) */
+function canManageReusableTemplate(session, template) {
+  if (!session || !template) return false;
+  if (session.role === "admin") return true;
+  return template.userId != null && template.userId === session.userId;
+}
+
 // ──────────────────────────────────────────────
 // User Custom Templates (Reusable)
 // ──────────────────────────────────────────────
@@ -63,8 +70,12 @@ export async function deleteTemplate(templateId) {
   const user = await getSession();
   if (!user) throw new Error("Unauthorized");
 
-  if (user.role !== "admin") {
-    throw new Error("Seuls les administrateurs peuvent supprimer un modèle");
+  const existing = await prisma.template.findFirst({
+    where: { id: templateId, eventId: null },
+  });
+  if (!existing) throw new Error("Modèle non trouvé");
+  if (!canManageReusableTemplate(user, existing)) {
+    throw new Error("Vous n'avez pas le droit de supprimer ce modèle");
   }
 
   await prisma.$transaction(async (tx) => {
@@ -95,16 +106,15 @@ export async function getUserTemplateById(templateId) {
   });
 
   if (!tmpl) throw new Error("Modèle non trouvé");
+  if (!canManageReusableTemplate(user, tmpl)) {
+    throw new Error("Vous n'avez pas le droit d'accéder à ce modèle");
+  }
   return tmpl;
 }
 
 export async function updateUserTemplate(templateId, name, templateConfig, status) {
   const user = await getSession();
   if (!user) throw new Error("Unauthorized");
-
-  if (user.role !== "admin") {
-    throw new Error("Seuls les administrateurs peuvent modifier un modèle");
-  }
 
   if (!name) throw new Error("Le nom du modèle est requis");
 
@@ -114,6 +124,9 @@ export async function updateUserTemplate(templateId, name, templateConfig, statu
     where: { id: templateId, eventId: null },
   });
   if (!existing) throw new Error("Modèle non trouvé");
+  if (!canManageReusableTemplate(user, existing)) {
+    throw new Error("Vous n'avez pas le droit de modifier ce modèle");
+  }
 
   const tmpl = await prisma.template.update({
     where: { id: templateId },
