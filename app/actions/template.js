@@ -5,19 +5,34 @@ import { getSession } from "@/app/actions/auth";
 
 // L'ancienne logique de génération IA a été supprimée suite au refactoring.
 
+const TEMPLATE_STATUSES = ["draft", "in_progress", "completed"];
+
+function assertTemplateStatus(value) {
+  if (value == null || value === "") return "draft";
+  if (!TEMPLATE_STATUSES.includes(value)) {
+    throw new Error(
+      `Statut invalide. Valeurs autorisées : ${TEMPLATE_STATUSES.join(", ")}`
+    );
+  }
+  return value;
+}
+
 // ──────────────────────────────────────────────
 // User Custom Templates (Reusable)
 // ──────────────────────────────────────────────
-export async function saveUserTemplate(name, templateConfig) {
+export async function saveUserTemplate(name, templateConfig, status) {
   const user = await getSession();
   if (!user) throw new Error("Unauthorized");
 
   if (!name) throw new Error("Template name is required");
 
+  const safeStatus = assertTemplateStatus(status);
+
   const tmpl = await prisma.template.create({
     data: {
       userId: user.userId,
       name,
+      status: safeStatus,
       config: templateConfig,
     },
   });
@@ -83,7 +98,7 @@ export async function getUserTemplateById(templateId) {
   return tmpl;
 }
 
-export async function updateUserTemplate(templateId, name, templateConfig) {
+export async function updateUserTemplate(templateId, name, templateConfig, status) {
   const user = await getSession();
   if (!user) throw new Error("Unauthorized");
 
@@ -92,6 +107,8 @@ export async function updateUserTemplate(templateId, name, templateConfig) {
   }
 
   if (!name) throw new Error("Le nom du modèle est requis");
+
+  const safeStatus = assertTemplateStatus(status);
 
   const existing = await prisma.template.findFirst({
     where: { id: templateId, eventId: null },
@@ -102,6 +119,7 @@ export async function updateUserTemplate(templateId, name, templateConfig) {
     where: { id: templateId },
     data: {
       name,
+      status: safeStatus,
       config: templateConfig,
     },
   });

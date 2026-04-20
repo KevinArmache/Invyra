@@ -18,6 +18,19 @@ import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { useTranslation } from "@/utils/i18n/Context";
 import { useUser } from "@/hooks/useUser";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+
+const TEMPLATE_STATUS_EMOJI = {
+  draft: "⚪",
+  in_progress: "🟡",
+  completed: "🟢",
+};
+
+function templateStatusBadgeKey(status) {
+  if (status === "in_progress") return "status_in_progress_badge";
+  if (status === "completed") return "status_completed_badge";
+  return "status_draft_badge";
+}
 
 export default function TemplatesPage() {
   const { user } = useUser();
@@ -203,6 +216,15 @@ export default function TemplatesPage() {
                 </div>
               </div>
               <CardContent className="p-4 flex flex-col gap-1 items-start bg-card z-10">
+                <Badge
+                  variant="secondary"
+                  className="mb-1 font-normal text-xs gap-1.5 px-2 py-0.5"
+                >
+                  <span aria-hidden>
+                    {TEMPLATE_STATUS_EMOJI[tmpl.status] ?? TEMPLATE_STATUS_EMOJI.draft}
+                  </span>
+                  {t(`portal.templates.list.${templateStatusBadgeKey(tmpl.status)}`)}
+                </Badge>
                 <h3 className="font-semibold text-lg truncate w-full">
                   {tmpl.name}
                 </h3>

@@ -440,7 +440,10 @@
         "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce modèle ?",
         "delete_success": "Modèle supprimé avec succès",
         "preview_btn": "Aperçu du modèle",
-        "edit_btn": "Éditer le modèle"
+        "edit_btn": "Éditer le modèle",
+        "status_draft_badge": "Brouillon",
+        "status_in_progress_badge": "En construction",
+        "status_completed_badge": "Terminé"
       },
       "editor": {
         "title": "Éditeur de Modèle",
@@ -448,6 +451,10 @@
         "saving": "Sauvegarde...",
         "success": "Modèle sauvegardé !",
         "name_placeholder": "Nom du modèle",
+        "status_label": "État d'avancement",
+        "status_draft_option": "⚪ Brouillon",
+        "status_in_progress_option": "🟡 En construction",
+        "status_completed_option": "🟢 Terminé",
         "mode_code": "Mode code",
         "mode_preview": "Mode aperçu",
         "variables_title": "Variables d'Événement",

@@ -96,6 +96,7 @@ export const TemplateScalarFieldEnum = {
   eventId: 'eventId',
   sourceTemplateId: 'sourceTemplateId',
   name: 'name',
+  status: 'status',
   config: 'config',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

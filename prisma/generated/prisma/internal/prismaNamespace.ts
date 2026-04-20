@@ -839,6 +839,7 @@ export const TemplateScalarFieldEnum = {
   eventId: 'eventId',
   sourceTemplateId: 'sourceTemplateId',
   name: 'name',
+  status: 'status',
   config: 'config',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -991,6 +992,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TemplateStatus'
+ */
+export type EnumTemplateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TemplateStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'TemplateStatus[]'
+ */
+export type ListEnumTemplateStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TemplateStatus[]'>
     
 
 

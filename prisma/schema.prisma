@@ -37,6 +37,13 @@ model User {
   @@map("users") // Nom réel de la collection dans MongoDB
 }
 
+// --- Statut d'avancement d'un modèle (template réutilisable ou copie liée à un événement) ---
+enum TemplateStatus {
+  draft
+  in_progress
+  completed
+}
+
 // --- Modèle Template ---
 model Template {
   id               String  @id @default(cuid())
@@ -46,6 +53,7 @@ model Template {
   // Référence vers le propriétaire du template, nullable pour ne pas supprimer le template si l'utilisateur est supprimé
 
   name      String // Nom du template
+  status    TemplateStatus? @default(draft) // Brouillon | en construction | terminé
   config    Json // Configuration / design du template en JSON
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -6,10 +6,18 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { ArrowLeft, Save } from 'lucide-react'
 import CodeTemplateEditor from '@/components/invitation/CodeTemplateEditor'
 import InvitationPreview from '@/components/invitation/InvitationPreview'
 import { toast } from 'sonner'
+import { useTranslation } from '@/utils/i18n/Context'
 
 const DEMO_EVENT = {
   title: 'Gala de Bienfaisance 2025',
@@ -21,11 +29,19 @@ const DEMO_EVENT = {
 
 /**
  * Composant partagé entre la création et l'édition d'un modèle personnalisé.
- * @param {{ initialName: string, initialConfig: object, onSave: (name: string, config: object) => Promise<void>, isEditing: boolean }} props
+ * @param {{ initialName: string, initialStatus?: string, initialConfig: object, onSave: (name: string, config: object, status: string) => Promise<void>, isEditing: boolean }} props
  */
-export default function TemplateEditorForm({ initialName = '', initialConfig, isEditing = false, onSave }) {
+export default function TemplateEditorForm({
+  initialName = '',
+  initialStatus = 'draft',
+  initialConfig,
+  isEditing = false,
+  onSave,
+}) {
   const router = useRouter()
+  const { t } = useTranslation()
   const [saveName, setSaveName] = useState(initialName)
+  const [saveStatus, setSaveStatus] = useState(initialStatus || 'draft')
   const [saving, setSaving] = useState(false)
   const [activeMode, setActiveMode] = useState('edit')
   const [templateConfig, setTemplateConfig] = useState(initialConfig ?? { type: 'code', html: '', css: '', js: '' })
@@ -37,7 +53,7 @@ export default function TemplateEditorForm({ initialName = '', initialConfig, is
     }
     setSaving(true)
     try {
-      await onSave(saveName.trim(), templateConfig)
+      await onSave(saveName.trim(), templateConfig, saveStatus)
       router.push('/dashboard/templates')
     } catch (e) {
       toast.error(e.message)
@@ -63,13 +79,34 @@ export default function TemplateEditorForm({ initialName = '', initialConfig, is
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
           <Input
             placeholder="Nom du modèle..."
             value={saveName}
             onChange={e => setSaveName(e.target.value)}
             className="w-full sm:w-52 bg-background"
           />
+          <div className="flex flex-col gap-1 sm:min-w-[200px]">
+            <span className="text-xs text-muted-foreground sm:sr-only">
+              {t('portal.templates.editor.status_label')}
+            </span>
+            <Select value={saveStatus} onValueChange={setSaveStatus}>
+              <SelectTrigger className="w-full sm:w-[200px] bg-background" size="default">
+                <SelectValue placeholder={t('portal.templates.editor.status_label')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="draft">
+                  {t('portal.templates.editor.status_draft_option')}
+                </SelectItem>
+                <SelectItem value="in_progress">
+                  {t('portal.templates.editor.status_in_progress_option')}
+                </SelectItem>
+                <SelectItem value="completed">
+                  {t('portal.templates.editor.status_completed_option')}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <Button onClick={handleSave} disabled={saving || !saveName.trim()} className="gap-2 shrink-0">
             <Save className="w-4 h-4" /> {saving ? (isEditing ? 'Enregistrement...' : 'Sauvegarde...') : (isEditing ? 'Mettre à jour' : 'Enregistrer')}
           </Button>

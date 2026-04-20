@@ -32,9 +32,9 @@ export default function EditTemplatePage({ params }) {
     js: template.config?.js || "",
   };
 
-  async function handleSave(name, config) {
+  async function handleSave(name, config, status) {
     try {
-      await updateUserTemplate(id, name, config);
+      await updateUserTemplate(id, name, config, status);
       toast.success("Modèle mis à jour !");
     } catch (e) {
       toast.error(e.message);
@@ -44,6 +44,7 @@ export default function EditTemplatePage({ params }) {
   return (
     <TemplateEditorForm
       initialName={template.name}
+      initialStatus={template.status ?? "draft"}
       initialConfig={initialConfig}
       isEditing={true}
       onSave={handleSave}

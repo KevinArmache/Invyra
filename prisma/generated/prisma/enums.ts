@@ -9,7 +9,10 @@
 * 🟢 You can import this file directly.
 */
 
+export const TemplateStatus = {
+  draft: 'draft',
+  in_progress: 'in_progress',
+  completed: 'completed'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type TemplateStatus = (typeof TemplateStatus)[keyof typeof TemplateStatus]
