@@ -1,95 +1,69 @@
 "use server";
 
-import { SignJWT, jwtVerify } from "jose";
-import { cookies } from "next/headers";
-import bcrypt from "bcryptjs";
-import { prisma } from "@/utils/prisma";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import bcrypt from "bcryptjs";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "invyra-secret-key-change-in-production",
-);
+import { prisma } from "@/utils/prisma";
+import { auth } from "@/utils/auth/server";
 
-export async function hashPassword(password) {
-  return bcrypt.hash(password, 12);
-}
-
-export async function verifyPassword(password, hashedPassword) {
-  return bcrypt.compare(password, hashedPassword);
-}
-
-export async function createToken(payload) {
-  return new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("7d")
-    .sign(JWT_SECRET);
-}
-
-export async function verifyToken(token) {
-  try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-    return payload;
-  } catch {
-    return null;
-  }
+/**
+ * La session est portée par better-auth, mais tout le reste du code attend la
+ * forme historique `{ userId, email, name, role, plan }`. On garde ce contrat
+ * pour que les actions métier n'aient pas à changer.
+ */
+function toLegacySession(session) {
+  if (!session?.user) return null;
+  const { user } = session;
+  return {
+    userId: user.id,
+    email: user.email,
+    name: user.name,
+    role: user.role ?? "user",
+    plan: user.plan ?? "free",
+  };
 }
 
 export async function getSession() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("auth-token")?.value;
-
-  if (!token) return null;
-
-  const payload = await verifyToken(token);
-  return payload;
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) return null;
+  // Un compte suspendu garde un cookie valide : on le traite comme déconnecté.
+  if (session.user.suspended) return null;
+  return toLegacySession(session);
 }
 
-export async function setSession(userId, email, name, role, plan) {
-  const token = await createToken({ userId, email, name, role, plan });
-  const cookieStore = await cookies();
-
-  cookieStore.set("auth-token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-    path: "/",
-  });
-
-  return token;
-}
-
-export async function clearSession() {
-  const cookieStore = await cookies();
-  cookieStore.delete("auth-token");
-}
-
-// ─── Auth Actions ─────────────────────────────────────────────────────────────
+// ─── Auth ────────────────────────────────────────────────────────────────────
 
 export async function login(email, password) {
   if (!email || !password) throw new Error("Email et mot de passe requis");
 
-  const user = await prisma.user.findUnique({
-    where: { email: email.toLowerCase() },
+  const normalized = email.toLowerCase();
+
+  const existing = await prisma.user.findUnique({
+    where: { email: normalized },
+    select: { suspended: true },
   });
-
-  if (!user) throw new Error("Email ou mot de passe invalide");
-  if (user.suspended)
+  if (existing?.suspended) {
     throw new Error("Ce compte a été suspendu. Contactez le support.");
+  }
 
-  const isValid = await verifyPassword(password, user.password);
-  if (!isValid) throw new Error("Email ou mot de passe invalide");
+  try {
+    const result = await auth.api.signInEmail({
+      body: { email: normalized, password },
+      headers: await headers(),
+    });
 
-  await setSession(user.id, user.email, user.name, user.role, user.plan);
-
-  return {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role,
-    plan: user.plan,
-  };
+    return {
+      id: result.user.id,
+      email: result.user.email,
+      name: result.user.name,
+      role: result.user.role ?? "user",
+      plan: result.user.plan ?? "free",
+    };
+  } catch {
+    // On ne distingue jamais « email inconnu » de « mot de passe faux ».
+    throw new Error("Email ou mot de passe invalide");
+  }
 }
 
 export async function register(name, email, password, company, phone) {
@@ -98,45 +72,50 @@ export async function register(name, email, password, company, phone) {
   if (password.length < 8)
     throw new Error("Le mot de passe doit contenir au moins 8 caractères");
 
+  const normalized = email.toLowerCase();
+
   const existing = await prisma.user.findUnique({
-    where: { email: email.toLowerCase() },
+    where: { email: normalized },
+    select: { id: true },
   });
   if (existing) throw new Error("Un compte avec cet email existe déjà");
 
-  const passwordHash = await hashPassword(password);
-  const user = await prisma.user.create({
-    data: {
-      email: email.toLowerCase(),
-      password: passwordHash,
-      name,
-      company: company || null,
-      phone: phone || null,
-      role: "user",
-      plan: "free",
-    },
-  });
+  try {
+    const result = await auth.api.signUpEmail({
+      body: {
+        email: normalized,
+        password,
+        name,
+        company: company || undefined,
+        phone: phone || undefined,
+      },
+      headers: await headers(),
+    });
 
-  await setSession(user.id, user.email, user.name, user.role, user.plan);
-  return {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role,
-    plan: user.plan,
-  };
+    return {
+      id: result.user.id,
+      email: result.user.email,
+      name: result.user.name,
+      role: result.user.role ?? "user",
+      plan: result.user.plan ?? "free",
+    };
+  } catch (error) {
+    if (error?.body?.message) throw new Error(error.body.message);
+    throw new Error("Impossible de créer le compte");
+  }
 }
 
 export async function logout() {
-  await clearSession();
+  await auth.api.signOut({ headers: await headers() });
   redirect("/login");
 }
 
 export async function getCurrentUser() {
-  const session = await getSession();
-  if (!session) return null;
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.userId },
+  return prisma.user.findUnique({
+    where: { id: session.user.id },
     select: {
       id: true,
       email: true,
@@ -144,15 +123,14 @@ export async function getCurrentUser() {
       company: true,
       phone: true,
       role: true,
+      plan: true,
       suspended: true,
       createdAt: true,
     },
   });
-
-  return user || null;
 }
 
-// ─── Permission Guards ─────────────────────────────────────────────────────
+// ─── Garde-fous ──────────────────────────────────────────────────────────────
 
 export async function requireAuth() {
   const session = await getSession();
@@ -163,7 +141,7 @@ export async function requireAuth() {
 export async function requireAdmin() {
   const session = await getSession();
   if (!session) redirect("/login");
-  // Vérifier le rôle dans la DB (source de vérité fiable)
+  // Le rôle du cookie peut être périmé : on retranche sur la base.
   const user = await prisma.user.findUnique({
     where: { id: session.userId },
     select: { role: true, suspended: true },
@@ -175,13 +153,7 @@ export async function requireAdmin() {
 export async function canAccessEvent(eventId) {
   const session = await getSession();
   if (!session) return false;
-
-  const user = await prisma.user.findUnique({
-    where: { id: session.userId },
-    select: { role: true },
-  });
-  if (!user) return false;
-  if (user.role === "admin") return true;
+  if (session.role === "admin") return true;
 
   const event = await prisma.event.findUnique({
     where: { id: eventId },
@@ -190,8 +162,9 @@ export async function canAccessEvent(eventId) {
   if (!event) return false;
   if (event.userId === session.userId) return true;
 
-  const collab = await prisma.event_Collaborator.findFirst({
+  const collab = await prisma.eventCollaborator.findFirst({
     where: { eventId, userId: session.userId, accepted: true },
+    select: { id: true },
   });
   return !!collab;
 }
@@ -199,12 +172,8 @@ export async function canAccessEvent(eventId) {
 export async function isEventOwnerOrAdmin(eventId) {
   const session = await getSession();
   if (!session) return false;
-  const user = await prisma.user.findUnique({
-    where: { id: session.userId },
-    select: { role: true },
-  });
-  if (!user) return false;
-  if (user.role === "admin") return true;
+  if (session.role === "admin") return true;
+
   const event = await prisma.event.findUnique({
     where: { id: eventId },
     select: { userId: true },
@@ -212,11 +181,13 @@ export async function isEventOwnerOrAdmin(eventId) {
   return event?.userId === session.userId;
 }
 
+// ─── Profil ──────────────────────────────────────────────────────────────────
+
 export async function updateProfile(name, company, phone) {
   const session = await getSession();
   if (!session) throw new Error("Non authentifié");
 
-  const user = await prisma.user.update({
+  return prisma.user.update({
     where: { id: session.userId },
     data: {
       name: name !== undefined ? name : undefined,
@@ -225,8 +196,6 @@ export async function updateProfile(name, company, phone) {
     },
     select: { id: true, email: true, name: true, company: true, phone: true },
   });
-
-  return user;
 }
 
 export async function changePassword(currentPassword, newPassword) {
@@ -238,28 +207,39 @@ export async function changePassword(currentPassword, newPassword) {
       "Le nouveau mot de passe doit contenir au moins 8 caractères",
     );
 
-  const user = await prisma.user.findUnique({ where: { id: session.userId } });
-  if (!user) throw new Error("Utilisateur introuvable");
+  try {
+    await auth.api.changePassword({
+      body: {
+        currentPassword,
+        newPassword,
+        revokeOtherSessions: true,
+      },
+      headers: await headers(),
+    });
+  } catch (error) {
+    if (error?.body?.message) throw new Error("Mot de passe actuel incorrect");
+    throw new Error("Impossible de changer le mot de passe");
+  }
 
-  const isValid = await verifyPassword(currentPassword, user.password);
-  if (!isValid) throw new Error("Mot de passe actuel incorrect");
-
-  const hash = await hashPassword(newPassword);
+  // Le hash hérité ne doit plus servir de porte dérobée.
   await prisma.user.update({
     where: { id: session.userId },
-    data: { password: hash },
+    data: { legacyPassword: null },
   });
 
   return { success: true };
 }
 
-// ─── Suppression de compte ────────────────────────────────────────────────────────────
+// ─── Suppression de compte ───────────────────────────────────────────────────
 
 export async function deleteMyAccount() {
   const session = await getSession();
   if (!session) throw new Error("Non authentifié");
-  console.log(session);
-  const user = await prisma.user.findUnique({ where: { id: session.userId } });
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.userId },
+    select: { id: true, role: true },
+  });
   if (!user) throw new Error("Utilisateur introuvable");
   if (user.role === "admin") {
     throw new Error(
@@ -267,35 +247,46 @@ export async function deleteMyAccount() {
     );
   }
 
-  // 1. Trouver un administrateur pour lui réassigner les templates créés par l'utilisateur
-  // Cela empêchera la suppression en cascade des templates (bibliothèque communautaire)
+  // Les modèles partagés survivent à leur auteur : on les réassigne à un admin
+  // avant la suppression en cascade.
   let admin = await prisma.user.findFirst({
     where: { role: "admin", id: { not: user.id } },
+    select: { id: true },
   });
 
-  // S'il n'y a aucun admin, créer un compte Ghost (système)
   if (!admin) {
-    const passwordHash = await hashPassword("GhostInvyra!2026");
     admin = await prisma.user.create({
       data: {
         email: `ghost_${Date.now()}@invyra.local`,
         name: "Invyra System",
-        password: passwordHash,
         role: "admin",
+        emailVerified: true,
       },
+      select: { id: true },
     });
+    // Compte technique sans identifiants : aucun Account n'est créé, il est
+    // donc impossible de s'y connecter.
   }
 
-  // 2. Réassignation des templates
   await prisma.template.updateMany({
     where: { userId: user.id },
     data: { userId: admin.id },
   });
 
-  // 3. Suppression du compte de l'utilisateur (événements, collaborateurs, etc seront effacés en cascade)
+  await auth.api.signOut({ headers: await headers() });
   await prisma.user.delete({ where: { id: user.id } });
 
-  // 4. Déconnexion
-  await clearSession();
   return { success: true };
+}
+
+// ─── Compatibilité ───────────────────────────────────────────────────────────
+
+/** @deprecated better-auth hache lui-même ; conservé pour les scripts. */
+export async function hashPassword(password) {
+  return bcrypt.hash(password, 12);
+}
+
+/** @deprecated better-auth vérifie lui-même ; conservé pour les scripts. */
+export async function verifyPassword(password, hashedPassword) {
+  return bcrypt.compare(password, hashedPassword);
 }

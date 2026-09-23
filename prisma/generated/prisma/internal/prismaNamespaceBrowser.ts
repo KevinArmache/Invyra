@@ -52,9 +52,12 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  Session: 'Session',
+  Account: 'Account',
+  Verification: 'Verification',
   Template: 'Template',
   Event: 'Event',
-  Event_Collaborator: 'Event_Collaborator',
+  EventCollaborator: 'EventCollaborator',
   Guest: 'Guest'
 } as const
 
@@ -77,17 +80,65 @@ export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof
 export const UserScalarFieldEnum = {
   id: 'id',
   email: 'email',
+  emailVerified: 'emailVerified',
   name: 'name',
+  image: 'image',
   company: 'company',
   phone: 'phone',
-  password: 'password',
   role: 'role',
+  plan: 'plan',
   suspended: 'suspended',
+  legacyPassword: 'legacyPassword',
   createdAt: 'createdAt',
-  plan: 'plan'
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const AccountScalarFieldEnum = {
+  id: 'id',
+  accountId: 'accountId',
+  providerId: 'providerId',
+  userId: 'userId',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  idToken: 'idToken',
+  accessTokenExpiresAt: 'accessTokenExpiresAt',
+  refreshTokenExpiresAt: 'refreshTokenExpiresAt',
+  scope: 'scope',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
+
+
+export const VerificationScalarFieldEnum = {
+  id: 'id',
+  identifier: 'identifier',
+  value: 'value',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
 export const TemplateScalarFieldEnum = {
@@ -98,6 +149,7 @@ export const TemplateScalarFieldEnum = {
   name: 'name',
   status: 'status',
   config: 'config',
+  featured: 'featured',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -127,7 +179,7 @@ export const EventScalarFieldEnum = {
 export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
-export const Event_CollaboratorScalarFieldEnum = {
+export const EventCollaboratorScalarFieldEnum = {
   id: 'id',
   eventId: 'eventId',
   userId: 'userId',
@@ -137,7 +189,7 @@ export const Event_CollaboratorScalarFieldEnum = {
   createdAt: 'createdAt'
 } as const
 
-export type Event_CollaboratorScalarFieldEnum = (typeof Event_CollaboratorScalarFieldEnum)[keyof typeof Event_CollaboratorScalarFieldEnum]
+export type EventCollaboratorScalarFieldEnum = (typeof EventCollaboratorScalarFieldEnum)[keyof typeof EventCollaboratorScalarFieldEnum]
 
 
 export const GuestScalarFieldEnum = {

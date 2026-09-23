@@ -4,99 +4,112 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Invyra - Luxury Dark Theme with Gold Accents */
-:root {
-  /* Dark luxury base - deep charcoal */
-  --background: oklch(0.12 0.01 250);
-  --foreground: oklch(0.95 0.01 250);
-  
-  /* Card surfaces - slightly lighter */
-  --card: oklch(0.15 0.01 250);
-  --card-foreground: oklch(0.95 0.01 250);
-  
-  /* Popovers */
-  --popover: oklch(0.13 0.01 250);
-  --popover-foreground: oklch(0.95 0.01 250);
-  
-  /* Primary - Champagne gold */
-  --primary: oklch(0.82 0.12 85);
-  --primary-foreground: oklch(0.15 0.01 250);
-  
-  /* Secondary - Muted gold */
-  --secondary: oklch(0.25 0.02 250);
-  --secondary-foreground: oklch(0.90 0.01 250);
-  
-  /* Muted elements */
-  --muted: oklch(0.22 0.01 250);
-  --muted-foreground: oklch(0.65 0.01 250);
-  
-  /* Accent - Rose gold */
-  --accent: oklch(0.70 0.10 50);
-  --accent-foreground: oklch(0.15 0.01 250);
-  
-  /* Destructive */
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.95 0 0);
-  
-  /* Borders and inputs */
-  --border: oklch(0.28 0.02 250);
-  --input: oklch(0.20 0.01 250);
-  --ring: oklch(0.82 0.12 85);
-  
-  /* Charts */
-  --chart-1: oklch(0.82 0.12 85);
-  --chart-2: oklch(0.70 0.10 50);
-  --chart-3: oklch(0.60 0.15 180);
-  --chart-4: oklch(0.75 0.10 280);
-  --chart-5: oklch(0.65 0.20 340);
-  
-  --radius: 0.625rem;
-  
-  /* Sidebar */
-  --sidebar: oklch(0.10 0.01 250);
-  --sidebar-foreground: oklch(0.95 0.01 250);
-  --sidebar-primary: oklch(0.82 0.12 85);
-  --sidebar-primary-foreground: oklch(0.15 0.01 250);
-  --sidebar-accent: oklch(0.20 0.02 250);
-  --sidebar-accent-foreground: oklch(0.90 0.01 250);
-  --sidebar-border: oklch(0.25 0.02 250);
-  --sidebar-ring: oklch(0.82 0.12 85);
-}
+/* ═══════════════════════════════════════════════════════════════════════════
+   Invyra — système de design « luxe modernisé »
+   ───────────────────────────────────────────────────────────────────────────
+   Trois règles tiennent l'ensemble :
+   1. Le fond est un noir chaud, jamais un gris bleuté. Tout le neutre partage
+      la même teinte (~70°) pour que les surfaces se répondent.
+   2. L'or est un accent rare : filets, état actif, un chiffre clé, le CTA
+      principal. S'il couvre plus de ~5 % d'un écran, il a cessé d'être un
+      accent.
+   3. Les titres sont en serif éditoriale, l'interface en sans. On ne mélange
+      jamais les deux rôles.
 
-/* Keep dark class for compatibility */
-.dark {
-  --background: oklch(0.12 0.01 250);
-  --foreground: oklch(0.95 0.01 250);
-  --card: oklch(0.15 0.01 250);
-  --card-foreground: oklch(0.95 0.01 250);
-  --popover: oklch(0.13 0.01 250);
-  --popover-foreground: oklch(0.95 0.01 250);
-  --primary: oklch(0.82 0.12 85);
-  --primary-foreground: oklch(0.15 0.01 250);
-  --secondary: oklch(0.25 0.02 250);
-  --secondary-foreground: oklch(0.90 0.01 250);
-  --muted: oklch(0.22 0.01 250);
-  --muted-foreground: oklch(0.65 0.01 250);
-  --accent: oklch(0.70 0.10 50);
-  --accent-foreground: oklch(0.15 0.01 250);
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.95 0 0);
-  --border: oklch(0.28 0.02 250);
-  --input: oklch(0.20 0.01 250);
-  --ring: oklch(0.82 0.12 85);
-  --sidebar: oklch(0.10 0.01 250);
-  --sidebar-foreground: oklch(0.95 0.01 250);
-  --sidebar-primary: oklch(0.82 0.12 85);
-  --sidebar-primary-foreground: oklch(0.15 0.01 250);
-  --sidebar-accent: oklch(0.20 0.02 250);
-  --sidebar-accent-foreground: oklch(0.90 0.01 250);
-  --sidebar-border: oklch(0.25 0.02 250);
-  --sidebar-ring: oklch(0.82 0.12 85);
+   L'interface est volontairement sombre uniquement : une variante claire
+   crédible demanderait sa propre direction, et un demi-thème clair est pire
+   que pas de thème clair.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Neutres : noir chaud → ivoire ──────────────────────────────────── */
+  --ink-900: oklch(0.135 0.005 70); /* fond de page */
+  --ink-850: oklch(0.163 0.006 70); /* surface au repos */
+  --ink-800: oklch(0.193 0.007 70); /* surface élevée, survol */
+  --ink-700: oklch(0.245 0.008 70); /* bordures fortes, champs */
+  --ink-600: oklch(0.305 0.009 70); /* séparateurs */
+  /* L relevé de 0.545 à 0.60 : à 0.545 le contraste tombait à 3,9:1 sur une
+     carte, sous le seuil AA de 4,5:1 pour du texte courant — or ce jeton porte
+     les libellés secondaires et les sur-titres. Mesuré, pas estimé. */
+  --ink-400: oklch(0.6 0.011 70); /* texte tertiaire */
+  --ink-300: oklch(0.685 0.012 75); /* texte secondaire */
+  --ink-100: oklch(0.925 0.011 80); /* texte courant */
+  --ink-50: oklch(0.975 0.009 85); /* titres, ivoire */
+
+  /* ── Or : un seul accent, trois intensités ──────────────────────────── */
+  --gold-bright: oklch(0.875 0.095 88); /* survol, reflets */
+  --gold: oklch(0.805 0.115 84); /* champagne, couleur de marque */
+  --gold-deep: oklch(0.665 0.125 70); /* dégradés, texte sur clair */
+
+  /* ── États ──────────────────────────────────────────────────────────── */
+  --positive: oklch(0.755 0.145 155);
+  --caution: oklch(0.805 0.135 75);
+  --negative: oklch(0.655 0.185 22);
+  --info: oklch(0.755 0.095 235);
+
+  /* ── Jetons sémantiques consommés par shadcn ────────────────────────── */
+  --background: var(--ink-900);
+  --foreground: var(--ink-100);
+
+  --card: var(--ink-850);
+  --card-foreground: var(--ink-100);
+
+  --popover: var(--ink-800);
+  --popover-foreground: var(--ink-100);
+
+  --primary: var(--gold);
+  --primary-foreground: oklch(0.16 0.02 70);
+
+  --secondary: var(--ink-800);
+  --secondary-foreground: var(--ink-100);
+
+  --muted: var(--ink-800);
+  --muted-foreground: var(--ink-300);
+
+  --accent: var(--ink-800);
+  --accent-foreground: var(--ink-50);
+
+  --destructive: var(--negative);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --border: var(--ink-700);
+  --input: var(--ink-700);
+  --ring: var(--gold);
+
+  /* ── Graphiques : l'or d'abord, puis des teintes qui ne se battent pas
+        avec lui (on s'écarte en teinte, pas en saturation). ───────────── */
+  --chart-1: var(--gold);
+  --chart-2: oklch(0.715 0.105 35);
+  --chart-3: oklch(0.685 0.085 195);
+  --chart-4: oklch(0.745 0.095 135);
+  --chart-5: oklch(0.665 0.105 295);
+
+  /* ── Barre latérale ─────────────────────────────────────────────────── */
+  --sidebar: oklch(0.115 0.005 70);
+  --sidebar-foreground: var(--ink-300);
+  --sidebar-primary: var(--gold);
+  --sidebar-primary-foreground: oklch(0.16 0.02 70);
+  --sidebar-accent: var(--ink-800);
+  --sidebar-accent-foreground: var(--ink-50);
+  --sidebar-border: oklch(0.225 0.007 70);
+  --sidebar-ring: var(--gold);
+
+  /* ── Formes ─────────────────────────────────────────────────────────── */
+  /* Un rayon discret : le luxe se lit à des angles nets, pas à des pilules. */
+  --radius: 0.5rem;
+
+  /* ── Élévation : une ombre portée noire plus un filet clair au-dessus,
+        c'est ce qui fait qu'une surface sombre a l'air posée sur le fond. */
+  --elevation-1: 0 1px 2px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(1 0 0 / 0.03);
+  --elevation-2: 0 4px 16px -4px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.04);
+  --elevation-3: 0 16px 48px -12px oklch(0 0 0 / 0.65), inset 0 1px 0 oklch(1 0 0 / 0.05);
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-display: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -116,15 +129,13 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -133,58 +144,314 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Teintes nommées, pour sortir du carcan sémantique quand il le faut. */
+  --color-ink-900: var(--ink-900);
+  --color-ink-850: var(--ink-850);
+  --color-ink-800: var(--ink-800);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-ink-400: var(--ink-400);
+  --color-ink-300: var(--ink-300);
+  --color-ink-100: var(--ink-100);
+  --color-ink-50: var(--ink-50);
+
+  --color-gold: var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-deep: var(--gold-deep);
+  --color-positive: var(--positive);
+  --color-caution: var(--caution);
+  --color-negative: var(--negative);
+  --color-info: var(--info);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+
+  --shadow-elevation-1: var(--elevation-1);
+  --shadow-elevation-2: var(--elevation-2);
+  --shadow-elevation-3: var(--elevation-3);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/40;
   }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  }
+
+  /* Les titres sont en serif par défaut : on ne répète pas font-display sur
+     chaque balise, et un h2 oublié reste dans le bon registre. */
+  h1, h2, h3, h4 {
+    @apply font-display;
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+  }
+
+  /* Chiffres alignés partout : un tableau de statistiques ne doit pas danser
+     quand une valeur change. */
+  table, [data-numeric] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: var(--gold);
+    color: var(--primary-foreground);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ink-700);
+    border-radius: 999px;
+    border: 3px solid var(--background);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ink-600);
   }
 }
 
-/* Custom animations for Invyra */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+@layer components {
+  /* ── Filet or ────────────────────────────────────────────────────────
+     Le motif signature : une règle d'un pixel qui s'éteint à ses extrémités.
+     Sous un titre, elle fait tout le travail qu'un aplat doré ferait mal. */
+  .rule-gold {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--gold) 15%,
+      var(--gold) 85%,
+      transparent
+    );
+    opacity: 0.55;
+  }
+
+  .rule-gold-left {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(to right, var(--gold), transparent);
+    opacity: 0.55;
+  }
+
+  /* ── Surface ─────────────────────────────────────────────────────────
+     Une carte au repos. Le filet clair intérieur en haut est ce qui la
+     décolle du fond ; sans lui, une carte sombre sur fond sombre est plate. */
+  .surface {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--elevation-1);
+  }
+
+  .surface-raised {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--elevation-2);
+  }
+
+  /* Carte cliquable : la bordure prend l'or, rien d'autre ne bouge. */
+  .surface-interactive {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--elevation-1);
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      background-color 200ms ease;
+  }
+  .surface-interactive:hover {
+    border-color: color-mix(in oklch, var(--gold) 40%, transparent);
+    background: var(--ink-800);
+    box-shadow: var(--elevation-2);
+  }
+
+  /* ── Texte or ────────────────────────────────────────────────────────
+     Un dégradé très court : l'or franc en haut, l'or profond en bas. Un
+     dégradé large sur du texte le rend illisible à petite taille. */
+  .text-gold {
+    background: linear-gradient(
+      160deg,
+      var(--gold-bright) 0%,
+      var(--gold) 45%,
+      var(--gold-deep) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--gold);
+  }
+
+  /* ── Étiquette ───────────────────────────────────────────────────────
+     Petites capitales espacées : sert de sur-titre de section. */
+  .eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+  }
+
+  /* ── Grain ───────────────────────────────────────────────────────────
+     Un bruit très faible posé sur les grands aplats sombres. Il casse le
+     banding des dégradés, que les écrans 8 bits rendent en bandes visibles. */
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Halo ────────────────────────────────────────────────────────────
+     Lueur dorée diffuse derrière un élément de héros. */
+  .glow-gold {
+    background: radial-gradient(
+      ellipse 60% 50% at 50% 50%,
+      color-mix(in oklch, var(--gold) 18%, transparent),
+      transparent 70%
+    );
+  }
+}
+
+@layer utilities {
+  /* Masque de fondu en bas d'une zone défilante. */
+  .fade-bottom {
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ── Animations ───────────────────────────────────────────────────────── */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  from {
+    background-position: -150% 0;
+  }
+  to {
+    background-position: 250% 0;
+  }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.8;
+  }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+/* Entrée au chargement, en CSS et non en JavaScript.
+   Au-dessus de la ligne de flottaison, une animation pilotée par le JS laisse
+   la zone vide tant que l'hydratation n'a pas eu lieu. En CSS, elle démarre au
+   premier rendu et se termine même si le script ne se charge jamais.
+   Le décalage se règle par --rise-delay sur l'élément. */
+.animate-rise {
+  animation: rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0ms);
 }
 
-.animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 3s infinite;
+@keyframes rise-card {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
+.animate-rise-card {
+  animation: rise-card 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0ms);
 }
 
-/* Glass morphism utility */
-.glass {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* Révélation au défilement, sans une ligne de JavaScript.
+   `animation-timeline: view()` accroche l'animation à la position de
+   l'élément dans la fenêtre. Là où ce n'est pas encore implémenté (Firefox à
+   ce jour), la règle entière est ignorée et le contenu s'affiche simplement :
+   c'est la bonne dégradation. Une bibliothèque d'animation ferait l'inverse —
+   elle poserait opacity:0 au rendu serveur et laisserait la section vide si le
+   script ne s'exécute pas. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 50%;
+    }
+  }
 }
 
-/* Text gradient utility */
-.text-gradient {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.animate-breathe {
+  animation: breathe 5s ease-in-out infinite;
+}
+
+/* Squelette de chargement : le reflet doré passe une fois par seconde et
+   demie, assez lent pour ne pas être nerveux. */
+.skeleton {
+  background:
+    linear-gradient(
+        90deg,
+        transparent,
+        color-mix(in oklch, var(--gold) 8%, transparent),
+        transparent
+      )
+      0 0 / 200% 100% no-repeat,
+    var(--ink-800);
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Quiconque a demandé moins d'animation n'en reçoit aucune. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

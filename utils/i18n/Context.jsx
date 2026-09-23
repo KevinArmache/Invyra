@@ -1,70 +1,51 @@
-'use client'
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useCallback, useContext, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
-const I18nContext = createContext()
+import { LOCALE_COOKIE, normalizeLocale, translate } from "./config";
 
-export function I18nProvider({ children }) {
-  const [locale, setLocale] = useState('fr')
-  const [translations, setTranslations] = useState(null)
+const I18nContext = createContext(null);
 
-  useEffect(() => {
-    // Check localStorage first
-    const savedLocale = localStorage.getItem('app-locale')
-    if (savedLocale) {
-      setLocale(savedLocale)
-    } else {
-      // Auto-detect browser language if possible, fallback to French
-      const browserLang = navigator.language?.split('-')[0]
-      if (browserLang === 'en' || browserLang === 'fr') {
-        setLocale(browserLang)
-      }
-    }
-  }, [])
+/**
+ * Le dictionnaire arrive déjà résolu depuis le layout racine (Server
+ * Component). Le contexte ne charge donc rien : il ne fait que distribuer aux
+ * composants clients ce que le serveur a déjà calculé, ce qui supprime
+ * l'affichage transitoire des clés brutes au montage.
+ */
+export function I18nProvider({ locale, dictionary, children }) {
+  const router = useRouter();
 
-  useEffect(() => {
-    // Dynamic import to avoid loading all languages at once
-    import(`../../locales/${locale}.json`)
-      .then(module => {
-        setTranslations(module.default)
-      })
-      .catch(err => console.error(`Failed to load translations for ${locale}`, err))
-  }, [locale])
+  const changeLocale = useCallback(
+    (nextLocale) => {
+      const safe = normalizeLocale(nextLocale);
+      // Un an, sur tout le site. `SameSite=Lax` suffit : aucun enjeu de
+      // sécurité, c'est une préférence d'affichage.
+      document.cookie = `${LOCALE_COOKIE}=${safe}; path=/; max-age=31536000; samesite=lax`;
+      // refresh() rejoue le rendu serveur avec la nouvelle langue sans perdre
+      // l'état client de la page.
+      router.refresh();
+    },
+    [router],
+  );
 
-  const t = (key) => {
-    if (!translations) return key
-    
-    // Support nested keys like "editor.title"
-    const keys = key.split('.')
-    let current = translations
-    
-    for (const k of keys) {
-      if (current[k] === undefined) {
-        console.warn(`Translation key not found: ${key}`)
-        return key
-      }
-      current = current[k]
-    }
-    
-    return current
-  }
+  const value = useMemo(
+    () => ({
+      locale,
+      changeLocale,
+      t: (key) => translate(dictionary, key),
+      isReady: true,
+    }),
+    [locale, dictionary, changeLocale],
+  );
 
-  const changeLocale = (newLocale) => {
-    setLocale(newLocale)
-    localStorage.setItem('app-locale', newLocale)
-  }
-
-  return (
-    <I18nContext.Provider value={{ locale, changeLocale, t, isReady: !!translations }}>
-      {children}
-    </I18nContext.Provider>
-  )
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
 export function useTranslation() {
-  const context = useContext(I18nContext)
-  if (context === undefined) {
-    throw new Error('useTranslation must be used within an I18nProvider')
+  const context = useContext(I18nContext);
+  if (!context) {
+    throw new Error("useTranslation doit être utilisé dans un I18nProvider");
   }
-  return context
+  return context;
 }

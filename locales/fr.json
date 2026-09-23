@@ -6,7 +6,9 @@
     "sign_in": "Se connecter",
     "get_started": "Commencer",
     "dashboard": "Tableau de Bord",
-    "language": "Langue"
+    "language": "Langue",
+    "templates": "Modèles",
+    "availability": "Disponibilités"
   },
   "sidebar": {
     "dashboard": "Tableau de Bord",
@@ -25,7 +27,9 @@
     "submit": "Se connecter",
     "submitting": "Connexion...",
     "no_account": "Vous n'avez pas de compte ?",
-    "create_one": "En créer un"
+    "create_one": "En créer un",
+    "error_generic": "Email ou mot de passe invalide",
+    "tagline": "Vos invitations vous attendent."
   },
   "register": {
     "title": "Créer un Compte",
@@ -40,7 +44,14 @@
     "has_account": "Vous avez déjà un compte ?",
     "sign_in": "Se connecter",
     "phone": "Numéro de téléphone",
-    "phone_placeholder": "+33 6 12 34 56 78"
+    "phone_placeholder": "+33 6 12 34 56 78",
+    "confirm_password": "Confirmer le mot de passe",
+    "password_mismatch": "Les mots de passe ne correspondent pas",
+    "password_too_short": "Le mot de passe doit contenir au moins 8 caractères",
+    "company": "Société",
+    "company_placeholder": "Optionnel",
+    "optional": "optionnel",
+    "tagline": "Composez votre première invitation en quelques minutes."
   },
   "settings": {
     "title": "Paramètres",
@@ -76,7 +87,12 @@
     "delete_account": "Supprimer le Compte",
     "delete_desc": "La suppression de compte est actuellement possible. Contactez le support si vous avez des problèmes pour supprimer votre compte.",
     "delete_prompt": "Tapez SUPPRIMER pour confirmer la suppression définitive de votre compte :",
-    "delete_cancel": "Suppression annulée : le mot de confirmation est incorrect."
+    "delete_cancel": "Suppression annulée : le mot de confirmation est incorrect.",
+    "delete_confirm_word": "SUPPRIMER",
+    "delete_dialog_title": "Supprimer définitivement votre compte ?",
+    "delete_dialog_body": "Vos événements, vos invités et leurs réponses seront effacés. Vos modèles partagés resteront disponibles pour les autres. Cette action est irréversible.",
+    "delete_type_to_confirm": "Tapez {word} pour confirmer",
+    "admin_cannot_delete": "Les comptes administrateur ne peuvent pas être supprimés depuis cette page."
   },
   "dashboard": {
     "title": "Tableau de Bord",
@@ -153,7 +169,6 @@
     "create": "Créer l'Événement",
     "creating": "Création en cours..."
   },
-
   "analytics": {
     "title": "Analytiques",
     "subtitle": "Statistiques d'utilisation de vos événements",
@@ -245,7 +260,9 @@
       "analytics": "Statistiques",
       "settings": "Paramètres",
       "sign_out": "Déconnexion",
-      "open_sidebar": "Ouvrir le menu"
+      "open_sidebar": "Ouvrir le menu",
+      "admin": "Administration",
+      "account": "Mon compte"
     },
     "admin": {
       "overview": "Vue d'ensemble",
@@ -276,7 +293,9 @@
       "reactivate_account": "Réactiver le compte",
       "suspend_account": "Suspendre le compte",
       "delete_forever": "Supprimer définitivement",
-      "no_users": "Aucun utilisateur"
+      "no_users": "Aucun utilisateur",
+      "you": "vous",
+      "delete_account_body": "Ses événements, ses invités et leurs réponses seront supprimés. Les modèles qu'il a partagés sont réattribués et restent disponibles."
     },
     "analytics": {
       "title": "Statistiques",
@@ -376,7 +395,20 @@
         "success": "Événement mis à jour",
         "preview_title": "Aperçu en Direct",
         "no_preview": "Aucun modèle personnalisé n'a été assigné.",
-        "select_template": "Sélectionner un modèle"
+        "select_template": "Sélectionner un modèle",
+        "configure_invitation": "Configurer l'invitation",
+        "save_and_exit": "Enregistrer et quitter",
+        "template_saved": "Le modèle de cet événement a été enregistré.",
+        "template_applied": "Une copie du modèle a été appliquée à l'événement.",
+        "status_label": "Statut",
+        "status_draft": "Brouillon",
+        "status_active": "Actif",
+        "status_archived": "Archivé",
+        "tab_gallery": "Modèles",
+        "tab_customize": "Personnaliser",
+        "template_applied_pending": "Modèle appliqué. Personnalisez-le puis enregistrez.",
+        "copy_notice": "Vous modifiez uniquement l'invitation de cet événement : le modèle d'origine n'est jamais touché.",
+        "copy_source": "Modèle de départ :"
       },
       "details": {
         "actions": {
@@ -389,7 +421,8 @@
           "guest_deleted": "Invité supprimé.",
           "back_to_events": "Retour aux événements",
           "edit": "Éditer",
-          "delete": "Supprimer"
+          "delete": "Supprimer",
+          "customize_invitation": "Personnaliser l'invitation"
         },
         "tabs": {
           "overview": "Aperçu",
@@ -404,7 +437,9 @@
           "declined": "Refusés",
           "copy_link": "Copier le lien",
           "link_copied": "Lien copié !",
-          "active_template": "Aperçu du modèle actif"
+          "active_template": "Aperçu du modèle actif",
+          "message": "Message personnalisé",
+          "no_details": "Aucune description ni message personnalisé."
         },
         "guests": {
           "title": "Liste des invités",
@@ -421,12 +456,25 @@
           "status": {
             "pending": "En attente",
             "attending": "Confirmé",
-            "declined": "Refusé"
+            "declined": "Refusé",
+            "maybe": "Peut-être"
           },
           "send_email": "Envoyer email",
           "send_whatsapp": "Envoyer WhatsApp",
-          "delete_confirm": "Supprimer cet invité ?"
-        }
+          "delete_confirm": "Supprimer cet invité ?",
+          "resend": "Renvoyer",
+          "search": "Rechercher un invité...",
+          "import_failed": "import(s) en échec",
+          "bulk_needs_template": "Choisissez d'abord le design de l'invitation pour pouvoir l'envoyer."
+        },
+        "collaborators": "Collaborateurs",
+        "collaborators_hint": "L'utilisateur doit déjà avoir un compte Invyra.",
+        "no_collaborators": "Aucun collaborateur pour le moment",
+        "collaborator_added": "{name} a été ajouté",
+        "collaborator_removed": "Collaborateur retiré",
+        "role_updated": "Rôle mis à jour",
+        "role_editor": "Éditeur",
+        "role_viewer": "Lecteur"
       }
     },
     "templates": {
@@ -435,7 +483,7 @@
         "subtitle": "Créez et gérez vos designs réutilisables pour vos invitations.",
         "new_btn": "Nouveau modèle",
         "no_templates": "Aucun modèle sauvegardé",
-        "no_templates_desc": "Créez votre propre modèle personnalisable par code, pour le réutiliser lors de vos prochains événements.",
+        "no_templates_desc": "Partez d'un thème et personnalisez-le en quelques minutes, sans écrire de code.",
         "create_first": "Créer mon premier modèle",
         "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce modèle ?",
         "delete_success": "Modèle supprimé avec succès",
@@ -443,7 +491,17 @@
         "edit_btn": "Éditer le modèle",
         "status_draft_badge": "Brouillon",
         "status_in_progress_badge": "En construction",
-        "status_completed_badge": "Terminé"
+        "status_completed_badge": "Terminé",
+        "search_placeholder": "Rechercher un modèle...",
+        "usage_label": "utilisations",
+        "usage_hint": "Nombre de fois où ce modèle a été choisi pour un événement",
+        "duplicate_btn": "Dupliquer",
+        "duplicate_success": "Modèle dupliqué : vous pouvez le personnaliser.",
+        "feature_btn": "Afficher sur l'accueil",
+        "unfeature_btn": "Retirer de l'accueil",
+        "featured_badge": "Accueil",
+        "feature_success": "Le modèle apparaît maintenant sur l'accueil.",
+        "unfeature_success": "Le modèle a été retiré de l'accueil."
       },
       "editor": {
         "title": "Éditeur de Modèle",
@@ -458,7 +516,164 @@
         "mode_code": "Mode code",
         "mode_preview": "Mode aperçu",
         "variables_title": "Variables d'Événement",
-        "variables_desc": "Utilisez ces variables dans votre code HTML ou JS pour injecter les données de l'événement."
+        "variables_desc": "Utilisez ces variables dans votre code HTML ou JS pour injecter les données de l'événement.",
+        "title_new": "Créer un modèle",
+        "title_edit": "Modifier le modèle",
+        "name_required": "Donnez un nom à votre modèle."
+      }
+    },
+    "themes": {
+      "picker": {
+        "title": "Choisissez un thème",
+        "subtitle": "Vous pourrez tout personnaliser ensuite : couleurs, polices, photos et textes.",
+        "filter_all": "Tous",
+        "code_title": "Code (expert)",
+        "code_desc": "HTML, CSS et JavaScript écrits à la main."
+      },
+      "occasions": {
+        "wedding": "Mariage",
+        "gala": "Gala",
+        "corporate": "Professionnel",
+        "baptism": "Baptême",
+        "anniversary": "Anniversaire de mariage",
+        "birthday": "Anniversaire",
+        "party": "Soirée"
+      },
+      "catalog": {
+        "eclat": "Grand mariage : photo plein écran, titre à la feuille d'or, poussière d'or, compte à rebours et confettis.",
+        "elegance": "Carte translucide et filet doré, titre posé sur la photo. Pour les grandes occasions.",
+        "minimal": "Page claire et aérée, typographie forte. Sobre et moderne.",
+        "festive": "Dégradé vif, confettis et boutons ronds. Pour faire la fête."
+      },
+      "editor": {
+        "theme_label": "Thème",
+        "change_theme_hint": "Changer de thème conserve vos textes et vos photos.",
+        "presets": "Ambiances",
+        "style": "Couleurs & polices",
+        "show_section": "Afficher cette section",
+        "hidden_badge": "masquée",
+        "details_hint": "Date, heure, lieu et tenue sont repris automatiquement de la fiche de l'événement.",
+        "tokens_hint": "Jetons utilisables :",
+        "mode_edit": "Édition",
+        "opening_hint": "Le premier écran que voit l'invité. Laissez le monogramme vide pour utiliser les initiales du titre de l'événement (Camille & Antoine donne C&A).",
+        "show_opening": "Voir l'ouverture",
+        "replay_opening": "Rejouer l'ouverture",
+        "code_confirm_title": "Passer ce modèle en mode code ?",
+        "code_confirm_desc": "Le modèle sera converti en HTML, CSS et JavaScript modifiables, écran d'ouverture compris. Le mode sans code restera disponible pour changer les textes, les images et les couleurs. Rien n'est enregistré tant que vous ne cliquez pas sur Enregistrer.",
+        "code_confirm_btn": "Passer en mode code"
+      },
+      "style": {
+        "background": "Fond",
+        "background2": "Fond (dégradé)",
+        "card": "Carte",
+        "text": "Texte",
+        "accent": "Accent",
+        "accent2": "Accent secondaire",
+        "fontHeading": "Police des titres",
+        "fontBody": "Police du texte",
+        "radius": "Arrondis",
+        "overlay": "Assombrir la photo",
+        "fontScript": "Police calligraphiée",
+        "particles": "Poussière d'or animée",
+        "countdown": "Compte à rebours",
+        "confetti": "Confettis à la confirmation"
+      },
+      "sections": {
+        "opening": "Ouverture de l'invitation",
+        "hero": "En-tête",
+        "intro": "Message d'accueil",
+        "details": "Infos pratiques",
+        "story": "Histoire",
+        "program": "Programme",
+        "venue": "Lieu",
+        "dressCode": "Dress code",
+        "gallery": "Galerie",
+        "closing": "Mot de la fin",
+        "rsvp": "Réponse (RSVP)"
+      },
+      "fields": {
+        "image": "Photo",
+        "eyebrow": "Sur-titre",
+        "title": "Titre",
+        "title_placeholder": "Titre de l'événement",
+        "message": "Message",
+        "text": "Texte",
+        "items": "Étapes",
+        "time": "Heure",
+        "label": "Intitulé",
+        "mapUrl": "Lien vers la carte (Google Maps…)",
+        "images": "Photos",
+        "confirmed": "Bouton « oui »",
+        "maybe": "Bouton « peut-être »",
+        "declined": "Bouton « non »",
+        "style": "Style d'ouverture",
+        "monogram": "Monogramme",
+        "hint": "Invitation à ouvrir"
+      },
+      "image": {
+        "url_placeholder": "https://…",
+        "upload": "Importer",
+        "uploading": "Envoi…",
+        "remove": "Retirer",
+        "add": "Ajouter",
+        "upload_error": "L'image n'a pas pu être envoyée.",
+        "too_large": "Image trop lourde (5 Mo maximum)."
+      },
+      "list": {
+        "add_row": "Ajouter une étape",
+        "remove_row": "Supprimer"
+      },
+      "options": {
+        "style": {
+          "envelope": "Enveloppe",
+          "seal": "Cachet de cire",
+          "curtain": "Rideau"
+        }
+      },
+      "music": {
+        "label": "Musique à l'ouverture",
+        "hint": "Elle démarre quand l'invité ouvre son invitation, avec un fondu. Un bouton lui permet de la couper. MP3 conseillé, 15 Mo maximum.",
+        "placeholder": "Lien vers un fichier audio (https://…)",
+        "remove": "Retirer la musique",
+        "too_large": "Fichier audio trop lourd (15 Mo maximum)."
+      },
+      "mode": {
+        "label": "Mode d'édition",
+        "visual": "Sans code",
+        "code": "Code"
+      },
+      "visual": {
+        "intro": "Modifiez les textes, les images, les liens et les couleurs de l'invitation, de l'écran d'ouverture jusqu'au pied de page. La mise en page reste celle du modèle.",
+        "content": "Contenu",
+        "backgrounds": "Images de fond",
+        "colors": "Couleurs",
+        "colors_hint": "Chaque couleur est remplacée partout où elle apparaît dans l'invitation.",
+        "color": "Couleur",
+        "heading": "Titre",
+        "paragraph": "Paragraphe",
+        "button": "Bouton",
+        "link_text": "Texte du lien",
+        "list_item": "Élément de liste",
+        "text": "Texte",
+        "image": "Image",
+        "link": "Lien"
+      },
+      "code": {
+        "scope_label": "Partie de l'invitation",
+        "scope_invitation": "Invitation",
+        "scope_opening": "Écran d'ouverture",
+        "opening_to_code_desc": "Besoin d'aller plus loin que ces réglages ? Écrivez l'écran d'ouverture en HTML, CSS et JavaScript, à partir de l'ouverture actuelle.",
+        "opening_to_code_btn": "Modifier dans le code",
+        "opening_code_hint": "L'écran d'ouverture est écrit en code. L'élément qui porte l'attribut data-opening ouvre l'invitation au clic ; data-reveal-delay et data-remove-delay (en millisecondes) règlent le moment où l'invitation apparaît et celui où l'écran disparaît. Le jeton {{MONOGRAM}} affiche le monogramme ci-dessous.",
+        "opening_standard_btn": "Revenir à l'ouverture standard",
+        "opening_standard_title": "Revenir à l'ouverture standard ?",
+        "opening_standard_desc": "Le code de l'écran d'ouverture sera abandonné au profit des réglages (enveloppe, cachet ou rideau). Rien n'est enregistré tant que vous ne cliquez pas sur Enregistrer.",
+        "opening_standard_confirm": "Revenir aux réglages",
+        "fullscreen": "Coder en plein écran",
+        "exit_fullscreen": "Quitter le plein écran",
+        "exit_fullscreen_hint": "Quitter le plein écran (Échap)",
+        "show_preview": "Afficher l'aperçu",
+        "hide_preview": "Masquer l'aperçu"
       }
     }
   },
@@ -583,22 +798,9 @@
             "Envois d'emails massifs",
             "Support client prioritaire"
           ]
-        },
-        "enterprise": {
-          "name": "Agences / Pro",
-          "desc": "Pour les wedding planners",
-          "price": "Sur devis",
-          "period": "nous contacter",
-          "cta": "Prendre RDV",
-          "features": [
-            "Événements illimités",
-            "Retrait de la mention Invyra",
-            "Enregistrement de gros modèles",
-            "Multi-utilisateurs",
-            "Accès API"
-          ]
         }
-      }
+      },
+      "popular": "Le plus choisi"
     },
     "footer": {
       "brand": "Invyra",
@@ -614,6 +816,38 @@
         "examples": "Exemples d'invitations",
         "contact": "Support"
       }
+    },
+    "templates": {
+      "title": "Nos modèles, ",
+      "title_highlight": "prêts à personnaliser",
+      "subtitle": "Choisissez un design, ajoutez vos photos et vos textes : votre invitation est prête en quelques minutes.",
+      "preview": "Voir en direct"
+    },
+    "availability": {
+      "title": "Vérifiez votre ",
+      "title_highlight": "date",
+      "subtitle": "Les dates déjà retenues par nos clients apparaissent en doré. Le calendrier se met à jour tout seul à chaque nouvel événement.",
+      "multiple_note": "Une date réservée reste possible : nous accompagnons plusieurs mariages le même jour.",
+      "legend_free": "Disponible",
+      "legend_booked": "Date réservée, encore possible",
+      "month_free": "Aucune réservation ce mois-ci",
+      "month_booked_one": "date réservée ce mois-ci",
+      "month_booked_many": "dates réservées ce mois-ci",
+      "booked_one": "événement prévu",
+      "booked_many": "événements prévus",
+      "prev": "Mois précédent",
+      "next": "Mois suivant",
+      "cta": "Réserver ma date",
+      "upcoming": "Prochaines dates réservées",
+      "day_free": "Aucun mariage prévu ce jour-là : la date est libre.",
+      "wedding_one": "mariage déjà prévu ce jour-là",
+      "wedding_many": "mariages déjà prévus ce jour-là",
+      "still_possible": "La date reste possible : nous accompagnons plusieurs mariages le même jour.",
+      "book_this_date": "Réserver cette date",
+      "pick_a_date": "Touchez une date pour voir combien de mariages y sont déjà prévus.",
+      "mail_subject": "Demande de réservation",
+      "mail_body": "Bonjour,\n\nJe souhaite réserver la date du {date} pour notre mariage.\n\nNos prénoms :\nLieu de la réception :\nNombre d'invités (environ) :\nTéléphone :\n\nMerci et à bientôt !",
+      "mail_date_placeholder": "(date à préciser)"
     }
   }
 }

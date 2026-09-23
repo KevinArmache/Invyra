@@ -7,11 +7,11 @@ import {
   canAccessEvent,
 } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
+import { validateTemplateConfig } from "@/lib/invitation/document";
 
 const PLAN_LIMITS = {
   free: 1,
   premium: 1,
-  enterprise: Infinity,
 };
 
 export async function canCreateEvent() {
@@ -95,7 +95,7 @@ export async function getEventById(id) {
       where: { id },
       include: {
         templateCopy: {
-          select: { id: true, config: true },
+          select: { id: true, config: true, sourceTemplateId: true },
         },
         _count: {
           select: { guests: true },
@@ -112,6 +112,7 @@ export async function getEventById(id) {
       ...event,
       invitationTemplate:
         event.templateCopy?.config || event.invitationTemplate,
+      templateSourceId: event.templateCopy?.sourceTemplateId ?? null,
       templateCopy: undefined,
       guest_count: event._count.guests,
       confirmed_count: event.guests.filter((g) => g.rsvpStatus === "confirmed")
@@ -152,18 +153,18 @@ export async function createEvent(data) {
       custom_message,
     } = data;
     if (!title) throw new Error("Title is required");
-    console.log(data);
-    let adjustedDate = null;
-    if (event_date) {
-      adjustedDate = new Date(event_date); // Crée la date depuis la string
-      adjustedDate.setHours(adjustedDate.getHours() + 1); // Ajoute 1 heure
-    }
+
+    // `datetime-local` renvoie une heure locale ; `new Date()` la lit comme
+    // telle et Prisma la stocke correctement. Le +1 h appliqué ici décalait
+    // chaque événement d'une heure à la création — les dates enregistrées
+    // avant ce correctif sont donc en avance d'une heure en base.
+    const eventDate = event_date ? new Date(event_date) : null;
     const event = await prisma.event.create({
       data: {
         userId: user.userId,
         title,
         description: description || null,
-        eventDate: adjustedDate,
+        eventDate,
         location: location || null,
         time: time || null,
         dressCode: dress_code || null,
@@ -200,18 +201,17 @@ export async function updateEvent(id, data) {
     });
     if (!existing) throw new Error("Event not found");
 
-    // ⚡ Ajuste event_date +1 heure
-    let adjustedDate = undefined;
-    if (data.event_date) {
-      adjustedDate = new Date(data.event_date);
-      adjustedDate.setHours(adjustedDate.getHours() + 1);
-    }
+    // Voir createEvent : aucun décalage ne doit être appliqué ici non plus.
+    const eventDate = data.event_date ? new Date(data.event_date) : undefined;
 
     if (data.invitation_template !== undefined) {
+      const config = validateTemplateConfig(data.invitation_template, {
+        allowCode: user.role === "admin",
+      });
       if (existing.templateCopy?.id) {
         await prisma.template.update({
           where: { id: existing.templateCopy.id },
-          data: { config: data.invitation_template },
+          data: { config },
         });
       } else {
         await prisma.template.create({
@@ -219,7 +219,7 @@ export async function updateEvent(id, data) {
             userId: existing.userId,
             eventId: existing.id,
             name: `Copie de ${existing.title}`,
-            config: data.invitation_template,
+            config,
           },
         });
       }
@@ -231,7 +231,7 @@ export async function updateEvent(id, data) {
         title: data.title !== undefined ? data.title : undefined,
         description:
           data.description !== undefined ? data.description : undefined,
-        eventDate: adjustedDate,
+        eventDate,
         location: data.location !== undefined ? data.location : undefined,
         time: data.time !== undefined ? data.time : undefined,
         dressCode: data.dress_code !== undefined ? data.dress_code : undefined,

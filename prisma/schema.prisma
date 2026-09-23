@@ -1,139 +1,220 @@
-// --- Configuration de la base de données ---
+// ─────────────────────────────────────────────────────────────────────────────
+// Invyra — schéma de données
+//
+// L'authentification est gérée par better-auth : les modèles Session, Account
+// et Verification sont ceux qu'il attend, ne les renommez pas sans mettre à
+// jour utils/auth/server.js.
+// ─────────────────────────────────────────────────────────────────────────────
+
 datasource db {
   provider = "postgresql"
 }
 
-// --- Générateur Prisma Client ---
 generator client {
   provider = "prisma-client"
   output   = "./generated/prisma"
 }
 
-// --- Modèle Utilisateur ---
+// ─── Utilisateur ─────────────────────────────────────────────────────────────
+
 model User {
   id String @id @default(cuid())
-  // ID unique de l'utilisateur, auto-généré par MongoDB
 
-  email String @unique
-  // Email unique pour l'identification / login
+  email         String  @unique
+  emailVerified Boolean @default(false)
+  name          String?
+  image         String?
 
-  name      String?
-  company   String? // Société de l'utilisateur (optionnel)
-  phone     String? // Téléphone (optionnel)
-  password  String // Mot de passe hashé
-  role      String   @default("user") // Rôle : "user" ou "admin"
-  suspended Boolean  @default(false) // Indique si le compte est suspendu
-  createdAt DateTime @default(now()) // Date de création du compte
+  company String?
+  phone   String?
 
-  // 🔥 Abonnement
-  plan String @default("free") // "free" | "premium" | "enterprise"	
-  //  premiumUntil DateTime? // date d’expiration
+  // Champs métier, exposés à better-auth via `user.additionalFields`.
+  role      String  @default("user") // "user" | "admin"
+  plan      String  @default("free") // "free" | "premium"
+  suspended Boolean @default(false)
 
-  // Relations
-  events         Event[] // Événements créés par cet utilisateur
-  templates      Template[] // Templates créés par cet utilisateur
-  collaborations Event_Collaborator[] // Événements où l'utilisateur est collaborateur
+  /// Hash bcrypt hérité de l'authentification maison. Plus jamais écrit : le
+  /// mot de passe vit désormais dans Account.password (providerId
+  /// "credential"). Conservé le temps que tous les comptes soient migrés par
+  /// prisma/migrate-passwords.mjs, puis supprimable.
+  legacyPassword String? @map("password")
 
-  @@map("users") // Nom réel de la collection dans MongoDB
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  events         Event[]
+  templates      Template[]
+  collaborations EventCollaborator[]
+  sessions       Session[]
+  accounts       Account[]
+
+  @@map("users")
 }
 
-// --- Statut d'avancement d'un modèle (template réutilisable ou copie liée à un événement) -- 
+// ─── better-auth : sessions, comptes, vérifications ─────────────────────────
+
+model Session {
+  id String @id @default(cuid())
+
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Account {
+  id String @id @default(cuid())
+
+  accountId  String
+  providerId String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Verification {
+  id String @id @default(cuid())
+
+  identifier String
+  value      String
+  expiresAt  DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([identifier])
+  @@map("verifications")
+}
+
+// ─── Modèles d'invitation ────────────────────────────────────────────────────
+
 enum TemplateStatus {
   draft
   in_progress
   completed
 }
 
-// --- Modèle Template ---
 model Template {
   id               String  @id @default(cuid())
   userId           String?
   eventId          String? @unique
   sourceTemplateId String?
-  // Référence vers le propriétaire du template, nullable pour ne pas supprimer le template si l'utilisateur est supprimé
 
-  name      String // Nom du template
-  status    TemplateStatus? @default(draft) // Brouillon | en construction | terminé
-  config    Json // Configuration / design du template en JSON
-  createdAt DateTime        @default(now())
-  updatedAt DateTime        @updatedAt
+  name   String
+  status TemplateStatus? @default(draft)
+  config Json
 
+  // Mis en avant sur la page d'accueil publique (choisi par un admin).
+  featured Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // userId est nullable et sans cascade : un modèle partagé survit à la
+  // suppression de son auteur.
   user           User?      @relation(fields: [userId], references: [id])
   event          Event?     @relation("EventTemplateCopy", fields: [eventId], references: [id], onDelete: Cascade)
   sourceTemplate Template?  @relation("TemplateCopies", fields: [sourceTemplateId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   eventCopies    Template[] @relation("TemplateCopies")
-  // Relation vers l'utilisateur, pas de cascade => le template reste si l'utilisateur est supprimé
 
-  @@map("templates") // Nom réel de la collection dans MongoDB
+  @@index([userId])
+  @@index([featured])
+  @@map("templates")
 }
 
-// --- Modèle Event (Événement) ---
+// ─── Événements ──────────────────────────────────────────────────────────────
+
 model Event {
   id     String @id @default(cuid())
   userId String
-  // Propriétaire / créateur de l'événement
 
-  title              String // Titre de l'événement
-  description        String? // Description optionnelle
-  eventDate          DateTime? // Date de l'événement
-  location           String? // Lieu
-  time               String? // Heure
-  dressCode          String? // Code vestimentaire
-  customMessage      String? // Message personnalisé pour les invités
-  animationConfig    Json? // Configuration d'animations (JSON)
-  invitationTemplate Json? // Template d'invitation spécifique
-  emailTemplate      String? // Template d'email
-  status             String    @default("draft") // État : draft | sent | etc.
-  autoSend           Boolean   @default(false) // Envoi automatique activé ?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  title         String
+  description   String?
+  eventDate     DateTime?
+  location      String?
+  time          String?
+  dressCode     String?
+  customMessage String?
 
-  // Relations
-  user          User                 @relation(fields: [userId], references: [id])
-  guests        Guest[] // Liste des invités
-  collaborators Event_Collaborator[] // Collaborateurs de l'événement
-  templateCopy  Template?            @relation("EventTemplateCopy")
+  animationConfig Json?
+  /// Déprécié : le design vit dans Template (relation templateCopy).
+  /// Encore lu en repli pour les événements créés avant la bascule.
+  invitationTemplate Json?
+  emailTemplate      String?
 
+  status   String  @default("draft") // "draft" | "active" | "archived"
+  autoSend Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  guests        Guest[]
+  collaborators EventCollaborator[]
+  templateCopy  Template?           @relation("EventTemplateCopy")
+
+  @@index([userId])
   @@map("events")
 }
 
-// --- Modèle Event_Collaborator (Collaborateurs) ---
-model Event_Collaborator {
+model EventCollaborator {
   id          String   @id @default(cuid())
   eventId     String
   userId      String
-  role        String   @default("editor") // "editor" ou "viewer"
-  inviteToken String?  @unique // Token d'invitation unique
-  accepted    Boolean  @default(false) // Si l'invitation a été acceptée
+  role        String   @default("editor") // "editor" | "viewer"
+  inviteToken String?  @unique
+  accepted    Boolean  @default(false)
   createdAt   DateTime @default(now())
 
-  // Relations
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  // Si l'événement est supprimé, le collaborateur est supprimé
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // Si l'utilisateur est supprimé, ce lien est supprimé
-  // Un utilisateur ne peut être collaborateur qu'une seule fois par événement
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([eventId, userId])
+  @@index([userId])
   @@map("event_collaborators")
 }
 
-// --- Modèle Guest (Invité) ---
+// ─── Invités ─────────────────────────────────────────────────────────────────
+
 model Guest {
-  id                  String  @id @default(cuid())
-  eventId             String
+  id      String @id @default(cuid())
+  eventId String
+
   name                String
   email               String
   phone               String?
-  dietaryRestrictions String? // Allergies / régime alimentaire
-  plusOne             Boolean @default(false) // Si l'invité amène un accompagnant
-  notes               String? // Notes supplémentaires
+  dietaryRestrictions String?
+  plusOne             Boolean @default(false)
+  notes               String?
 
-  invitationToken String  @unique // Token unique pour RSVP
-  rsvpStatus      String? // Statut RSVP : accepted | declined | pending
+  invitationToken String  @unique
+  rsvpStatus      String? // "confirmed" | "declined" | "maybe" | null
 
-  invitationSentAt   DateTime? // Dates de suivi des invitations
+  invitationSentAt   DateTime?
   emailSentAt        DateTime?
   whatsappSentAt     DateTime?
   invitationViewedAt DateTime?
@@ -142,11 +223,9 @@ model Guest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations
   event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  // Si l'événement est supprimé, les invités liés sont supprimés
-  // Un invité ne peut pas avoir deux fois le même email pour un événement donné
 
   @@unique([eventId, email])
+  @@index([eventId, rsvpStatus])
   @@map("guests")
 }

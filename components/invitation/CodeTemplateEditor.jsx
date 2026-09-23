@@ -1,754 +1,543 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import {
+  Braces,
+  Check,
+  Code2,
+  Copy,
+  Eye,
+  EyeOff,
+  MailOpen,
+  Maximize2,
+  Minimize2,
+  Palette,
+  RotateCcw,
+  SlidersHorizontal,
+} from "lucide-react";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Eye, Code, Palette, Zap, Copy, Check, RotateCcw } from "lucide-react";
+import {
+  DEFAULT_CSS,
+  DEFAULT_HTML,
+  DEFAULT_JS,
+} from "@/components/invitation/default-template";
+import OpeningFields from "@/components/invitation/theme-editor/OpeningFields";
+import { openingToCode } from "@/lib/invitation/opening";
+import { normalizeOpening } from "@/lib/invitation/shared";
+import { useTranslation } from "@/utils/i18n/Context";
+
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
 });
 
-const DEFAULT_HTML = `<div class="invitation-wrapper">
-  <div class="invitation-card">
-    <div class="header-decoration"></div>
-    
-    <!-- HERO IMAGE -->
-    <div class="hero">
-      <div class="hero-content">
-        <p class="eyebrow">Invitation Exclusive</p>
-        <h1 class="event-title">{{EVENT_TITLE}}</h1>
-      </div>
-    </div>
-
-    <!-- CONTENU -->
-    <div class="content">
-      <div class="divider"></div>
-      
-      <p class="guest-name">Cher(e) <strong>{{GUEST_NAME}}</strong>,</p>
-      <p class="description">
-        Nous avons l'honneur de vous inviter à un moment unique, 
-        une célébration exceptionnelle où l’amour et l’élégance se rencontrent.
-      </p>
-
-      <div class="details">
-        <div class="detail-item">
-          <span class="icon">📅</span>
-          <span>{{EVENT_DATE}}</span>
-        </div>
-
-        <div class="detail-item">
-          <span class="icon">📍</span>
-          <span>{{EVENT_LOCATION}}</span>
-        </div>
-
-        <div class="detail-item">
-          <span class="icon">👗</span>
-          <span>{{DRESS_CODE}}</span>
-        </div>
-
-        <div class="detail-item">
-          <span class="icon">⏰</span>
-          <span>{{TIME}}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- STORY -->
-    <div class="section">
-      <h3 class="section-title">💖 Notre histoire</h3>
-      <p>
-        Chaque grande histoire commence par une rencontre.
-        La nôtre s’est construite à travers les moments partagés,
-        les défis surmontés et un amour qui n’a cessé de grandir.
-      </p>
-      <p>
-        Aujourd’hui, nous écrivons ensemble le plus beau chapitre :
-        celui de notre union.
-      </p>
-
-      <div class="image-block" style="background-image:url('https://images.unsplash.com/photo-1519741497674-611481863552');"></div>
-    </div>
-
-    <!-- PROGRAM -->
-    <div class="section alt">
-      <h3 class="section-title">🗓 Programme</h3>
-      <div class="timeline">
-        <div class="timeline-item">⏰ <strong>16:00</strong> – Accueil des invités</div>
-        <div class="timeline-item">💍 <strong>17:00</strong> – Cérémonie</div>
-        <div class="timeline-item">🍽 <strong>19:00</strong> – Dîner</div>
-        <div class="timeline-item">🎉 <strong>22:00</strong> – Soirée dansante</div>
-      </div>
-
-      <div class="image-block" style="background-image:url('https://images.unsplash.com/photo-1505236858219-8359eb29e329');"></div>
-    </div>
-
-    <!-- VENUE -->
-    <div class="section">
-      <h3 class="section-title">📍 Le lieu</h3>
-      <p>
-        Le lieu de la cérémonie a été choisi avec soin pour offrir
-        un cadre magique et inoubliable.
-      </p>
-      <p>
-        Préparez-vous à vivre une expérience unique dans un environnement
-        raffiné et chaleureux.
-      </p>
-
-      <div class="image-block" style="background-image:url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486');"></div>
-    </div>
-
-    <!-- DRESS CODE -->
-    <div class="section alt">
-      <h3 class="section-title">👗 Dress Code</h3>
-      <p>
-        Une tenue élégante est recommandée pour cette occasion.
-        Laissez parler votre style tout en respectant le thème de l’événement.
-      </p>
-
-      <div class="image-block" style="background-image:url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc');"></div>
-    </div>
-
-    <!-- GALLERY -->
-    <div class="section">
-      <h3 class="section-title">📸 Galerie</h3>
-      <p>
-        Quelques souvenirs de notre parcours ensemble…
-      </p>
-
-      <div class="gallery">
-        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486')"></div>
-        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1505236858219-8359eb29e329')"></div>
-        <div class="gallery-item" style="background-image:url('https://images.unsplash.com/photo-1511285560929-80b456fea0bc')"></div>
-      </div>
-    </div>
-
-    <!-- RSVP -->
-    <div class="rsvp-section">
-      <h3 class="rsvp-title">Confirmer votre présence</h3>
-      
-      <div id="rsvp-form">
-        <div class="rsvp-buttons">
-          <button class="rsvp-btn confirm-btn" data-rsvp="confirmed">✅ Oui, je viens</button>
-          <button class="rsvp-btn maybe-btn" data-rsvp="maybe">🤔 Peut-être</button>
-          <button class="rsvp-btn decline-btn" data-rsvp="declined">❌ Je ne pourrai pas</button>
-        </div>
-      </div>
-      
-      <div id="rsvp-success" class="rsvp-success" style="display:none">
-        <p id="rsvp-status-msg">🎉 Merci pour votre réponse !</p>
-        <button id="rsvp-edit-btn" class="rsvp-edit-btn" style="margin-top:1rem;background:transparent;border:1px solid #d4af37;color:#d4af37;padding:0.5rem 1rem;border-radius:0.5rem;cursor:pointer;font-size:0.8rem">
-          Modifier ma réponse
-        </button>
-      </div>
-    </div>
-
-    <!-- FAQ -->
-    <div class="section alt">
-      <h3 class="section-title">❓ Informations</h3>
-      <p><strong>+1 autorisé ?</strong><br>Merci de vérifier votre invitation.</p>
-      <p><strong>Parking disponible ?</strong><br>Oui, sur place.</p>
-      <p><strong>Enfants ?</strong><br>Selon invitation.</p>
-    </div>
-
-    <!-- FINAL -->
-    <div class="section">
-      <h3 class="section-title">💌 Message final</h3>
-      <p>
-        Votre présence rendra ce moment encore plus spécial.
-        Nous avons hâte de célébrer avec vous.
-      </p>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer">
-      <p>
-        Developed by 
-        <a href="https://instagram.com/kevinarmache" target="_blank" rel="noopener noreferrer" 
-        style="color:inherit;text-decoration:underline;opacity:0.7;">
-        Kevin Armache
-        </a>
-      </p>
-    </div>
-
-  </div>
-</div>`;
-
-const DEFAULT_CSS = `/* RESET */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  padding: 2rem;
-}
-
-/* WRAPPER */
-.invitation-wrapper {
-  width: 100%;
-  max-width: 480px;
-}
-
-/* CARD */
-.invitation-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 1.5rem;
-  overflow: hidden;
-  box-shadow: 0 25px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
-  animation: fadeIn 1s ease;
-}
-
-/* HEADER LINE */
-.header-decoration {
-  height: 4px;
-  background: linear-gradient(90deg, transparent, #d4af37, transparent);
-}
-
-/* HERO IMAGE */
-.hero {
-  height: 220px;
-  background: url('https://images.unsplash.com/photo-1520857014576-2c4f4c972b57') center/cover;
-  position: relative;
-}
-
-.hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-}
-
-.hero-content {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: #fff;
-}
-
-/* CONTENT */
-.content {
-  padding: 2.5rem 2rem 1.5rem;
-  text-align: center;
-}
-
-.eyebrow {
-  color: #d4af37;
-  font-size: 0.65rem;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-.event-title {
-  color: #fff;
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.25rem;
-}
-
-.divider {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #d4af37, transparent);
-  margin: 0 auto 1.5rem;
-}
-
-/* TEXT */
-.guest-name {
-  color: rgba(255,255,255,0.7);
-  font-size: 1rem;
-  margin-bottom: 0.75rem;
-  font-style: italic;
-}
-
-.guest-name strong { color: #d4af37; }
-
-.description {
-  color: rgba(255,255,255,0.45);
-  font-size: 0.85rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-/* DETAILS */
-.details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 0.75rem;
-  color: rgba(255,255,255,0.7);
-  font-size: 0.85rem;
-  transition: 0.3s;
-}
-
-.detail-item:hover {
-  transform: translateY(-3px);
-  background: rgba(212,175,55,0.08);
-  border-color: rgba(212,175,55,0.4);
-}
-
-.icon { font-size: 1rem; }
-
-/* SECTIONS */
-.section {
-  padding: 2rem;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-
-.section.alt {
-  background: rgba(255,255,255,0.02);
-}
-
-.section-title {
-  color: #d4af37;
-  font-size: 0.8rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
-}
-
-.section p {
-  color: rgba(255,255,255,0.5);
-  font-size: 0.85rem;
-  line-height: 1.6;
-  margin-bottom: 1rem;
-}
-
-/* IMAGE BLOCK */
-.image-block {
-  height: 160px;
-  border-radius: 1rem;
-  background-size: cover;
-  background-position: center;
-  margin-top: 1rem;
-}
-
-/* GALLERY */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-}
-
-.gallery-item {
-  height: 80px;
-  border-radius: 0.5rem;
-  background-size: cover;
-  background-position: center;
-}
-
-/* RSVP */
-.rsvp-section {
-  padding: 1.5rem 2rem;
-}
-
-.rsvp-title {
-  text-align: center;
-  color: rgba(255,255,255,0.5);
-  font-size: 0.65rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  margin-bottom: 1.25rem;
-}
-
-.rsvp-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 0.5rem;
-}
-
-.rsvp-btn {
-  padding: 0.75rem 0.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.03);
-  color: rgba(255,255,255,0.6);
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.rsvp-btn:hover { transform: translateY(-2px); }
-
-.confirm-btn.active { color:#4ade80; border-color:#4ade80; }
-.maybe-btn.active { color:#facc15; border-color:#facc15; }
-.decline-btn.active { color:#f87171; border-color:#f87171; }
-
-.rsvp-success {
-  text-align: center;
-  padding: 1rem;
-  color: #4ade80;
-}
-
-/* FOOTER */
-.footer {
-  padding: 1rem;
-  text-align: center;
-  border-top: 1px solid rgba(255,255,255,0.04);
-}
-
-.footer p {
-  color: rgba(255,255,255,0.2);
-  font-size: 0.65rem;
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-  from { opacity:0; transform: translateY(10px); }
-  to { opacity:1; transform: translateY(0); }
-}`;
-
-const DEFAULT_JS = `// RSVP template script: uniquement l'essentiel (init, clics, "Merci", modification, postMessage).
-document.addEventListener('DOMContentLoaded', function() {
-  // ─────────────────────────────────────────────────────────────────────────────
-  // DOM: éléments RSVP attendus par le template
-  // ─────────────────────────────────────────────────────────────────────────────
-  var formSection = document.getElementById('rsvp-form');
-  var successSection = document.getElementById('rsvp-success');
-  var statusMsg = document.getElementById('rsvp-status-msg');
-  var editBtn = document.getElementById('rsvp-edit-btn');
-  var rsvpButtons = Array.prototype.slice.call(document.querySelectorAll('[data-rsvp]'));
-
-  // ─────────────────────────────────────────────────────────────────────────────
-  // Etat local (pour "Modifier ma réponse" et éviter les double-soumissions)
-  // ─────────────────────────────────────────────────────────────────────────────
-  var currentStatus = null;
-  var isSubmitting = false;
-
-  function setButtonsDisabled(disabled) {
-    rsvpButtons.forEach(function(btn) {
-      btn.disabled = !!disabled;
-      btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
-    });
-  }
-
-  // Garantit "une seule réponse à la fois" côté UI (un seul bouton avec la classe active).
-  function setActiveStatus(status) {
-    rsvpButtons.forEach(function(btn) {
-      btn.classList.remove('active');
-      if (btn.getAttribute('data-rsvp') === status) btn.classList.add('active');
-    });
-  }
-
-  function updateStatusMessage(status) {
-    if (!statusMsg) return;
-    if (status === 'confirmed') statusMsg.innerHTML = '🎉 Présence confirmée !';
-    else if (status === 'declined') statusMsg.innerHTML = '😔 Vous avez décliné.';
-    else statusMsg.innerHTML = '🤔 Réponse : Peut-être.';
-  }
-
-  function showSuccess(status) {
-    currentStatus = status;
-    if (formSection) formSection.style.display = 'none';
-    if (successSection) successSection.style.display = 'block';
-
-    // Marque visuellement la réponse sélectionnée
-    setActiveStatus(status);
-    updateStatusMessage(status);
-  }
-
-  function showForm() {
-    if (formSection) formSection.style.display = 'block';
-    if (successSection) successSection.style.display = 'none';
-
-    // Repartir avec la dernière réponse sélectionnée (modifiable)
-    setActiveStatus(currentStatus);
-    setButtonsDisabled(false);
-  }
-
-  // 1) Initialisation au chargement de la page (si l'invité a déjà répondu)
-  var initialStatus =
-    window.GUEST_DATA && window.GUEST_DATA.rsvp_status ? window.GUEST_DATA.rsvp_status : null;
-
-  if (initialStatus) {
-    showSuccess(initialStatus);
-    // Bloque toute nouvelle sélection tant que l'on n'a pas cliqué "Modifier"
-    setButtonsDisabled(true);
-  } else {
-    setButtonsDisabled(false);
-  }
-
-  // 2) Modification possible: revenir sur le formulaire RSVP
-  if (editBtn) {
-    editBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      isSubmitting = false;
-      showForm();
-    });
-  }
-
-  // 3) Gestion des clics sur les boutons RSVP + communication parent via postMessage
-  rsvpButtons.forEach(function(btn) {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-
-      // Empêche les double-soumissions (ex: clics rapides)
-      if (isSubmitting) return;
-
-      var status = btn.getAttribute('data-rsvp');
-      if (!status) return;
-
-      isSubmitting = true;
-
-      // Garantit l'unicité de sélection dans l'UI
-      setActiveStatus(status);
-      setButtonsDisabled(true);
-
-      // Envoie la réponse à la plateforme (parent de l'iframe)
-      if (window.parent && window.parent.postMessage) {
-        window.parent.postMessage(
-          {
-            type: 'RSVP_SUBMIT',
-            data: {
-              rsvp_status: status,
-              dietary_restrictions: '',
-              plus_one: false,
-              notes: ''
-            }
-          },
-          '*'
-        );
-      }
-
-      // 4) Affiche la section "Merci" après la réponse
-      setTimeout(function() {
-        showSuccess(status);
-        isSubmitting = false;
-      }, 500);
-    });
-  });
-});`;
-
-export default function CodeTemplateEditor({ template, onChange }) {
-  const [activeTab, setActiveTab] = useState("html");
-  const [html, setHtml] = useState(template?.html || DEFAULT_HTML);
-  const [css, setCss] = useState(template?.css || DEFAULT_CSS);
-  const [js, setJs] = useState(template?.js || DEFAULT_JS);
+/**
+ * Thème Monaco accordé à la palette Invyra.
+ *
+ * Le thème `vs-dark` livré avec Monaco est bleuté et plus clair que nos
+ * surfaces : l'éditeur flottait visiblement au-dessus du reste de la page.
+ * Les valeurs sont en hexadécimal parce que Monaco n'accepte pas oklch().
+ */
+const INVYRA_THEME = {
+  base: "vs-dark",
+  inherit: true,
+  rules: [
+    { token: "comment", foreground: "746f69", fontStyle: "italic" },
+    { token: "string", foreground: "e2b963" },
+    { token: "keyword", foreground: "f2b250" },
+    { token: "number", foreground: "55ca86" },
+    { token: "tag", foreground: "f2b250" },
+    { token: "attribute.name", foreground: "9e9992" },
+    { token: "attribute.value", foreground: "e2b963" },
+    { token: "delimiter", foreground: "9e9992" },
+  ],
+  colors: {
+    "editor.background": "#100d0b",
+    "editor.foreground": "#eae6de",
+    "editorLineNumber.foreground": "#5a5550",
+    "editorLineNumber.activeForeground": "#e2b963",
+    "editor.selectionBackground": "#e2b96333",
+    "editor.lineHighlightBackground": "#1a1613",
+    "editorCursor.foreground": "#e2b963",
+    "editorIndentGuide.background1": "#241f1b",
+    "editorIndentGuide.activeBackground1": "#3a332d",
+  },
+};
+
+const VARIABLES = [
+  "{{EVENT_TITLE}}",
+  "{{GUEST_NAME}}",
+  "{{EVENT_DATE}}",
+  "{{EVENT_LOCATION}}",
+  "{{TIME}}",
+  "{{DRESS_CODE}}",
+  "{{COUNTDOWN_DATE}}",
+  "{{MONOGRAM}}",
+];
+
+const PANES = [
+  { key: "html", label: "HTML", icon: Code2 },
+  { key: "css", label: "CSS", icon: Palette },
+  { key: "js", label: "JavaScript", icon: Braces },
+];
+
+/** Nom de fichier affiché au-dessus de l'éditeur. */
+const FILES = {
+  invitation: { html: "invitation.html", css: "styles.css", js: "rsvp.js" },
+  opening: { html: "opening.html", css: "opening.css", js: "opening.js" },
+};
+
+/**
+ * Éditeur des templates code.
+ *
+ * Deux espaces : l'invitation elle-même et son écran d'ouverture (Digital
+ * Invitation Opening). L'ouverture se règle par formulaire, ou s'écrit en
+ * HTML/CSS/JS à partir de l'ouverture standard (`openingCode`).
+ *
+ * Plein écran : l'éditeur couvre toute la fenêtre, aperçu à côté sur grand
+ * écran. Seules les classes du conteneur changent : Monaco n'est pas
+ * remonté, le curseur et l'historique d'annulation sont conservés.
+ *
+ * @param {React.ReactNode} [props.preview]  aperçu affiché en plein écran
+ */
+export default function CodeTemplateEditor({ template, onChange, preview }) {
+  const { t } = useTranslation();
+  const [scope, setScope] = useState("invitation");
+  const [activePane, setActivePane] = useState("html");
   const [copied, setCopied] = useState(null);
+  const [fullscreen, setFullscreen] = useState(false);
+  const [showPreview, setShowPreview] = useState(true);
 
-  // Si on reçoit un nouveau template depuis l'IA, mettre à jour les champs
+  // En plein écran : la page derrière ne défile plus, Échap en sort. Une
+  // touche Échap déjà traitée ailleurs (suggestion Monaco, boîte de dialogue
+  // ouverte) est ignorée.
   useEffect(() => {
-    if (template?.html && template.html !== html) setHtml(template.html);
-    if (template?.css && template.css !== css) setCss(template.css);
-    if (template?.js && template.js !== js) setJs(template.js || DEFAULT_JS);
-  }, [template?.html, template?.css, template?.js]);
+    if (!fullscreen) return;
+    const root = document.documentElement;
+    const previousOverflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    function handleKey(event) {
+      if (
+        event.key === "Escape" &&
+        !event.defaultPrevented &&
+        !document.querySelector('[role="alertdialog"], [role="dialog"]')
+      ) {
+        setFullscreen(false);
+      }
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      root.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [fullscreen]);
 
-  // Appliquer les changements au parent en temps réel
-  function applyChanges(newHtml = html, newCss = css, newJs = js) {
-    onChange({
+  // Toute invitation a un écran d'ouverture, template code compris.
+  const [opening, setOpening] = useState(() =>
+    normalizeOpening(template?.opening),
+  );
+  // Ouverture écrite en code : null tant qu'on garde l'ouverture standard.
+  const [openingCode, setOpeningCode] = useState(() =>
+    template?.openingCode?.html
+      ? {
+          html: template.openingCode.html,
+          css: template.openingCode.css ?? "",
+          js: template.openingCode.js ?? "",
+        }
+      : null,
+  );
+
+  const [sources, setSources] = useState(() => ({
+    html: template?.html || DEFAULT_HTML,
+    css: template?.css || DEFAULT_CSS,
+    js: template?.js || DEFAULT_JS,
+  }));
+
+  // `onChange` change souvent d'identité chez l'appelant ; le garder dans une
+  // ref évite de relancer l'effet de remontée à chaque rendu du parent.
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  // Remonte l'état courant au parent. Fait dans un effet plutôt que dans le
+  // gestionnaire de frappe : le parent était auparavant mis à jour pendant le
+  // rendu de l'enfant, ce qui déclenchait un rendu en cascade par caractère.
+  useEffect(() => {
+    // Mise à jour fonctionnelle : on garde ce que le parent a ajouté à côté
+    // du code (musique, polices…) au lieu de l'écraser à chaque frappe.
+    onChangeRef.current((previous) => ({
+      ...(previous?.type === "code" ? previous : {}),
       type: "code",
-      html: newHtml,
-      css: newCss,
-      js: newJs,
-    });
-  }
+      ...sources,
+      opening,
+      openingCode,
+    }));
+  }, [sources, opening, openingCode]);
 
-  function handleHtmlChange(val) {
-    setHtml(val);
-    applyChanges(val, css, js);
-  }
-  function handleCssChange(val) {
-    setCss(val);
-    applyChanges(html, val, js);
-  }
-  function handleJsChange(val) {
-    setJs(val);
-    applyChanges(html, css, val);
-  }
-
-  function handleReset() {
-    if (!confirm("Réinitialiser avec le modèle par défaut ?")) return;
-    setHtml(DEFAULT_HTML);
-    setCss(DEFAULT_CSS);
-    setJs(DEFAULT_JS);
-    applyChanges(DEFAULT_HTML, DEFAULT_CSS, DEFAULT_JS);
-  }
-
-  async function handleCopy(content, key) {
-    await navigator.clipboard.writeText(content);
-    setCopied(key);
-    setTimeout(() => setCopied(null), 2000);
-  }
-
-  const tabs = [
-    {
-      key: "html",
-      label: "HTML",
-      icon: Code,
-      color: "text-orange-400",
-      content: html,
-      onChange: handleHtmlChange,
+  const update = useCallback(
+    (pane, value) => {
+      if (scope === "opening") {
+        setOpeningCode((previous) =>
+          previous ? { ...previous, [pane]: value ?? "" } : previous,
+        );
+      } else {
+        setSources((previous) => ({ ...previous, [pane]: value ?? "" }));
+      }
     },
-    {
-      key: "css",
-      label: "CSS",
-      icon: Palette,
-      color: "text-blue-400",
-      content: css,
-      onChange: handleCssChange,
-    },
-    {
-      key: "js",
-      label: "JavaScript (RSVP)",
-      icon: Zap,
-      color: "text-yellow-400",
-      content: js,
-      onChange: handleJsChange,
-    },
-  ];
+    [scope],
+  );
 
-  const activeTabData = tabs.find((t) => t.key === activeTab);
+  const current = scope === "opening" ? openingCode : sources;
+  // Ouverture standard : pas de code à afficher, seulement ses réglages.
+  const showCode = scope === "invitation" || Boolean(openingCode);
 
-  // Force apply on mount in case switching from another template type
-  useEffect(() => {
-    applyChanges();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  function reset() {
+    setSources({ html: DEFAULT_HTML, css: DEFAULT_CSS, js: DEFAULT_JS });
+  }
+
+  async function copyActive() {
+    try {
+      await navigator.clipboard.writeText(current?.[activePane] ?? "");
+      setCopied(activePane);
+      setTimeout(() => setCopied(null), 2000);
+    } catch {
+      // Presse-papiers refusé (contexte non sécurisé) : sans retour visuel,
+      // l'utilisateur sélectionnera à la main.
+    }
+  }
+
+  const hasPreview = fullscreen && Boolean(preview);
 
   return (
-    <div className="flex flex-col h-full gap-3">
-      {/* Info Banner */}
-      <div className="bg-muted/30 border border-border rounded-lg p-3 text-xs text-muted-foreground space-y-1">
-        <p className="font-semibold text-foreground flex items-center gap-1.5">
-          <Code className="w-3.5 h-3.5 text-primary" /> Éditeur de Modèle
-          Personnalisé
-        </p>
-        <p>
-          Variables disponibles :{" "}
-          <code className="text-primary text-[10px]">{"{{EVENT_TITLE}}"}</code>,{" "}
-          <code className="text-primary text-[10px]">{"{{GUEST_NAME}}"}</code>,{" "}
-          <code className="text-primary text-[10px]">
-            {"{{EVENT_LOCATION}}"}
-          </code>
-          , <code className="text-primary text-[10px]">{"{{EVENT_DATE}}"}</code>
-          , <code className="text-primary text-[10px]">{"{{DRESS_CODE}}"}</code>
-          , <code className="text-primary text-[10px]">{"{{TIME}}"}</code>
-        </p>
-        <p className="text-[10px] opacity-70">
-          L'onglet JS est automatiquement injecté dans l'iframe. Il gère le RSVP
-          via <code>postMessage</code>.
-        </p>
-      </div>
+    <div
+      className={
+        fullscreen
+          ? "fixed inset-0 z-50 flex gap-4 bg-background p-3 sm:p-4"
+          : "flex min-h-0 flex-1 flex-col"
+      }
+    >
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3">
+        {/* ── Invitation / Ouverture ──────────────────────────────────── */}
+        <div className="flex shrink-0 gap-2">
+          <div
+            role="tablist"
+            aria-label={t("portal.themes.code.scope_label")}
+            className="grid flex-1 grid-cols-2 gap-1 rounded-md border border-border bg-ink-850 p-1"
+          >
+            {[
+              { key: "invitation", icon: Code2 },
+              { key: "opening", icon: MailOpen },
+            ].map((item) => {
+              const isActive = item.key === scope;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setScope(item.key)}
+                  className={`flex items-center justify-center gap-1.5 rounded px-3 py-2 text-xs transition-colors ${
+                    isActive
+                      ? "bg-ink-800 text-ink-50 shadow-elevation-1"
+                      : "text-ink-400 hover:text-ink-100"
+                  }`}
+                >
+                  <item.icon
+                    className={`h-3.5 w-3.5 ${isActive ? "text-gold" : ""}`}
+                    strokeWidth={1.75}
+                  />
+                  {t(`portal.themes.code.scope_${item.key}`)}
+                </button>
+              );
+            })}
+          </div>
 
-      {/* Tab Headers */}
-      <div className="flex items-center gap-1 p-1 bg-muted/20 border border-border rounded-lg">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold transition-all ${
-              activeTab === tab.key
-                ? "bg-card border border-border shadow-sm text-foreground"
-                : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-            }`}
-          >
-            <tab.icon
-              className={`w-3 h-3 ${activeTab === tab.key ? tab.color : ""}`}
-            />
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Code Editor Area */}
-      <div className="flex-1 relative flex flex-col min-h-0 overflow-hidden">
-        <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border border-border border-b-0 rounded-t-lg">
-          <span
-            className={`text-xs font-mono font-semibold ${activeTabData?.color}`}
-          >
-            {activeTabData?.label.toLowerCase()}.
-            {activeTab === "html" ? "html" : activeTab === "css" ? "css" : "js"}
-          </span>
-          <button
-            onClick={() => handleCopy(activeTabData?.content || "", activeTab)}
-            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {copied === activeTab ? (
-              <Check className="w-3 h-3 text-green-400" />
-            ) : (
-              <Copy className="w-3 h-3" />
+          {hasPreview && (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              onClick={() => setShowPreview((value) => !value)}
+              aria-pressed={showPreview}
+              aria-label={t(
+                showPreview
+                  ? "portal.themes.code.hide_preview"
+                  : "portal.themes.code.show_preview",
+              )}
+              title={t(
+                showPreview
+                  ? "portal.themes.code.hide_preview"
+                  : "portal.themes.code.show_preview",
+              )}
+              className="hidden h-auto shrink-0 lg:inline-flex"
+            >
+              {showPreview ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </Button>
+          )}
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={() => setFullscreen((value) => !value)}
+            aria-pressed={fullscreen}
+            aria-label={t(
+              fullscreen
+                ? "portal.themes.code.exit_fullscreen"
+                : "portal.themes.code.fullscreen",
             )}
-            {copied === activeTab ? "Copié" : "Copier"}
-          </button>
+            title={t(
+              fullscreen
+                ? "portal.themes.code.exit_fullscreen_hint"
+                : "portal.themes.code.fullscreen",
+            )}
+            className="h-auto shrink-0"
+          >
+            {fullscreen ? (
+              <Minimize2 className="h-4 w-4" />
+            ) : (
+              <Maximize2 className="h-4 w-4" />
+            )}
+          </Button>
         </div>
 
-        <div className="flex-1 min-h-0 rounded-b-lg overflow-hidden border border-border border-t-0 bg-[#1e1e2e]">
-          <MonacoEditor
-            key={activeTab}
-            height="100%"
-            defaultLanguage={
-              activeTab === "html"
-                ? "html"
-                : activeTab === "css"
-                  ? "css"
-                  : "javascript"
-            }
-            language={
-              activeTab === "html"
-                ? "html"
-                : activeTab === "css"
-                  ? "css"
-                  : "javascript"
-            }
-            value={activeTabData?.content || ""}
-            onChange={(val) => activeTabData?.onChange(val ?? "")}
-            theme="vs-dark"
-            options={{
-              minimap: { enabled: false },
-              fontSize: 12,
-              fontFamily:
-                'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-              lineNumbers: "on",
-              scrollBeyondLastLine: false,
-              wordWrap: "on",
-              tabSize: 2,
-              automaticLayout: true,
-            }}
-            loading={
-              <div className="h-full flex items-center justify-center text-xs text-muted-foreground">
-                Chargement de l'éditeur...
+        {/* ── Ouverture : réglages, ou passage en code ────────────────── */}
+        {scope === "opening" && (
+          <div className="surface space-y-4 p-4 text-xs">
+            {openingCode ? (
+              <>
+                <p className="leading-relaxed text-ink-400">
+                  {t("portal.themes.code.opening_code_hint")}
+                </p>
+                <OpeningFields
+                  value={opening}
+                  onChange={setOpening}
+                  only={["monogram"]}
+                />
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      <SlidersHorizontal className="mr-1.5 h-3.5 w-3.5" />
+                      {t("portal.themes.code.opening_standard_btn")}
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        {t("portal.themes.code.opening_standard_title")}
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {t("portal.themes.code.opening_standard_desc")}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>
+                        {t("common.cancel")}
+                      </AlertDialogCancel>
+                      <AlertDialogAction onClick={() => setOpeningCode(null)}>
+                        {t("portal.themes.code.opening_standard_confirm")}
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            ) : (
+              <>
+                <OpeningFields value={opening} onChange={setOpening} />
+                <div className="flex flex-col gap-3 border-t border-border/60 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="leading-relaxed text-ink-400">
+                    {t("portal.themes.code.opening_to_code_desc")}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="shrink-0"
+                    onClick={() => {
+                      setOpeningCode(openingToCode(opening));
+                      setActivePane("html");
+                    }}
+                  >
+                    <Code2 className="mr-1.5 h-3.5 w-3.5" />
+                    {t("portal.themes.code.opening_to_code_btn")}
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* ── Aide variables ──────────────────────────────────────────── */}
+        <details className="surface group px-4 py-3 text-xs">
+          <summary className="cursor-pointer list-none text-ink-300 transition-colors hover:text-ink-50">
+            <span className="eyebrow">Variables disponibles</span>
+          </summary>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {VARIABLES.map((variable) => (
+              <code
+                key={variable}
+                className="rounded border border-gold/20 bg-gold/5 px-1.5 py-0.5 font-mono text-[11px] text-gold"
+              >
+                {variable}
+              </code>
+            ))}
+          </div>
+          <p className="mt-3 leading-relaxed text-ink-400">
+            Le JavaScript est injecté dans l&apos;iframe de l&apos;invitation.
+            Il transmet les réponses RSVP au moyen de <code>postMessage</code>.
+          </p>
+        </details>
+
+        {showCode && (
+          <>
+            {/* ── Onglets ─────────────────────────────────────────────────── */}
+            <div
+              role="tablist"
+              aria-label="Fichiers du modèle"
+              className="flex gap-1 rounded-md border border-border bg-ink-850 p-1"
+            >
+              {PANES.map((item) => {
+                const isActive = item.key === activePane;
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActivePane(item.key)}
+                    className={`flex flex-1 items-center justify-center gap-1.5 rounded px-3 py-2 text-xs transition-colors ${
+                      isActive
+                        ? "bg-ink-800 text-ink-50 shadow-elevation-1"
+                        : "text-ink-400 hover:text-ink-100"
+                    }`}
+                  >
+                    <item.icon
+                      className={`h-3.5 w-3.5 ${isActive ? "text-gold" : ""}`}
+                      strokeWidth={1.75}
+                    />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* ── Éditeur ─────────────────────────────────────────────────── */}
+            {/* Hauteur minimale ici, Monaco en absolu dedans : sa hauteur ne
+              dépend plus de celle, parfois indéfinie, des conteneurs parents.
+              Il remplit tout l'espace restant, sans descendre sous 20rem. */}
+            <div className="flex min-h-[20rem] flex-1 flex-col overflow-hidden rounded-md border border-border">
+              <div className="flex items-center justify-between border-b border-border bg-ink-850 px-3 py-2">
+                <span className="font-mono text-xs text-ink-400">
+                  {FILES[scope][activePane]}
+                </span>
+                <button
+                  type="button"
+                  onClick={copyActive}
+                  className="flex items-center gap-1.5 text-xs text-ink-400 transition-colors hover:text-ink-100"
+                >
+                  {copied === activePane ? (
+                    <>
+                      <Check className="h-3 w-3 text-positive" />
+                      Copié
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3 w-3" />
+                      Copier
+                    </>
+                  )}
+                </button>
               </div>
-            }
-          />
-        </div>
+
+              <div className="relative min-h-0 flex-1 bg-ink-850">
+                <div className="absolute inset-0">
+                  <MonacoEditor
+                    key={`${scope}-${activePane}`}
+                    height="100%"
+                    language={activePane === "js" ? "javascript" : activePane}
+                    value={current?.[activePane] ?? ""}
+                    onChange={(value) => update(activePane, value)}
+                    beforeMount={(monaco) => {
+                      monaco.editor.defineTheme("invyra", INVYRA_THEME);
+                    }}
+                    theme="invyra"
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 12.5,
+                      fontFamily:
+                        "var(--font-geist-mono), ui-monospace, Menlo, Consolas, monospace",
+                      lineNumbers: "on",
+                      scrollBeyondLastLine: false,
+                      wordWrap: "on",
+                      tabSize: 2,
+                      automaticLayout: true,
+                      padding: { top: 12, bottom: 12 },
+                      renderLineHighlight: "line",
+                      smoothScrolling: true,
+                    }}
+                    loading={
+                      <div className="flex h-full items-center justify-center text-xs text-ink-400">
+                        Chargement de l&apos;éditeur…
+                      </div>
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* ── Réinitialisation ────────────────────────────────────────── */}
+        {scope === "invitation" && (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" size="sm" className="self-start">
+                <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+                Réinitialiser
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Repartir du modèle par défaut ?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Le HTML, le CSS et le JavaScript actuels seront remplacés.
+                  Tant que vous n&apos;enregistrez pas, la version en base reste
+                  inchangée.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction onClick={reset}>
+                  Réinitialiser
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
       </div>
 
-      {/* Footer Actions */}
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleReset}
-          className="gap-1.5"
-        >
-          <RotateCcw className="w-3 h-3" />
-          Réinitialiser
-        </Button>
-        <Button
-          size="sm"
-          onClick={() => applyChanges()}
-          className="flex-1 gap-1.5"
-        >
-          <Eye className="w-3 h-3" />
-          Rafraîchir l'aperçu
-        </Button>
-      </div>
+      {hasPreview && showPreview && (
+        <div className="relative hidden w-[min(42%,560px)] shrink-0 overflow-hidden rounded-md border border-border/60 bg-ink-900 shadow-elevation-3 lg:block">
+          {preview}
+        </div>
+      )}
     </div>
   );
 }

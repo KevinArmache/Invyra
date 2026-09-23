@@ -218,7 +218,8 @@ export async function sendBulkInvitationEmails(eventId) {
   const guests = await prisma.guest.findMany({
     where: {
       eventId,
-      email: { not: null },
+      // `email` est obligatoire dans le schéma : on écarte seulement les vides.
+      email: { not: "" },
       emailSentAt: null, // seulement ceux qui n'ont pas encore reçu l'email
     }
   })

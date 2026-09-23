@@ -2,7 +2,14 @@
 
 import { prisma } from '@/utils/prisma'
 
-export async function getInvitationByToken(token) {
+/**
+ * @param {string} token
+ * @param {object} [options]
+ * @param {boolean} [options.markViewed=true]  faux pour les robots d'aperçu de
+ *   lien (WhatsApp, iMessage…) : leur passage ne veut pas dire que l'invité a
+ *   ouvert son invitation.
+ */
+export async function getInvitationByToken(token, { markViewed = true } = {}) {
   try {
     const guest = await prisma.guest.findUnique({
       where: { invitationToken: token },
@@ -20,7 +27,7 @@ export async function getInvitationByToken(token) {
     if (!guest) throw new Error('Invitation not found')
 
     // Mark as viewed if first time
-    if (!guest.invitationViewedAt) {
+    if (markViewed && !guest.invitationViewedAt) {
       await prisma.guest.update({
         where: { id: guest.id },
         data: { invitationViewedAt: new Date() }

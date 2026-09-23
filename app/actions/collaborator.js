@@ -10,7 +10,7 @@ export async function getCollaborators(eventId) {
   const session = await getSession();
   if (!session) throw new Error("Non authentifié");
 
-  return prisma.event_Collaborator.findMany({
+  return prisma.eventCollaborator.findMany({
     where: { eventId },
     include: {
       user: { select: { id: true, name: true, email: true } },
@@ -48,14 +48,14 @@ export async function addCollaborator(eventId, email, role = "editor") {
     );
 
   // Vérifier doublon
-  const existing = await prisma.event_Collaborator.findFirst({
+  const existing = await prisma.eventCollaborator.findFirst({
     where: { eventId, userId: targetUser.id },
   });
   if (existing) throw new Error("Cet utilisateur est déjà collaborateur.");
 
   const inviteToken = nanoid(32);
 
-  const collab = await prisma.event_Collaborator.create({
+  const collab = await prisma.eventCollaborator.create({
     data: {
       eventId,
       userId: targetUser.id,
@@ -77,7 +77,7 @@ export async function removeCollaborator(collaboratorId, eventId) {
   const isOwnerOrAdmin = await isEventOwnerOrAdmin(eventId);
   if (!isOwnerOrAdmin) throw new Error("Accès refusé");
 
-  await prisma.event_Collaborator.delete({ where: { id: collaboratorId } });
+  await prisma.eventCollaborator.delete({ where: { id: collaboratorId } });
   return { success: true };
 }
 
@@ -89,7 +89,7 @@ export async function updateCollaboratorRole(collaboratorId, eventId, role) {
 
   if (!["editor", "viewer"].includes(role)) throw new Error("Rôle invalide");
 
-  return prisma.event_Collaborator.update({
+  return prisma.eventCollaborator.update({
     where: { id: collaboratorId },
     data: { role },
     include: { user: { select: { id: true, name: true, email: true } } },
@@ -102,7 +102,7 @@ export async function getMyCollaboratorRole(eventId) {
   const session = await getSession();
   if (!session) return null;
 
-  const collab = await prisma.event_Collaborator.findFirst({
+  const collab = await prisma.eventCollaborator.findFirst({
     where: { eventId, userId: session.userId, accepted: true },
     select: { role: true },
   });

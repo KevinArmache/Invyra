@@ -1,71 +1,32 @@
 import { NextResponse } from "next/server";
-import { jwtVerify } from "jose";
+import { getSessionCookie } from "better-auth/cookies";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
-
-async function getPayload(token) {
-  if (!token) return null;
-  try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-    return payload;
-  } catch {
-    return null;
-  }
-}
-
+/**
+ * Filtre d'entrée volontairement superficiel : il ne fait que vérifier la
+ * présence du cookie de session pour éviter d'afficher une page privée à un
+ * visiteur anonyme. La vraie autorisation (rôle, suspension, propriété d'un
+ * événement) est faite côté serveur par requireAuth / requireAdmin, qui
+ * interrogent la base. Un cookie forgé ne donne donc accès à rien.
+ */
 export async function proxy(request) {
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get("auth-token")?.value;
 
-  // ── Routes publiques : toujours autorisées ─────────────────────────
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/invite") ||
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname === "/"
-  ) {
-    return NextResponse.next();
-  }
+  const isProtected =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/admin");
 
-  const payload = await getPayload(token);
+  if (!isProtected) return NextResponse.next();
 
-  // ── Protection /dashboard/** ────────────────────────────────────────
-  if (pathname.startsWith("/dashboard")) {
-    if (!payload) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-    return NextResponse.next();
-  }
+  const sessionCookie = getSessionCookie(request);
 
-  // ── Protection /admin/** ────────────────────────────────────────────
-  if (pathname.startsWith("/admin")) {
-    if (!payload) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-    // Vérification du rôle directement via l'API route interne
-    // (le JWT peut ne pas contenir le rôle si token ancien)
-    // On délègue la vérification à requireAdmin() dans le Server Component
-    // mais on vérifie d'abord le JWT pour les nouveaux tokens
-    const roleFromJwt = payload.role;
-
-    if (roleFromJwt && roleFromJwt !== "admin") {
-      // JWT récent et rôle clairement non-admin → bloquer directement
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
-
-    // Si le JWT est ancien (pas de role), on laisse passer
-    // requireAdmin() dans le layout fera la vérification DB fiable
-    return NextResponse.next();
+  if (!sessionCookie) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.svg|.*\\.webp).*)",
-  ],
+  matcher: ["/dashboard/:path*", "/admin/:path*"],
 };

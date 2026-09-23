@@ -9,8 +9,11 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Session'
+export type * from './models/Account'
+export type * from './models/Verification'
 export type * from './models/Template'
 export type * from './models/Event'
-export type * from './models/Event_Collaborator'
+export type * from './models/EventCollaborator'
 export type * from './models/Guest'
 export type * from './commonInputTypes'

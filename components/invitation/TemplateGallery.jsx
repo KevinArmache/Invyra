@@ -1,96 +1,92 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getTemplates } from "@/app/actions/template";
-import InvitationPreview from "./InvitationPreview";
+import { Check, LayoutTemplate } from "lucide-react";
 
-export default function TemplateGallery({ selectedId, onSelect }) {
-  const [templates, setTemplates] = useState([]);
-  const [loading, setLoading] = useState(true);
+import { EmptyState } from "@/components/dashboard/ui";
+import InvitationPreview from "@/components/invitation/InvitationPreview";
+import { useTranslation } from "@/utils/i18n/Context";
 
-  useEffect(() => {
-    getTemplates()
-      .then((tmpls) => setTemplates(tmpls))
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
+const SAMPLE_EVENT = {
+  title: "Votre événement",
+  eventDate: "2027-06-12T00:00:00.000Z",
+  location: "Lieu de réception",
+  time: "19:00",
+  dressCode: "Tenue de soirée",
+};
 
-  if (loading) {
+/**
+ * Galerie de modèles réutilisables.
+ *
+ * Les modèles sont passés en propriété par le Server Component parent : la
+ * galerie allait auparavant les chercher elle-même au montage, ce qui
+ * affichait « Chargement… » à chaque ouverture de l'onglet.
+ */
+export default function TemplateGallery({ templates, selectedId, onSelect }) {
+  const { t } = useTranslation();
+
+  if (!templates || templates.length === 0) {
     return (
-      <div className="text-center py-8 text-sm text-muted-foreground animate-pulse">
-        Chargement des modèles...
-      </div>
-    );
-  }
-
-  if (templates.length === 0) {
-    return (
-      <div className="text-center py-12 border border-dashed rounded-xl">
-        <p className="text-sm text-muted-foreground">
-          Vous n'avez aucun modèle personnalisé.
-        </p>
-        <p className="text-xs text-muted-foreground mt-1">
-          Créez-en un depuis l'onglet "Modèles" du menu principal.
-        </p>
-      </div>
+      <EmptyState
+        icon={LayoutTemplate}
+        title={t("portal.events.new.no_templates")}
+        description={t("portal.templates.list.no_templates_desc")}
+      />
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h3 className="text-xs font-semibold uppercase tracking-widest text-primary mb-3">
-          Vos Modèles Customisés
-        </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {templates.map((preset) => (
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {templates.map((template) => {
+        const isSelected = selectedId === template.id;
+
+        return (
+          <li key={template.id}>
             <button
-              key={preset.id}
-              onClick={() => onSelect(preset.id, preset.config)}
-              className={`relative rounded-lg overflow-hidden border-2 transition-all hover:scale-[1.03] active:scale-[0.97] aspect-[3/4] bg-muted/20 ${
-                selectedId === preset.id
-                  ? "border-primary shadow-lg shadow-primary/30 ring-2 ring-primary/40"
-                  : "border-border hover:border-primary/40"
+              type="button"
+              onClick={() => onSelect(template.id, template.config)}
+              aria-pressed={isSelected}
+              className={`relative aspect-3/4 w-full overflow-hidden rounded-md border bg-ink-900 text-left transition-colors ${
+                isSelected
+                  ? "border-gold"
+                  : "border-border hover:border-gold/40"
               }`}
             >
-              <div className="absolute inset-0 scale-75 origin-top pointer-events-none">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-0 left-1/2"
+                style={{
+                  width: "250%",
+                  height: "250%",
+                  transform: "translateX(-50%) scale(0.4)",
+                  transformOrigin: "top center",
+                }}
+              >
                 <InvitationPreview
-                  template={preset.config}
-                  event={{
-                    title: "Votre Événement",
-                    eventDate: new Date().toISOString(),
-                    location: "Lieu",
-                  }}
+                  template={template.config}
+                  event={SAMPLE_EVENT}
+                  guestName="Marie Dupont"
                   readOnly
                 />
               </div>
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent p-2 text-left">
-                <span className="text-lg">💻</span>
-                <p className="text-white text-xs font-semibold leading-tight mt-0.5 truncate">
-                  {preset.name}
-                </p>
-              </div>
-              {selectedId === preset.id && (
-                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                  <svg
-                    className="w-3 h-3 text-primary-foreground"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+
+              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-900 via-ink-900/85 to-transparent px-2.5 pt-6 pb-2.5">
+                <span className="block truncate text-xs text-ink-100">
+                  {template.name}
+                </span>
+              </span>
+
+              {isSelected && (
+                <span className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold">
+                  <Check
+                    className="h-3 w-3 text-primary-foreground"
                     strokeWidth={3}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
+                  />
+                </span>
               )}
             </button>
-          ))}
-        </div>
-      </div>
-    </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

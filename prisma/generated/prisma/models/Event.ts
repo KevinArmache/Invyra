@@ -264,7 +264,7 @@ export type EventWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   guests?: Prisma.GuestListRelationFilter
-  collaborators?: Prisma.Event_CollaboratorListRelationFilter
+  collaborators?: Prisma.EventCollaboratorListRelationFilter
   templateCopy?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
 }
 
@@ -287,7 +287,7 @@ export type EventOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   guests?: Prisma.GuestOrderByRelationAggregateInput
-  collaborators?: Prisma.Event_CollaboratorOrderByRelationAggregateInput
+  collaborators?: Prisma.EventCollaboratorOrderByRelationAggregateInput
   templateCopy?: Prisma.TemplateOrderByWithRelationInput
 }
 
@@ -313,7 +313,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   guests?: Prisma.GuestListRelationFilter
-  collaborators?: Prisma.Event_CollaboratorListRelationFilter
+  collaborators?: Prisma.EventCollaboratorListRelationFilter
   templateCopy?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
 }, "id">
 
@@ -379,7 +379,7 @@ export type EventCreateInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEventsInput
   guests?: Prisma.GuestCreateNestedManyWithoutEventInput
-  collaborators?: Prisma.Event_CollaboratorCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
 }
 
@@ -401,7 +401,7 @@ export type EventUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
-  collaborators?: Prisma.Event_CollaboratorUncheckedCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
 }
 
@@ -423,7 +423,7 @@ export type EventUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
   guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
-  collaborators?: Prisma.Event_CollaboratorUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
 }
 
@@ -445,7 +445,7 @@ export type EventUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
-  collaborators?: Prisma.Event_CollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
 }
 
@@ -636,10 +636,6 @@ export type EventUpdateOneWithoutTemplateCopyNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutTemplateCopyInput, Prisma.EventUpdateWithoutTemplateCopyInput>, Prisma.EventUncheckedUpdateWithoutTemplateCopyInput>
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type EventCreateNestedOneWithoutCollaboratorsInput = {
   create?: Prisma.XOR<Prisma.EventCreateWithoutCollaboratorsInput, Prisma.EventUncheckedCreateWithoutCollaboratorsInput>
   connectOrCreate?: Prisma.EventCreateOrConnectWithoutCollaboratorsInput
@@ -685,7 +681,7 @@ export type EventCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestCreateNestedManyWithoutEventInput
-  collaborators?: Prisma.Event_CollaboratorCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
 }
 
@@ -706,7 +702,7 @@ export type EventUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
-  collaborators?: Prisma.Event_CollaboratorUncheckedCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
 }
 
@@ -776,7 +772,7 @@ export type EventCreateWithoutTemplateCopyInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEventsInput
   guests?: Prisma.GuestCreateNestedManyWithoutEventInput
-  collaborators?: Prisma.Event_CollaboratorCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutTemplateCopyInput = {
@@ -797,7 +793,7 @@ export type EventUncheckedCreateWithoutTemplateCopyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
-  collaborators?: Prisma.Event_CollaboratorUncheckedCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutTemplateCopyInput = {
@@ -834,7 +830,7 @@ export type EventUpdateWithoutTemplateCopyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
   guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
-  collaborators?: Prisma.Event_CollaboratorUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutTemplateCopyInput = {
@@ -855,7 +851,7 @@ export type EventUncheckedUpdateWithoutTemplateCopyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
-  collaborators?: Prisma.Event_CollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateWithoutCollaboratorsInput = {
@@ -975,7 +971,7 @@ export type EventCreateWithoutGuestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEventsInput
-  collaborators?: Prisma.Event_CollaboratorCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
 }
 
@@ -996,7 +992,7 @@ export type EventUncheckedCreateWithoutGuestsInput = {
   autoSend?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  collaborators?: Prisma.Event_CollaboratorUncheckedCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
 }
 
@@ -1033,7 +1029,7 @@ export type EventUpdateWithoutGuestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
-  collaborators?: Prisma.Event_CollaboratorUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
 }
 
@@ -1054,7 +1050,7 @@ export type EventUncheckedUpdateWithoutGuestsInput = {
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  collaborators?: Prisma.Event_CollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
 }
 
@@ -1093,7 +1089,7 @@ export type EventUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
-  collaborators?: Prisma.Event_CollaboratorUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
 }
 
@@ -1114,7 +1110,7 @@ export type EventUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
-  collaborators?: Prisma.Event_CollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
 }
 
@@ -1172,7 +1168,7 @@ export type EventCountOutputTypeCountGuestsArgs<ExtArgs extends runtime.Types.Ex
  * EventCountOutputType without action
  */
 export type EventCountOutputTypeCountCollaboratorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.Event_CollaboratorWhereInput
+  where?: Prisma.EventCollaboratorWhereInput
 }
 
 
@@ -1279,7 +1275,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     guests: Prisma.$GuestPayload<ExtArgs>[]
-    collaborators: Prisma.$Event_CollaboratorPayload<ExtArgs>[]
+    collaborators: Prisma.$EventCollaboratorPayload<ExtArgs>[]
     templateCopy: Prisma.$TemplatePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1293,6 +1289,10 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     dressCode: string | null
     customMessage: string | null
     animationConfig: runtime.JsonValue | null
+    /**
+     * Déprécié : le design vit dans Template (relation templateCopy).
+     * Encore lu en repli pour les événements créés avant la bascule.
+     */
     invitationTemplate: runtime.JsonValue | null
     emailTemplate: string | null
     status: string
@@ -1695,7 +1695,7 @@ export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   guests<T extends Prisma.Event$guestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$guestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  collaborators<T extends Prisma.Event$collaboratorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$collaboratorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$Event_CollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  collaborators<T extends Prisma.Event$collaboratorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$collaboratorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   templateCopy<T extends Prisma.Event$templateCopyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$templateCopyArgs<ExtArgs>>): Prisma.Prisma__TemplateClient<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2171,23 +2171,23 @@ export type Event$guestsArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
  */
 export type Event$collaboratorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Event_Collaborator
+   * Select specific fields to fetch from the EventCollaborator
    */
-  select?: Prisma.Event_CollaboratorSelect<ExtArgs> | null
+  select?: Prisma.EventCollaboratorSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Event_Collaborator
+   * Omit specific fields from the EventCollaborator
    */
-  omit?: Prisma.Event_CollaboratorOmit<ExtArgs> | null
+  omit?: Prisma.EventCollaboratorOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.Event_CollaboratorInclude<ExtArgs> | null
-  where?: Prisma.Event_CollaboratorWhereInput
-  orderBy?: Prisma.Event_CollaboratorOrderByWithRelationInput | Prisma.Event_CollaboratorOrderByWithRelationInput[]
-  cursor?: Prisma.Event_CollaboratorWhereUniqueInput
+  include?: Prisma.EventCollaboratorInclude<ExtArgs> | null
+  where?: Prisma.EventCollaboratorWhereInput
+  orderBy?: Prisma.EventCollaboratorOrderByWithRelationInput | Prisma.EventCollaboratorOrderByWithRelationInput[]
+  cursor?: Prisma.EventCollaboratorWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.Event_CollaboratorScalarFieldEnum | Prisma.Event_CollaboratorScalarFieldEnum[]
+  distinct?: Prisma.EventCollaboratorScalarFieldEnum | Prisma.EventCollaboratorScalarFieldEnum[]
 }
 
 /**

@@ -13,7 +13,6 @@ import { sendInvitationEmail, sendBulkInvitationEmails } from "./notify";
 const GUEST_LIMITS = {
   free: 15,
   premium: Infinity,
-  enterprise: Infinity,
 };
 
 // ─── Helper de vérification des droits ───────────────────────────────────────

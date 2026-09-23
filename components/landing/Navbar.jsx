@@ -1,128 +1,154 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useUser } from "@/hooks/useUser";
-import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useTranslation } from "@/utils/i18n/Context";
 
-export default function Navbar() {
+const SECTIONS = [
+  { href: "#features", key: "nav.features" },
+  { href: "#templates", key: "nav.templates", showcaseOnly: true },
+  { href: "#how-it-works", key: "nav.how_it_works" },
+  { href: "#availability", key: "nav.availability" },
+  { href: "#pricing", key: "nav.pricing" },
+];
+
+/**
+ * `isAuthenticated` vient du Server Component parent : la barre n'a pas à
+ * demander la session au montage, donc pas de bouton fantôme qui clignote
+ * pendant le chargement.
+ */
+export default function Navbar({
+  isAuthenticated = false,
+  hasShowcase = false,
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, loading } = useUser();
+  const [isScrolled, setIsScrolled] = useState(false);
   const { t } = useTranslation();
+  // Le lien « Modèles » n'apparaît que si la vitrine a du contenu.
+  const sections = SECTIONS.filter(
+    (section) => hasShowcase || !section.showcaseOnly,
+  );
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Un menu plein écran ouvert ne doit pas laisser la page défiler dessous.
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-gradient">Invyra</span>
-          </Link>
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        isScrolled || isOpen
+          ? "border-b border-border/60 bg-background/85 backdrop-blur-xl"
+          : "border-b border-transparent"
+      }`}
+      style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+    >
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className="font-display text-2xl tracking-tight text-ink-50"
+          onClick={() => setIsOpen(false)}
+        >
+          Invyra
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+        <nav className="hidden items-center gap-9 md:flex">
+          {sections.map((section) => (
             <Link
-              href="#features"
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              key={section.href}
+              href={section.href}
+              className="relative py-1 text-sm text-muted-foreground transition-colors hover:text-foreground after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-gold after:transition-transform after:duration-300 hover:after:scale-x-100"
             >
-              {t("nav.features")}
+              {t(section.key)}
             </Link>
-            <Link
-              href="#how-it-works"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("nav.how_it_works")}
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("nav.pricing")}
-            </Link>
-          </div>
+          ))}
+        </nav>
 
-          <div className="hidden md:flex items-center gap-3">
-            <LanguageSwitcher />
-            {loading ? (
-              <div className="w-20 h-9 bg-muted animate-pulse rounded-md" />
-            ) : user ? (
-              <Button asChild>
-                <Link href="/dashboard">{t("nav.dashboard")}</Link>
+        <div className="hidden items-center gap-2 md:flex">
+          <LanguageSwitcher />
+          {isAuthenticated ? (
+            <Button asChild size="sm">
+              <Link href="/dashboard">{t("nav.dashboard")}</Link>
+            </Button>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/login">{t("nav.sign_in")}</Link>
               </Button>
-            ) : (
-              <>
-                <Button variant="ghost" asChild>
-                  <Link href="/login">{t("nav.sign_in")}</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/register">{t("nav.get_started")}</Link>
-                </Button>
-              </>
-            )}
-          </div>
+              <Button asChild size="sm">
+                <Link href="/register">{t("nav.get_started")}</Link>
+              </Button>
+            </>
+          )}
+        </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center gap-2">
-            <LanguageSwitcher />
-            <button
-              className="p-2 text-muted-foreground hover:text-foreground"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+        <div className="flex items-center gap-1 md:hidden">
+          <LanguageSwitcher />
+          <button
+            type="button"
+            className="rounded-md p-2 text-muted-foreground transition-colors hover:text-foreground"
+            onClick={() => setIsOpen((open) => !open)}
+            aria-expanded={isOpen}
+            aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+          >
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isOpen && (
-        <div className="md:hidden bg-card/95 backdrop-blur-xl border-b border-border">
-          <div className="px-4 py-4 space-y-4">
-            <Link
-              href="#features"
-              className="block text-muted-foreground hover:text-foreground transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {t("nav.features")}
-            </Link>
-            <Link
-              href="#how-it-works"
-              className="block text-muted-foreground hover:text-foreground transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {t("nav.how_it_works")}
-            </Link>
-            {/*
-            <Link
-              href="#pricing"
-              className="block text-muted-foreground hover:text-foreground transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {t('nav.pricing')}
-            </Link>
-            */}
-            <div className="pt-4 space-y-2">
-              {user ? (
+        <div className="border-t border-border/60 bg-background/95 backdrop-blur-xl md:hidden">
+          <nav className="space-y-1 px-4 py-4">
+            {sections.map((section) => (
+              <Link
+                key={section.href}
+                href={section.href}
+                className="block rounded-md px-2 py-3 text-base text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                onClick={() => setIsOpen(false)}
+              >
+                {t(section.key)}
+              </Link>
+            ))}
+
+            <div className="space-y-2 pt-4">
+              {isAuthenticated ? (
                 <Button asChild className="w-full">
-                  <Link href="/dashboard">{t("nav.dashboard")}</Link>
+                  <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+                    {t("nav.dashboard")}
+                  </Link>
                 </Button>
               ) : (
                 <>
-                  <Button variant="outline" asChild className="w-full">
-                    <Link href="/login">{t("nav.sign_in")}</Link>
+                  <Button asChild variant="outline" className="w-full">
+                    <Link href="/login" onClick={() => setIsOpen(false)}>
+                      {t("nav.sign_in")}
+                    </Link>
                   </Button>
                   <Button asChild className="w-full">
-                    <Link href="/register">{t("nav.get_started")}</Link>
+                    <Link href="/register" onClick={() => setIsOpen(false)}>
+                      {t("nav.get_started")}
+                    </Link>
                   </Button>
                 </>
               )}
             </div>
-          </div>
+          </nav>
         </div>
       )}
-    </nav>
+    </header>
   );
 }

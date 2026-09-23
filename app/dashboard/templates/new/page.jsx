@@ -1,18 +1,23 @@
-'use client'
+import { redirect } from "next/navigation";
 
-import { saveUserTemplate } from '@/app/actions/template'
-import { toast } from 'sonner'
-import TemplateEditorForm from '@/components/dashboard/TemplateEditorForm'
+import { saveUserTemplate } from "@/app/actions/template";
+import { getSession } from "@/app/actions/auth";
+import TemplateEditorForm from "@/components/dashboard/TemplateEditorForm";
 
-export default function NewTemplatePage() {
-  async function handleSave(name, config, status) {
-    try {
-      await saveUserTemplate(name, config, status)
-      toast.success('Modèle créé avec succès !')
-    } catch (e) {
-      toast.error(e.message)
-    }
-  }
+export const metadata = { title: "Nouveau modèle" };
 
-  return <TemplateEditorForm onSave={handleSave} />
+export default async function NewTemplatePage() {
+  const session = await getSession();
+  // La création de modèles est réservée aux administrateurs.
+  if (session?.role !== "admin") redirect("/dashboard/templates");
+
+  // `saveUserTemplate` est une server action : elle se passe telle quelle au
+  // composant client, qui l'appellera depuis le navigateur.
+  return (
+    <TemplateEditorForm
+      onSave={saveUserTemplate}
+      allowCode
+      uploadEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
+    />
+  );
 }

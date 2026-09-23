@@ -1,0 +1,23 @@
+# pnpm 11 n'exécute plus les scripts d'installation d'un paquet sans accord
+# explicite, et refuse de terminer tant que chaque cas n'est pas tranché — ce
+# qui faisait échouer `pnpm install`, donc `pnpm dev`.
+#
+# Ce fichier doit être versionné : sans lui, chaque machine bute sur la même
+# erreur.
+allowBuilds:
+  # Posent les binaires natifs du moteur Prisma, nécessaires au client.
+  '@prisma/engines': true
+  prisma: true
+
+  # Redimensionnement d'images pour Next. Inutilisé tant que
+  # `images.unoptimized` est à true dans next.config.mjs, mais on l'autorise
+  # pour ne pas casser une éventuelle réactivation.
+  sharp: true
+
+  # Résolveur natif utilisé par les règles d'import d'ESLint.
+  unrs-resolver: true
+
+  # Mock Service Worker, tiré par une dépendance pour ses propres tests. Son
+  # script d'installation copie un service worker dont le projet ne se sert
+  # pas.
+  msw: false

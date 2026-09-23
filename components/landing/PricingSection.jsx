@@ -1,126 +1,139 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 
-import { useTranslation } from "@/utils/i18n/Context";
+import { Button } from "@/components/ui/button";
+import { getTranslations } from "@/utils/i18n/server";
 
-export default function PricingSection() {
-  const { t } = useTranslation();
+const CONTACT_URL = "https://wa.me/+243816864164";
 
-  const safeFeatures = (arr) => (Array.isArray(arr) ? arr : []);
+const PLANS = [
+  { key: "free", href: "/register", featured: false },
+  { key: "pro", href: CONTACT_URL, featured: true },
+];
 
-  const plans = [
-    {
-      name: t("landing.pricing.plans.free.name"),
-      price: t("landing.pricing.plans.free.price"),
-      period: t("landing.pricing.plans.free.period"),
-      description: t("landing.pricing.plans.free.desc"),
-      features: safeFeatures(t("landing.pricing.plans.free.features")),
-      cta: t("landing.pricing.plans.free.cta"),
-      href: "/register",
-      popular: false,
-    },
-    {
-      name: t("landing.pricing.plans.pro.name"),
-      price: t("landing.pricing.plans.pro.price"),
-      period: t("landing.pricing.plans.pro.period"),
-      description: t("landing.pricing.plans.pro.desc"),
-      features: safeFeatures(t("landing.pricing.plans.pro.features")),
-      cta: t("landing.pricing.plans.pro.cta"),
-      href: "https://wa.me/+243816864164",
-      popular: true,
-    },
-    {
-      name: t("landing.pricing.plans.enterprise.name"),
-      price: t("landing.pricing.plans.enterprise.price"),
-      period: t("landing.pricing.plans.enterprise.period"),
-      description: t("landing.pricing.plans.enterprise.desc"),
-      features: safeFeatures(t("landing.pricing.plans.enterprise.features")),
-      cta: t("landing.pricing.plans.enterprise.cta"),
-      href: "https://wa.me/+243816864164",
-      popular: false,
-    },
-  ];
+export default async function PricingSection() {
+  const { t } = await getTranslations();
 
   return (
-    <section id="pricing" className="py-24 px-4 sm:px-6 lg:px-8 bg-card/30">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+    <section
+      id="pricing"
+      className="scroll-mt-16 border-t border-border/60 px-4 py-24 sm:px-6 lg:px-8 lg:py-32"
+    >
+      <div className="mx-auto max-w-6xl">
+        <header className="reveal mx-auto max-w-2xl text-center">
+          <h2 className="text-balance text-4xl leading-tight text-ink-50 sm:text-5xl">
             {t("landing.pricing.title")}
-            <span className="text-gradient">
+            <em className="text-gold not-italic">
               {t("landing.pricing.title_highlight")}
-            </span>
+            </em>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <hr className="rule-gold mx-auto mt-7 w-24" />
+          <p className="mt-7 text-pretty text-lg leading-relaxed text-ink-300">
             {t("landing.pricing.subtitle")}
           </p>
-        </motion.div>
+        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={index}
-              className={`relative rounded-2xl p-8 ${
-                plan.popular
-                  ? "bg-primary/5 border-2 border-primary"
-                  : "bg-card border border-border/50"
-              }`}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary text-primary-foreground text-sm font-medium rounded-full">
-                  Most Popular
-                </div>
-              )}
+        {/* Deux formules : la grille est resserrée pour que les cartes
+            gardent la largeur qu'elles avaient à trois. items-start empêche la
+            carte gratuite de s'étirer à la hauteur de la carte mise en avant,
+            volontairement plus haute. */}
+        <div className="mx-auto mt-20 grid max-w-4xl items-start gap-6 md:grid-cols-2">
+          {PLANS.map((plan) => {
+            const features = t(`landing.pricing.plans.${plan.key}.features`);
+            const isExternal = plan.href.startsWith("http");
 
-              <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold text-foreground mb-2">
-                  {plan.name}
-                </h3>
-                <div className="mb-2">
-                  <span className="text-4xl font-bold text-foreground">
-                    {plan.price}
-                  </span>
-                  <span className="text-muted-foreground ml-2">
-                    / {plan.period}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {plan.description}
-                </p>
-              </div>
+            // « 0€ » et un prix en toutes lettres ne peuvent pas partager la même taille :
+            // au-delà de quelques caractères le prix cesse d'être un chiffre à
+            // lire d'un coup d'œil et devient une ligne de texte.
+            const price = t(`landing.pricing.plans.${plan.key}.price`);
+            const priceIsNumeric = String(price).length <= 6;
 
-              <ul className="space-y-4 mb-8">
-                {plan.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0" />
-                    <span className="text-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Button
-                asChild
-                className="w-full"
-                variant={plan.popular ? "default" : "outline"}
+            return (
+              <article
+                key={plan.key}
+                className={`reveal relative flex h-full flex-col rounded-lg p-8 ${
+                  plan.featured
+                    ? "border border-gold/40 bg-ink-850 shadow-elevation-3 md:-mt-6 md:pt-12 md:pb-10"
+                    : "surface"
+                }`}
               >
-                <Link href={plan.href}>{plan.cta}</Link>
-              </Button>
-            </motion.div>
-          ))}
+                {plan.featured && (
+                  <>
+                    {/* Le filet doré en tête remplace la pastille flottante
+                        « populaire » : il ne chevauche rien et se lit aussi
+                        bien sur mobile. */}
+                    <hr className="rule-gold absolute inset-x-8 top-0" />
+                    <p className="eyebrow mb-5 text-gold/80">
+                      {t("landing.pricing.popular")}
+                    </p>
+                  </>
+                )}
+
+                <h3 className="text-2xl text-ink-50">
+                  {t(`landing.pricing.plans.${plan.key}.name`)}
+                </h3>
+                <p className="mt-2 text-sm text-ink-400">
+                  {t(`landing.pricing.plans.${plan.key}.desc`)}
+                </p>
+
+                <div
+                  className={
+                    priceIsNumeric
+                      ? "mt-7 flex flex-wrap items-baseline gap-x-2 gap-y-1"
+                      : "mt-7"
+                  }
+                >
+                  <span
+                    data-numeric
+                    className={`font-display text-ink-50 ${
+                      priceIsNumeric ? "text-5xl" : "text-3xl"
+                    }`}
+                  >
+                    {price}
+                  </span>
+                  <span
+                    className={`text-sm text-ink-400 ${
+                      priceIsNumeric ? "" : "mt-1.5 block"
+                    }`}
+                  >
+                    {t(`landing.pricing.plans.${plan.key}.period`)}
+                  </span>
+                </div>
+
+                <hr className="my-8 border-border/70" />
+
+                <ul className="mb-9 flex-1 space-y-3.5">
+                  {(Array.isArray(features) ? features : []).map((feature) => (
+                    <li key={feature} className="flex gap-3">
+                      <Check
+                        className="mt-0.5 h-4 w-4 shrink-0 text-gold"
+                        strokeWidth={2}
+                      />
+                      <span className="text-sm leading-relaxed text-ink-100">
+                        {feature}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  asChild
+                  size="lg"
+                  variant={plan.featured ? "default" : "outline"}
+                  className="w-full"
+                >
+                  <Link
+                    href={plan.href}
+                    {...(isExternal
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
+                    {t(`landing.pricing.plans.${plan.key}.cta`)}
+                  </Link>
+                </Button>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>

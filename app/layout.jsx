@@ -1,67 +1,96 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+
 import { I18nProvider } from "@/utils/i18n/Context";
+import { getLocale, getDictionary } from "@/utils/i18n/server";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 
-const _geist = Geist({ subsets: ["latin"] });
-const _geistMono = Geist_Mono({ subsets: ["latin"] });
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist",
+  display: "swap",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
+  display: "swap",
+});
+
+/**
+ * Fraunces porte tous les titres. L'axe SOFT est laissé à 0 et WONK désactivé :
+ * on veut l'autorité d'une serif de presse, pas son côté fantaisiste.
+ */
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+  axes: ["SOFT", "WONK", "opsz"],
+});
 
 export const metadata = {
-  title: "Invyra - Custom HTML/JS event invitations",
+  metadataBase: process.env.NEXT_PUBLIC_APP_URL
+    ? new URL(process.env.NEXT_PUBLIC_APP_URL)
+    : undefined,
+  title: {
+    default: "Invyra — Invitations d'événement sur mesure",
+    template: "%s · Invyra",
+  },
   description:
-    "Create stunning, custom event invitations. Transform your events into unforgettable experiences with clean HTML/CSS/JS designs, personalized messaging, and smart RSVP tracking.",
-  generator: "Invyra",
+    "Composez des invitations en HTML, CSS et JavaScript, envoyez-les par email ou WhatsApp, et suivez les réponses en temps réel.",
+  applicationName: "Invyra",
   keywords: [
-    "invitations",
-    "events",
-    "HTML",
-    "CSS",
-    "JS",
-    "custom designs",
+    "invitation",
+    "événement",
     "RSVP",
-    "wedding invitations",
-    "event management",
+    "mariage",
+    "HTML",
+    "faire-part",
+    "gestion d'invités",
   ],
   authors: [{ name: "Invyra" }],
   openGraph: {
-    title: "Invyra - Custom HTML/JS event invitations",
-    description: "Create stunning, custom HTML/JS event invitations.",
+    title: "Invyra — Invitations d'événement sur mesure",
+    description:
+      "Composez des invitations en HTML, CSS et JavaScript, et suivez les réponses en temps réel.",
     type: "website",
+    siteName: "Invyra",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Invyra — Invitations d'événement sur mesure",
+    description:
+      "Composez des invitations en HTML, CSS et JavaScript, et suivez les réponses en temps réel.",
   },
   icons: {
-    icon: [
-      {
-        url: "/logo-favicon.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/logo-favicon.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/logo-favicon.png",
-        type: "image/svg+xml",
-      },
-    ],
+    icon: "/logo-favicon.png",
     apple: "/apple-icon.png",
   },
 };
 
 export const viewport = {
-  themeColor: "#1a1a2e",
+  themeColor: "#232020",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const locale = await getLocale();
+  const dictionary = getDictionary(locale);
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased" suppressHydrationWarning>
-        <I18nProvider>
+    <html
+      lang={locale}
+      className={`${geist.variable} ${geistMono.variable} ${fraunces.variable}`}
+      suppressHydrationWarning
+    >
+      <body suppressHydrationWarning>
+        <I18nProvider locale={locale} dictionary={dictionary}>
           {children}
-          <Toaster position="top-center" richColors />
+          <Toaster position="top-center" richColors closeButton />
           <Analytics />
         </I18nProvider>
       </body>

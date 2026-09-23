@@ -47,6 +47,21 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model Account
+ * 
+ */
+export type Account = Prisma.AccountModel
+/**
+ * Model Verification
+ * 
+ */
+export type Verification = Prisma.VerificationModel
+/**
  * Model Template
  * 
  */
@@ -57,10 +72,10 @@ export type Template = Prisma.TemplateModel
  */
 export type Event = Prisma.EventModel
 /**
- * Model Event_Collaborator
+ * Model EventCollaborator
  * 
  */
-export type Event_Collaborator = Prisma.Event_CollaboratorModel
+export type EventCollaborator = Prisma.EventCollaboratorModel
 /**
  * Model Guest
  * 

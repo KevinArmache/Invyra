@@ -1,45 +1,46 @@
-'use client'
+"use client";
 
-import * as React from "react"
-import { Check } from "lucide-react"
-import { useTranslation } from "@/utils/i18n/Context"
-import { Button } from "@/components/ui/button"
+import { Check } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-const languages = [
-  { code: 'en', name: 'English' },
-  { code: 'fr', name: 'Français' }
-]
+} from "@/components/ui/dropdown-menu";
+import { useTranslation } from "@/utils/i18n/Context";
+import { LOCALES, LOCALE_LABELS } from "@/utils/i18n/config";
 
 export function LanguageSwitcher() {
-  const { locale, changeLocale } = useTranslation()
+  const { locale, changeLocale } = useTranslation();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-1 px-2 text-xs font-bold uppercase tracking-widest">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1 px-2 text-xs font-semibold tracking-widest uppercase"
+          aria-label={LOCALE_LABELS[locale]}
+        >
           {locale.toUpperCase()}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-32 min-w-0">
-        {languages.map((lang) => (
+      <DropdownMenuContent align="end" className="w-36 min-w-0">
+        {LOCALES.map((code) => (
           <DropdownMenuItem
-            key={lang.code}
-            onClick={() => changeLocale(lang.code)}
-            className="flex items-center justify-between cursor-pointer"
+            key={code}
+            onClick={() => changeLocale(code)}
+            className="flex cursor-pointer items-center justify-between gap-2"
           >
-            <span className="font-medium">{lang.code.toUpperCase()}</span>
-            <span className="text-xs text-muted-foreground">{lang.name}</span>
-            {locale === lang.code && <Check className="h-3.5 w-3.5 ml-2 text-primary shrink-0" />}
+            <span className="text-sm">{LOCALE_LABELS[code]}</span>
+            {locale === code && (
+              <Check className="h-3.5 w-3.5 shrink-0 text-gold" />
+            )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
-

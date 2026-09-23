@@ -1,93 +1,70 @@
-'use client'
+import { getTranslations } from "@/utils/i18n/server";
 
-import { motion } from 'framer-motion'
-import { PenLine, Wand2, Send, BarChart3 } from 'lucide-react'
+const STEPS = ["1", "2", "3", "4"];
 
-import { useTranslation } from '@/utils/i18n/Context'
-
-export default function HowItWorksSection() {
-  const { t } = useTranslation()
-
-  const steps = [
-    {
-      icon: PenLine,
-      step: '01',
-      title: t('landing.how_it_works.steps.1.title'),
-      description: t('landing.how_it_works.steps.1.desc')
-    },
-    {
-      icon: Wand2,
-      step: '02',
-      title: t('landing.how_it_works.steps.2.title'),
-      description: t('landing.how_it_works.steps.2.desc')
-    },
-    {
-      icon: Send,
-      step: '03',
-      title: t('landing.how_it_works.steps.3.title'),
-      description: t('landing.how_it_works.steps.3.desc')
-    },
-    {
-      icon: BarChart3,
-      step: '04',
-      title: t('landing.how_it_works.steps.4.title'),
-      description: t('landing.how_it_works.steps.4.desc')
-    }
-  ]
+export default async function HowItWorksSection() {
+  const { t } = await getTranslations();
 
   return (
-    <section id="how-it-works" className="py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-            {t('landing.how_it_works.title')}<span className="text-gradient">{t('landing.how_it_works.title_highlight')}</span>
+    <section
+      id="how-it-works"
+      className="grain relative scroll-mt-16 overflow-hidden border-t border-border/60 bg-ink-850/40 px-4 py-24 sm:px-6 lg:px-8 lg:py-32"
+    >
+      <div className="relative mx-auto max-w-5xl">
+        <header className="reveal mx-auto max-w-2xl text-center">
+          <h2 className="text-balance text-4xl leading-tight text-ink-50 sm:text-5xl">
+            {t("landing.how_it_works.title")}
+            <em className="text-gold not-italic">
+              {t("landing.how_it_works.title_highlight")}
+            </em>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            {t('landing.how_it_works.subtitle')}
+          <hr className="rule-gold mx-auto mt-7 w-24" />
+          <p className="mt-7 text-lg leading-relaxed text-ink-300">
+            {t("landing.how_it_works.subtitle")}
           </p>
-        </motion.div>
+        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              className="relative"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              {/* Connector line */}
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-12 left-[calc(100%_-_1rem)] w-[calc(100%_-_2rem)] h-[2px] bg-gradient-to-r from-primary/50 to-primary/10" />
-              )}
-              
-              <div className="text-center">
-                <div className="relative inline-flex mb-6">
-                  <div className="w-24 h-24 rounded-full bg-primary/10 border-2 border-primary/30 flex items-center justify-center">
-                    <step.icon className="w-10 h-10 text-primary" />
-                  </div>
-                  <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold flex items-center justify-center">
-                    {step.step}
-                  </span>
+        <ol className="relative mt-20">
+          {/* Le fil vertical qui relie les étapes : il s'éteint avant le bas
+              du bloc plutôt que de s'arrêter net. */}
+          <div
+            aria-hidden="true"
+            className="absolute top-6 bottom-6 left-6 w-px bg-gradient-to-b from-gold/40 via-border to-transparent md:left-1/2 md:-translate-x-1/2"
+          />
+
+          {STEPS.map((step, index) => {
+            const isRight = index % 2 === 1;
+
+            return (
+              <li
+                key={step}
+                className="reveal relative mb-14 flex gap-6 last:mb-0 md:mb-20 md:gap-0"
+              >
+                {/* Pastille : le chiffre en serif est l'élément décoratif, on
+                    n'ajoute donc aucune icône. */}
+                <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold/30 bg-background shadow-elevation-2 md:absolute md:left-1/2 md:-translate-x-1/2">
+                  <span className="font-display text-xl text-gold">{step}</span>
                 </div>
-                <h3 className="text-xl font-semibold text-foreground mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-muted-foreground">
-                  {step.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+
+                <div
+                  className={`pt-1.5 md:w-[calc(50%-3rem)] ${
+                    isRight
+                      ? "md:ml-auto md:pl-4 md:text-left"
+                      : "md:mr-auto md:pr-4 md:text-right"
+                  }`}
+                >
+                  <h3 className="text-xl leading-snug text-ink-50">
+                    {t(`landing.how_it_works.steps.${step}.title`)}
+                  </h3>
+                  <p className="mt-2.5 text-pretty text-sm leading-relaxed text-ink-300">
+                    {t(`landing.how_it_works.steps.${step}.desc`)}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
       </div>
     </section>
-  )
+  );
 }
