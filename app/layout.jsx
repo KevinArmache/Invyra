@@ -64,8 +64,11 @@ export const metadata = {
     description:
       "Composez des invitations en HTML, CSS et JavaScript, et suivez les réponses en temps réel.",
   },
+  // favicon.ico (16, 32 et 48 px) et apple-icon.png (180 px) sont tirés du
+  // logo ; logo-favicon.png, en 1536 × 1024, est bien trop lourd pour un
+  // onglet.
   icons: {
-    icon: "/logo-favicon.png",
+    icon: "/favicon.ico",
     apple: "/apple-icon.png",
   },
 };

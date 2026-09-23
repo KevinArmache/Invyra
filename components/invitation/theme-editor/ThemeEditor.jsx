@@ -92,6 +92,17 @@ export default function ThemeEditor({ value, onChange, uploadEnabled }) {
     if (field.type === "font") return <FontField key={field.key} {...props} />;
     if (field.type === "toggle")
       return <ToggleField key={field.key} {...props} />;
+    if (field.type === "select")
+      return (
+        <ChoiceField
+          key={field.key}
+          {...props}
+          options={field.options.map((option) => ({
+            value: option,
+            label: t(`portal.themes.options.${field.key}.${option}`),
+          }))}
+        />
+      );
     return (
       <RangeField
         key={field.key}
@@ -315,9 +326,14 @@ export default function ThemeEditor({ value, onChange, uploadEnabled }) {
                   </p>
                 )}
                 {!hidden &&
-                  section.fields.map((field) =>
-                    renderContentField(section, field),
-                  )}
+                  section.fields
+                    // Réglages sans effet sur ce thème (ex. style d'ouverture
+                    // d'un thème qui a sa propre ouverture).
+                    .filter(
+                      (field) =>
+                        !theme.hiddenFields?.[section.key]?.includes(field.key),
+                    )
+                    .map((field) => renderContentField(section, field))}
               </AccordionContent>
             </AccordionItem>
           );

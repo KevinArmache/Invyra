@@ -537,10 +537,13 @@
         "baptism": "Christening",
         "anniversary": "Wedding anniversary",
         "birthday": "Birthday",
-        "party": "Party"
+        "party": "Party",
+        "engagement": "Engagement",
+        "babyshower": "Baby shower"
       },
       "catalog": {
         "eclat": "Grand wedding: full-screen photo, gold-foil title, gold dust, countdown and confetti.",
+        "origami": "A folded sheet the guest unfolds with a fingertip. Embossed paper, accordion schedule, a reply card that flies off as a paper plane and a final paper figure.",
         "elegance": "Translucent card and gold trim, title over the photo. For big occasions.",
         "minimal": "Light, airy page with strong typography. Clean and modern.",
         "festive": "Bright gradient, confetti and round buttons. Time to party."
@@ -576,7 +579,10 @@
         "fontScript": "Script font",
         "particles": "Floating gold dust",
         "countdown": "Countdown",
-        "confetti": "Confetti on confirmation"
+        "confetti": "Confetti on confirmation",
+        "texture": "Paper grain",
+        "figure": "Final figure",
+        "cranes": "Paper cranes on confirmation"
       },
       "sections": {
         "opening": "Invitation opening",
@@ -628,6 +634,11 @@
           "envelope": "Envelope",
           "seal": "Wax seal",
           "curtain": "Curtain"
+        },
+        "figure": {
+          "crane": "Crane",
+          "heart": "Heart",
+          "star": "Star"
         }
       },
       "music": {

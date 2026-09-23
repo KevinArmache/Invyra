@@ -537,10 +537,13 @@
         "baptism": "Baptême",
         "anniversary": "Anniversaire de mariage",
         "birthday": "Anniversaire",
-        "party": "Soirée"
+        "party": "Soirée",
+        "engagement": "Fiançailles",
+        "babyshower": "Baby shower"
       },
       "catalog": {
         "eclat": "Grand mariage : photo plein écran, titre à la feuille d'or, poussière d'or, compte à rebours et confettis.",
+        "origami": "Une feuille pliée que l'invité déplie du bout du doigt. Papier en relief, programme en accordéon, carte-réponse qui s'envole en avion et figure finale en papier.",
         "elegance": "Carte translucide et filet doré, titre posé sur la photo. Pour les grandes occasions.",
         "minimal": "Page claire et aérée, typographie forte. Sobre et moderne.",
         "festive": "Dégradé vif, confettis et boutons ronds. Pour faire la fête."
@@ -576,7 +579,10 @@
         "fontScript": "Police calligraphiée",
         "particles": "Poussière d'or animée",
         "countdown": "Compte à rebours",
-        "confetti": "Confettis à la confirmation"
+        "confetti": "Confettis à la confirmation",
+        "texture": "Grain du papier",
+        "figure": "Figure finale",
+        "cranes": "Envol de grues à la confirmation"
       },
       "sections": {
         "opening": "Ouverture de l'invitation",
@@ -628,6 +634,11 @@
           "envelope": "Enveloppe",
           "seal": "Cachet de cire",
           "curtain": "Rideau"
+        },
+        "figure": {
+          "crane": "Grue",
+          "heart": "Cœur",
+          "star": "Étoile"
         }
       },
       "music": {
