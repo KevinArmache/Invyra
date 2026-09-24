@@ -5,6 +5,7 @@ import { ArrowRight, Eye } from "lucide-react";
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
+import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import { sampleEvent } from "@/lib/invitation/sample";
 import { useTranslation } from "@/utils/i18n/Context";
 
@@ -54,21 +55,11 @@ export default function TemplatesShowcase({ templates, sample }) {
                 className="group surface-interactive block w-full overflow-hidden text-left"
               >
                 <div className="relative aspect-3/4 overflow-hidden border-b border-border/60 bg-ink-900">
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute top-0 left-1/2 transition-transform duration-700 group-hover:scale-[1.02]"
-                    style={{
-                      width: "250%",
-                      height: "250%",
-                      transform: "translateX(-50%) scale(0.4)",
-                      transformOrigin: "top center",
-                    }}
-                  >
-                    <InvitationPreview
+                  <div className="absolute inset-0 origin-top transition-transform duration-700 group-hover:scale-[1.02]">
+                    <TemplateThumbnail
                       template={template.config}
                       event={sample}
                       guestName="Sophie"
-                      readOnly
                       title={template.name}
                     />
                   </div>

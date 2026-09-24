@@ -20,7 +20,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InvitationEditor from "@/components/invitation/InvitationEditor";
 import LivePreview from "@/components/invitation/LivePreview";
 import ThemePicker from "@/components/invitation/theme-editor/ThemePicker";
+import { TEMPLATE_CATEGORIES } from "@/lib/invitation/categories";
 import { useTranslation } from "@/utils/i18n/Context";
+
+/** Valeur du Select pour « sans catégorie » (un Select n'accepte pas ""). */
+const NO_CATEGORY = "none";
 
 /** Événement fictif servant à peupler l'aperçu pendant l'édition. */
 const SAMPLE_EVENT = {
@@ -46,6 +50,7 @@ const STATUSES = [
 export default function TemplateEditorForm({
   initialName = "",
   initialStatus = "draft",
+  initialCategory = null,
   initialConfig,
   isEditing = false,
   allowCode = false,
@@ -57,7 +62,8 @@ export default function TemplateEditorForm({
 
   const [name, setName] = useState(initialName);
   const [status, setStatus] = useState(initialStatus || "draft");
-  // Sans configuration initiale, on commence par choisir un thème.
+  const [category, setCategory] = useState(initialCategory || NO_CATEGORY);
+  // Sans configuration initiale, on commence par choisir un design.
   const [config, setConfig] = useState(initialConfig ?? null);
   const [isSaving, setIsSaving] = useState(false);
   // En dessous de `lg`, code et aperçu ne tiennent pas côte à côte : on bascule
@@ -73,7 +79,12 @@ export default function TemplateEditorForm({
 
     setIsSaving(true);
     try {
-      await onSave(trimmed, config, status);
+      await onSave(
+        trimmed,
+        config,
+        status,
+        category === NO_CATEGORY ? null : category,
+      );
       toast.success(t("portal.templates.editor.success"));
       router.push("/dashboard/templates");
       router.refresh();
@@ -109,7 +120,7 @@ export default function TemplateEditorForm({
           <hr className="rule-gold-left mt-3 w-14" />
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end xl:flex-nowrap">
           <div className="space-y-1.5">
             <Label htmlFor="template-name" className="text-xs text-ink-400">
               {t("portal.templates.editor.name_placeholder")}
@@ -121,6 +132,27 @@ export default function TemplateEditorForm({
               placeholder={t("portal.templates.editor.name_placeholder")}
               className="sm:w-52"
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="template-category" className="text-xs text-ink-400">
+              {t("portal.templates.categories.label")}
+            </Label>
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger id="template-category" className="sm:w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NO_CATEGORY}>
+                  {t("portal.templates.categories.none")}
+                </SelectItem>
+                {TEMPLATE_CATEGORIES.map((key) => (
+                  <SelectItem key={key} value={key}>
+                    {t(`portal.templates.categories.${key}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-1.5">

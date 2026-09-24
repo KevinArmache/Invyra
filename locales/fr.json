@@ -483,7 +483,7 @@
         "subtitle": "Créez et gérez vos designs réutilisables pour vos invitations.",
         "new_btn": "Nouveau modèle",
         "no_templates": "Aucun modèle sauvegardé",
-        "no_templates_desc": "Partez d'un thème et personnalisez-le en quelques minutes, sans écrire de code.",
+        "no_templates_desc": "Partez d'un design et personnalisez-le en quelques minutes, sans écrire de code.",
         "create_first": "Créer mon premier modèle",
         "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce modèle ?",
         "delete_success": "Modèle supprimé avec succès",
@@ -501,7 +501,8 @@
         "unfeature_btn": "Retirer de l'accueil",
         "featured_badge": "Accueil",
         "feature_success": "Le modèle apparaît maintenant sur l'accueil.",
-        "unfeature_success": "Le modèle a été retiré de l'accueil."
+        "unfeature_success": "Le modèle a été retiré de l'accueil.",
+        "reset_filters": "Voir tous les modèles"
       },
       "editor": {
         "title": "Éditeur de Modèle",
@@ -520,26 +521,34 @@
         "title_new": "Créer un modèle",
         "title_edit": "Modifier le modèle",
         "name_required": "Donnez un nom à votre modèle."
+      },
+      "categories": {
+        "label": "Catégorie",
+        "all": "Tous",
+        "none": "Sans catégorie",
+        "wedding": "Mariage",
+        "engagement": "Fiançailles",
+        "birthday": "Anniversaire",
+        "babyshower": "Baby shower",
+        "baptism": "Baptême",
+        "party": "House party & soirées",
+        "gala": "Gala",
+        "corporate": "Professionnel",
+        "other": "Autre"
+      },
+      "pagination": {
+        "label": "Pages de modèles",
+        "previous": "Page précédente",
+        "next": "Page suivante",
+        "results": "modèles au total"
       }
     },
     "themes": {
       "picker": {
-        "title": "Choisissez un thème",
-        "subtitle": "Vous pourrez tout personnaliser ensuite : couleurs, polices, photos et textes.",
-        "filter_all": "Tous",
+        "title": "Choisissez un design de départ",
+        "subtitle": "Vous choisirez ensuite son ambiance, puis vous pourrez tout personnaliser : couleurs, polices, photos et textes.",
         "code_title": "Code (expert)",
         "code_desc": "HTML, CSS et JavaScript écrits à la main."
-      },
-      "occasions": {
-        "wedding": "Mariage",
-        "gala": "Gala",
-        "corporate": "Professionnel",
-        "baptism": "Baptême",
-        "anniversary": "Anniversaire de mariage",
-        "birthday": "Anniversaire",
-        "party": "Soirée",
-        "engagement": "Fiançailles",
-        "babyshower": "Baby shower"
       },
       "catalog": {
         "eclat": "Grand mariage : photo plein écran, titre à la feuille d'or, poussière d'or, compte à rebours et confettis.",
@@ -549,8 +558,6 @@
         "festive": "Dégradé vif, confettis et boutons ronds. Pour faire la fête."
       },
       "editor": {
-        "theme_label": "Thème",
-        "change_theme_hint": "Changer de thème conserve vos textes et vos photos.",
         "presets": "Ambiances",
         "style": "Couleurs & polices",
         "show_section": "Afficher cette section",
@@ -823,7 +830,7 @@
       "links": {
         "features": "Fonctionnalités",
         "pricing": "Tarifs",
-        "themes": "Thèmes disponibles",
+        "themes": "Modèles disponibles",
         "examples": "Exemples d'invitations",
         "contact": "Support"
       }

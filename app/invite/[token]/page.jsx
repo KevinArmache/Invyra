@@ -4,6 +4,7 @@ import { XCircle } from "lucide-react";
 
 import { getInvitationByToken } from "@/app/actions/invitation";
 import InvitationExperience from "@/components/invitation/InvitationExperience";
+import InvitationUnavailable from "@/components/invitation/InvitationUnavailable";
 import { toEditableConfig } from "@/lib/invitation/document";
 
 /**
@@ -22,17 +23,25 @@ async function isLinkPreviewBot() {
 }
 
 /**
- * Une seule lecture par requête, partagée entre métadonnées, viewport et
- * page. Jeton inconnu ou révoqué : `null`, sans distinguer les deux cas pour
- * ne pas confirmer l'existence d'une invitation à qui devine des jetons.
+ * Une seule lecture par requête, partagée entre métadonnées et page.
+ *
+ * - `{ invitation }` : trouvée ;
+ * - `{ invitation: null }` : jeton inconnu ou révoqué, sans distinguer les
+ *   deux pour ne pas confirmer l'existence d'une invitation à qui devine des
+ *   jetons ;
+ * - `{ failed: true }` : la base n'a pas répondu (Neon qui se réveille, même
+ *   après les nouveaux essais du client Prisma). Surtout pas « Lien invalide » :
+ *   l'invité doit pouvoir réessayer.
  */
 const loadInvitation = cache(async (token) => {
   try {
-    return await getInvitationByToken(token, {
+    const invitation = await getInvitationByToken(token, {
       markViewed: !(await isLinkPreviewBot()),
     });
-  } catch {
-    return null;
+    return { invitation };
+  } catch (error) {
+    console.error("[invite] Chargement impossible :", error.message);
+    return { invitation: null, failed: true };
   }
 });
 
@@ -48,9 +57,14 @@ function templateLook(invitation) {
   };
 }
 
+// Pas de generateViewport : une couleur de barre lue en base retarderait
+// l'envoi de toute la page (Next attend le viewport avant le premier octet),
+// et donc l'écran de chargement. InvitationExperience pose la couleur du
+// modèle côté client.
+
 export async function generateMetadata({ params }) {
   const { token } = await params;
-  const invitation = await loadInvitation(token);
+  const { invitation } = await loadInvitation(token);
 
   // Une invitation est nominative : elle ne doit jamais être indexée.
   const robots = { index: false, follow: false };
@@ -80,16 +94,11 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export async function generateViewport({ params }) {
-  const { token } = await params;
-  const invitation = await loadInvitation(token);
-  // La barre du navigateur mobile prend la couleur de l'invitation.
-  return { themeColor: templateLook(invitation).background };
-}
-
 export default async function InvitationPage({ params }) {
   const { token } = await params;
-  const invitation = await loadInvitation(token);
+  const { invitation, failed } = await loadInvitation(token);
+
+  if (failed) return <InvitationUnavailable />;
 
   if (!invitation) {
     return (

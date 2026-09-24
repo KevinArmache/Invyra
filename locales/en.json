@@ -483,7 +483,7 @@
         "subtitle": "Create and manage your reusable template designs.",
         "new_btn": "New template",
         "no_templates": "No templates saved",
-        "no_templates_desc": "Start from a theme and customise it in minutes, no code needed.",
+        "no_templates_desc": "Start from a design and make it yours in minutes, no code needed.",
         "create_first": "Create my first template",
         "delete_confirm": "Are you sure you want to delete this template?",
         "delete_success": "Template deleted successfully",
@@ -501,7 +501,8 @@
         "unfeature_btn": "Remove from home page",
         "featured_badge": "Home",
         "feature_success": "The template now appears on the home page.",
-        "unfeature_success": "The template was removed from the home page."
+        "unfeature_success": "The template was removed from the home page.",
+        "reset_filters": "Show all templates"
       },
       "editor": {
         "title": "Template editor",
@@ -520,26 +521,34 @@
         "title_new": "Create a template",
         "title_edit": "Edit template",
         "name_required": "Give your template a name."
+      },
+      "categories": {
+        "label": "Category",
+        "all": "All",
+        "none": "No category",
+        "wedding": "Wedding",
+        "engagement": "Engagement",
+        "birthday": "Birthday",
+        "babyshower": "Baby shower",
+        "baptism": "Christening",
+        "party": "House parties & nights out",
+        "gala": "Gala",
+        "corporate": "Corporate",
+        "other": "Other"
+      },
+      "pagination": {
+        "label": "Template pages",
+        "previous": "Previous page",
+        "next": "Next page",
+        "results": "templates in total"
       }
     },
     "themes": {
       "picker": {
-        "title": "Pick a theme",
-        "subtitle": "You can customise everything afterwards: colours, fonts, photos and text.",
-        "filter_all": "All",
+        "title": "Choose a starting design",
+        "subtitle": "You will then pick its mood, and can customise everything: colours, fonts, photos and text.",
         "code_title": "Code (expert)",
         "code_desc": "Hand-written HTML, CSS and JavaScript."
-      },
-      "occasions": {
-        "wedding": "Wedding",
-        "gala": "Gala",
-        "corporate": "Corporate",
-        "baptism": "Christening",
-        "anniversary": "Wedding anniversary",
-        "birthday": "Birthday",
-        "party": "Party",
-        "engagement": "Engagement",
-        "babyshower": "Baby shower"
       },
       "catalog": {
         "eclat": "Grand wedding: full-screen photo, gold-foil title, gold dust, countdown and confetti.",
@@ -549,8 +558,6 @@
         "festive": "Bright gradient, confetti and round buttons. Time to party."
       },
       "editor": {
-        "theme_label": "Theme",
-        "change_theme_hint": "Switching themes keeps your text and photos.",
         "presets": "Moods",
         "style": "Colours & fonts",
         "show_section": "Show this section",
@@ -823,7 +830,7 @@
       "links": {
         "features": "Features",
         "pricing": "Pricing",
-        "themes": "Themes available",
+        "themes": "Available templates",
         "examples": "Invitation examples",
         "contact": "Support"
       }

@@ -1114,6 +1114,7 @@ export const TemplateScalarFieldEnum = {
   name: 'name',
   status: 'status',
   config: 'config',
+  category: 'category',
   featured: 'featured',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Plus } from "lucide-react";
 
-import { getTemplates } from "@/app/actions/template";
+import { getTemplatesPage } from "@/app/actions/template";
 import { getCurrentUser } from "@/app/actions/auth";
 import { getTranslations } from "@/utils/i18n/server";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,15 @@ import TemplatesBrowser from "@/components/dashboard/templates/TemplatesBrowser"
 
 export const metadata = { title: "Modèles" };
 
-export default async function TemplatesPage() {
-  const [templates, user, { t }] = await Promise.all([
-    getTemplates(),
+/**
+ * Galerie des modèles, paginée. Filtre et recherche vivent dans l'URL
+ * (?category=wedding&q=…&page=2) : un lien ou un retour arrière retrouve la
+ * même vue, et seul le serveur trie les modèles.
+ */
+export default async function TemplatesPage({ searchParams }) {
+  const { page, category, q } = await searchParams;
+  const [result, user, { t }] = await Promise.all([
+    getTemplatesPage({ page, category, query: q }),
     getCurrentUser(),
     getTranslations(),
   ]);
@@ -39,7 +45,9 @@ export default async function TemplatesPage() {
       />
 
       <TemplatesBrowser
-        templates={templates}
+        {...result}
+        activeCategory={typeof category === "string" ? category : ""}
+        query={typeof q === "string" ? q : ""}
         currentUser={{ id: user.id, role: user.role }}
       />
     </>

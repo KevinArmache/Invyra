@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Code2 } from "lucide-react";
 
-import InvitationPreview from "@/components/invitation/InvitationPreview";
+import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import { THEMES, createThemeConfig } from "@/lib/invitation/themes";
 import { useTranslation } from "@/utils/i18n/Context";
 
@@ -15,20 +15,19 @@ const SAMPLE_EVENT = {
   dressCode: "Tenue de soirée",
 };
 
-const OCCASIONS = [...new Set(THEMES.flatMap((theme) => theme.occasions))];
-
 /**
- * Première étape d'un nouveau template : choisir un thème (ou, pour un
- * admin, le mode code). Chaque vignette est le thème rendu avec ses valeurs
- * par défaut.
+ * Première étape d'un nouveau modèle : choisir son design de départ (ou,
+ * pour un admin, le mode code). Chaque vignette est le design rendu avec son
+ * contenu d'exemple. Le modèle garde ensuite ses ambiances (couleurs) et se
+ * range dans une catégorie ; le design lui-même n'est plus présenté comme un
+ * « thème » à part.
  *
- * @param {function} props.onPick  reçoit la config initiale du template
+ * @param {function} props.onPick  reçoit la config initiale du modèle
  * @param {boolean}  props.allowCode  propose aussi le mode code (admins)
  * @param {function} props.onPickCode
  */
 export default function ThemePicker({ onPick, allowCode = false, onPickCode }) {
   const { t } = useTranslation();
-  const [occasion, setOccasion] = useState(null);
 
   const previews = useMemo(
     () =>
@@ -37,17 +36,6 @@ export default function ThemePicker({ onPick, allowCode = false, onPickCode }) {
       ),
     [],
   );
-
-  const visible = occasion
-    ? THEMES.filter((theme) => theme.occasions.includes(occasion))
-    : THEMES;
-
-  const chip = (active) =>
-    `rounded-full border px-3 py-1 text-xs transition-colors ${
-      active
-        ? "border-gold bg-gold/10 text-ink-50"
-        : "border-border text-ink-400 hover:text-ink-100"
-    }`;
 
   return (
     <div className="@container space-y-5">
@@ -60,28 +48,8 @@ export default function ThemePicker({ onPick, allowCode = false, onPickCode }) {
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          className={chip(!occasion)}
-          onClick={() => setOccasion(null)}
-        >
-          {t("portal.themes.picker.filter_all")}
-        </button>
-        {OCCASIONS.map((item) => (
-          <button
-            key={item}
-            type="button"
-            className={chip(occasion === item)}
-            onClick={() => setOccasion(item)}
-          >
-            {t(`portal.themes.occasions.${item}`)}
-          </button>
-        ))}
-      </div>
-
       <ul className="grid gap-4 @sm:grid-cols-2 @3xl:grid-cols-3">
-        {visible.map((theme) => (
+        {THEMES.map((theme) => (
           <li key={theme.id}>
             <button
               type="button"
@@ -89,23 +57,11 @@ export default function ThemePicker({ onPick, allowCode = false, onPickCode }) {
               className="surface-interactive flex w-full flex-col overflow-hidden text-left"
             >
               <div className="relative aspect-3/4 w-full overflow-hidden border-b border-border/60 bg-ink-900">
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute top-0 left-1/2"
-                  style={{
-                    width: "250%",
-                    height: "250%",
-                    transform: "translateX(-50%) scale(0.4)",
-                    transformOrigin: "top center",
-                  }}
-                >
-                  <InvitationPreview
-                    template={previews[theme.id]}
-                    event={SAMPLE_EVENT}
-                    guestName="Marie Dupont"
-                    readOnly
-                  />
-                </div>
+                <TemplateThumbnail
+                  template={previews[theme.id]}
+                  event={SAMPLE_EVENT}
+                  title={theme.name}
+                />
               </div>
               <div className="p-4">
                 <p className="text-base text-ink-50">{theme.name}</p>
@@ -117,7 +73,7 @@ export default function ThemePicker({ onPick, allowCode = false, onPickCode }) {
           </li>
         ))}
 
-        {allowCode && !occasion && (
+        {allowCode && (
           <li>
             <button
               type="button"

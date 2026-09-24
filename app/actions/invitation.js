@@ -10,56 +10,60 @@ import { prisma } from '@/utils/prisma'
  *   ouvert son invitation.
  */
 export async function getInvitationByToken(token, { markViewed = true } = {}) {
-  try {
-    const guest = await prisma.guest.findUnique({
-      where: { invitationToken: token },
-      include: {
-        event: {
-          include: {
-            templateCopy: {
-              select: { config: true },
-            },
+  // Une erreur de base (réveil de Neon, connexion coupée) remonte telle
+  // quelle : la page doit pouvoir la distinguer d'un jeton inconnu, sans quoi
+  // l'invité lirait « Lien invalide » pour un lien parfaitement valide.
+  const guest = await prisma.guest.findUnique({
+    where: { invitationToken: token },
+    include: {
+      event: {
+        include: {
+          templateCopy: {
+            select: { config: true },
           },
         },
-      }
-    })
+      },
+    }
+  })
 
-    if (!guest) throw new Error('Invitation not found')
+  // Jeton inconnu ou révoqué.
+  if (!guest) return null
 
-    // Mark as viewed if first time
-    if (markViewed && !guest.invitationViewedAt) {
+  // Première ouverture : on la note, sans jamais bloquer l'affichage de
+  // l'invitation si l'écriture échoue.
+  if (markViewed && !guest.invitationViewedAt) {
+    try {
       await prisma.guest.update({
         where: { id: guest.id },
         data: { invitationViewedAt: new Date() }
       })
+    } catch (error) {
+      console.error('[invite] Ouverture non enregistrée :', error.message)
     }
+  }
 
-    return {
-      guest: {
-        id: guest.id,
-        name: guest.name,
-        email: guest.email,
-        rsvp_status: guest.rsvpStatus,
-        dietary_restrictions: guest.dietaryRestrictions,
-        plus_one: guest.plusOne,
-        notes: guest.notes
-      },
-      event: {
-        id: guest.event.id,
-        title: guest.event.title,
-        description: guest.event.description,
-        eventDate: guest.event.eventDate,
-        date: guest.event.eventDate,
-        location: guest.event.location,
-        time: guest.event.time,
-        dressCode: guest.event.dressCode,
-        customMessage: guest.event.customMessage,
-        invitationTemplate: guest.event.templateCopy?.config || guest.event.invitationTemplate
-      }
+  return {
+    guest: {
+      id: guest.id,
+      name: guest.name,
+      email: guest.email,
+      rsvp_status: guest.rsvpStatus,
+      dietary_restrictions: guest.dietaryRestrictions,
+      plus_one: guest.plusOne,
+      notes: guest.notes
+    },
+    event: {
+      id: guest.event.id,
+      title: guest.event.title,
+      description: guest.event.description,
+      eventDate: guest.event.eventDate,
+      date: guest.event.eventDate,
+      location: guest.event.location,
+      time: guest.event.time,
+      dressCode: guest.event.dressCode,
+      customMessage: guest.event.customMessage,
+      invitationTemplate: guest.event.templateCopy?.config || guest.event.invitationTemplate
     }
-  } catch (error) {
-    console.error('Error fetching invitation:', error)
-    throw new Error('Failed to fetch invitation')
   }
 }
 

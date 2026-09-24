@@ -51,6 +51,12 @@ export default function InvitationExperience({
   useEffect(() => {
     function handleMessage(messageEvent) {
       if (messageEvent.source !== iframeRef.current?.contentWindow) return;
+      // Document analysé et polices prêtes (voir READY_SCRIPT dans
+      // lib/invitation/document.js) : on n'attend pas les photos.
+      if (messageEvent.data?.type === "INVITATION_READY") {
+        setIsLoaded(true);
+        return;
+      }
       if (messageEvent.data?.type !== "RSVP_SUBMIT") return;
       submitRsvp(messageEvent.data.data);
     }
@@ -58,6 +64,25 @@ export default function InvitationExperience({
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, [submitRsvp]);
+
+  // Filet de sécurité : un modèle code dont le script casserait le signal ne
+  // doit pas laisser l'invité devant un écran noir.
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoaded(true), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Couleur de la barre du navigateur mobile, posée ici plutôt que par
+  // generateViewport, qui retarderait toute la page (voir la page invite).
+  useEffect(() => {
+    let meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.name = "theme-color";
+      document.head.appendChild(meta);
+    }
+    meta.content = background;
+  }, [background]);
 
   const template = event.invitationTemplate;
 
@@ -88,8 +113,10 @@ export default function InvitationExperience({
         rsvpData={initialRsvp}
         title={`Invitation : ${event.title}`}
         onLoad={() => setIsLoaded(true)}
+        // Invisible, l'invitation ne reçoit pas les touchers : sinon un
+        // invité impatient ouvrirait l'enveloppe sans la voir.
         className={`transition-opacity duration-700 ease-out ${
-          isLoaded ? "opacity-100" : "opacity-0"
+          isLoaded ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
 

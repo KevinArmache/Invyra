@@ -128,6 +128,10 @@ model Template {
   status TemplateStatus? @default(draft)
   config Json
 
+  /// Groupe du modèle dans la galerie (voir lib/invitation/categories.js) :
+  /// "wedding", "birthday", "party"… ; null = sans catégorie.
+  category String?
+
   // Mis en avant sur la page d'accueil publique (choisi par un admin).
   featured Boolean @default(false)
 
@@ -143,6 +147,7 @@ model Template {
 
   @@index([userId])
   @@index([featured])
+  @@index([category])
   @@map("templates")
 }
 

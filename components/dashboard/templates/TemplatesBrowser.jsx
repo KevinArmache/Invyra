@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Copy,
   CopyPlus,
@@ -32,7 +32,10 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { EmptyState, StatusBadge } from "@/components/dashboard/ui";
+import PaginationNav from "@/components/dashboard/PaginationNav";
+import CategoryFilter from "@/components/invitation/CategoryFilter";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
+import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import {
   deleteTemplate,
   duplicateTemplate,
@@ -66,20 +69,69 @@ const SAMPLE_EVENT = {
   dressCode: "Tenue de soirée",
 };
 
-export default function TemplatesBrowser({ templates, currentUser }) {
+/**
+ * Galerie des modèles, une page à la fois. Le serveur filtre (catégorie,
+ * recherche) et pagine : ce composant ne fait que refléter l'URL.
+ *
+ * @param {Array}  props.templates       modèles de la page
+ * @param {number} props.total           résultats du filtre courant
+ * @param {number} props.totalAll        modèles visibles, sans filtre
+ * @param {Array}  props.categories      `[{ key, count }]` présentes
+ * @param {string} props.activeCategory  "" = toutes
+ */
+export default function TemplatesBrowser({
+  templates,
+  total,
+  totalAll,
+  page,
+  pageCount,
+  categories,
+  activeCategory,
+  query: initialQuery,
+  currentUser,
+}) {
   const { t, locale } = useTranslation();
   const router = useRouter();
-  const [query, setQuery] = useState("");
+  const pathname = usePathname();
+  const [query, setQuery] = useState(initialQuery);
   const [preview, setPreview] = useState(null);
   const [isPending, startTransition] = useTransition();
+  const [isSearching, startSearch] = useTransition();
 
-  const filtered = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    if (!needle) return templates;
-    return templates.filter((template) =>
-      (template.name || "").toLowerCase().includes(needle),
-    );
-  }, [templates, query]);
+  /** URL de la galerie avec ces filtres (page 1 par défaut). */
+  function hrefFor({ category = activeCategory, q = initialQuery, page: target = 1 } = {}) {
+    const params = new URLSearchParams();
+    if (category) params.set("category", category);
+    if (q.trim()) params.set("q", q.trim());
+    if (target > 1) params.set("page", String(target));
+    const search = params.toString();
+    return search ? `${pathname}?${search}` : pathname;
+  }
+
+  // L'URL change sans la saisie (réinitialisation, retour arrière) : le
+  // champ la suit. Pas quand c'est la saisie elle-même qui l'a changée :
+  // on écraserait les lettres tapées pendant la navigation.
+  const pushedQuery = useRef(initialQuery);
+  useEffect(() => {
+    if (initialQuery === pushedQuery.current) return;
+    pushedQuery.current = initialQuery;
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
+  // Recherche : l'URL suit la saisie, après une courte pause (un rendu
+  // serveur par mot, pas par lettre).
+  useEffect(() => {
+    if (query.trim() === pushedQuery.current.trim()) return;
+    const timer = setTimeout(() => {
+      pushedQuery.current = query.trim();
+      startSearch(() => {
+        router.replace(hrefFor({ q: query }), { scroll: false });
+      });
+    }, 350);
+    return () => clearTimeout(timer);
+    // hrefFor dépend des filtres actuels, relus à chaque appel.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   function handleFeature(id, featured) {
     startTransition(async () => {
@@ -123,7 +175,7 @@ export default function TemplatesBrowser({ templates, currentUser }) {
     });
   }
 
-  if (templates.length === 0) {
+  if (totalAll === 0) {
     return (
       <div className="surface">
         <EmptyState
@@ -145,34 +197,63 @@ export default function TemplatesBrowser({ templates, currentUser }) {
     );
   }
 
+  const dateFormat = new Intl.DateTimeFormat(locale === "fr" ? "fr-FR" : "en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+
   return (
     <>
-      <div className="relative mb-6 max-w-md">
-        <Search
-          className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400"
-          aria-hidden="true"
-        />
-        <Input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={t("portal.templates.list.search_placeholder")}
-          aria-label={t("portal.templates.list.search_placeholder")}
-          className="pl-9"
+      <div className="mb-6 space-y-4">
+        <div className="relative max-w-md">
+          <Search
+            className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400"
+            aria-hidden="true"
+          />
+          <Input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("portal.templates.list.search_placeholder")}
+            aria-label={t("portal.templates.list.search_placeholder")}
+            className="pl-9"
+          />
+          {isSearching && (
+            <Loader2
+              className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 animate-spin text-ink-400"
+              aria-hidden="true"
+            />
+          )}
+        </div>
+
+        <CategoryFilter
+          available={categories.map((category) => category.key)}
+          value={activeCategory}
+          hrefFor={(key) => hrefFor({ category: key })}
         />
       </div>
 
-      {filtered.length === 0 ? (
+      {templates.length === 0 ? (
         <div className="surface">
           <EmptyState
             icon={Search}
             title={t("common.no_results")}
             description={t("portal.events.list.try_different_search")}
+            action={
+              <Button variant="outline" asChild>
+                <Link href={pathname}>{t("portal.templates.list.reset_filters")}</Link>
+              </Button>
+            }
           />
         </div>
       ) : (
-        <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((template) => {
+        <ul
+          className={`grid gap-5 transition-opacity sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ${
+            isSearching ? "opacity-60" : ""
+          }`}
+        >
+          {templates.map((template) => {
             const editable = canManage(template, currentUser);
             const duplicable = canDuplicate(currentUser);
 
@@ -181,26 +262,14 @@ export default function TemplatesBrowser({ templates, currentUser }) {
                 key={template.id}
                 className="surface-interactive flex flex-col overflow-hidden"
               >
-                {/* Vignette : le modèle est rendu à l'échelle réduite dans son
-                    iframe, en lecture seule (son script ne s'exécute pas). */}
+                {/* Vignette : le modèle est rendu à l'échelle réduite, figé,
+                    et seulement quand la carte approche de l'écran. */}
                 <div className="relative aspect-3/4 overflow-hidden border-b border-border/60 bg-ink-900">
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute top-0 left-1/2"
-                    style={{
-                      width: "250%",
-                      height: "250%",
-                      transform: "translateX(-50%) scale(0.4)",
-                      transformOrigin: "top center",
-                    }}
-                  >
-                    <InvitationPreview
-                      template={template.config}
-                      event={{ ...SAMPLE_EVENT, title: template.name }}
-                      guestName="Marie Dupont"
-                      readOnly
-                    />
-                  </div>
+                  <TemplateThumbnail
+                    template={template.config}
+                    event={{ ...SAMPLE_EVENT, title: template.name }}
+                    title={template.name}
+                  />
 
                   <button
                     type="button"
@@ -235,11 +304,16 @@ export default function TemplatesBrowser({ templates, currentUser }) {
                     {template.name}
                   </h3>
 
-                  <p className="mt-1 text-xs text-ink-400">
-                    {new Date(template.createdAt).toLocaleDateString(
-                      locale === "fr" ? "fr-FR" : "en-US",
-                      { day: "numeric", month: "short", year: "numeric" },
+                  <p className="mt-1 truncate text-xs text-ink-400">
+                    {template.category && (
+                      <>
+                        <span className="text-ink-300">
+                          {t(`portal.templates.categories.${template.category}`)}
+                        </span>
+                        <span aria-hidden="true"> · </span>
+                      </>
                     )}
+                    {dateFormat.format(new Date(template.createdAt))}
                   </p>
 
                   <p
@@ -368,6 +442,18 @@ export default function TemplatesBrowser({ templates, currentUser }) {
             );
           })}
         </ul>
+      )}
+
+      <PaginationNav
+        page={page}
+        pageCount={pageCount}
+        hrefFor={(target) => hrefFor({ page: target })}
+      />
+      {pageCount > 1 && (
+        <p className="mt-3 text-center text-xs text-ink-400">
+          <span data-numeric>{total}</span>{" "}
+          {t("portal.templates.pagination.results")}
+        </p>
       )}
 
       <Dialog

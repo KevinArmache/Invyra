@@ -41,6 +41,7 @@ export default async function EditTemplatePage({ params }) {
       isEditing
       initialName={template.name}
       initialStatus={template.status ?? "draft"}
+      initialCategory={template.category}
       initialConfig={toEditableConfig(template.config)}
       // Un modèle code existant reste modifiable par son auteur ; en créer un
       // nouveau est réservé aux admins (voir updateUserTemplate).

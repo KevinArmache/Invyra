@@ -9,18 +9,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import {
   ChoiceField,
   ColorField,
-  Field,
   FontField,
   ImageField,
   ImagesField,
@@ -45,8 +37,12 @@ function presetIsActive(preset, style) {
 }
 
 /**
- * Formulaire d'un template à thème, généré à partir des schémas : le
- * `styleSchema` du thème et CONTENT_SECTIONS, commun à tous les thèmes.
+ * Formulaire d'un modèle sans code, généré à partir des schémas : le
+ * `styleSchema` de son design et CONTENT_SECTIONS, commun à tous.
+ *
+ * Le design d'un modèle ne se change pas ici (plus de choix de « thème ») :
+ * un modèle se décline en ambiances. Pour partir d'un autre design, on crée
+ * un nouveau modèle.
  *
  * @param {object}   props.value     config `{ type: "theme", themeId, style, content }` normalisée
  * @param {function} props.onChange  reçoit la config complète mise à jour
@@ -71,13 +67,6 @@ export default function ThemeEditor({ value, onChange, uploadEnabled }) {
         [sectionKey]: { ...value.content[sectionKey], [fieldKey]: next },
       },
     });
-  }
-
-  function switchTheme(themeId) {
-    const next = getTheme(themeId);
-    if (!next) return;
-    // Le contenu est commun à tous les thèmes : seul le style repart à zéro.
-    onChange({ ...value, themeId, style: { ...next.defaultStyle } });
   }
 
   function renderStyleField(field) {
@@ -210,26 +199,9 @@ export default function ThemeEditor({ value, onChange, uploadEnabled }) {
         <link rel="stylesheet" href={ALL_FONTS_HREF} precedence="default" />
       )}
 
-      {/* ── Thème ─────────────────────────────────────────────────────── */}
+      {/* ── Ambiances ──────────────────────────────────────────────────
+          Un modèle garde son design ; on ne choisit que son ambiance. */}
       <div className="surface space-y-4 p-4">
-        <Field
-          label={t("portal.themes.editor.theme_label")}
-          hint={t("portal.themes.editor.change_theme_hint")}
-        >
-          <Select value={theme.id} onValueChange={switchTheme}>
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {THEMES.map((item) => (
-                <SelectItem key={item.id} value={item.id}>
-                  {item.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </Field>
-
         <div className="space-y-1.5">
           <Label className="text-xs text-ink-400">
             {t("portal.themes.editor.presets")}

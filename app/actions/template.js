@@ -4,8 +4,12 @@ import { prisma } from "@/utils/prisma";
 import { getSession, isEventOwnerOrAdmin } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { validateTemplateConfig } from "@/lib/invitation/document";
+import { normalizeCategory } from "@/lib/invitation/categories";
 
 const TEMPLATE_STATUSES = ["draft", "in_progress", "completed"];
+
+/** Modèles par page dans la galerie (/dashboard/templates). */
+const TEMPLATES_PAGE_SIZE = 8;
 
 function assertTemplateStatus(value) {
   if (value == null || value === "") return "draft";
@@ -62,7 +66,7 @@ async function assertCanEditEvent(eventId) {
 // ──────────────────────────────────────────────
 // User Custom Templates (Reusable)
 // ──────────────────────────────────────────────
-export async function saveUserTemplate(name, templateConfig, status) {
+export async function saveUserTemplate(name, templateConfig, status, category) {
   const user = await getSession();
   if (!user) throw new Error("Unauthorized");
   assertCanCreateTemplate(user);
@@ -79,6 +83,7 @@ export async function saveUserTemplate(name, templateConfig, status) {
       userId: user.userId,
       name,
       status: safeStatus,
+      category: normalizeCategory(category),
       config,
     },
   });
@@ -86,6 +91,7 @@ export async function saveUserTemplate(name, templateConfig, status) {
   return tmpl;
 }
 
+/** Tous les modèles visibles (choix du modèle d'un événement). */
 export async function getTemplates() {
   const user = await getSession();
   if (!user) return [];
@@ -101,6 +107,71 @@ export async function getTemplates() {
     },
     orderBy: { createdAt: "desc" },
   });
+}
+
+/**
+ * Une page de la galerie des modèles, filtrée par catégorie et par nom.
+ *
+ * Chaque carte embarque la config complète du modèle (jusqu'à plusieurs
+ * centaines de Ko de HTML pour un modèle code) : on n'envoie au navigateur que
+ * celles de la page affichée.
+ *
+ * @param {object} options
+ * @param {number} [options.page=1]
+ * @param {string} [options.category]  clé de catégorie ; absente = toutes
+ * @param {string} [options.query]     recherche dans le nom
+ * @returns {Promise<{ templates, total, page, pageCount, categories, totalAll }>}
+ *   `categories` : `[{ key, count }]` des catégories qui ont au moins un
+ *   modèle visible (pour les filtres) ; `totalAll` : modèles visibles sans
+ *   filtre (pour distinguer « aucun modèle » de « aucun résultat »).
+ */
+export async function getTemplatesPage({ page = 1, category, query } = {}) {
+  const user = await getSession();
+  if (!user) {
+    return { templates: [], total: 0, page: 1, pageCount: 1, categories: [], totalAll: 0 };
+  }
+
+  const visible = visibleTemplatesWhere(user);
+  const safeCategory = normalizeCategory(category);
+  const search = typeof query === "string" ? query.trim().slice(0, 100) : "";
+  const where = {
+    AND: [
+      visible,
+      ...(safeCategory ? [{ category: safeCategory }] : []),
+      ...(search ? [{ name: { contains: search, mode: "insensitive" } }] : []),
+    ],
+  };
+
+  const [total, groups] = await Promise.all([
+    prisma.template.count({ where }),
+    prisma.template.groupBy({
+      by: ["category"],
+      where: visible,
+      _count: { _all: true },
+    }),
+  ]);
+
+  const pageCount = Math.max(1, Math.ceil(total / TEMPLATES_PAGE_SIZE));
+  const current = Math.min(Math.max(1, Math.floor(Number(page)) || 1), pageCount);
+
+  const templates = await prisma.template.findMany({
+    where,
+    include: { _count: { select: { eventCopies: true } } },
+    orderBy: { createdAt: "desc" },
+    skip: (current - 1) * TEMPLATES_PAGE_SIZE,
+    take: TEMPLATES_PAGE_SIZE,
+  });
+
+  return {
+    templates,
+    total,
+    page: current,
+    pageCount,
+    categories: groups
+      .filter((group) => normalizeCategory(group.category))
+      .map((group) => ({ key: group.category, count: group._count._all })),
+    totalAll: groups.reduce((sum, group) => sum + group._count._all, 0),
+  };
 }
 
 export async function deleteTemplate(templateId) {
@@ -149,7 +220,7 @@ export async function getUserTemplateById(templateId) {
   return tmpl;
 }
 
-export async function updateUserTemplate(templateId, name, templateConfig, status) {
+export async function updateUserTemplate(templateId, name, templateConfig, status, category) {
   const user = await getSession();
   if (!user) throw new Error("Unauthorized");
 
@@ -178,6 +249,7 @@ export async function updateUserTemplate(templateId, name, templateConfig, statu
     data: {
       name,
       status: safeStatus,
+      category: normalizeCategory(category),
       config,
     },
   });
@@ -210,6 +282,7 @@ export async function duplicateTemplate(templateId) {
       userId: user.userId,
       name: `${source.name} (copie)`.slice(0, 200),
       status: "draft",
+      category: source.category,
       config,
     },
   });
