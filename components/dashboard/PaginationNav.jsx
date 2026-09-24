@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 /**
  * Pages à afficher : la première, la dernière, et deux voisines de la page

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { TEMPLATE_CATEGORIES } from "@/lib/invitation/categories";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 const chip = (active) =>
   `rounded-full border px-3 py-1 text-xs transition-colors ${

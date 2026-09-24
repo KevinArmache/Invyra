@@ -1,13 +1,15 @@
-# v0 runtime files
-__v0_runtime_loader.js
-__v0_devtools.tsx
-__v0_jsx-dev-runtime.ts
-
-# Common ignores
+# Dépendances et builds
 node_modules/
 .next/
-.env*.local
-.DS_Store
+
+# Fichiers générés par TypeScript et Next à chaque build
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets
 .env
 .env.local
+.env*.local
 .env.*.local
+
+.DS_Store

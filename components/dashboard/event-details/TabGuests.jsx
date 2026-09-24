@@ -44,7 +44,7 @@ import {
   markWhatsAppSent,
   sendInvitationEmail,
 } from "@/app/actions/notify";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 const RSVP_STYLES = {
   confirmed: {

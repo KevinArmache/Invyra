@@ -6,17 +6,8 @@
     "sign_in": "Se connecter",
     "get_started": "Commencer",
     "dashboard": "Tableau de Bord",
-    "language": "Langue",
     "templates": "Modèles",
     "availability": "Disponibilités"
-  },
-  "sidebar": {
-    "dashboard": "Tableau de Bord",
-    "events": "Événements",
-    "analytics": "Analytiques",
-    "settings": "Paramètres",
-    "sign_out": "Déconnexion",
-    "open_sidebar": "Ouvrir le menu"
   },
   "login": {
     "title": "Bon retour !",
@@ -86,8 +77,6 @@
     "irreversible": "Actions irréversibles",
     "delete_account": "Supprimer le Compte",
     "delete_desc": "La suppression de compte est actuellement possible. Contactez le support si vous avez des problèmes pour supprimer votre compte.",
-    "delete_prompt": "Tapez SUPPRIMER pour confirmer la suppression définitive de votre compte :",
-    "delete_cancel": "Suppression annulée : le mot de confirmation est incorrect.",
     "delete_confirm_word": "SUPPRIMER",
     "delete_dialog_title": "Supprimer définitivement votre compte ?",
     "delete_dialog_body": "Vos événements, vos invités et leurs réponses seront effacés. Vos modèles partagés resteront disponibles pour les autres. Cette action est irréversible.",
@@ -105,152 +94,7 @@
     "recent_events": "Événements récents",
     "no_events": "Aucun événement pour l'instant. Créez votre premier !",
     "view_all": "Voir tous les événements",
-    "view": "Voir",
-    "guests": "invités",
-    "quick_actions": "Actions rapides",
-    "new_event": "Nouvel événement",
-    "new_event_desc": "Créez un nouvel événement et commencez à inviter vos invités.",
-    "manage_events": "Gérer les Événements",
-    "manage_events_desc": "Consultez et gérez tous vos événements existants."
-  },
-  "events": {
-    "title": "Mes événements",
-    "subtitle": "Gérez toutes vos invitations numériques",
-    "new_event": "Nouvel événement",
-    "no_events": "Aucun événement trouvé",
-    "no_events_desc": "Commencez par créer votre premier événement.",
-    "create_first": "Créer mon premier événement",
-    "view": "Voir",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "guests": "invités",
-    "views": "vues",
-    "confirmed": "confirmés",
-    "search": "Rechercher des événements...",
-    "filter_all": "Tous",
-    "filter_upcoming": "À venir",
-    "filter_past": "Passés"
-  },
-  "event_detail": {
-    "back": "Retour aux Événements",
-    "edit": "Modifier",
-    "delete": "Supprimer",
-    "animate": "Animer l'Invitation",
-    "preview": "Prévisualiser",
-    "share": "Partager",
-    "guests_confirmed": "Invités confirmés",
-    "views": "Vues",
-    "rsvp_link": "Lien RSVP",
-    "copy_link": "Copier le lien",
-    "copied": "Copié !",
-    "event_info": "Informations de l'Événement",
-    "date": "Date",
-    "time": "Heure",
-    "location": "Lieu",
-    "theme": "Thème",
-    "description": "Description",
-    "no_description": "Aucune description disponible."
-  },
-  "new_event": {
-    "title": "Nouvel événement",
-    "subtitle": "Créez un nouvel événement et personnalisez votre invitation",
-    "back": "Retour",
-    "event_title": "Titre de l'Événement",
-    "event_title_placeholder": "Ex: Mariage de Jean & Marie",
-    "event_date": "Date",
-    "event_time": "Heure",
-    "location": "Lieu",
-    "location_placeholder": "Ex: Château de Versailles, Paris",
-    "theme": "Thème",
-    "theme_placeholder": "Ex: Romantique, Moderne, Traditionnel...",
-    "description": "Description",
-    "description_placeholder": "Décrivez votre événement...",
-    "guest_count": "Nombre d'invités estimé",
-    "create": "Créer l'Événement",
-    "creating": "Création en cours..."
-  },
-  "analytics": {
-    "title": "Analytiques",
-    "subtitle": "Statistiques d'utilisation de vos événements",
-    "total_events": "Total événements",
-    "total_views": "Total vues",
-    "total_guests": "Total invités",
-    "total_confirmed": "Total confirmés"
-  },
-  "editor": {
-    "title": "Éditeur d'Animation",
-    "back_events": "Retour aux Événements",
-    "live_preview": "Aperçu en Direct",
-    "full_preview": "Aperçu plein écran",
-    "save_changes": "Enregistrer",
-    "saving": "Enregistrement...",
-    "saved": "✓ Enregistré !",
-    "generate": "Générer animation",
-    "generating": "Génération...",
-    "hide_controls": "Masquer les Contrôles",
-    "show_controls": "Afficher les Contrôles"
-  },
-  "ai": {
-    "title": "Générateur d'Animation IA",
-    "description": "Décrivez l'ambiance et le style souhaités, et l'IA générera les paramètres d'animation.",
-    "placeholder": "Ex: 'Mariage romantique au coucher du soleil avec des tons dorés chauds et de délicats pétales flottants'..."
-  },
-  "manual": {
-    "title": "Contrôles manuels",
-    "description": "Ajustez précisément les paramètres d'animation manuellement",
-    "colors_title": "Couleurs",
-    "primary": "Primaire",
-    "secondary": "Secondaire",
-    "accent": "Accent",
-    "text_color": "Couleur du Texte",
-    "bg_image_title": "Image de Fond",
-    "bg_image_desc": "Remplace la couleur/dégradé de fond par défaut. Laisser vide pour utiliser les couleurs du thème.",
-    "bg_audio_title": "Audio de Fond (Optionnel)",
-    "bg_audio_desc": "Tournera en boucle automatiquement.",
-    "animate_bg": "Animer le fond (Pan & Zoom)",
-    "apply": "Appliquer",
-    "card_container": "Conteneur de Carte (HTML)",
-    "text_blocks": "Blocs de Texte",
-    "bg_color": "Couleur de Fond",
-    "bg_opacity": "Opacité du Fond",
-    "padding": "Marge interne",
-    "border_color": "Couleur de Bordure",
-    "border_size": "Taille de Bordure",
-    "border_radius": "Arrondi de Bordure",
-    "particles": "Particules",
-    "count": "Nombre",
-    "size": "Taille",
-    "speed": "Vitesse",
-    "shape": "Forme",
-    "blending": "Mode de Fusion",
-    "decorative_shapes": "Formes décoratives",
-    "thickness": "Épaisseur",
-    "metalness": "Métal",
-    "roughness": "Rugosité",
-    "emissive": "Émissif",
-    "opacity": "Opacité",
-    "wireframe": "Mode filaire",
-    "camera_parallax": "Caméra & Parallax",
-    "enable_parallax": "Activer le Parallax de la Souris",
-    "intensity": "Intensité",
-    "depth": "Profondeur",
-    "loading_screen": "Écran de Chargement",
-    "bar_bg": "Fond de la Barre",
-    "bar_progress": "Barre de Progression",
-    "environment": "Environnement & Décor",
-    "hdri_preset": "Préréglage HDRI",
-    "show_panorama": "Afficher le panorama complet",
-    "stars": "Étoiles (espace)",
-    "sparkles": "Scintillements (ambiance)",
-    "clouds": "Nuages volumétriques",
-    "darken_overlay": "Assombrissement de l'Arrière-plan",
-    "font_style": "Style de Police"
-  },
-  "scene": {
-    "click_open": "Cliquer pour Ouvrir",
-    "when": "Quand",
-    "where": "Où",
-    "dear": "Cher(e)"
+    "guests": "invités"
   },
   "portal": {
     "sidebar": {
@@ -279,7 +123,6 @@
       "role": "Rôle",
       "status": "Statut",
       "registered_on": "Inscrit le",
-      "updating": "Mise à jour en cours...",
       "active": "Actif",
       "suspended": "Suspendu",
       "standard_user": "Utilisateur",
@@ -358,10 +201,7 @@
           "description": "Description",
           "name": "Nom complet *",
           "email": "Email *",
-          "phone": "Téléphone (optionnel)",
-          "demo_name": "Nom de l'événement",
-          "demo_location": "Lieu",
-          "demo_dress_code": "Tenue de soirée"
+          "phone": "Téléphone (optionnel)"
         },
         "placeholders": {
           "title": "Mariage de Marie & Jean",
@@ -373,12 +213,9 @@
         "buttons": {
           "continue": "Continuer",
           "creating": "Création...",
-          "create_template": "Créer un modèle",
           "first_template": "Créer mon premier modèle",
-          "back": "Retour",
           "continue_with_template": "Continuer avec ce modèle",
           "skip": "Passer cette étape",
-          "adding": "Ajout...",
           "add": "Ajouter l'invité",
           "finish": "Terminer et gérer l'événement"
         },
@@ -412,29 +249,21 @@
       },
       "details": {
         "actions": {
-          "delete_event_confirm": "Voulez-vous vraiment supprimer cet événement ?",
           "event_deleted": "Événement supprimé.",
-          "send_bulk_confirm": "Envoyer les invitations à tous les invités n'ayant pas encore reçu d'email ?",
           "sending": "Envoi...",
           "send_invitations": "Envoyer les invitations",
           "email_sent": "Email envoyé avec succès !",
           "guest_deleted": "Invité supprimé.",
           "back_to_events": "Retour aux événements",
           "edit": "Éditer",
-          "delete": "Supprimer",
           "customize_invitation": "Personnaliser l'invitation"
         },
         "tabs": {
           "overview": "Aperçu",
-          "guests": "Invités",
-          "settings": "Paramètres"
+          "guests": "Invités"
         },
         "overview": {
           "stats_title": "Confirmations (RSVP)",
-          "total_guests": "Total invités",
-          "attending": "Confirmés",
-          "pending": "En attente",
-          "declined": "Refusés",
           "copy_link": "Copier le lien",
           "link_copied": "Lien copié !",
           "active_template": "Aperçu du modèle actif",
@@ -445,13 +274,9 @@
           "title": "Liste des invités",
           "subtitle": "Gérez vos invités et suivez leurs statuts individuels",
           "add_btn": "Ajouter",
-          "import_csv": "Importer CSV",
           "table": {
-            "guest": "Invité",
             "email": "Email",
-            "whatsapp": "WhatsApp",
-            "rsvp": "RSVP",
-            "actions": "Actions"
+            "whatsapp": "WhatsApp"
           },
           "status": {
             "pending": "En attente",
@@ -459,8 +284,6 @@
             "declined": "Refusé",
             "maybe": "Peut-être"
           },
-          "send_email": "Envoyer email",
-          "send_whatsapp": "Envoyer WhatsApp",
           "delete_confirm": "Supprimer cet invité ?",
           "resend": "Renvoyer",
           "search": "Rechercher un invité...",
@@ -505,7 +328,6 @@
         "reset_filters": "Voir tous les modèles"
       },
       "editor": {
-        "title": "Éditeur de Modèle",
         "save_btn": "Sauvegarder le modèle",
         "saving": "Sauvegarde...",
         "success": "Modèle sauvegardé !",
@@ -514,10 +336,7 @@
         "status_draft_option": "⚪ Brouillon",
         "status_in_progress_option": "🟡 En construction",
         "status_completed_option": "🟢 Terminé",
-        "mode_code": "Mode code",
         "mode_preview": "Mode aperçu",
-        "variables_title": "Variables d'Événement",
-        "variables_desc": "Utilisez ces variables dans votre code HTML ou JS pour injecter les données de l'événement.",
         "title_new": "Créer un modèle",
         "title_edit": "Modifier le modèle",
         "name_required": "Donnez un nom à votre modèle."
@@ -543,7 +362,7 @@
         "results": "modèles au total"
       }
     },
-    "themes": {
+    "editor": {
       "picker": {
         "title": "Choisissez un design de départ",
         "subtitle": "Vous choisirez ensuite son ambiance, puis vous pourrez tout personnaliser : couleurs, polices, photos et textes.",
@@ -553,11 +372,12 @@
       "catalog": {
         "eclat": "Grand mariage : photo plein écran, titre à la feuille d'or, poussière d'or, compte à rebours et confettis.",
         "origami": "Une feuille pliée que l'invité déplie du bout du doigt. Papier en relief, programme en accordéon, carte-réponse qui s'envole en avion et figure finale en papier.",
+        "vinyl": "Un album vinyle : l'invité sort le disque de sa pochette et pose l'aiguille. Tracklist lue par la platine, disque qu'on retourne, jukebox pour répondre et piste cachée. Idéal pour un anniversaire ou une soirée.",
         "elegance": "Carte translucide et filet doré, titre posé sur la photo. Pour les grandes occasions.",
         "minimal": "Page claire et aérée, typographie forte. Sobre et moderne.",
         "festive": "Dégradé vif, confettis et boutons ronds. Pour faire la fête."
       },
-      "editor": {
+      "general": {
         "presets": "Ambiances",
         "style": "Couleurs & polices",
         "show_section": "Afficher cette section",
@@ -589,7 +409,11 @@
         "confetti": "Confettis à la confirmation",
         "texture": "Grain du papier",
         "figure": "Figure finale",
-        "cranes": "Envol de grues à la confirmation"
+        "cranes": "Envol de grues à la confirmation",
+        "record": "Couleur du disque",
+        "fontMono": "Police des numéros",
+        "rpm": "Vitesse du disque",
+        "crackle": "Grésillement à l'ouverture"
       },
       "sections": {
         "opening": "Ouverture de l'invitation",
@@ -646,6 +470,10 @@
           "crane": "Grue",
           "heart": "Cœur",
           "star": "Étoile"
+        },
+        "rpm": {
+          "33": "33 tours",
+          "45": "45 tours"
         }
       },
       "music": {
@@ -696,11 +524,8 @@
     }
   },
   "common": {
-    "loading": "Chargement...",
     "error": "Une erreur est survenue",
-    "confirm_delete": "Êtes-vous sûr de vouloir supprimer ?",
     "cancel": "Annuler",
-    "confirm": "Confirmer",
     "close": "Fermer",
     "search": "Rechercher...",
     "no_results": "Aucun résultat"
@@ -718,8 +543,8 @@
         "events_value": "10K+",
         "rsvp": "Taux de Réponse",
         "rsvp_value": "98%",
-        "themes": "Liberté créative",
-        "themes_value": "100%"
+        "creative": "Liberté créative",
+        "creative_value": "100%"
       }
     },
     "features": {
@@ -731,7 +556,7 @@
           "title": "Contrôle total (HTML/CSS)",
           "desc": "Concevez le design de votre choix grâce à un éditeur web puissant, pensé pour une personnalisation absolue."
         },
-        "themes": {
+        "interactive": {
           "title": "Expérience interactive",
           "desc": "Intégrez vos propres scripts JavaScript pour créer des animations fluides et engager vos invités."
         },
@@ -830,8 +655,6 @@
       "links": {
         "features": "Fonctionnalités",
         "pricing": "Tarifs",
-        "themes": "Modèles disponibles",
-        "examples": "Exemples d'invitations",
         "contact": "Support"
       }
     },
@@ -851,8 +674,6 @@
       "month_free": "Aucune réservation ce mois-ci",
       "month_booked_one": "date réservée ce mois-ci",
       "month_booked_many": "dates réservées ce mois-ci",
-      "booked_one": "événement prévu",
-      "booked_many": "événements prévus",
       "prev": "Mois précédent",
       "next": "Mois suivant",
       "cta": "Réserver ma date",

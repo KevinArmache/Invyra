@@ -9,11 +9,11 @@ import {
   Users,
 } from "lucide-react";
 
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 
 const FEATURES = [
   { icon: Code2, key: "ai" },
-  { icon: MousePointerClick, key: "themes" },
+  { icon: MousePointerClick, key: "interactive" },
   { icon: Users, key: "guests" },
   { icon: Mail, key: "emails" },
   { icon: BarChart3, key: "analytics" },

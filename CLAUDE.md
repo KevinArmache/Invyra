@@ -1,5 +1,3 @@
-Bien sûr, voici la version corrigée en gardant exactement le format avec des `-` :
-
 @AGENTS.md
 
 * Utiliser seulement Javascript (JSX), pas de Typescript (TSX)

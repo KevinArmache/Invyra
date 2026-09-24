@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 
 import { getTemplatesPage } from "@/app/actions/template";
 import { getCurrentUser } from "@/app/actions/auth";
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/dashboard/ui";
 import TemplatesBrowser from "@/components/dashboard/templates/TemplatesBrowser";

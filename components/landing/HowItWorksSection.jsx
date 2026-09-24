@@ -1,4 +1,4 @@
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 
 const STEPS = ["1", "2", "3", "4"];
 

@@ -1,6 +1,6 @@
 import { getAllUsers } from "@/app/actions/admin";
 import { getCurrentUser } from "@/app/actions/auth";
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 import { PageHeader } from "@/components/dashboard/ui";
 import UsersTable from "@/components/admin/UsersTable";
 

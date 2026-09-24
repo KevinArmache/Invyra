@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 import InvitationShowcase from "@/components/landing/InvitationShowcase";
 
 /**
@@ -22,8 +22,8 @@ export default async function HeroSection() {
       label: t("landing.hero.stats.rsvp"),
     },
     {
-      value: t("landing.hero.stats.themes_value"),
-      label: t("landing.hero.stats.themes"),
+      value: t("landing.hero.stats.creative_value"),
+      label: t("landing.hero.stats.creative"),
     },
   ];
 

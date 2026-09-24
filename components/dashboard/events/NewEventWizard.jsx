@@ -23,7 +23,7 @@ import CSVImporter from "@/components/invitation/CSVImporter";
 import { createEvent } from "@/app/actions/event";
 import { addGuest } from "@/app/actions/guest";
 import { assignTemplateToEvent } from "@/app/actions/template";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 const STEPS = [
   { id: 1, icon: FileText, key: "portal.events.new.steps.details" },
@@ -224,7 +224,7 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
                 description={t("portal.templates.list.no_templates_desc")}
                 action={
                   // Seuls les admins créent des modèles ; un client pourra
-                  // partir d'un thème depuis la page de l'événement.
+                  // partir d'un design depuis la page de l'événement.
                   isAdmin ? (
                     <Button asChild variant="outline">
                       <Link href="/dashboard/templates/new" target="_blank">

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState, Panel } from "@/components/dashboard/ui";
 import RsvpBreakdown from "@/components/dashboard/analytics/RsvpBreakdown";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 function countByStatus(guests) {
   return guests.reduce(

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { saveUserTemplate } from "@/app/actions/template";
 import { getSession } from "@/app/actions/auth";
-import TemplateEditorForm from "@/components/dashboard/TemplateEditorForm";
+import TemplateEditorForm from "@/components/dashboard/templates/TemplateEditorForm";
 
 export const metadata = { title: "Nouveau modèle" };
 

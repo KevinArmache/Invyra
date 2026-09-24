@@ -38,7 +38,7 @@ import {
   suspendUser,
   updateUserRole,
 } from "@/app/actions/admin";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 function RoleBadge({ role }) {
   const { t } = useTranslation();

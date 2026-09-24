@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/utils/prisma";
+import { prisma } from "@/lib/prisma";
 import { requireAdmin, getSession } from "./auth";
 
 // ─── Gestion des utilisateurs (Admin seulement) ──────────────────────────────

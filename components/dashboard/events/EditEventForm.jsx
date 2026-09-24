@@ -19,7 +19,7 @@ import { Panel } from "@/components/dashboard/ui";
 import EventFields from "@/components/dashboard/events/EventFields";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { updateEvent } from "@/app/actions/event";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 const STATUSES = [
   { value: "draft", labelKey: "portal.events.edit.status_draft" },

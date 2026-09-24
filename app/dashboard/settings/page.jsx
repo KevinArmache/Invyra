@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { KeyRound, UserRound } from "lucide-react";
 
 import { getCurrentUser } from "@/app/actions/auth";
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 import { PageHeader, Panel } from "@/components/dashboard/ui";
 import ProfileForm from "@/components/dashboard/settings/ProfileForm";
 import PasswordForm from "@/components/dashboard/settings/PasswordForm";

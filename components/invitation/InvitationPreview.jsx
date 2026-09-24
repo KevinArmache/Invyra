@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Rend une invitation (template code ou template à thème) dans une iframe
+ * Rend une invitation (modèle code ou modèle design) dans une iframe
  * isolée. La construction du document est dans lib/invitation/document.js.
  *
  * ── Modèle de sécurité ────────────────────────────────────────────────────

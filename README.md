@@ -47,7 +47,7 @@ le résultat à un enfant client.
 
 ### Authentification
 
-Gérée par [better-auth](https://better-auth.com) (`utils/auth/server.js`).
+Gérée par [better-auth](https://better-auth.com) (`lib/auth/server.js`).
 
 - Sessions en base, table `sessions` ; cookie en cache 5 minutes pour éviter
   un aller-retour SQL à chaque server action.
@@ -81,7 +81,7 @@ Une fois tous les comptes migrés, `legacyPassword` peut être retiré du schém
 Français et anglais, dictionnaires dans `locales/`.
 
 La langue vient du cookie `invyra_locale`, résolu **sur le serveur**
-(`utils/i18n/server.js`) : le HTML part déjà traduit et `<html lang>` est
+(`lib/i18n/server.js`) : le HTML part déjà traduit et `<html lang>` est
 correct. Les composants clients lisent le même dictionnaire via le contexte,
 qui ne charge rien lui-même.
 
@@ -126,24 +126,61 @@ Les primitives d'écran (`PageHeader`, `StatCard`, `Panel`, `EmptyState`,
 ## Organisation
 
 ```
-app/
-  actions/          Server actions — toute la logique métier et les accès DB
-  dashboard/        Espace connecté (Server Components)
-  admin/            Administration, même coquille que le dashboard
-  invite/[token]/   Page publique d'invitation
-  api/auth/[...all] Routes better-auth
+app/                    Routes uniquement (pages, layouts, API) et actions
+  actions/              Server actions : logique métier et accès DB
+  dashboard/            Espace connecté (Server Components)
+  admin/                Administration, même coquille que le dashboard
+  invite/[token]/       Page publique d'invitation
+  api/                  better-auth, envoi de fichiers, tâche planifiée
 components/
-  landing/          Page d'accueil
-  dashboard/        Écrans connectés + primitives partagées (ui.jsx)
-  invitation/       Éditeur de code, aperçu, import CSV
-  ui/               shadcn/ui
-utils/
-  auth/             Configuration better-auth (serveur et client)
-  i18n/             Résolution de langue serveur + contexte client
+  ui/                   Primitives shadcn/ui (.jsx, seulement celles utilisées)
+  landing/  auth/  admin/
+  dashboard/            Coquille (DashboardShell, Sidebar, navigation.js),
+                        primitives d'écran (ui.jsx) et un dossier par écran :
+                        events/, event-details/, templates/, analytics/, settings/
+  invitation/           Invitation rendue (aperçu, page invité, vignettes,
+                        galerie, import CSV)
+    editor/             Éditeur de modèle : sélecteur de design, formulaire
+                        design, éditeur visuel, éditeur de code, ouverture
+lib/
+  invitation/           Construction du document d'invitation
+    designs/            Un fichier ou un dossier par design (registre : index.js)
+    template-config.js  Format des modèles enregistrés en base
+    document.js         Document HTML complet, validation, passage en code
+    opening.js          Écran d'ouverture standard
+    shared.js           Échappement, polices, schéma du contenu, bloc RSVP
+  auth/  i18n/  email/  prisma.js  utils.js (cn)
+hooks/
+locales/                Dictionnaires fr / en (mêmes clés)
 prisma/
   schema.prisma
+  seed-design-template.mjs   Enregistre un design comme modèle de la galerie
   migrate-passwords.mjs
 ```
+
+### Designs et modèles
+
+Un **design** est une mise en page du registre (`lib/invitation/designs/`) :
+Éclat, Origami, Face A… Un **modèle** est ce que l'utilisateur enregistre :
+soit un design avec ses couleurs et ses textes, soit du code HTML/CSS/JS.
+
+En base, un modèle design porte `type: "theme"` et `themeId` : ce sont des
+noms historiques, gardés pour ne pas migrer les données. Seul
+`lib/invitation/template-config.js` les connaît ; le reste du code passe par
+`isDesignConfig`, `designIdOf`, `toDesignConfig`…
+
+Ajouter un design :
+
+1. créer `lib/invitation/designs/<id>.js` (ou un dossier, s'il a sa propre
+   ouverture) sur le modèle d'`elegance.js` ou de `vinyl/` ;
+2. l'ajouter à `DESIGNS` dans `designs/index.js` ;
+3. ajouter sa description sous `portal.editor.catalog.<id>` dans les deux
+   dictionnaires, et les libellés de ses nouveaux réglages ;
+4. l'enregistrer dans la galerie :
+   `node --env-file=.env prisma/seed-design-template.mjs <id> "<Nom>" --category=<clé>`.
+
+Un design n'importe jamais les fichiers d'un autre design : ce qui se
+partage vit dans `designs/textures.js` ou dans `lib/invitation/`.
 
 ### Conventions
 

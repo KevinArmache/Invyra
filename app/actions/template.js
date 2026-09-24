@@ -1,10 +1,11 @@
 "use server";
 
-import { prisma } from "@/utils/prisma";
+import { prisma } from "@/lib/prisma";
 import { getSession, isEventOwnerOrAdmin } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { validateTemplateConfig } from "@/lib/invitation/document";
 import { normalizeCategory } from "@/lib/invitation/categories";
+import { isDesignConfig } from "@/lib/invitation/template-config";
 
 const TEMPLATE_STATUSES = ["draft", "in_progress", "completed"];
 
@@ -236,11 +237,11 @@ export async function updateUserTemplate(templateId, name, templateConfig, statu
     throw new Error("Vous n'avez pas le droit de modifier ce modèle");
   }
 
-  // L'auteur d'un modèle code créé avant les thèmes peut continuer à le
-  // modifier ; écrire du code dans un modèle à thème reste réservé aux admins.
+  // L'auteur d'un modèle code créé avant les designs peut continuer à le
+  // modifier ; écrire du code dans un modèle design reste réservé aux admins.
   // Sans ce droit, l'éditeur visuel reste permis (textes, images, couleurs).
   const config = validateTemplateConfig(templateConfig, {
-    allowCode: user.role === "admin" || existing.config?.type !== "theme",
+    allowCode: user.role === "admin" || !isDesignConfig(existing.config),
     base: existing.config,
   });
 

@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
-import { I18nProvider } from "@/utils/i18n/Context";
-import { getLocale, getDictionary } from "@/utils/i18n/server";
+import { I18nProvider } from "@/lib/i18n/Context";
+import { getLocale, getDictionary } from "@/lib/i18n/server";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";

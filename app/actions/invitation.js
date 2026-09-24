@@ -1,6 +1,6 @@
 'use server'
 
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 
 /**
  * @param {string} token

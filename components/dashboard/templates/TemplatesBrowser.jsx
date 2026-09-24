@@ -41,7 +41,7 @@ import {
   duplicateTemplate,
   setTemplateFeatured,
 } from "@/app/actions/template";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 const STATUS_LABEL_KEY = {
   draft: "portal.templates.list.status_draft_badge",

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Calendar, LayoutTemplate, Shield, Users } from "lucide-react";
 
 import { getAdminStats } from "@/app/actions/admin";
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 import { Button } from "@/components/ui/button";
 import { PageHeader, Panel, StatCard, StatGrid } from "@/components/dashboard/ui";
 

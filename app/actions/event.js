@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/utils/prisma";
+import { prisma } from "@/lib/prisma";
 import {
   getSession,
   isEventOwnerOrAdmin,
@@ -14,7 +14,7 @@ const PLAN_LIMITS = {
   premium: 1,
 };
 
-export async function canCreateEvent() {
+async function canCreateEvent() {
   const session = await getSession();
   if (!session) throw new Error("Unauthorized");
 

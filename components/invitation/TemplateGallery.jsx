@@ -6,7 +6,7 @@ import { Check, LayoutTemplate } from "lucide-react";
 import { EmptyState } from "@/components/dashboard/ui";
 import CategoryFilter from "@/components/invitation/CategoryFilter";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 const SAMPLE_EVENT = {
   title: "Votre événement",

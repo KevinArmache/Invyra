@@ -2,10 +2,9 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import bcrypt from "bcryptjs";
 
-import { prisma } from "@/utils/prisma";
-import { auth } from "@/utils/auth/server";
+import { prisma } from "@/lib/prisma";
+import { auth } from "@/lib/auth/server";
 
 /**
  * La session est portée par better-auth, mais tout le reste du code attend la
@@ -277,16 +276,4 @@ export async function deleteMyAccount() {
   await prisma.user.delete({ where: { id: user.id } });
 
   return { success: true };
-}
-
-// ─── Compatibilité ───────────────────────────────────────────────────────────
-
-/** @deprecated better-auth hache lui-même ; conservé pour les scripts. */
-export async function hashPassword(password) {
-  return bcrypt.hash(password, 12);
-}
-
-/** @deprecated better-auth vérifie lui-même ; conservé pour les scripts. */
-export async function verifyPassword(password, hashedPassword) {
-  return bcrypt.compare(password, hashedPassword);
 }

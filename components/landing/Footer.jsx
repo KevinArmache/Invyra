@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 
 function InstagramIcon(props) {
   return (

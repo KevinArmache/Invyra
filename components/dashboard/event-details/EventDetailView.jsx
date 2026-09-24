@@ -17,10 +17,10 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatusBadge } from "@/components/dashboard/ui";
 import DeleteEventDialog from "@/components/dashboard/events/DeleteEventDialog";
-import CollaboratorModal from "@/components/dashboard/CollaboratorModal";
+import CollaboratorModal from "@/components/dashboard/event-details/CollaboratorModal";
 import TabOverview from "@/components/dashboard/event-details/TabOverview";
 import TabGuests from "@/components/dashboard/event-details/TabGuests";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 export default function EventDetailView({ event, guests, collaborators }) {
   const { t, locale } = useTranslation();

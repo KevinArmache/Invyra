@@ -1,11 +1,11 @@
 import { headers } from "next/headers";
 
-import { auth } from "@/utils/auth/server";
+import { auth } from "@/lib/auth/server";
 import {
   getBookedDates,
   getShowcaseTemplates,
   todayKey,
-} from "@/utils/landing";
+} from "@/lib/landing";
 import { sampleEvent } from "@/lib/invitation/sample";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";

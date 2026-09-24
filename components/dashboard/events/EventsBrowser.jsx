@@ -14,7 +14,7 @@ import {
 import { EmptyState, StatusBadge } from "@/components/dashboard/ui";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import DeleteEventDialog from "@/components/dashboard/events/DeleteEventDialog";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 function formatDate(date, locale, fallback) {
   if (!date) return fallback;

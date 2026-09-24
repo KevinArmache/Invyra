@@ -5,8 +5,9 @@ import {
   getUserTemplateById,
   updateUserTemplate,
 } from "@/app/actions/template";
-import TemplateEditorForm from "@/components/dashboard/TemplateEditorForm";
+import TemplateEditorForm from "@/components/dashboard/templates/TemplateEditorForm";
 import { toEditableConfig } from "@/lib/invitation/document";
+import { isDesignConfig } from "@/lib/invitation/template-config";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -34,7 +35,7 @@ export default async function EditTemplatePage({ params }) {
   const saveTemplate = updateUserTemplate.bind(null, id);
 
   const session = await getSession();
-  const isTheme = template.config?.type === "theme";
+  const isDesign = isDesignConfig(template.config);
 
   return (
     <TemplateEditorForm
@@ -45,7 +46,7 @@ export default async function EditTemplatePage({ params }) {
       initialConfig={toEditableConfig(template.config)}
       // Un modèle code existant reste modifiable par son auteur ; en créer un
       // nouveau est réservé aux admins (voir updateUserTemplate).
-      allowCode={session?.role === "admin" || !isTheme}
+      allowCode={session?.role === "admin" || !isDesign}
       uploadEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
       onSave={saveTemplate}
     />

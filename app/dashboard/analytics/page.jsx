@@ -1,7 +1,7 @@
 import { Calendar, Eye, TrendingUp, Users } from "lucide-react";
 
 import { getEvents } from "@/app/actions/event";
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 import {
   EmptyState,
   PageHeader,

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Calendar, CheckCircle2, Eye, Plus, Users } from "lucide-react";
 
 import { getEvents } from "@/app/actions/event";
-import { getTranslations } from "@/utils/i18n/server";
+import { getTranslations } from "@/lib/i18n/server";
 import { Button } from "@/components/ui/button";
 import {
   EmptyState,

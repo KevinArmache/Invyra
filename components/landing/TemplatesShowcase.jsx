@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import { sampleEvent } from "@/lib/invitation/sample";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 /**
  * Vitrine publique des modèles mis en avant par un admin (étoile dans la

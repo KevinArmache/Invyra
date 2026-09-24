@@ -11,7 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 function isActive(pathname, href, exact) {

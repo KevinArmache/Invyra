@@ -5,7 +5,7 @@ import { Calendar, Clock, MapPin, Shirt } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 /**
  * Champs décrivant un événement, partagés par la création et l'édition.

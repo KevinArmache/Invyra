@@ -1,10 +1,11 @@
 'use server'
 
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { getSession, isEventOwnerOrAdmin } from '@/app/actions/auth'
 import { getMyCollaboratorRole } from '@/app/actions/collaborator'
 import { buildInvitationEmail } from '@/lib/email/invitation-email'
 import { toEditableConfig } from '@/lib/invitation/document'
+import { isDesignConfig } from '@/lib/invitation/template-config'
 import nodemailer from 'nodemailer'
 
 // ──────────────────────────────────────────────
@@ -33,7 +34,7 @@ const EVENT_FOR_EMAIL = {
 /** Photo d'accueil du modèle de l'événement, s'il en a une. */
 function eventImage(event) {
   const config = toEditableConfig(event.templateCopy?.config || event.invitationTemplate)
-  return config?.type === 'theme' ? config.content.hero?.image || '' : ''
+  return isDesignConfig(config) ? config.content.hero?.image || '' : ''
 }
 
 function emailFor(guest, event, appUrl) {

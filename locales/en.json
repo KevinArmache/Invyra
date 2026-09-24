@@ -6,17 +6,8 @@
     "sign_in": "Sign in",
     "get_started": "Get started",
     "dashboard": "Dashboard",
-    "language": "Language",
     "templates": "Templates",
     "availability": "Availability"
-  },
-  "sidebar": {
-    "dashboard": "Dashboard",
-    "events": "Events",
-    "analytics": "Analytics",
-    "settings": "Settings",
-    "sign_out": "Sign out",
-    "open_sidebar": "Open sidebar"
   },
   "login": {
     "title": "Welcome back",
@@ -85,8 +76,6 @@
     "danger_zone": "Danger zone",
     "irreversible": "Irreversible actions",
     "delete_account": "Delete account",
-    "delete_prompt": "Type DELETE to confirm the irreversible deletion of your account:",
-    "delete_cancel": "Deletion cancelled: the confirmation word is incorrect.",
     "delete_desc": "Account deletion is currently enabled. Contact support if you have any issues with deleting your account.",
     "delete_confirm_word": "DELETE",
     "delete_dialog_title": "Permanently delete your account?",
@@ -105,152 +94,7 @@
     "recent_events": "Recent events",
     "no_events": "No events yet. Create your first one!",
     "view_all": "View all events",
-    "view": "View",
-    "guests": "guests",
-    "quick_actions": "Quick actions",
-    "new_event": "New event",
-    "new_event_desc": "Create a new event and start inviting your guests.",
-    "manage_events": "Manage events",
-    "manage_events_desc": "View and manage all your existing events."
-  },
-  "events": {
-    "title": "My events",
-    "subtitle": "Manage all your digital invitations",
-    "new_event": "New event",
-    "no_events": "No events found",
-    "no_events_desc": "Start by creating your first event.",
-    "create_first": "Create my first event",
-    "view": "View",
-    "edit": "Edit",
-    "delete": "Delete",
-    "guests": "guests",
-    "views": "views",
-    "confirmed": "confirmed",
-    "search": "Search events...",
-    "filter_all": "All",
-    "filter_upcoming": "Upcoming",
-    "filter_past": "Past"
-  },
-  "event_detail": {
-    "back": "Back to events",
-    "edit": "Edit",
-    "delete": "Delete",
-    "animate": "Animate invitation",
-    "preview": "Preview",
-    "share": "Share",
-    "guests_confirmed": "Guests confirmed",
-    "views": "Views",
-    "rsvp_link": "RSVP link",
-    "copy_link": "Copy link",
-    "copied": "Copied!",
-    "event_info": "Event information",
-    "date": "Date",
-    "time": "Time",
-    "location": "Location",
-    "theme": "Theme",
-    "description": "Description",
-    "no_description": "No description available."
-  },
-  "new_event": {
-    "title": "New event",
-    "subtitle": "Create a new event and customize your invitation",
-    "back": "Back",
-    "event_title": "Event title",
-    "event_title_placeholder": "E.g., John & Mary's Wedding",
-    "event_date": "Date",
-    "event_time": "Time",
-    "location": "Location",
-    "location_placeholder": "E.g., Versailles Palace, Paris",
-    "theme": "Theme",
-    "theme_placeholder": "E.g., Romantic, Modern, Traditional...",
-    "description": "Description",
-    "description_placeholder": "Describe your event...",
-    "guest_count": "Estimated guest count",
-    "create": "Create event",
-    "creating": "Creating..."
-  },
-  "analytics": {
-    "title": "Analytics",
-    "subtitle": "Usage statistics for your events",
-    "total_events": "Total events",
-    "total_views": "Total views",
-    "total_guests": "Total guests",
-    "total_confirmed": "Total confirmed"
-  },
-  "editor": {
-    "title": "Animation editor",
-    "back_events": "Back to events",
-    "live_preview": "Live preview",
-    "full_preview": "Full preview",
-    "save_changes": "Save changes",
-    "saving": "Saving...",
-    "saved": "✓ Saved!",
-    "generate": "Generate animation",
-    "generating": "Generating...",
-    "hide_controls": "Hide controls",
-    "show_controls": "Show controls"
-  },
-  "ai": {
-    "title": "AI animation generator",
-    "description": "Describe the mood and style you want, and AI will generate the animation settings",
-    "placeholder": "E.g., 'Romantic sunset wedding with warm golden tones and gentle floating petals'..."
-  },
-  "manual": {
-    "title": "Manual controls",
-    "description": "Fine-tune the animation settings manually",
-    "colors_title": "Colors",
-    "primary": "Primary",
-    "secondary": "Secondary",
-    "accent": "Accent",
-    "text_color": "Text color",
-    "bg_image_title": "Background image",
-    "bg_image_desc": "Overrides the default background color/gradient. Leave empty to use theme colors.",
-    "bg_audio_title": "Background audio (optional)",
-    "bg_audio_desc": "Will loop automatically.",
-    "animate_bg": "Animate bg (pan & zoom)",
-    "apply": "Apply",
-    "card_container": "Card container (HTML)",
-    "text_blocks": "Text blocks (headers & message)",
-    "bg_color": "Bg color",
-    "bg_opacity": "Bg opacity",
-    "padding": "Padding",
-    "border_color": "Border color",
-    "border_size": "Border size",
-    "border_radius": "Border radius",
-    "particles": "Particles",
-    "count": "Count",
-    "size": "Size",
-    "speed": "Speed",
-    "shape": "Shape",
-    "blending": "Blending mode",
-    "decorative_shapes": "Decorative shapes",
-    "thickness": "Thickness",
-    "metalness": "Metalness",
-    "roughness": "Roughness",
-    "emissive": "Emissive",
-    "opacity": "Opacity",
-    "wireframe": "Wireframe mode",
-    "camera_parallax": "Camera & Parallax",
-    "enable_parallax": "Enable mouse parallax",
-    "intensity": "Intensity",
-    "depth": "Target depth",
-    "loading_screen": "Loading screen",
-    "bar_bg": "Bar background",
-    "bar_progress": "Progress bar",
-    "environment": "Environment & Scenery",
-    "hdri_preset": "HDRI Preset",
-    "show_panorama": "Show full panorama",
-    "stars": "Stars (Space)",
-    "sparkles": "Sparkles (Magic)",
-    "clouds": "Volumetric clouds",
-    "darken_overlay": "Background darken overlay",
-    "font_style": "Font style"
-  },
-  "scene": {
-    "click_open": "Click to Open",
-    "when": "When",
-    "where": "Where",
-    "dear": "Dear"
+    "guests": "guests"
   },
   "portal": {
     "sidebar": {
@@ -279,7 +123,6 @@
       "role": "Role",
       "status": "Status",
       "registered_on": "Registered on",
-      "updating": "Updating...",
       "active": "Active",
       "suspended": "Suspended",
       "standard_user": "User",
@@ -358,10 +201,7 @@
           "description": "Description",
           "name": "Full name *",
           "email": "Email *",
-          "phone": "Phone (optional)",
-          "demo_name": "Event name",
-          "demo_location": "Location",
-          "demo_dress_code": "Black Tie"
+          "phone": "Phone (optional)"
         },
         "placeholders": {
           "title": "Sarah & Mark's Wedding",
@@ -373,12 +213,9 @@
         "buttons": {
           "continue": "Continue",
           "creating": "Creating...",
-          "create_template": "Create a template",
           "first_template": "Create my first template",
-          "back": "Back",
           "continue_with_template": "Continue with this template",
           "skip": "Skip this step",
-          "adding": "Adding...",
           "add": "Add guest",
           "finish": "Finish & manage event"
         },
@@ -412,29 +249,21 @@
       },
       "details": {
         "actions": {
-          "delete_event_confirm": "Are you sure you want to delete this event?",
           "event_deleted": "Event deleted.",
-          "send_bulk_confirm": "Send invitations to all guests who haven't received an email yet?",
           "sending": "Sending...",
           "send_invitations": "Send invitations",
           "email_sent": "Email sent successfully!",
           "guest_deleted": "Guest deleted.",
           "back_to_events": "Back to events",
           "edit": "Edit",
-          "delete": "Delete",
           "customize_invitation": "Customise the invitation"
         },
         "tabs": {
           "overview": "Overview",
-          "guests": "Guests",
-          "settings": "Settings"
+          "guests": "Guests"
         },
         "overview": {
           "stats_title": "RSVP responses",
-          "total_guests": "Total guests",
-          "attending": "Attending",
-          "pending": "Pending",
-          "declined": "Declined",
           "copy_link": "Copy link",
           "link_copied": "Link copied!",
           "active_template": "Active template preview",
@@ -445,13 +274,9 @@
           "title": "Guest list",
           "subtitle": "Manage your guests and track their individual status",
           "add_btn": "Add",
-          "import_csv": "Import CSV",
           "table": {
-            "guest": "Guest",
             "email": "Email",
-            "whatsapp": "WhatsApp",
-            "rsvp": "RSVP",
-            "actions": "Actions"
+            "whatsapp": "WhatsApp"
           },
           "status": {
             "pending": "Pending",
@@ -459,8 +284,6 @@
             "declined": "Declined",
             "maybe": "Maybe"
           },
-          "send_email": "Send email",
-          "send_whatsapp": "Send WhatsApp",
           "delete_confirm": "Delete this guest?",
           "resend": "Resend",
           "search": "Search a guest...",
@@ -505,7 +328,6 @@
         "reset_filters": "Show all templates"
       },
       "editor": {
-        "title": "Template editor",
         "save_btn": "Save template",
         "saving": "Saving...",
         "success": "Template saved!",
@@ -514,10 +336,7 @@
         "status_draft_option": "⚪ Draft",
         "status_in_progress_option": "🟡 In progress",
         "status_completed_option": "🟢 Completed",
-        "mode_code": "Code mode",
         "mode_preview": "Preview mode",
-        "variables_title": "Event variables",
-        "variables_desc": "Use these variables in your HTML or JS code to inject event data dynamically.",
         "title_new": "Create a template",
         "title_edit": "Edit template",
         "name_required": "Give your template a name."
@@ -543,7 +362,7 @@
         "results": "templates in total"
       }
     },
-    "themes": {
+    "editor": {
       "picker": {
         "title": "Choose a starting design",
         "subtitle": "You will then pick its mood, and can customise everything: colours, fonts, photos and text.",
@@ -553,11 +372,12 @@
       "catalog": {
         "eclat": "Grand wedding: full-screen photo, gold-foil title, gold dust, countdown and confetti.",
         "origami": "A folded sheet the guest unfolds with a fingertip. Embossed paper, accordion schedule, a reply card that flies off as a paper plane and a final paper figure.",
+        "vinyl": "A vinyl album: the guest slides the record out of its sleeve and drops the needle. A tracklist played by the turntable, a record you flip over, a jukebox to reply and a hidden track. Great for a birthday or a party.",
         "elegance": "Translucent card and gold trim, title over the photo. For big occasions.",
         "minimal": "Light, airy page with strong typography. Clean and modern.",
         "festive": "Bright gradient, confetti and round buttons. Time to party."
       },
-      "editor": {
+      "general": {
         "presets": "Moods",
         "style": "Colours & fonts",
         "show_section": "Show this section",
@@ -589,7 +409,11 @@
         "confetti": "Confetti on confirmation",
         "texture": "Paper grain",
         "figure": "Final figure",
-        "cranes": "Paper cranes on confirmation"
+        "cranes": "Paper cranes on confirmation",
+        "record": "Record colour",
+        "fontMono": "Numbers font",
+        "rpm": "Record speed",
+        "crackle": "Crackle on opening"
       },
       "sections": {
         "opening": "Invitation opening",
@@ -646,6 +470,10 @@
           "crane": "Crane",
           "heart": "Heart",
           "star": "Star"
+        },
+        "rpm": {
+          "33": "33 rpm",
+          "45": "45 rpm"
         }
       },
       "music": {
@@ -696,11 +524,8 @@
     }
   },
   "common": {
-    "loading": "Loading...",
     "error": "An error occurred",
-    "confirm_delete": "Are you sure you want to delete?",
     "cancel": "Cancel",
-    "confirm": "Confirm",
     "close": "Close",
     "search": "Search...",
     "no_results": "No results"
@@ -718,8 +543,8 @@
         "events_value": "10K+",
         "rsvp": "RSVP rate",
         "rsvp_value": "98%",
-        "themes": "Creative freedom",
-        "themes_value": "100%"
+        "creative": "Creative freedom",
+        "creative_value": "100%"
       }
     },
     "features": {
@@ -731,7 +556,7 @@
           "title": "Total control (HTML/CSS)",
           "desc": "Design anything you want using a powerful web editor built for absolute customization."
         },
-        "themes": {
+        "interactive": {
           "title": "Interactive experience",
           "desc": "Write your own JavaScript to create fluid animations and engage your guests on a whole new level."
         },
@@ -830,8 +655,6 @@
       "links": {
         "features": "Features",
         "pricing": "Pricing",
-        "themes": "Available templates",
-        "examples": "Invitation examples",
         "contact": "Support"
       }
     },
@@ -851,8 +674,6 @@
       "month_free": "No bookings this month",
       "month_booked_one": "date booked this month",
       "month_booked_many": "dates booked this month",
-      "booked_one": "event planned",
-      "booked_many": "events planned",
       "prev": "Previous month",
       "next": "Next month",
       "cta": "Book my date",

@@ -8,20 +8,21 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import InvitationEditor from "@/components/invitation/InvitationEditor";
+import InvitationEditor from "@/components/invitation/editor/InvitationEditor";
 import TemplateGallery from "@/components/invitation/TemplateGallery";
-import LivePreview from "@/components/invitation/LivePreview";
-import ThemePicker from "@/components/invitation/theme-editor/ThemePicker";
-import { MusicField } from "@/components/invitation/theme-editor/fields";
+import LivePreview from "@/components/invitation/editor/LivePreview";
+import DesignPicker from "@/components/invitation/editor/DesignPicker";
+import { emptyCodeConfig } from "@/lib/invitation/template-config";
+import { MusicField } from "@/components/invitation/editor/fields";
 import { saveTemplate } from "@/app/actions/template";
 import { toEditableConfig } from "@/lib/invitation/document";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 /**
  * Design de l'invitation d'un événement.
  *
  * Deux façons de faire, combinables : partir d'un modèle de la galerie, ou
- * d'un thème, puis personnaliser. Rien n'est écrit en base avant « Enregistrer » :
+ * d'un design, puis personnaliser. Rien n'est écrit en base avant « Enregistrer » :
  * choisir un modèle ne fait que remplacer l'état local.
  *
  * La personnalisation porte sur la copie propre à l'événement, de l'écran
@@ -76,11 +77,11 @@ export default function EventTemplateEditor({
   function renderCustomize() {
     if (!template) {
       return (
-        <ThemePicker
+        <DesignPicker
           onPick={setTemplate}
           allowCode={isAdmin}
           onPickCode={() =>
-            setTemplate({ type: "code", html: "", css: "", js: "" })
+            setTemplate(emptyCodeConfig())
           }
         />
       );

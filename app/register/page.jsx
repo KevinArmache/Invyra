@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 
-import { auth } from "@/utils/auth/server";
-import { getTranslations } from "@/utils/i18n/server";
+import { auth } from "@/lib/auth/server";
+import { getTranslations } from "@/lib/i18n/server";
 import AuthShell from "@/components/auth/AuthShell";
 import RegisterForm from "@/components/auth/RegisterForm";
 

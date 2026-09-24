@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { CalendarCheck, ChevronLeft, ChevronRight, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 
 /** Nombre de mois consultables à partir du mois courant. */
 const MONTHS_AHEAD = 24;

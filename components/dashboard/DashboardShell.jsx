@@ -4,10 +4,15 @@ import { useCallback, useState } from "react";
 import { Menu } from "lucide-react";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useTranslation } from "@/utils/i18n/Context";
+import { useTranslation } from "@/lib/i18n/Context";
 import Sidebar from "@/components/dashboard/Sidebar";
 import { useSidebarCollapsed } from "@/hooks/useSidebarCollapsed";
-import { NAVIGATION, ADMIN_LINK } from "@/components/dashboard/navigation";
+import {
+  ADMIN_LINK,
+  ADMIN_NAVIGATION,
+  DASHBOARD_LINK,
+  NAVIGATION,
+} from "@/components/dashboard/navigation";
 
 /**
  * Chrome de l'espace connecté. Seuls l'ouverture du tiroir et le repli du
@@ -17,16 +22,26 @@ import { NAVIGATION, ADMIN_LINK } from "@/components/dashboard/navigation";
  * Le repli est porté à ce niveau et non dans Sidebar, parce que la marge du
  * contenu principal doit le suivre. Sa persistance vit dans
  * useSidebarCollapsed.
+ *
+ * @param {"dashboard" | "admin"} [props.section]  menu affiché (voir
+ *   navigation.js) : l'espace principal, ou l'administration avec un lien de
+ *   retour vers l'espace principal.
  */
 export default function DashboardShell({
   user,
   homeHref,
+  section = "dashboard",
   brand = "Invyra",
   logoutAction,
   children,
 }) {
-  const navigation = NAVIGATION;
-  const footerLink = user?.role === "admin" ? ADMIN_LINK : null;
+  const isAdminSection = section === "admin";
+  const navigation = isAdminSection ? ADMIN_NAVIGATION : NAVIGATION;
+  const footerLink = isAdminSection
+    ? DASHBOARD_LINK
+    : user?.role === "admin"
+      ? ADMIN_LINK
+      : null;
   const [isOpen, setIsOpen] = useState(false);
   const [isCollapsed, toggleCollapse] = useSidebarCollapsed();
   const { t } = useTranslation();

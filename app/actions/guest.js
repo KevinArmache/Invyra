@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/utils/prisma";
+import { prisma } from "@/lib/prisma";
 import {
   getSession,
   isEventOwnerOrAdmin,
@@ -121,44 +121,6 @@ export async function addGuest(eventId, data) {
   } catch (error) {
     console.error("Error adding guest:", error);
     throw new Error(error.message || "Failed to add guest");
-  }
-}
-
-export async function updateGuest(guestId, data) {
-  try {
-    const guest = await prisma.guest.findUnique({
-      where: { id: guestId },
-    });
-    if (!guest) throw new Error("Guest not found");
-
-    await checkEditorAccess(guest.eventId);
-
-    const updated = await prisma.guest.update({
-      where: { id: guestId },
-      data: {
-        name: data.name !== undefined ? data.name : undefined,
-        email: data.email !== undefined ? data.email : undefined,
-        phone: data.phone !== undefined ? data.phone : undefined,
-        dietaryRestrictions:
-          data.dietary_restrictions !== undefined
-            ? data.dietary_restrictions
-            : undefined,
-        plusOne: data.plus_one !== undefined ? data.plus_one : undefined,
-        notes: data.notes !== undefined ? data.notes : undefined,
-        rsvpStatus:
-          data.rsvp_status !== undefined ? data.rsvp_status : undefined,
-        rsvpRespondedAt:
-          data.rsvp_status !== undefined &&
-          guest.rsvpStatus !== data.rsvp_status
-            ? new Date()
-            : undefined,
-      },
-    });
-
-    return updated;
-  } catch (error) {
-    console.error("Error updating guest:", error);
-    throw new Error("Failed to update guest");
   }
 }
 
