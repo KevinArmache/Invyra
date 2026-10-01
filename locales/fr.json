@@ -245,7 +245,9 @@
         "tab_customize": "Personnaliser",
         "template_applied_pending": "Modèle appliqué. Personnalisez-le puis enregistrez.",
         "copy_notice": "Vous modifiez uniquement l'invitation de cet événement : le modèle d'origine n'est jamais touché.",
-        "copy_source": "Modèle de départ :"
+        "copy_source": "Modèle de départ :",
+        "empty_desc": "Choisissez un modèle dans la galerie, puis personnalisez ses textes, ses images et ses couleurs.",
+        "blank_code": "Page vierge (code)"
       },
       "details": {
         "actions": {
@@ -363,89 +365,18 @@
       }
     },
     "editor": {
-      "picker": {
-        "title": "Choisissez un design de départ",
-        "subtitle": "Vous choisirez ensuite son ambiance, puis vous pourrez tout personnaliser : couleurs, polices, photos et textes.",
-        "code_title": "Code (expert)",
-        "code_desc": "HTML, CSS et JavaScript écrits à la main."
-      },
-      "catalog": {
-        "eclat": "Grand mariage : photo plein écran, titre à la feuille d'or, poussière d'or, compte à rebours et confettis.",
-        "origami": "Une feuille pliée que l'invité déplie du bout du doigt. Papier en relief, programme en accordéon, carte-réponse qui s'envole en avion et figure finale en papier.",
-        "vinyl": "Un album vinyle : l'invité sort le disque de sa pochette et pose l'aiguille. Tracklist lue par la platine, disque qu'on retourne, jukebox pour répondre et piste cachée. Idéal pour un anniversaire ou une soirée.",
-        "boarding": "Un voyage : l'invité détache le talon de sa carte d'embarquement, le tableau des départs fait claquer ses palettes, un avion suit l'itinéraire et le passeport se remplit de tampons. Idéal pour un mariage à destination.",
-        "elegance": "Carte translucide et filet doré, titre posé sur la photo. Pour les grandes occasions.",
-        "minimal": "Page claire et aérée, typographie forte. Sobre et moderne.",
-        "festive": "Dégradé vif, confettis et boutons ronds. Pour faire la fête."
-      },
       "general": {
-        "presets": "Ambiances",
-        "style": "Couleurs & polices",
-        "show_section": "Afficher cette section",
-        "hidden_badge": "masquée",
-        "details_hint": "Date, heure, lieu et tenue sont repris automatiquement de la fiche de l'événement.",
-        "tokens_hint": "Jetons utilisables :",
         "mode_edit": "Édition",
         "opening_hint": "Le premier écran que voit l'invité. Laissez le monogramme vide pour utiliser les initiales du titre de l'événement (Camille & Antoine donne C&A).",
         "show_opening": "Voir l'ouverture",
-        "replay_opening": "Rejouer l'ouverture",
-        "code_confirm_title": "Passer ce modèle en mode code ?",
-        "code_confirm_desc": "Le modèle sera converti en HTML, CSS et JavaScript modifiables, écran d'ouverture compris. Le mode sans code restera disponible pour changer les textes, les images et les couleurs. Rien n'est enregistré tant que vous ne cliquez pas sur Enregistrer.",
-        "code_confirm_btn": "Passer en mode code"
-      },
-      "style": {
-        "background": "Fond",
-        "background2": "Fond (dégradé)",
-        "card": "Carte",
-        "text": "Texte",
-        "accent": "Accent",
-        "accent2": "Accent secondaire",
-        "fontHeading": "Police des titres",
-        "fontBody": "Police du texte",
-        "radius": "Arrondis",
-        "overlay": "Assombrir la photo",
-        "fontScript": "Police calligraphiée",
-        "particles": "Poussière d'or animée",
-        "countdown": "Compte à rebours",
-        "confetti": "Confettis à la confirmation",
-        "texture": "Grain du papier",
-        "figure": "Figure finale",
-        "cranes": "Envol de grues à la confirmation",
-        "record": "Couleur du disque",
-        "fontMono": "Police des numéros",
-        "rpm": "Vitesse du disque",
-        "crackle": "Grésillement à l'ouverture",
-        "flap": "Lettres du tableau",
-        "sounds": "Sons de l'aéroport"
+        "replay_opening": "Rejouer l'ouverture"
       },
       "sections": {
-        "opening": "Ouverture de l'invitation",
-        "hero": "En-tête",
-        "intro": "Message d'accueil",
-        "details": "Infos pratiques",
-        "story": "Histoire",
-        "program": "Programme",
-        "venue": "Lieu",
-        "dressCode": "Dress code",
-        "gallery": "Galerie",
-        "closing": "Mot de la fin",
-        "rsvp": "Réponse (RSVP)"
+        "opening": "Ouverture de l'invitation"
       },
       "fields": {
-        "image": "Photo",
         "eyebrow": "Sur-titre",
         "title": "Titre",
-        "title_placeholder": "Titre de l'événement",
-        "message": "Message",
-        "text": "Texte",
-        "items": "Étapes",
-        "time": "Heure",
-        "label": "Intitulé",
-        "mapUrl": "Lien vers la carte (Google Maps…)",
-        "images": "Photos",
-        "confirmed": "Bouton « oui »",
-        "maybe": "Bouton « peut-être »",
-        "declined": "Bouton « non »",
         "style": "Style d'ouverture",
         "monogram": "Monogramme",
         "hint": "Invitation à ouvrir"
@@ -455,28 +386,14 @@
         "upload": "Importer",
         "uploading": "Envoi…",
         "remove": "Retirer",
-        "add": "Ajouter",
         "upload_error": "L'image n'a pas pu être envoyée.",
         "too_large": "Image trop lourde (5 Mo maximum)."
-      },
-      "list": {
-        "add_row": "Ajouter une étape",
-        "remove_row": "Supprimer"
       },
       "options": {
         "style": {
           "envelope": "Enveloppe",
           "seal": "Cachet de cire",
           "curtain": "Rideau"
-        },
-        "figure": {
-          "crane": "Grue",
-          "heart": "Cœur",
-          "star": "Étoile"
-        },
-        "rpm": {
-          "33": "33 tours",
-          "45": "45 tours"
         }
       },
       "music": {

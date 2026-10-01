@@ -19,7 +19,6 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InvitationEditor from "@/components/editor/InvitationEditor";
 import LivePreview from "@/components/editor/LivePreview";
-import DesignPicker from "@/components/editor/DesignPicker";
 import { emptyCodeConfig } from "@/lib/templates/config";
 import { TEMPLATE_CATEGORIES } from "@/lib/templates/categories";
 import { useTranslation } from "@/lib/i18n/Context";
@@ -64,8 +63,8 @@ export default function TemplateEditorForm({
   const [name, setName] = useState(initialName);
   const [status, setStatus] = useState(initialStatus || "draft");
   const [category, setCategory] = useState(initialCategory || NO_CATEGORY);
-  // Sans configuration initiale, on commence par choisir un design.
-  const [config, setConfig] = useState(initialConfig ?? null);
+  // Un nouveau modèle part du code de départ (voir CodeTemplateEditor).
+  const [config, setConfig] = useState(initialConfig ?? emptyCodeConfig());
   const [isSaving, setIsSaving] = useState(false);
   // En dessous de `lg`, code et aperçu ne tiennent pas côte à côte : on bascule
   // de l'un à l'autre plutôt que de réduire les deux à l'illisible.
@@ -96,14 +95,10 @@ export default function TemplateEditorForm({
   }
 
   return (
-    // Une fois le design choisi, la page occupe exactement la hauteur visible
-    // sur grand écran (100dvh moins les marges verticales du <main>, 2 × 2,5rem) :
-    // éditeur et aperçu ont ainsi une hauteur définie à remplir.
-    <div
-      className={`flex min-h-[calc(100dvh-8rem)] flex-col ${
-        config ? "lg:h-[calc(100dvh-5rem)]" : ""
-      }`}
-    >
+    // Sur grand écran, la page occupe exactement la hauteur visible (100dvh
+    // moins les marges verticales du <main>, 2 × 2,5rem) : éditeur et aperçu
+    // ont ainsi une hauteur définie à remplir.
+    <div className="flex min-h-[calc(100dvh-8rem)] flex-col lg:h-[calc(100dvh-5rem)]">
       <header className="mb-5 flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="min-w-0">
           <Link
@@ -177,7 +172,7 @@ export default function TemplateEditorForm({
           <Button
             size="lg"
             onClick={handleSave}
-            disabled={isSaving || !name.trim() || !config}
+            disabled={isSaving || !name.trim()}
           >
             {isSaving ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -191,66 +186,54 @@ export default function TemplateEditorForm({
         </div>
       </header>
 
-      {!config ? (
-        <DesignPicker
-          onPick={setConfig}
-          allowCode={allowCode}
-          onPickCode={() =>
-            setConfig(emptyCodeConfig())
-          }
-        />
-      ) : (
-        <>
-          <div className="mb-4 lg:hidden">
-            <Tabs value={mobilePane} onValueChange={setMobilePane}>
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="edit">
-                  {t("portal.editor.general.mode_edit")}
-                </TabsTrigger>
-                <TabsTrigger value="preview">
-                  {t("portal.templates.editor.mode_preview")}
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
+      <div className="mb-4 lg:hidden">
+        <Tabs value={mobilePane} onValueChange={setMobilePane}>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="edit">
+              {t("portal.editor.general.mode_edit")}
+            </TabsTrigger>
+            <TabsTrigger value="preview">
+              {t("portal.templates.editor.mode_preview")}
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
 
-          <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[minmax(0,440px)_1fr]">
-            <div
-              className={`min-h-[32rem] flex-col lg:flex lg:min-h-0 ${
-                mobilePane === "edit" ? "flex" : "hidden"
-              }`}
-            >
-              <InvitationEditor
-                value={config}
-                onChange={setConfig}
-                allowCode={allowCode}
-                uploadEnabled={uploadEnabled}
-                preview={
-                  <LivePreview
-                    template={config}
-                    event={SAMPLE_EVENT}
-                    guestName="Marie Dupont"
-                  />
-                }
+      <div className="grid min-h-0 flex-1 gap-5 lg:grid-cols-[minmax(0,440px)_1fr]">
+        <div
+          className={`min-h-[32rem] flex-col lg:flex lg:min-h-0 ${
+            mobilePane === "edit" ? "flex" : "hidden"
+          }`}
+        >
+          <InvitationEditor
+            value={config}
+            onChange={setConfig}
+            allowCode={allowCode}
+            uploadEnabled={uploadEnabled}
+            preview={
+              <LivePreview
+                template={config}
+                event={SAMPLE_EVENT}
+                guestName="Marie Dupont"
               />
-            </div>
+            }
+          />
+        </div>
 
-            <div
-              className={`surface min-h-[32rem] items-center justify-center overflow-hidden p-4 sm:p-6 lg:flex lg:min-h-0 ${
-                mobilePane === "preview" ? "flex" : "hidden"
-              }`}
-            >
-              <div className="relative aspect-3/4 h-full max-h-full w-full max-w-[560px] overflow-hidden rounded-md border border-border/60 bg-ink-900 shadow-elevation-3">
-                <LivePreview
-                  template={config}
-                  event={SAMPLE_EVENT}
-                  guestName="Marie Dupont"
-                />
-              </div>
-            </div>
+        <div
+          className={`surface min-h-[32rem] items-center justify-center overflow-hidden p-4 sm:p-6 lg:flex lg:min-h-0 ${
+            mobilePane === "preview" ? "flex" : "hidden"
+          }`}
+        >
+          <div className="relative aspect-3/4 h-full max-h-full w-full max-w-[560px] overflow-hidden rounded-md border border-border/60 bg-ink-900 shadow-elevation-3">
+            <LivePreview
+              template={config}
+              event={SAMPLE_EVENT}
+              guestName="Marie Dupont"
+            />
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 }

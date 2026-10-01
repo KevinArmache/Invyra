@@ -35,8 +35,7 @@ import {
   DEFAULT_JS,
 } from "@/lib/templates/code-starter";
 import OpeningFields from "@/components/editor/OpeningFields";
-import { openingToCode } from "@/lib/invitation/opening";
-import { normalizeOpening } from "@/lib/invitation/content";
+import { normalizeOpening, openingToCode } from "@/lib/invitation/opening";
 import { CODE_TYPE, isCodeConfig } from "@/lib/templates/config";
 import { useTranslation } from "@/lib/i18n/Context";
 

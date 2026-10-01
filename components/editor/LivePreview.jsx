@@ -5,7 +5,14 @@ import { MailOpen } from "lucide-react";
 
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { useTranslation } from "@/lib/i18n/Context";
-import { isDesignConfig } from "@/lib/templates/config";
+
+/** L'ouverture a-t-elle changé ? Ses réglages, ou son code (openingCode). */
+function openingChanged(template, previous) {
+  return (
+    template?.opening !== previous?.opening ||
+    template?.openingCode !== previous?.openingCode
+  );
+}
 
 /**
  * Aperçu des éditeurs de template.
@@ -14,20 +21,6 @@ import { isDesignConfig } from "@/lib/templates/config";
  * affiché que sur demande (bouton « Voir l'ouverture »), ou quand on modifie
  * justement ses réglages. Modifier autre chose le fait disparaître.
  */
-/**
- * L'ouverture a-t-elle changé ? Réglages dans content pour un design, à la
- * racine pour du code, où elle peut aussi être écrite en code (openingCode).
- */
-function openingChanged(template, previous) {
-  if (isDesignConfig(template)) {
-    return template?.content?.opening !== previous?.content?.opening;
-  }
-  return (
-    template?.opening !== previous?.opening ||
-    template?.openingCode !== previous?.openingCode
-  );
-}
-
 export default function LivePreview({ template, event, guestName }) {
   const { t } = useTranslation();
   // L'aperçu reconstruit tout le document à chaque changement : on le laisse

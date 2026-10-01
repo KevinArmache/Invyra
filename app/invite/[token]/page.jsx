@@ -6,7 +6,7 @@ import { getInvitationByToken } from "@/app/actions/invitation";
 import InvitationExperience from "@/components/invitation/InvitationExperience";
 import InvitationUnavailable from "@/components/invitation/InvitationUnavailable";
 import { toEditableConfig } from "@/lib/templates/validation";
-import { isDesignConfig } from "@/lib/templates/config";
+import { templateLook as lookOf } from "@/lib/templates/look";
 
 /**
  * Robots qui génèrent l'aperçu d'un lien partagé (WhatsApp, iMessage,
@@ -48,13 +48,10 @@ const loadInvitation = cache(async (token) => {
 
 /** Couleur de fond et photo principale du modèle, pour la transition et l'aperçu du lien. */
 function templateLook(invitation) {
-  const config = toEditableConfig(invitation?.event.invitationTemplate);
-  if (!isDesignConfig(config)) {
-    return { background: DEFAULT_BACKGROUND, image: null };
-  }
+  const look = lookOf(toEditableConfig(invitation?.event.invitationTemplate));
   return {
-    background: config.style.background ?? DEFAULT_BACKGROUND,
-    image: config.content.hero?.image || null,
+    background: look.background ?? DEFAULT_BACKGROUND,
+    image: look.image,
   };
 }
 

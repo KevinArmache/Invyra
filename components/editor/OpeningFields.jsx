@@ -4,14 +4,11 @@ import {
   ChoiceField,
   TextField,
 } from "@/components/editor/fields";
-import { CONTENT_SECTIONS } from "@/lib/invitation/content";
+import { OPENING_FIELDS } from "@/lib/invitation/opening";
 import { useTranslation } from "@/lib/i18n/Context";
 
-const OPENING = CONTENT_SECTIONS.find((section) => section.key === "opening");
-
 /**
- * Réglages de l'écran d'ouverture, pour les modèles code (les modèles design
- * les ont dans leur formulaire, générés depuis le même schéma).
+ * Réglages de l'écran d'ouverture standard d'un modèle.
  *
  * @param {string[]} [props.only]  champs à afficher (tous par défaut). Une
  *   ouverture écrite en code n'utilise plus que le monogramme.
@@ -25,7 +22,7 @@ export default function OpeningFields({ value, onChange, only }) {
 
   return (
     <div className="space-y-4">
-      {OPENING.fields
+      {OPENING_FIELDS
         .filter((field) => !only || only.includes(field.key))
         .map((field) =>
           field.type === "select" ? (

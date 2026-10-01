@@ -5,7 +5,6 @@ import { getSession, isEventOwnerOrAdmin } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { validateTemplateConfig } from "@/lib/templates/validation";
 import { normalizeCategory } from "@/lib/templates/categories";
-import { isDesignConfig } from "@/lib/templates/config";
 
 const TEMPLATE_STATUSES = ["draft", "in_progress", "completed"];
 
@@ -237,11 +236,10 @@ export async function updateUserTemplate(templateId, name, templateConfig, statu
     throw new Error("Vous n'avez pas le droit de modifier ce modèle");
   }
 
-  // L'auteur d'un modèle code créé avant les designs peut continuer à le
-  // modifier ; écrire du code dans un modèle design reste réservé aux admins.
-  // Sans ce droit, l'éditeur visuel reste permis (textes, images, couleurs).
+  // Seuls les admins écrivent du code ; les autres gardent l'éditeur visuel
+  // (textes, images, liens, couleurs).
   const config = validateTemplateConfig(templateConfig, {
-    allowCode: user.role === "admin" || !isDesignConfig(existing.config),
+    allowCode: user.role === "admin",
     base: existing.config,
   });
 
@@ -272,8 +270,7 @@ export async function duplicateTemplate(templateId) {
   });
   if (!source) throw new Error("Modèle non trouvé");
 
-  // Dupliquer un modèle code donnerait à son nouveau propriétaire le droit
-  // d'en modifier le code (voir updateUserTemplate).
+  // La copie est revalidée comme tout modèle écrit en base.
   const config = validateTemplateConfig(source.config, {
     allowCode: user.role === "admin",
   });
@@ -314,11 +311,11 @@ export async function setTemplateFeatured(templateId, featured) {
 }
 
 // ──────────────────────────────────────────────
-// Save the invitation design of an event
+// Save the invitation of an event
 // ──────────────────────────────────────────────
 
 /**
- * Enregistre le design d'un événement (sa copie de template).
+ * Enregistre l'invitation d'un événement (sa copie de modèle).
  *
  * @param {string} eventId
  * @param {object} template  config à enregistrer

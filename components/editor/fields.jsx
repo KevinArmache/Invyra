@@ -1,23 +1,13 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import { ImagePlus, Loader2, Plus, Trash2, Upload, X } from "lucide-react";
+import { Loader2, Trash2, Upload, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { FONTS } from "@/lib/invitation/fonts";
 import { safeUrl } from "@/lib/invitation/html";
 import { useTranslation } from "@/lib/i18n/Context";
 
@@ -77,43 +67,7 @@ export function ColorField({ label, value, onChange }) {
   );
 }
 
-export function FontField({ label, value, onChange }) {
-  const id = useId();
-  return (
-    <Field label={label} htmlFor={id}>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger id={id} className="w-full">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {FONTS.map((font) => (
-            <SelectItem key={font.id} value={font.id}>
-              <span style={{ fontFamily: font.stack }}>{font.label}</span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </Field>
-  );
-}
-
-export function RangeField({ label, value, onChange, min, max, step, unit }) {
-  return (
-    <Field label={`${label} · ${value}${unit ?? ""}`}>
-      <Slider
-        value={[value]}
-        min={min}
-        max={max}
-        step={step}
-        onValueChange={([next]) => onChange(next)}
-        aria-label={label}
-        className="py-2"
-      />
-    </Field>
-  );
-}
-
-/** Choix parmi quelques options, en pastilles (même style que les ambiances). */
+/** Choix parmi quelques options, en pastilles. */
 export function ChoiceField({ label, value, onChange, options }) {
   return (
     <Field label={label}>
@@ -143,15 +97,6 @@ export function ChoiceField({ label, value, onChange, options }) {
         })}
       </div>
     </Field>
-  );
-}
-
-export function ToggleField({ label, value, onChange }) {
-  return (
-    <label className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2 text-sm text-ink-100">
-      {label}
-      <Switch checked={!!value} onCheckedChange={onChange} />
-    </label>
   );
 }
 
@@ -319,133 +264,6 @@ export function ImageField({ label, value, onChange, uploadEnabled }) {
         />
         <UploadButton onUploaded={onChange} uploadEnabled={uploadEnabled} />
       </div>
-    </Field>
-  );
-}
-
-export function ImagesField({
-  label,
-  value,
-  onChange,
-  maxItems,
-  uploadEnabled,
-}) {
-  const { t } = useTranslation();
-  const [draft, setDraft] = useState("");
-  const isFull = value.length >= maxItems;
-
-  function add(url) {
-    const safe = safeUrl(url);
-    if (!safe || isFull) return;
-    onChange([...value, safe]);
-    setDraft("");
-  }
-
-  return (
-    <Field label={`${label} (${value.length}/${maxItems})`}>
-      {value.length > 0 && (
-        <div className="grid grid-cols-3 gap-2">
-          {value.map((url, index) => (
-            <Thumbnail
-              key={`${url}-${index}`}
-              url={url}
-              removeLabel={t("portal.editor.image.remove")}
-              onRemove={() => onChange(value.filter((_, i) => i !== index))}
-            />
-          ))}
-        </div>
-      )}
-      {!isFull && (
-        <div className="flex gap-2">
-          <Input
-            value={draft}
-            placeholder={t("portal.editor.image.url_placeholder")}
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                event.preventDefault();
-                add(draft);
-              }
-            }}
-            className="text-xs"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={!safeUrl(draft)}
-            onClick={() => add(draft)}
-            aria-label={t("portal.editor.image.add")}
-            className="shrink-0"
-          >
-            <ImagePlus className="h-3.5 w-3.5" />
-          </Button>
-          <UploadButton onUploaded={add} uploadEnabled={uploadEnabled} />
-        </div>
-      )}
-    </Field>
-  );
-}
-
-/** Lignes à colonnes fixes (ex. programme : heure + intitulé). */
-export function ListField({ label, value, onChange, columns, maxItems }) {
-  const { t } = useTranslation();
-
-  function updateRow(index, key, next) {
-    onChange(
-      value.map((row, i) => (i === index ? { ...row, [key]: next } : row)),
-    );
-  }
-
-  return (
-    <Field label={label}>
-      <ul className="space-y-2">
-        {value.map((row, index) => (
-          <li key={index} className="flex items-center gap-2">
-            {columns.map((column, columnIndex) => (
-              <Input
-                key={column.key}
-                value={row[column.key] ?? ""}
-                maxLength={column.max}
-                placeholder={t(`portal.editor.fields.${column.key}`)}
-                aria-label={t(`portal.editor.fields.${column.key}`)}
-                onChange={(event) =>
-                  updateRow(index, column.key, event.target.value)
-                }
-                className={
-                  columnIndex === 0 ? "w-20 shrink-0" : "min-w-0 flex-1"
-                }
-              />
-            ))}
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => onChange(value.filter((_, i) => i !== index))}
-              aria-label={t("portal.editor.list.remove_row")}
-              className="h-8 w-8 shrink-0 text-ink-400 hover:text-destructive"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </Button>
-          </li>
-        ))}
-      </ul>
-      {value.length < maxItems && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            onChange([
-              ...value,
-              Object.fromEntries(columns.map((column) => [column.key, ""])),
-            ])
-          }
-        >
-          <Plus className="mr-1.5 h-3.5 w-3.5" />
-          {t("portal.editor.list.add_row")}
-        </Button>
-      )}
     </Field>
   );
 }

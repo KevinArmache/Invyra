@@ -245,7 +245,9 @@
         "tab_customize": "Customise",
         "template_applied_pending": "Template applied. Customise it, then save.",
         "copy_notice": "You are only editing this event's invitation: the original template is never changed.",
-        "copy_source": "Starting template:"
+        "copy_source": "Starting template:",
+        "empty_desc": "Pick a template from the gallery, then customise its text, images and colours.",
+        "blank_code": "Blank page (code)"
       },
       "details": {
         "actions": {
@@ -363,89 +365,18 @@
       }
     },
     "editor": {
-      "picker": {
-        "title": "Choose a starting design",
-        "subtitle": "You will then pick its mood, and can customise everything: colours, fonts, photos and text.",
-        "code_title": "Code (expert)",
-        "code_desc": "Hand-written HTML, CSS and JavaScript."
-      },
-      "catalog": {
-        "eclat": "Grand wedding: full-screen photo, gold-foil title, gold dust, countdown and confetti.",
-        "origami": "A folded sheet the guest unfolds with a fingertip. Embossed paper, accordion schedule, a reply card that flies off as a paper plane and a final paper figure.",
-        "vinyl": "A vinyl album: the guest slides the record out of its sleeve and drops the needle. A tracklist played by the turntable, a record you flip over, a jukebox to reply and a hidden track. Great for a birthday or a party.",
-        "boarding": "A journey: the guest tears off the stub of their boarding pass, the departures board flips its letters, a plane follows the itinerary and the passport fills with stamps. Ideal for a destination wedding.",
-        "elegance": "Translucent card and gold trim, title over the photo. For big occasions.",
-        "minimal": "Light, airy page with strong typography. Clean and modern.",
-        "festive": "Bright gradient, confetti and round buttons. Time to party."
-      },
       "general": {
-        "presets": "Moods",
-        "style": "Colours & fonts",
-        "show_section": "Show this section",
-        "hidden_badge": "hidden",
-        "details_hint": "Date, time, place and dress code are taken from the event details automatically.",
-        "tokens_hint": "Available tokens:",
         "mode_edit": "Edit",
         "opening_hint": "The first screen the guest sees. Leave the monogram empty to use the initials of the event title (Camille & Antoine gives C&A).",
         "show_opening": "Show opening",
-        "replay_opening": "Replay opening",
-        "code_confirm_title": "Switch this template to code?",
-        "code_confirm_desc": "The template will be converted into editable HTML, CSS and JavaScript, opening screen included. The no-code mode stays available to change text, images and colours. Nothing is saved until you click Save.",
-        "code_confirm_btn": "Switch to code"
-      },
-      "style": {
-        "background": "Background",
-        "background2": "Background (gradient)",
-        "card": "Card",
-        "text": "Text",
-        "accent": "Accent",
-        "accent2": "Secondary accent",
-        "fontHeading": "Heading font",
-        "fontBody": "Body font",
-        "radius": "Corner radius",
-        "overlay": "Darken photo",
-        "fontScript": "Script font",
-        "particles": "Floating gold dust",
-        "countdown": "Countdown",
-        "confetti": "Confetti on confirmation",
-        "texture": "Paper grain",
-        "figure": "Final figure",
-        "cranes": "Paper cranes on confirmation",
-        "record": "Record colour",
-        "fontMono": "Numbers font",
-        "rpm": "Record speed",
-        "crackle": "Crackle on opening",
-        "flap": "Departure board letters",
-        "sounds": "Airport sounds"
+        "replay_opening": "Replay opening"
       },
       "sections": {
-        "opening": "Invitation opening",
-        "hero": "Header",
-        "intro": "Welcome message",
-        "details": "Practical info",
-        "story": "Story",
-        "program": "Schedule",
-        "venue": "Venue",
-        "dressCode": "Dress code",
-        "gallery": "Gallery",
-        "closing": "Closing words",
-        "rsvp": "Reply (RSVP)"
+        "opening": "Invitation opening"
       },
       "fields": {
-        "image": "Photo",
         "eyebrow": "Eyebrow",
         "title": "Title",
-        "title_placeholder": "Event title",
-        "message": "Message",
-        "text": "Text",
-        "items": "Steps",
-        "time": "Time",
-        "label": "Label",
-        "mapUrl": "Map link (Google Maps…)",
-        "images": "Photos",
-        "confirmed": "“Yes” button",
-        "maybe": "“Maybe” button",
-        "declined": "“No” button",
         "style": "Opening style",
         "monogram": "Monogram",
         "hint": "Call to open"
@@ -455,28 +386,14 @@
         "upload": "Upload",
         "uploading": "Uploading…",
         "remove": "Remove",
-        "add": "Add",
         "upload_error": "The image could not be uploaded.",
         "too_large": "Image too large (5 MB max)."
-      },
-      "list": {
-        "add_row": "Add a step",
-        "remove_row": "Remove"
       },
       "options": {
         "style": {
           "envelope": "Envelope",
           "seal": "Wax seal",
           "curtain": "Curtain"
-        },
-        "figure": {
-          "crane": "Crane",
-          "heart": "Heart",
-          "star": "Star"
-        },
-        "rpm": {
-          "33": "33 rpm",
-          "45": "45 rpm"
         }
       },
       "music": {

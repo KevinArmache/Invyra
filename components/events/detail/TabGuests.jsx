@@ -248,7 +248,7 @@ function GuestRow({ guest }) {
 }
 
 /**
- * @param {boolean} props.hasTemplate  l'événement a un design d'invitation :
+ * @param {boolean} props.hasTemplate  l'événement a une invitation :
  *   sans lui, l'envoi en masse enverrait un lien vers une page vide.
  */
 export default function TabGuests({ guests, eventId, hasTemplate = false }) {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Info, Loader2, Save } from "lucide-react";
+import { ArrowLeft, Code2, Info, LayoutTemplate, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InvitationEditor from "@/components/editor/InvitationEditor";
 import TemplateGallery from "@/components/templates/TemplateGallery";
 import LivePreview from "@/components/editor/LivePreview";
-import DesignPicker from "@/components/editor/DesignPicker";
+import { EmptyState } from "@/components/shell/primitives";
 import { emptyCodeConfig } from "@/lib/templates/config";
 import { MusicField } from "@/components/editor/fields";
 import { saveTemplate } from "@/app/actions/template";
@@ -19,15 +19,13 @@ import { toEditableConfig } from "@/lib/templates/validation";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**
- * Design de l'invitation d'un événement.
- *
- * Deux façons de faire, combinables : partir d'un modèle de la galerie, ou
- * d'un design, puis personnaliser. Rien n'est écrit en base avant « Enregistrer » :
- * choisir un modèle ne fait que remplacer l'état local.
+ * Invitation d'un événement : on part d'un modèle de la galerie, puis on le
+ * personnalise. Rien n'est écrit en base avant « Enregistrer » : choisir un
+ * modèle ne fait que remplacer l'état local.
  *
  * La personnalisation porte sur la copie propre à l'événement, de l'écran
  * d'ouverture au pied de page : sans code pour tous, dans le code pour les
- * admins (voir InvitationEditor).
+ * admins (voir InvitationEditor), qui peuvent aussi partir d'une page vierge.
  */
 export default function EventTemplateEditor({
   event,
@@ -77,11 +75,25 @@ export default function EventTemplateEditor({
   function renderCustomize() {
     if (!template) {
       return (
-        <DesignPicker
-          onPick={setTemplate}
-          allowCode={isAdmin}
-          onPickCode={() =>
-            setTemplate(emptyCodeConfig())
+        <EmptyState
+          icon={LayoutTemplate}
+          title={t("portal.events.edit.no_preview")}
+          description={t("portal.events.edit.empty_desc")}
+          action={
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button onClick={() => setPane("gallery")}>
+                {t("portal.events.edit.select_template")}
+              </Button>
+              {isAdmin && (
+                <Button
+                  variant="outline"
+                  onClick={() => setTemplate(emptyCodeConfig())}
+                >
+                  <Code2 className="mr-2 h-4 w-4" />
+                  {t("portal.events.edit.blank_code")}
+                </Button>
+              )}
+            </div>
           }
         />
       );

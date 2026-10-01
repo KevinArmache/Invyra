@@ -7,7 +7,6 @@ import {
 } from "@/app/actions/template";
 import TemplateEditorForm from "@/components/templates/TemplateEditorForm";
 import { toEditableConfig } from "@/lib/templates/validation";
-import { isDesignConfig } from "@/lib/templates/config";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -35,7 +34,6 @@ export default async function EditTemplatePage({ params }) {
   const saveTemplate = updateUserTemplate.bind(null, id);
 
   const session = await getSession();
-  const isDesign = isDesignConfig(template.config);
 
   return (
     <TemplateEditorForm
@@ -44,9 +42,9 @@ export default async function EditTemplatePage({ params }) {
       initialStatus={template.status ?? "draft"}
       initialCategory={template.category}
       initialConfig={toEditableConfig(template.config)}
-      // Un modèle code existant reste modifiable par son auteur ; en créer un
-      // nouveau est réservé aux admins (voir updateUserTemplate).
-      allowCode={session?.role === "admin" || !isDesign}
+      // Le code est réservé aux admins (voir updateUserTemplate) ; les autres
+      // modifient textes, images, liens et couleurs dans l'éditeur visuel.
+      allowCode={session?.role === "admin"}
       uploadEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
       onSave={saveTemplate}
     />

@@ -144,24 +144,20 @@ components/
     detail/               Fiche d'un événement : aperçu, invités,
                           collaborateurs, modèle de l'invitation
   templates/              Galerie, filtres par catégorie, formulaire de modèle
-  editor/                 Éditeur de modèle : choix du design, formulaire
-                          design, éditeur visuel, éditeur de code, ouverture
+  editor/                 Éditeur de modèle : éditeur visuel, éditeur de
+                          code, réglages de l'ouverture, aperçu
   invitation/             Invitation affichée : aperçu (iframe), vignette,
                           page de l'invité
 lib/
   invitation/             Construction de l'invitation que voit l'invité
-    designs/              Les invitations : un dossier par design
-      _shared/            Pièces partagées (balisage standard, textures…)
-      index.js            Registre des designs
     document.js           Document HTML complet (point d'entrée du rendu)
-    opening.js            Écran d'ouverture standard
-    content.js            Sections, contenu par défaut, normalisation
-    fonts.js  html.js  rsvp.js
+    opening.js            Écran d'ouverture standard et ses réglages
+    fonts.js  html.js
   templates/              Modèles enregistrés en base
-    config.js             Format des modèles (seul à connaître « theme »)
+    config.js             Format des modèles
     validation.js         Validation avant écriture, configuration éditable
-    convert.js            Passage d'un design en code
-    visual-edit.js        Édition sans code d'un modèle code
+    visual-edit.js        Édition sans code (textes, images, liens, couleurs)
+    look.js               Fond et photo d'un modèle (aperçu des liens, e-mails)
     categories.js  code-starter.js
   landing/                Données publiques et événement d'exemple de l'accueil
   auth/  i18n/  email/  prisma.js  utils.js (cn)
@@ -170,59 +166,62 @@ locales/                  Dictionnaires fr / en (mêmes clés)
 prisma/
   schema.prisma
   migrations-sql/         Migrations SQL rejouables
-  scripts/                Scripts Node (seed des designs, suppression d'un
-                          design, migrations ponctuelles)
+  scripts/                Scripts Node ponctuels (migrations, restauration
+                          des modèles)
 ```
 
-### Designs et modèles
+### Modèles d'invitation
 
-Un **design** est une invitation du registre (`lib/invitation/designs/`) :
-Éclat, Origami, Face A, Embarquement… Chacun vit dans **son propre dossier** :
+Les modèles vivent **uniquement en base** (table `templates`) : l'application
+les lit avec `getTemplates()` et aucun fichier du projet n'est propre à un
+modèle. Supprimer un modèle supprime sa ligne, rien d'autre.
 
-```
-lib/invitation/designs/<id>/
-  index.js     définition : nom, réglages, ambiances, contenu d'exemple
-  styles.js    CSS
-  markup.js    balisage (facultatif : sinon, le balisage standard partagé)
-  effects.js   scripts d'animation (facultatif)
-  opening.js   écran d'ouverture propre (facultatif)
+Tous ont le même format, du HTML, du CSS et du JavaScript :
+
+```js
+{ type: "code", html, css, js, opening, openingCode, fonts, music }
 ```
 
-Un **modèle** est ce que l'utilisateur enregistre : soit un design avec ses
-couleurs et ses textes, soit du code HTML/CSS/JS.
+- **Création** : réservée aux admins, depuis *Modèles › Nouveau* (l'éditeur
+  de code démarre avec le code de départ, `lib/templates/code-starter.js`) ou
+  en dupliquant un modèle existant.
+- **Modification** : les admins ont l'éditeur de code ; les autres
+  utilisateurs ont l'éditeur visuel, qui ne change que les textes, les
+  images, les liens et les couleurs (contrôlé côté serveur par
+  `isVisualEdit`).
+- **Événements** : choisir un modèle pour un événement en copie la config
+  dans une ligne rattachée à l'événement. Personnaliser l'invitation modifie
+  cette copie, jamais le modèle d'origine.
 
-En base, un modèle design porte `type: "theme"` et `themeId` : ce sont des
-noms historiques, gardés pour ne pas migrer les données. Seul
-`lib/templates/config.js` les connaît ; le reste du code passe par
-`isDesignConfig`, `designIdOf`, `toDesignConfig`…
+Ce qu'un modèle peut utiliser (voir `lib/invitation/document.js`) :
 
-Ajouter un design :
+- **Jetons**, remplacés par les valeurs de l'événement : `{{GUEST_NAME}}`,
+  `{{EVENT_TITLE}}`, `{{EVENT_DATE}}`, `{{TIME}}`, `{{EVENT_LOCATION}}`,
+  `{{DRESS_CODE}}`, `{{EVENT_DESCRIPTION}}`, `{{CUSTOM_MESSAGE}}`,
+  `{{COUNTDOWN_DATE}}` (pour un compte à rebours) et `{{MONOGRAM}}`.
+- **`data-if="DRESS_CODE"`** : l'élément n'est affiché que si l'événement
+  renseigne cette valeur. Plusieurs noms : il suffit que l'un soit renseigné.
+  `data-if="!TIME"` inverse la condition.
+- **`<script data-static>`** dans le HTML : script qui tourne aussi dans les
+  vignettes (compte à rebours, mise en page). Les autres scripts n'y tournent
+  pas.
+- **`data-thumbnail-skip`** : élément absent des vignettes, pour ne pas y
+  charger les photos du bas de page.
+- **Ouverture** : l'ouverture standard, réglée par `opening`, ou une ouverture
+  écrite en code (`openingCode`, avec un élément `[data-opening]`). Avec
+  `data-opening-manual`, c'est le modèle qui appelle `window.openInvitation()`.
+  Un script peut attendre l'ouverture avec `window.whenOpened(fn)`.
+- **Réponse RSVP** : envoyée à la page par `postMessage` ; le code de départ
+  montre comment.
 
-1. créer son dossier `lib/invitation/designs/<id>/` sur le modèle de
-   `minimal/` (design simple) ou de `boarding/` (design complet) ;
-2. l'ajouter à `DESIGNS` dans `designs/index.js` ;
-3. ajouter sa description sous `portal.editor.catalog.<id>` dans les deux
-   dictionnaires, et les libellés de ses nouveaux réglages ;
-4. l'enregistrer dans la galerie :
-   `node --env-file=.env prisma/scripts/seed-design-template.mjs <id> "<Nom>" --category=<clé>`.
-
-Supprimer un design : supprimez d'abord ses modèles dans l'application, puis
-lancez
+Les sauvegardes de la table `templates` sont écrites dans `prisma/backups/`
+(ignoré par git, elles contiennent des données de production). Pour revenir à
+une sauvegarde :
 
 ```bash
-node --env-file=.env prisma/scripts/remove-design.mjs <id> --dry   # aperçu
-node --env-file=.env prisma/scripts/remove-design.mjs <id>         # suppression
+node --env-file=.env prisma/scripts/restore-templates.mjs prisma/backups/<fichier>.json --dry   # aperçu
+node --env-file=.env prisma/scripts/restore-templates.mjs prisma/backups/<fichier>.json
 ```
-
-Le script refuse tant qu'un modèle de la galerie ou l'invitation d'un
-événement utilise encore le design (sinon ces invitations s'afficheraient
-cassées). Sinon, il supprime son dossier, son entrée dans le registre et ses
-traductions ; il reste à vérifier (`pnpm build`), commiter et déployer. Le
-site déployé ne peut pas modifier son propre code : cette suppression se fait
-toujours depuis le dépôt.
-
-Un design n'importe jamais les fichiers d'un autre design : ce qui se
-partage vit dans `designs/_shared/` ou dans `lib/invitation/`.
 
 ### Conventions
 

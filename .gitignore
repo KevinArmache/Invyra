@@ -6,6 +6,9 @@ node_modules/
 *.tsbuildinfo
 next-env.d.ts
 
+# Sauvegardes de la base (données de production)
+prisma/backups/
+
 # Secrets
 .env
 .env.local

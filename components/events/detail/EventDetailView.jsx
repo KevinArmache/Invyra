@@ -90,7 +90,7 @@ export default function EventDetailView({ event, guests, collaborators }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 lg:shrink-0">
-          {/* Le design se modifie sur la copie propre à l'événement : le
+          {/* L'invitation se modifie sur la copie propre à l'événement : le
               modèle d'origine n'est jamais touché. L'envoi en masse est dans
               la carte des invités. */}
           <Button asChild>

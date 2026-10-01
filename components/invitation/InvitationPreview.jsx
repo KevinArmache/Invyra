@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * Rend une invitation (modèle code ou modèle design) dans une iframe
- * isolée. La construction du document est dans lib/invitation/document.js.
+ * Rend une invitation dans une iframe isolée. La construction du document
+ * est dans lib/invitation/document.js.
  *
  * ── Modèle de sécurité ────────────────────────────────────────────────────
- * Un template code est du HTML/JS arbitraire : l'iframe est donc la frontière
+ * Un modèle est du HTML/JS arbitraire : l'iframe est donc la frontière
  * de sécurité, et elle doit réellement isoler.
  *
  * `allow-same-origin` n'est volontairement PAS dans la liste : combiné à

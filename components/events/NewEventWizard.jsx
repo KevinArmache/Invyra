@@ -223,8 +223,8 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
                 title={t("portal.events.new.no_templates")}
                 description={t("portal.templates.list.no_templates_desc")}
                 action={
-                  // Seuls les admins créent des modèles ; un client pourra
-                  // partir d'un design depuis la page de l'événement.
+                  // Seuls les admins créent des modèles : un client choisira
+                  // le sien plus tard, depuis la page de l'événement.
                   isAdmin ? (
                     <Button asChild variant="outline">
                       <Link href="/dashboard/templates/new" target="_blank">
