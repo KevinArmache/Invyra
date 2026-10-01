@@ -6,10 +6,10 @@ import { TEMPLATE_CATEGORIES } from "@/lib/templates/categories";
 import { useTranslation } from "@/lib/i18n/Context";
 
 const chip = (active) =>
-  `rounded-full border px-3 py-1 text-xs transition-colors ${
+  `rounded-full border px-3 py-1 text-xs transition-[color,background-color,border-color,box-shadow,translate] duration-300 hover:-translate-y-0.5 ${
     active
-      ? "border-gold bg-gold/10 text-ink-50"
-      : "border-border text-ink-400 hover:text-ink-100"
+      ? "border-gold bg-gold/10 text-ink-50 shadow-[0_0_14px_-4px_var(--gold)]"
+      : "border-border text-ink-400 hover:border-gold/30 hover:text-ink-100"
   }`;
 
 /**

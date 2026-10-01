@@ -8,6 +8,8 @@ import DashboardShell from "@/components/shell/DashboardShell";
 // pré-rendu statique qui échoue de toute façon, et rend le journal lisible.
 export const dynamic = "force-dynamic";
 
+// Espace personnel : rien à indexer.
+export const metadata = { robots: { index: false, follow: false } };
 
 export default async function DashboardLayout({ children }) {
   // Le filtre d'entrée n'a vu qu'un cookie ; c'est ici que la session est

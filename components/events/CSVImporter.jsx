@@ -5,6 +5,7 @@ import { AlertTriangle, Check, Upload, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslation } from "@/lib/i18n/Context";
 
 const EXAMPLE = `Marie Dupont,marie@exemple.com,+33600000001
 Jean Martin,jean@exemple.com
@@ -62,6 +63,10 @@ function looksLikeHeader(fields) {
   return HEADER_WORDS.some((word) => first.toLowerCase().includes(word));
 }
 
+/**
+ * Les erreurs sont des descripteurs, traduits à l'affichage : le découpage
+ * reste une fonction pure, sans dépendre de la langue.
+ */
 function parseCsv(text) {
   const rows = text
     .trim()
@@ -79,11 +84,11 @@ function parseCsv(text) {
     const [name, email, phone] = fields;
 
     if (!name || !email) {
-      errors.push(`Ligne ${index + 1} : nom ou email manquant`);
+      errors.push({ key: "error_missing", line: index + 1 });
       return;
     }
     if (!email.includes("@") || email.startsWith("@") || email.endsWith("@")) {
-      errors.push(`Ligne ${index + 1} : email invalide (${email})`);
+      errors.push({ key: "error_email", line: index + 1, email });
       return;
     }
 
@@ -94,6 +99,8 @@ function parseCsv(text) {
 }
 
 export default function CSVImporter({ onImport, loading = false }) {
+  const { t } = useTranslation();
+  const csv = (key) => t(`portal.events.csv.${key}`);
   const [text, setText] = useState("");
   const [preview, setPreview] = useState(null);
   const fileInputRef = useRef(null);
@@ -116,11 +123,18 @@ export default function CSVImporter({ onImport, loading = false }) {
   return (
     <div className="space-y-3">
       <p className="text-xs leading-relaxed text-ink-400">
-        Une ligne par invité :{" "}
-        <code className="rounded bg-secondary px-1 py-0.5 text-ink-300">
-          Nom,Email,Téléphone
-        </code>
-        . Le téléphone est facultatif et une ligne d&apos;en-tête est ignorée.
+        {csv("hint")
+          .split("{format}")
+          .map((part, index) => (
+            <span key={index}>
+              {index > 0 && (
+                <code className="rounded bg-secondary px-1 py-0.5 text-ink-300">
+                  {csv("format")}
+                </code>
+              )}
+              {part}
+            </span>
+          ))}
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -138,8 +152,8 @@ export default function CSVImporter({ onImport, loading = false }) {
           size="sm"
           onClick={() => fileInputRef.current?.click()}
         >
-          <Upload className="mr-1.5 h-3.5 w-3.5" />
-          Choisir un fichier
+          <Upload className="h-3.5 w-3.5" />
+          {csv("choose_file")}
         </Button>
 
         <Button
@@ -149,8 +163,8 @@ export default function CSVImporter({ onImport, loading = false }) {
           onClick={() => setPreview(parseCsv(text))}
           disabled={!text.trim()}
         >
-          <Users className="mr-1.5 h-3.5 w-3.5" />
-          Vérifier ({lineCount})
+          <Users className="h-3.5 w-3.5" />
+          {csv("check")} ({lineCount})
         </Button>
       </div>
 
@@ -159,21 +173,23 @@ export default function CSVImporter({ onImport, loading = false }) {
         onChange={(event) => updateText(event.target.value)}
         placeholder={EXAMPLE}
         rows={6}
-        aria-label="Contenu CSV"
+        aria-label={csv("content_label")}
         className="font-mono text-xs"
       />
 
       {preview && (
-        <div className="overflow-hidden rounded-md border border-border">
+        <div className="animate-in fade-in-0 slide-in-from-top-1 overflow-hidden rounded-md border border-border duration-300">
           {preview.errors.length > 0 && (
             <ul className="space-y-1 border-b border-destructive/20 bg-destructive/10 p-3">
               {preview.errors.map((error) => (
                 <li
-                  key={error}
+                  key={`${error.key}-${error.line}`}
                   className="flex items-start gap-1.5 text-xs text-destructive"
                 >
                   <AlertTriangle className="mt-0.5 h-3 w-3 shrink-0" />
-                  {error}
+                  {csv(error.key)
+                    .replace("{line}", String(error.line))
+                    .replace("{email}", error.email ?? "")}
                 </li>
               ))}
             </ul>
@@ -181,10 +197,11 @@ export default function CSVImporter({ onImport, loading = false }) {
 
           {preview.guests.length > 0 && (
             <ul className="max-h-40 space-y-1 overflow-y-auto p-3">
-              {preview.guests.map((guest) => (
+              {preview.guests.map((guest, index) => (
                 <li
                   key={guest.email}
-                  className="flex items-center gap-2 text-xs"
+                  className="animate-in fade-in-0 slide-in-from-left-1 fill-mode-both flex items-center gap-2 text-xs duration-300"
+                  style={{ animationDelay: `${Math.min(index, 15) * 30}ms` }}
                 >
                   <Check className="h-3 w-3 shrink-0 text-positive" />
                   <span className="truncate text-ink-100">{guest.name}</span>
@@ -201,11 +218,11 @@ export default function CSVImporter({ onImport, loading = false }) {
               <span data-numeric className="text-positive">
                 {preview.guests.length}
               </span>{" "}
-              valides ·{" "}
+              {csv("valid")} ·{" "}
               <span data-numeric className="text-destructive">
                 {preview.errors.length}
               </span>{" "}
-              en erreur
+              {csv("invalid")}
             </p>
             <Button
               type="button"
@@ -213,8 +230,10 @@ export default function CSVImporter({ onImport, loading = false }) {
               onClick={() => onImport(preview.guests)}
               disabled={preview.guests.length === 0 || loading}
             >
-              <Upload className="mr-1.5 h-3 w-3" />
-              {loading ? "Import…" : `Importer ${preview.guests.length}`}
+              <Upload className="h-3 w-3" />
+              {loading
+                ? csv("importing")
+                : csv("import").replace("{count}", String(preview.guests.length))}
             </Button>
           </div>
         </div>

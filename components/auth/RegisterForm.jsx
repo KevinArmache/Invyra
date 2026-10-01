@@ -60,7 +60,7 @@ export default function RegisterForm() {
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       <FormError message={error} />
 
-      <div className="space-y-2">
+      <div className="animate-rise space-y-2" style={{ "--rise-delay": "200ms" }}>
         <Label htmlFor="name">{t("register.name")}</Label>
         <Input
           id="name"
@@ -71,7 +71,7 @@ export default function RegisterForm() {
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="animate-rise space-y-2" style={{ "--rise-delay": "260ms" }}>
         <Label htmlFor="email">{t("register.email")}</Label>
         <Input
           id="email"
@@ -83,38 +83,44 @@ export default function RegisterForm() {
         />
       </div>
 
-      {/* `items-end` aligne les champs entre eux : sans cela, un libellé qui
-          passe sur deux lignes décale son input par rapport au voisin. */}
-      <div className="grid items-end gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="phone">
-            {t("register.phone")}{" "}
-            <span className="text-ink-400">({t("register.optional")})</span>
-          </Label>
-          <Input
-            id="phone"
-            name="phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder={t("register.phone_placeholder")}
-          />
-        </div>
+      <div className="animate-rise space-y-2" style={{ "--rise-delay": "320ms" }}>
+        {/* `items-end` aligne les champs entre eux : sans cela, un libellé qui
+            passe sur deux lignes décale son input par rapport au voisin. */}
+        <div className="grid items-end gap-5 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="phone" className="block leading-snug">
+              {t("register.phone")}{" "}
+              <span className="text-ink-400">({t("register.optional")})</span>
+            </Label>
+            <Input
+              id="phone"
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              placeholder={t("register.phone_placeholder")}
+              aria-describedby="phone-hint"
+            />
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="company">
-            {t("register.company")}{" "}
-            <span className="text-ink-400">({t("register.optional")})</span>
-          </Label>
-          <Input
-            id="company"
-            name="company"
-            autoComplete="organization"
-            placeholder={t("register.company_placeholder")}
-          />
+          <div className="space-y-2">
+            <Label htmlFor="company" className="block leading-snug">
+              {t("register.company")}{" "}
+              <span className="text-ink-400">({t("register.optional")})</span>
+            </Label>
+            <Input
+              id="company"
+              name="company"
+              autoComplete="organization"
+              placeholder={t("register.company_placeholder")}
+            />
+          </div>
         </div>
+        <p id="phone-hint" className="text-xs leading-snug text-ink-400">
+          {t("register.phone_hint")}
+        </p>
       </div>
 
-      <div className="space-y-2">
+      <div className="animate-rise space-y-2" style={{ "--rise-delay": "380ms" }}>
         <Label htmlFor="password">{t("register.password")}</Label>
         <Input
           id="password"
@@ -127,7 +133,7 @@ export default function RegisterForm() {
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="animate-rise space-y-2" style={{ "--rise-delay": "440ms" }}>
         <Label htmlFor="confirmPassword">{t("register.confirm_password")}</Label>
         <Input
           id="confirmPassword"
@@ -139,12 +145,17 @@ export default function RegisterForm() {
         />
       </div>
 
-      <Button type="submit" size="lg" className="w-full" disabled={isPending}>
-        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isPending ? t("register.submitting") : t("register.submit")}
-      </Button>
+      <div className="animate-rise" style={{ "--rise-delay": "500ms" }}>
+        <Button type="submit" size="lg" className="h-11 w-full" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isPending ? t("register.submitting") : t("register.submit")}
+        </Button>
+      </div>
 
-      <p className="pt-2 text-center text-sm text-ink-400">
+      <p
+        className="animate-fade-in pt-2 text-center text-sm text-ink-400"
+        style={{ "--rise-delay": "600ms" }}
+      >
         {t("register.has_account")}{" "}
         <Link
           href="/login"

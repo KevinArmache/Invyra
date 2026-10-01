@@ -4,7 +4,10 @@ import { getTranslations } from "@/lib/i18n/server";
 import { PageHeader } from "@/components/shell/primitives";
 import UsersTable from "@/components/admin/UsersTable";
 
-export const metadata = { title: "Utilisateurs" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return { title: t("portal.admin.users") };
+}
 
 export default async function AdminUsersPage() {
   const [users, currentUser, { t }] = await Promise.all([

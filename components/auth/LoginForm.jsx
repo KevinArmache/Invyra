@@ -43,7 +43,7 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       <FormError message={error} />
 
-      <div className="space-y-2">
+      <div className="animate-rise space-y-2" style={{ "--rise-delay": "220ms" }}>
         <Label htmlFor="email">{t("login.email")}</Label>
         <Input
           id="email"
@@ -55,7 +55,7 @@ export default function LoginForm() {
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="animate-rise space-y-2" style={{ "--rise-delay": "300ms" }}>
         <Label htmlFor="password">{t("login.password")}</Label>
         <Input
           id="password"
@@ -67,12 +67,17 @@ export default function LoginForm() {
         />
       </div>
 
-      <Button type="submit" size="lg" className="w-full" disabled={isPending}>
-        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {isPending ? t("login.submitting") : t("login.submit")}
-      </Button>
+      <div className="animate-rise" style={{ "--rise-delay": "380ms" }}>
+        <Button type="submit" size="lg" className="h-11 w-full" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isPending ? t("login.submitting") : t("login.submit")}
+        </Button>
+      </div>
 
-      <p className="pt-2 text-center text-sm text-ink-400">
+      <p
+        className="animate-fade-in pt-2 text-center text-sm text-ink-400"
+        style={{ "--rise-delay": "480ms" }}
+      >
         {t("login.no_account")}{" "}
         <Link
           href="/register"

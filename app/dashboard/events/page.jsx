@@ -7,7 +7,15 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shell/primitives";
 import EventsBrowser from "@/components/events/EventsBrowser";
 
-export const metadata = { title: "Événements" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return { title: t("portal.events.list.title") };
+}
+
+/** Jour de la requête (AAAA-MM-JJ, UTC), pour les comptes à rebours. */
+function requestDay() {
+  return new Date().toISOString().slice(0, 10);
+}
 
 export default async function EventsPage() {
   const [events, { t }] = await Promise.all([getEvents(), getTranslations()]);
@@ -19,15 +27,15 @@ export default async function EventsPage() {
         subtitle={t("portal.events.list.subtitle")}
         action={
           <Button asChild size="lg">
-            <Link href="/dashboard/events/new">
-              <Plus size={18} className="mr-2" />
+            <Link href="/dashboard/events/new" className="group">
+              <Plus size={18} className="transition-transform duration-300 group-hover:rotate-90" />
               {t("portal.events.list.create_btn")}
             </Link>
           </Button>
         }
       />
 
-      <EventsBrowser events={events} />
+      <EventsBrowser events={events} today={requestDay()} />
     </>
   );
 }

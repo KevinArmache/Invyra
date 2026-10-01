@@ -1,0 +1,729 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scène du héros : ce que vit un invité, en boucle de 14 s.
+   ───────────────────────────────────────────────────────────────────────────
+   0 %   l'enveloppe à son nom apparaît et flotte ;
+   20 %  un toucher : le cachet saute, le rabat s'ouvre, la lettre monte ;
+   36 %  l'invitation remplace l'enveloppe ;
+   58 %  un toucher sur « Je confirme ma présence », qui passe au vert ;
+   96 %  tout s'efface et la boucle reprend.
+   Les pastilles autour racontent le même parcours côté organisateur.
+
+   Toutes les animations ont la même durée (--cycle) et démarrent ensemble :
+   elles restent synchronisées sans une ligne de JavaScript. L'enveloppe
+   reprend le dessin de l'ouverture réelle (lib/invitation/opening.js).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.scene {
+  --cycle: 14s;
+  --paper: color-mix(in oklch, var(--gold) 14%, #fbf7ef);
+  --serif: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
+  position: relative;
+  width: min(100%, 23.5rem);
+  margin-inline: auto;
+  aspect-ratio: 4 / 5;
+}
+
+/* ── Cadre ──────────────────────────────────────────────────────────────── */
+
+.frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in oklch, var(--gold) 26%, transparent);
+  background:
+    radial-gradient(
+      ellipse 80% 55% at 50% 38%,
+      color-mix(in oklch, var(--gold) 9%, transparent),
+      transparent 70%
+    ),
+    var(--ink-850);
+  box-shadow: var(--elevation-3);
+}
+
+/* Reflet qui glisse lentement sur le cadre, comme sur un papier glacé. */
+.frame::after {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 40%,
+    oklch(1 0 0 / 0.045) 50%,
+    transparent 60%
+  );
+  animation: sheen 9s ease-in-out infinite;
+}
+
+/* ── Phase 1 : l'écran d'ouverture ──────────────────────────────────────── */
+
+.opening {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  animation: opening var(--cycle) var(--ease-out-expo) infinite;
+}
+
+.invited {
+  font-size: 0.62rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.guest {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 7vw, 2.6rem);
+  line-height: 1.1;
+  color: var(--ink-50);
+}
+
+.envelope {
+  position: relative;
+  width: 68%;
+  aspect-ratio: 1.5;
+  margin-top: 0.4rem;
+  perspective: 1000px;
+  animation: float 4.5s ease-in-out infinite;
+}
+
+.envBack,
+.envLetter,
+.envFront,
+.envFlap {
+  position: absolute;
+  display: block;
+}
+
+.envBack {
+  inset: 0;
+  border-radius: 6px;
+  background: color-mix(in oklch, var(--paper) 86%, black);
+  box-shadow: 0 26px 50px -18px oklch(0 0 0 / 0.65);
+}
+
+.envLetter {
+  left: 7%;
+  right: 7%;
+  top: 7%;
+  height: 86%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  padding-top: 9%;
+  border-radius: 4px;
+  background: #fffdf8;
+  box-shadow: 0 2px 10px oklch(0 0 0 / 0.12);
+  animation: letter var(--cycle) var(--ease-out-expo) infinite;
+}
+
+.envMono {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--gold-deep);
+}
+
+.envLine {
+  width: 38%;
+  height: 1px;
+  background: color-mix(in oklch, var(--gold) 60%, transparent);
+}
+
+.envFront {
+  inset: 0;
+  z-index: 2;
+  border-radius: 6px;
+  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(
+    160deg,
+    var(--paper),
+    color-mix(in oklch, var(--paper) 90%, black)
+  );
+}
+
+.envFlap {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 57%;
+  z-index: 3;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklch, var(--paper) 95%, black),
+    color-mix(in oklch, var(--paper) 84%, black)
+  );
+  transform-origin: top center;
+  backface-visibility: hidden;
+  animation: flap var(--cycle) cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.seal {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 2.7rem;
+  height: 2.7rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    var(--gold-bright) 0%,
+    var(--gold) 42%,
+    var(--gold-deep) 100%
+  );
+  box-shadow:
+    0 8px 18px oklch(0 0 0 / 0.35),
+    inset 0 0 0 3px color-mix(in oklch, var(--gold-deep) 70%, black);
+  font-family: var(--serif);
+  font-size: 0.8rem;
+  color: color-mix(in oklch, var(--gold-deep) 45%, black);
+  transform: translate(-50%, -50%);
+  animation: seal var(--cycle) var(--ease-spring) infinite;
+}
+
+.hint {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+  animation: hint var(--cycle) ease-in-out infinite;
+}
+
+/* Le toucher de l'invité, au centre de l'enveloppe. */
+.touchEnvelope {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  z-index: 5;
+  width: 3.4rem;
+  height: 3.4rem;
+  margin: -1.7rem 0 0 -1.7rem;
+  border-radius: 50%;
+  border: 1.5px solid oklch(1 0 0 / 0.75);
+  background: oklch(1 0 0 / 0.14);
+  opacity: 0;
+  pointer-events: none;
+  animation: touchEnvelope var(--cycle) var(--ease-out-quart) infinite;
+}
+
+/* ── Phase 2 : l'invitation ─────────────────────────────────────────────── */
+
+.card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.6rem;
+  text-align: center;
+  opacity: 0;
+  animation: card var(--cycle) var(--ease-out-expo) infinite;
+}
+
+.rule {
+  width: 4.5rem;
+}
+.rule > span {
+  display: block;
+  height: 1px;
+  background: color-mix(in oklch, var(--gold) 60%, transparent);
+}
+.rule > span + span {
+  margin-top: 3px;
+  background: color-mix(in oklch, var(--gold) 25%, transparent);
+}
+.ruleBottom > span:first-child {
+  background: color-mix(in oklch, var(--gold) 25%, transparent);
+}
+.ruleBottom > span + span {
+  background: color-mix(in oklch, var(--gold) 60%, transparent);
+}
+
+.cardEyebrow {
+  max-width: 15rem;
+  margin-top: 1.5rem;
+  font-size: 0.6rem;
+  line-height: 1.7;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: color-mix(in oklch, var(--gold) 82%, transparent);
+}
+
+.names {
+  margin-top: 0.9rem;
+  font-family: var(--serif);
+  font-size: clamp(1.75rem, 6.2vw, 2.3rem);
+  line-height: 1.1;
+  color: var(--ink-50);
+}
+
+.amp {
+  margin: 0 0.3em;
+  font-size: 0.7em;
+  vertical-align: middle;
+  color: var(--gold);
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.3rem;
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-300);
+}
+.date::before,
+.date::after {
+  content: '';
+  width: 1.6rem;
+  height: 1px;
+  background: var(--ink-600);
+}
+
+.place {
+  margin-top: 0.85rem;
+  font-size: 0.8rem;
+  color: var(--ink-300);
+}
+
+.rsvp {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  min-width: 13rem;
+  margin-top: 1.6rem;
+  padding: 0.62rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--gold) 40%, transparent);
+  background: color-mix(in oklch, var(--gold) 9%, transparent);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  animation: rsvp var(--cycle) ease infinite;
+}
+
+.rsvpIdle,
+.rsvpDone {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.rsvpIdle {
+  color: var(--gold);
+  animation: rsvpIdle var(--cycle) ease infinite;
+}
+
+.rsvpDone {
+  color: var(--positive);
+  opacity: 0;
+  animation: rsvpDone var(--cycle) var(--ease-spring) infinite;
+}
+
+.rsvpDone svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.touchButton {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.8rem;
+  height: 2.8rem;
+  margin: -1.4rem 0 0 -1.4rem;
+  border-radius: 50%;
+  border: 1.5px solid oklch(1 0 0 / 0.75);
+  background: oklch(1 0 0 / 0.14);
+  opacity: 0;
+  pointer-events: none;
+  animation: touchButton var(--cycle) var(--ease-out-quart) infinite;
+}
+
+.ruleSpaced {
+  margin-top: 1.7rem;
+}
+
+/* ── Pastilles de suivi ─────────────────────────────────────────────────── */
+
+.chip {
+  position: absolute;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.85rem 0.45rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--ink-700);
+  background: color-mix(in oklch, var(--ink-800) 90%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--elevation-2);
+  font-size: 0.74rem;
+  white-space: nowrap;
+  color: var(--ink-100);
+  opacity: 0;
+}
+
+.chipIcon {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+.chipIcon svg {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
+.chipSent {
+  top: -3%;
+  left: -12%;
+  animation: chipSent var(--cycle) var(--ease-out-expo) infinite;
+}
+.chipSent .chipIcon {
+  background: color-mix(in oklch, var(--positive) 18%, transparent);
+  color: var(--positive);
+}
+
+.chipOpened {
+  top: 14%;
+  right: -16%;
+  animation: chipOpened var(--cycle) var(--ease-out-expo) infinite;
+}
+.chipOpened .chipIcon {
+  background: color-mix(in oklch, var(--gold) 16%, transparent);
+  color: var(--gold);
+}
+
+.chipConfirmed {
+  bottom: 5%;
+  left: -12%;
+  animation: chipConfirmed var(--cycle) var(--ease-out-expo) infinite;
+}
+.chipConfirmed .chipIcon {
+  background: color-mix(in oklch, var(--positive) 18%, transparent);
+  color: var(--positive);
+}
+
+/* Sur petit écran, la carte occupe toute la largeur : les pastilles
+   passent dessous, en escalier, plutôt que de couvrir le texte. */
+@media (max-width: 639px) {
+  .scene {
+    margin-bottom: 8.5rem;
+  }
+  .chip {
+    font-size: 0.68rem;
+    padding-right: 0.7rem;
+  }
+  .chipSent {
+    top: auto;
+    bottom: -3.1rem;
+    left: 0;
+  }
+  .chipOpened {
+    top: auto;
+    bottom: -5.9rem;
+    right: 0;
+  }
+  .chipConfirmed {
+    bottom: -8.7rem;
+    left: 8%;
+  }
+}
+
+/* ── Keyframes ──────────────────────────────────────────────────────────── */
+
+@keyframes opening {
+  0% {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  4%,
+  31% {
+    opacity: 1;
+    transform: none;
+  }
+  37%,
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes seal {
+  0%,
+  19% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  23%,
+  97% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.4);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes flap {
+  0%,
+  21% {
+    z-index: 3;
+    transform: rotateX(0deg);
+  }
+  28%,
+  97% {
+    z-index: 0;
+    transform: rotateX(180deg);
+  }
+  100% {
+    z-index: 3;
+    transform: rotateX(0deg);
+  }
+}
+
+@keyframes letter {
+  0%,
+  25% {
+    transform: translateY(0);
+  }
+  33%,
+  97% {
+    transform: translateY(-38%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hint {
+  0%,
+  4% {
+    opacity: 0;
+  }
+  8%,
+  14% {
+    opacity: 0.85;
+  }
+  11%,
+  17% {
+    opacity: 0.4;
+  }
+  19%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes touchEnvelope {
+  0%,
+  17% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  19% {
+    opacity: 1;
+    transform: scale(0.65);
+  }
+  24%,
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+@keyframes card {
+  0%,
+  34% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  40%,
+  90% {
+    opacity: 1;
+    transform: none;
+  }
+  96%,
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes rsvp {
+  0%,
+  59% {
+    border-color: color-mix(in oklch, var(--gold) 40%, transparent);
+    background: color-mix(in oklch, var(--gold) 9%, transparent);
+  }
+  62%,
+  100% {
+    border-color: color-mix(in oklch, var(--positive) 55%, transparent);
+    background: color-mix(in oklch, var(--positive) 13%, transparent);
+  }
+}
+
+@keyframes rsvpIdle {
+  0%,
+  59% {
+    opacity: 1;
+    transform: none;
+  }
+  62%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes rsvpDone {
+  0%,
+  60% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  64%,
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes touchButton {
+  0%,
+  55% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  58% {
+    opacity: 1;
+    transform: scale(0.7);
+  }
+  63%,
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+@keyframes chipSent {
+  0%,
+  3% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  7%,
+  92% {
+    opacity: 1;
+    transform: none;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes chipOpened {
+  0%,
+  37% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  41%,
+  92% {
+    opacity: 1;
+    transform: none;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes chipConfirmed {
+  0%,
+  62% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  66%,
+  92% {
+    opacity: 1;
+    transform: none;
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes sheen {
+  0%,
+  100% {
+    transform: translateX(-30%);
+  }
+  50% {
+    transform: translateX(30%);
+  }
+}
+
+/* Sans animation : l'invitation confirmée et les trois pastilles, figées. */
+@media (prefers-reduced-motion: reduce) {
+  .scene *,
+  .scene *::before,
+  .scene *::after {
+    animation: none !important;
+  }
+  .opening,
+  .touchEnvelope,
+  .touchButton,
+  .rsvpIdle {
+    opacity: 0;
+  }
+  .card,
+  .chip,
+  .rsvpDone {
+    opacity: 1;
+    transform: none;
+  }
+  .rsvp {
+    border-color: color-mix(in oklch, var(--positive) 55%, transparent);
+    background: color-mix(in oklch, var(--positive) 13%, transparent);
+  }
+}

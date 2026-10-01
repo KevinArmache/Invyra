@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import {
   Ban,
   CheckCircle2,
+  Crown,
   MoreVertical,
   Search,
   Shield,
@@ -36,6 +37,7 @@ import { EmptyState, Panel, StatusBadge } from "@/components/shell/primitives";
 import {
   deleteUserAdmin,
   suspendUser,
+  updateUserPlan,
   updateUserRole,
 } from "@/app/actions/admin";
 import { useTranslation } from "@/lib/i18n/Context";
@@ -47,7 +49,7 @@ function RoleBadge({ role }) {
     return (
       <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-xs whitespace-nowrap text-gold">
         <Shield className="h-3 w-3" aria-hidden="true" />
-        Admin
+        {t("portal.admin.role_admin")}
       </span>
     );
   }
@@ -56,6 +58,26 @@ function RoleBadge({ role }) {
     <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-2.5 py-0.5 text-xs whitespace-nowrap text-ink-300">
       <UserRound className="h-3 w-3" aria-hidden="true" />
       {t("portal.admin.standard_user")}
+    </span>
+  );
+}
+
+/** Formule du compte : Premium en or, Découverte en neutre. */
+function PlanBadge({ plan }) {
+  const { t } = useTranslation();
+
+  if (plan === "premium") {
+    return (
+      <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/30 bg-gold/10 px-2.5 py-0.5 text-xs whitespace-nowrap text-gold">
+        <Crown className="h-3 w-3" aria-hidden="true" />
+        {t("portal.admin.plan_premium")}
+      </span>
+    );
+  }
+
+  return (
+    <span className="inline-flex items-center rounded-full border border-border bg-secondary px-2.5 py-0.5 text-xs whitespace-nowrap text-ink-300">
+      {t("portal.admin.plan_free")}
     </span>
   );
 }
@@ -104,6 +126,20 @@ export default function UsersTable({ users, currentUserId }) {
     );
   }
 
+  /** Active ou retire l'Événement premium vendu sur la page Tarifs. */
+  function togglePlan(user) {
+    const nextPlan = user.plan === "premium" ? "free" : "premium";
+    run(
+      () => updateUserPlan(user.id, nextPlan),
+      t("portal.admin.plan_updated")
+        .replace("{name}", user.name || user.email)
+        .replace(
+          "{plan}",
+          t(nextPlan === "premium" ? "portal.admin.plan_premium" : "portal.admin.plan_free"),
+        ),
+    );
+  }
+
   function toggleSuspension(user) {
     run(
       () => suspendUser(user.id, !user.suspended),
@@ -124,7 +160,7 @@ export default function UsersTable({ users, currentUserId }) {
 
   return (
     <>
-      <div className="relative mb-6 max-w-md">
+      <div className="animate-rise relative mb-6 max-w-md" style={{ "--rise-delay": "100ms" }}>
         <Search
           className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400"
           aria-hidden="true"
@@ -139,7 +175,7 @@ export default function UsersTable({ users, currentUserId }) {
         />
       </div>
 
-      <Panel>
+      <Panel delay={180}>
         {filtered.length === 0 ? (
           <EmptyState
             icon={users.length === 0 ? UserRound : Search}
@@ -151,7 +187,7 @@ export default function UsersTable({ users, currentUserId }) {
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[46rem] border-collapse text-sm">
+            <table className="w-full min-w-[52rem] border-collapse text-sm">
               <thead>
                 <tr className="border-b border-border/60 text-left">
                   <th scope="col" className="px-5 py-3 font-normal text-ink-400">
@@ -159,6 +195,9 @@ export default function UsersTable({ users, currentUserId }) {
                   </th>
                   <th scope="col" className="px-3 py-3 font-normal text-ink-400">
                     {t("portal.admin.role")}
+                  </th>
+                  <th scope="col" className="px-3 py-3 font-normal text-ink-400">
+                    {t("portal.admin.plan")}
                   </th>
                   <th scope="col" className="px-3 py-3 font-normal text-ink-400">
                     {t("portal.admin.status")}
@@ -173,19 +212,20 @@ export default function UsersTable({ users, currentUserId }) {
                     {t("portal.admin.registered_on")}
                   </th>
                   <th scope="col" className="px-5 py-3">
-                    <span className="sr-only">Actions</span>
+                    <span className="sr-only">{t("portal.admin.actions")}</span>
                   </th>
                 </tr>
               </thead>
 
               <tbody className="divide-y divide-border/60">
-                {filtered.map((user) => {
+                {filtered.map((user, index) => {
                   const isSelf = user.id === currentUserId;
 
                   return (
                     <tr
                       key={user.id}
-                      className="transition-colors hover:bg-ink-800/40"
+                      className="animate-rise transition-colors duration-300 hover:bg-ink-800/40"
+                      style={{ "--rise-delay": `${200 + Math.min(index, 12) * 40}ms` }}
                     >
                       <th
                         scope="row"
@@ -197,7 +237,7 @@ export default function UsersTable({ users, currentUserId }) {
                           </span>
                           <div className="min-w-0">
                             <p className="truncate text-ink-100">
-                              {user.name || "—"}
+                              {user.name || user.email}
                               {isSelf && (
                                 <span className="ml-2 text-xs text-ink-400">
                                   ({t("portal.admin.you")})
@@ -213,6 +253,10 @@ export default function UsersTable({ users, currentUserId }) {
 
                       <td className="px-3 py-3.5">
                         <RoleBadge role={user.role} />
+                      </td>
+
+                      <td className="px-3 py-3.5">
+                        <PlanBadge plan={user.plan} />
                       </td>
 
                       <td className="px-3 py-3.5">
@@ -251,7 +295,10 @@ export default function UsersTable({ users, currentUserId }) {
                               // suspension, ni sur sa propre suppression : le
                               // menu entier n'a donc rien à proposer.
                               disabled={isSelf || isPending}
-                              aria-label={`Actions pour ${user.name || user.email}`}
+                              aria-label={t("portal.admin.actions_for").replace(
+                                "{name}",
+                                user.name || user.email,
+                              )}
                             >
                               <MoreVertical className="h-4 w-4" />
                             </Button>
@@ -263,6 +310,13 @@ export default function UsersTable({ users, currentUserId }) {
                               {user.role === "admin"
                                 ? t("portal.admin.demote_user")
                                 : t("portal.admin.promote_admin")}
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem onClick={() => togglePlan(user)}>
+                              <Crown className="mr-2 h-4 w-4" />
+                              {user.plan === "premium"
+                                ? t("portal.admin.set_free")
+                                : t("portal.admin.set_premium")}
                             </DropdownMenuItem>
 
                             <DropdownMenuItem

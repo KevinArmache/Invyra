@@ -14,6 +14,40 @@ const PLAN_LIMITS = {
   premium: 1,
 };
 
+/** Message montré quand la formule n'autorise pas un événement de plus. */
+const EVENT_LIMIT_MESSAGE =
+  "Votre formule comprend 1 événement. Écrivez-nous sur WhatsApp pour en créer un autre.";
+
+/** Ce qu'on lit des invités pour compter envois, ouvertures et réponses. */
+const GUEST_COUNTS_SELECT = {
+  rsvpStatus: true,
+  invitationViewedAt: true,
+  invitationSentAt: true,
+};
+
+/**
+ * Compteurs d'un événement à partir de ses invités. « Peut-être » est une
+ * réponse à part entière : le tableau de bord et la fiche de l'événement
+ * doivent compter la même chose.
+ */
+function guestCounts(guests) {
+  const counts = {
+    confirmed_count: 0,
+    declined_count: 0,
+    maybe_count: 0,
+    viewed_count: 0,
+    sent_count: 0,
+  };
+  for (const guest of guests) {
+    if (guest.rsvpStatus === "confirmed") counts.confirmed_count += 1;
+    else if (guest.rsvpStatus === "declined") counts.declined_count += 1;
+    else if (guest.rsvpStatus === "maybe") counts.maybe_count += 1;
+    if (guest.invitationViewedAt) counts.viewed_count += 1;
+    if (guest.invitationSentAt) counts.sent_count += 1;
+  }
+  return counts;
+}
+
 async function canCreateEvent() {
   const session = await getSession();
   if (!session) throw new Error("Unauthorized");
@@ -61,7 +95,7 @@ export async function getEvents() {
           select: { guests: true },
         },
         guests: {
-          select: { rsvpStatus: true, invitationViewedAt: true },
+          select: GUEST_COUNTS_SELECT,
         },
       },
     });
@@ -71,10 +105,7 @@ export async function getEvents() {
       invitationTemplate: e.templateCopy?.config || e.invitationTemplate,
       templateCopy: undefined,
       guest_count: e._count.guests,
-      confirmed_count: e.guests.filter((g) => g.rsvpStatus === "confirmed")
-        .length,
-      viewed_count: e.guests.filter((g) => g.invitationViewedAt !== null)
-        .length,
+      ...guestCounts(e.guests),
       guests: undefined,
     }));
   } catch (error) {
@@ -101,7 +132,7 @@ export async function getEventById(id) {
           select: { guests: true },
         },
         guests: {
-          select: { rsvpStatus: true, invitationViewedAt: true },
+          select: GUEST_COUNTS_SELECT,
         },
       },
     });
@@ -115,12 +146,7 @@ export async function getEventById(id) {
       templateSourceId: event.templateCopy?.sourceTemplateId ?? null,
       templateCopy: undefined,
       guest_count: event._count.guests,
-      confirmed_count: event.guests.filter((g) => g.rsvpStatus === "confirmed")
-        .length,
-      declined_count: event.guests.filter((g) => g.rsvpStatus === "declined")
-        .length,
-      viewed_count: event.guests.filter((g) => g.invitationViewedAt !== null)
-        .length,
+      ...guestCounts(event.guests),
       guests: undefined,
     };
   } catch (error) {
@@ -130,18 +156,14 @@ export async function getEventById(id) {
 }
 
 export async function createEvent(data) {
+  // Hors du try : ce message doit arriver tel quel à l'utilisateur, alors que
+  // les autres erreurs sont remplacées par un message générique.
+  const allowed = await canCreateEvent();
+  if (!allowed) throw new Error(EVENT_LIMIT_MESSAGE);
+
   try {
     const user = await getSession();
     if (!user) throw new Error("Unauthorized");
-
-    // ✅ Vérification plan
-    const allowed = await canCreateEvent();
-
-    if (!allowed) {
-      throw new Error(
-        "Limite atteinte : passez à un plan premium pour créer plus d'événements.",
-      );
-    }
 
     const {
       title,
@@ -292,4 +314,75 @@ export async function deleteEvent(id) {
     console.error("Error deleting event:", error);
     throw new Error("Failed to delete event");
   }
+}
+
+/**
+ * Dernières ouvertures et réponses des invités, sur les événements que
+ * l'utilisateur possède ou suit comme collaborateur (même règle que
+ * getEvents).
+ *
+ * Un invité peut produire deux entrées : son ouverture, puis sa réponse.
+ *
+ * @param {number} [limit=8]
+ * @returns {Promise<Array<{ id, type, guestName, eventId, eventTitle, at }>>}
+ *   `type` : "viewed" | "confirmed" | "declined" | "maybe"
+ */
+export async function getRecentActivity(limit = 8) {
+  const user = await getSession();
+  if (!user) throw new Error("Unauthorized");
+
+  const take = Math.min(Math.max(1, Number(limit) || 8), 30);
+  const guests = await prisma.guest.findMany({
+    where: {
+      event: {
+        OR: [
+          { userId: user.userId },
+          { collaborators: { some: { userId: user.userId, accepted: true } } },
+        ],
+      },
+      OR: [
+        { invitationViewedAt: { not: null } },
+        { rsvpRespondedAt: { not: null } },
+      ],
+    },
+    orderBy: { updatedAt: "desc" },
+    take: take * 3,
+    select: {
+      id: true,
+      name: true,
+      rsvpStatus: true,
+      invitationViewedAt: true,
+      rsvpRespondedAt: true,
+      event: { select: { id: true, title: true } },
+    },
+  });
+
+  const items = [];
+  for (const guest of guests) {
+    const base = {
+      guestName: guest.name,
+      eventId: guest.event.id,
+      eventTitle: guest.event.title,
+    };
+    if (guest.rsvpRespondedAt && guest.rsvpStatus) {
+      items.push({
+        ...base,
+        id: `${guest.id}:rsvp`,
+        type: guest.rsvpStatus,
+        at: guest.rsvpRespondedAt,
+      });
+    }
+    if (guest.invitationViewedAt) {
+      items.push({
+        ...base,
+        id: `${guest.id}:viewed`,
+        type: "viewed",
+        at: guest.invitationViewedAt,
+      });
+    }
+  }
+
+  return items
+    .sort((a, b) => new Date(b.at) - new Date(a.at))
+    .slice(0, take);
 }

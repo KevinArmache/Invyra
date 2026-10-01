@@ -103,17 +103,20 @@ export default function TemplateEditorForm({
         <div className="min-w-0">
           <Link
             href="/dashboard/templates"
-            className="inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-foreground"
+            className="animate-fade-in group inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-foreground"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
             {t("portal.templates.list.title")}
           </Link>
-          <h1 className="mt-2 text-2xl leading-tight text-ink-50 sm:text-3xl">
+          <h1 className="animate-rise mt-2 text-2xl leading-tight text-ink-50 sm:text-3xl">
             {isEditing
               ? t("portal.templates.editor.title_edit")
               : t("portal.templates.editor.title_new")}
           </h1>
-          <hr className="rule-gold-left mt-3 w-14" />
+          <hr
+            className="rule-gold-left animate-draw-x mt-3 w-14"
+            style={{ "--rise-delay": "150ms" }}
+          />
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end xl:flex-nowrap">
@@ -221,11 +224,11 @@ export default function TemplateEditorForm({
         </div>
 
         <div
-          className={`surface min-h-[32rem] items-center justify-center overflow-hidden p-4 sm:p-6 lg:flex lg:min-h-0 ${
+          className={`surface relative min-h-[32rem] items-center justify-center overflow-hidden rounded-xl p-4 sm:p-6 lg:flex lg:min-h-0 ${
             mobilePane === "preview" ? "flex" : "hidden"
           }`}
         >
-          <div className="relative aspect-3/4 h-full max-h-full w-full max-w-[560px] overflow-hidden rounded-md border border-border/60 bg-ink-900 shadow-elevation-3">
+          <div className="animate-scale-in relative aspect-3/4 h-full max-h-full w-full max-w-[560px] overflow-hidden rounded-[1.4rem] border border-ink-600 bg-ink-900 shadow-elevation-3 ring-1 ring-gold/10">
             <LivePreview
               template={config}
               event={SAMPLE_EVENT}

@@ -2,8 +2,12 @@ import { notFound } from "next/navigation";
 
 import { getEventById } from "@/app/actions/event";
 import EditEventForm from "@/components/events/EditEventForm";
+import { getTranslations } from "@/lib/i18n/server";
 
-export const metadata = { title: "Modifier l'événement" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return { title: t("portal.events.edit.title") };
+}
 
 export default async function EditEventPage({ params }) {
   const { id } = await params;

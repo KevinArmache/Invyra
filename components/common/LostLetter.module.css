@@ -1,0 +1,122 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Pages introuvables : une enveloppe s'ouvre et la lettre qui en sort porte
+   le code de l'erreur. Une seule fois, puis la lettre flotte.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.letterScene {
+  --paper: color-mix(in oklch, var(--gold) 14%, #fbf7ef);
+  position: relative;
+  width: min(72vw, 15rem);
+  aspect-ratio: 1.5;
+  margin-inline: auto;
+  margin-top: 4.5rem;
+  perspective: 1000px;
+}
+
+.letterScene > span {
+  position: absolute;
+  display: block;
+}
+
+.back {
+  inset: 0;
+  border-radius: 6px;
+  background: color-mix(in oklch, var(--paper) 86%, black);
+  box-shadow: 0 30px 60px -20px oklch(0 0 0 / 0.7);
+}
+
+.letter {
+  left: 7%;
+  right: 7%;
+  top: 7%;
+  height: 86%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  padding-top: 7%;
+  border-radius: 4px;
+  background: #fffdf8;
+  box-shadow: 0 2px 12px oklch(0 0 0 / 0.15);
+  animation:
+    rise 1.1s var(--ease-out-expo) 0.9s both,
+    hover 5s ease-in-out 2.2s infinite;
+}
+
+.code {
+  font-family: var(--font-fraunces), Georgia, serif;
+  font-size: clamp(1.9rem, 9vw, 2.6rem);
+  line-height: 1;
+  color: var(--gold-deep);
+}
+
+.line {
+  width: 36%;
+  height: 1px;
+  background: color-mix(in oklch, var(--gold) 60%, transparent);
+}
+
+.front {
+  inset: 0;
+  z-index: 2;
+  border-radius: 6px;
+  clip-path: polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%);
+  background: linear-gradient(160deg, var(--paper), color-mix(in oklch, var(--paper) 90%, black));
+}
+
+.flap {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 57%;
+  z-index: 3;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(180deg, color-mix(in oklch, var(--paper) 95%, black), color-mix(in oklch, var(--paper) 84%, black));
+  transform-origin: top center;
+  backface-visibility: hidden;
+  animation: open 0.8s cubic-bezier(0.45, 0, 0.2, 1) 0.35s both;
+}
+
+@keyframes open {
+  from {
+    z-index: 3;
+    transform: rotateX(0deg);
+  }
+  to {
+    z-index: 0;
+    transform: rotateX(180deg);
+  }
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-62%);
+  }
+}
+
+@keyframes hover {
+  0%,
+  100% {
+    transform: translateY(-62%);
+  }
+  50% {
+    transform: translateY(-67%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter {
+    animation: none;
+    transform: translateY(-62%);
+  }
+  .flap {
+    animation: none;
+    z-index: 0;
+    transform: rotateX(180deg);
+  }
+}

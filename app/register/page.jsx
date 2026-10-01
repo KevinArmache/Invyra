@@ -6,7 +6,14 @@ import { getTranslations } from "@/lib/i18n/server";
 import AuthShell from "@/components/auth/AuthShell";
 import RegisterForm from "@/components/auth/RegisterForm";
 
-export const metadata = { title: "Créer un compte" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return {
+    title: t("register.meta_title"),
+    description: t("register.meta_description"),
+    alternates: { canonical: "/register" },
+  };
+}
 
 export default async function RegisterPage() {
   const session = await auth.api.getSession({ headers: await headers() });

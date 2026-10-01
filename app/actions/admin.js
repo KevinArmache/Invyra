@@ -14,6 +14,7 @@ export async function getAllUsers() {
       email: true,
       company: true,
       role: true,
+      plan: true,
       suspended: true,
       createdAt: true,
       _count: { select: { events: true, templates: true } },
@@ -34,6 +35,21 @@ export async function updateUserRole(userId, role) {
     where: { id: userId },
     data: { role },
     select: { id: true, name: true, email: true, role: true },
+  });
+}
+
+/**
+ * Formule d'un compte : « free » (Découverte) ou « premium ». C'est ainsi
+ * qu'un admin active l'Événement premium vendu sur la page Tarifs.
+ */
+export async function updateUserPlan(userId, plan) {
+  await requireAdmin();
+  if (!["free", "premium"].includes(plan)) throw new Error("Formule invalide");
+
+  return prisma.user.update({
+    where: { id: userId },
+    data: { plan },
+    select: { id: true, name: true, email: true, plan: true },
   });
 }
 

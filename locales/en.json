@@ -7,11 +7,16 @@
     "get_started": "Get started",
     "dashboard": "Dashboard",
     "templates": "Templates",
-    "availability": "Availability"
+    "availability": "Availability",
+    "faq": "FAQ",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "main": "Main navigation",
+    "skip": "Skip to content"
   },
   "login": {
     "title": "Welcome back",
-    "subtitle": "Sign in to your account to continue",
+    "subtitle": "Sign in to get back to your events and your guests' replies.",
     "email": "Email",
     "password": "Password",
     "password_placeholder": "Enter your password",
@@ -20,36 +25,41 @@
     "no_account": "Don't have an account?",
     "create_one": "Create one",
     "error_generic": "Invalid email or password",
-    "tagline": "Your invitations are waiting."
+    "tagline": "Your invitations are waiting.",
+    "meta_title": "Sign in",
+    "meta_description": "Sign in to Invyra to manage your events, your invitations and your guests' replies."
   },
   "register": {
     "title": "Create an account",
-    "subtitle": "Start creating beautiful invitations",
+    "subtitle": "Your first event and up to 15 guests are free.",
     "name": "Full name",
     "name_placeholder": "Your name",
     "email": "Email",
     "password": "Password",
     "password_placeholder": "Create a strong password",
-    "submit": "Create account",
+    "submit": "Create my account",
     "submitting": "Creating...",
     "has_account": "Already have an account?",
     "sign_in": "Sign in",
     "phone": "Phone number",
     "phone_placeholder": "+1 234 567 8900",
+    "phone_hint": "Needed to send your invitations on WhatsApp.",
     "confirm_password": "Confirm password",
     "password_mismatch": "Passwords do not match",
     "password_too_short": "Password must be at least 8 characters",
     "company": "Company",
     "company_placeholder": "Optional",
     "optional": "optional",
-    "tagline": "Compose your first invitation in minutes."
+    "tagline": "Compose your first invitation in minutes.",
+    "meta_title": "Create an account",
+    "meta_description": "Create your Invyra account for free: one event and up to 15 guests included, no code to write."
   },
   "settings": {
     "title": "Settings",
-    "subtitle": "Manage your account settings",
-    "profile_success": "Profile updated successfully",
+    "subtitle": "Your profile, your plan and your account security.",
+    "profile_success": "Profile updated",
     "profile_title": "Profile",
-    "profile_desc": "Update your personal information",
+    "profile_desc": "Your personal information",
     "email": "Email",
     "email_desc": "Email cannot be changed",
     "name": "Full name",
@@ -58,10 +68,11 @@
     "company_placeholder": "Your company",
     "phone": "Phone number",
     "phone_placeholder": "+1 234 567 8900",
+    "phone_hint": "Needed to send your invitations on WhatsApp.",
     "save": "Save changes",
     "saving": "Saving...",
     "password_title": "Change password",
-    "password_desc": "Update your password to keep your account secure",
+    "password_desc": "Your other signed-in devices will be signed out",
     "current_password": "Current password",
     "current_password_placeholder": "Enter current password",
     "new_password": "New password",
@@ -70,31 +81,65 @@
     "confirm_password_placeholder": "Confirm new password",
     "change_password": "Change password",
     "changing": "Changing...",
-    "password_success": "Password changed successfully",
+    "password_success": "Password changed",
     "password_mismatch": "New passwords do not match",
     "password_length": "Password must be at least 8 characters",
+    "plan_title": "Your plan",
+    "plan_desc": "What your account includes",
+    "plan_free_name": "Starter",
+    "plan_premium_name": "Premium event",
+    "plan_free_limits": "1 event, up to 15 guests",
+    "plan_premium_limits": "1 event, unlimited guests",
+    "plan_admin_limits": "Admin account: no limit on events or guests.",
+    "plan_upgrade": "Go premium on WhatsApp",
+    "plan_upgrade_hint": "$1 per guest. Our team activates the plan after your message.",
+    "plan_upgrade_message": "Hello, I would like to upgrade to the Premium event on Invyra. My email: {email}",
+    "plan_premium_hint": "Add as many guests as you need.",
     "danger_zone": "Danger zone",
     "irreversible": "Irreversible actions",
     "delete_account": "Delete account",
-    "delete_desc": "Account deletion is currently enabled. Contact support if you have any issues with deleting your account.",
+    "delete_desc": "Deleting your account erases your events, your guests and their replies. It cannot be undone.",
     "delete_confirm_word": "DELETE",
     "delete_dialog_title": "Permanently delete your account?",
-    "delete_dialog_body": "Your events, guests and their replies will be erased. Templates you shared stay available to others. This cannot be undone.",
+    "delete_dialog_body": "Your events, guests and their replies will be erased. Templates you created stay available to others. This cannot be undone.",
     "delete_type_to_confirm": "Type {word} to confirm",
     "admin_cannot_delete": "Admin accounts cannot be deleted from this page."
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome back! Here is an overview of your events.",
+    "welcome": "Here is where your events stand.",
+    "greeting": "Hello {name}",
+    "greeting_anonymous": "Hello",
     "create_event": "Create event",
-    "total_events": "Total events",
-    "total_guests": "Total guests",
-    "invitations_viewed": "Invitations viewed",
-    "confirmed_rsvps": "Confirmed RSVPs",
+    "total_events": "Events",
+    "total_guests": "Guests",
+    "invitations_viewed": "Invitations opened",
+    "confirmed_rsvps": "Confirmed attendance",
     "recent_events": "Recent events",
-    "no_events": "No events yet. Create your first one!",
+    "no_events": "No events yet",
+    "no_events_desc": "Create your first event: a template, your guests, and you are ready.",
     "view_all": "View all events",
-    "guests": "guests"
+    "guests": "guests",
+    "next_event": "Next event",
+    "no_upcoming_title": "No upcoming event",
+    "no_upcoming_desc": "Give your event a date to follow the countdown here.",
+    "open_event": "Open event",
+    "checklist": {
+      "title": "Getting started",
+      "progress": "{done} of {total}",
+      "create": "Create your event",
+      "template": "Choose the invitation template",
+      "guests": "Add your guests",
+      "send": "Send the invitations"
+    },
+    "activity": {
+      "title": "Recent activity",
+      "empty": "Your guests' openings and replies will show up here.",
+      "viewed": "opened the invitation",
+      "confirmed": "confirmed attendance",
+      "declined": "can't make it",
+      "maybe": "is not sure yet"
+    }
   },
   "portal": {
     "sidebar": {
@@ -105,12 +150,20 @@
       "settings": "Settings",
       "sign_out": "Sign out",
       "open_sidebar": "Open menu",
+      "close_sidebar": "Close menu",
+      "collapse": "Collapse menu",
+      "expand": "Expand menu",
+      "main_nav": "Workspace navigation",
       "admin": "Admin panel",
-      "account": "My account"
+      "account": "My account",
+      "new_event": "New event",
+      "plan_free": "Starter",
+      "plan_premium": "Premium",
+      "upgrade": "Go premium"
     },
     "admin": {
       "overview": "Overview",
-      "overview_subtitle": "Global statistics for the Invyra platform",
+      "overview_subtitle": "The numbers of the Invyra platform",
       "users": "Users",
       "events": "Events",
       "templates": "Templates",
@@ -121,12 +174,19 @@
       "users_count": "{count} registered user(s)",
       "user": "User",
       "role": "Role",
+      "role_admin": "Admin",
+      "plan": "Plan",
+      "plan_free": "Starter",
+      "plan_premium": "Premium",
+      "set_premium": "Switch to premium",
+      "set_free": "Back to Starter",
+      "plan_updated": "{name}'s plan: {plan}",
       "status": "Status",
       "registered_on": "Registered on",
       "active": "Active",
       "suspended": "Suspended",
       "standard_user": "User",
-      "role_updated": "Role updated: {name} -> {role}",
+      "role_updated": "{name}'s role: {role}",
       "account_suspended": "Account suspended",
       "account_reactivated": "Account reactivated",
       "delete_account_confirm": "Permanently delete account for {name}?",
@@ -138,32 +198,40 @@
       "delete_forever": "Delete permanently",
       "no_users": "No users",
       "you": "you",
-      "delete_account_body": "Their events, guests and replies will be deleted. Templates they shared are reassigned and stay available."
+      "actions": "Actions",
+      "actions_for": "Actions for {name}",
+      "delete_account_body": "Their events, guests and replies will be deleted. Templates they created stay available."
     },
     "analytics": {
       "title": "Analytics",
-      "subtitle": "Track your invitation performance across all events",
-      "total_events": "Total events",
-      "total_guests": "Total guests",
-      "view_rate": "View rate",
+      "subtitle": "Openings and replies across all your events",
+      "total_events": "Events",
+      "total_guests": "Guests",
+      "view_rate": "Open rate",
       "response_rate": "Response rate",
-      "views": "views",
-      "rsvp_breakdown_title": "RSVP breakdown",
-      "rsvp_breakdown_desc": "Summary of all guest responses",
-      "confirmed": "Confirmed",
-      "declined": "Declined",
-      "pending": "Pending",
-      "event_performance_title": "Event performance",
-      "event_performance_desc": "Individual event statistics",
-      "no_events": "No events yet. Create an event to see analytics.",
+      "views": "openings",
+      "rsvp_breakdown_title": "Replies breakdown",
+      "rsvp_breakdown_desc": "All your guests' replies",
+      "confirmed": "Attending",
+      "declined": "Not attending",
+      "pending": "No reply",
+      "event_performance_title": "By event",
+      "event_performance_desc": "Guests, openings and attendance for each event",
+      "no_events": "No events yet. Create an event to see its analytics.",
       "no_date": "No date set",
       "guests": "Guests",
-      "rate": "Rate"
+      "rate": "Attendance rate"
+    },
+    "error": {
+      "title": "This page could not be displayed",
+      "desc": "Something went wrong while loading. Try again; if the problem persists, reload the page.",
+      "reference": "Reference:",
+      "retry": "Try again"
     },
     "events": {
       "list": {
         "title": "Events",
-        "subtitle": "Manage all your events and invitations",
+        "subtitle": "Your events, their invitations and their guests",
         "create_btn": "Create event",
         "search_placeholder": "Search events...",
         "no_events_found": "No events found",
@@ -175,33 +243,34 @@
         "delete_confirm": "Are you sure you want to delete this event? This action cannot be undone.",
         "delete_btn": "Delete",
         "edit_btn": "Edit",
-        "preview_btn": "Preview invitation"
+        "preview_btn": "Preview invitation",
+        "no_template": "Template to choose"
       },
       "new": {
         "title": "Create an event",
-        "subtitle": "Configure your invitation in simple steps",
+        "subtitle": "Three steps: the event, its template, its guests.",
         "steps": {
           "details": "Details",
           "template": "Template",
           "guests": "Guests"
         },
-        "success_event": "Event created successfully",
-        "success_guest": "Guest added successfully",
+        "success_event": "Event created",
+        "success_guest": "Guest added",
         "error_guest": "Error adding guest",
-        "import_csv": "Bulk CSV import",
+        "import_csv": "CSV import",
         "add_guest": "Add manually",
         "details_title": "Event information",
-        "details_desc": "Describe your event for personalization",
+        "details_desc": "This information fills in the invitation automatically.",
         "labels": {
           "title": "Title *",
           "date": "Date",
-          "time": "Time (shown on invitation)",
+          "time": "Time (shown on the invitation)",
           "location": "Location",
           "dress_code": "Dress code",
           "description": "Description",
           "name": "Full name *",
           "email": "Email *",
-          "phone": "Phone (optional)"
+          "phone": "Phone (for WhatsApp)"
         },
         "placeholders": {
           "title": "Sarah & Mark's Wedding",
@@ -213,15 +282,15 @@
         "buttons": {
           "continue": "Continue",
           "creating": "Creating...",
-          "first_template": "Create my first template",
+          "first_template": "Create the first template",
           "continue_with_template": "Continue with this template",
-          "skip": "Skip this step",
+          "skip": "Choose later",
           "add": "Add guest",
           "finish": "Finish & manage event"
         },
-        "template_title": "Choose an invitation template",
-        "template_desc": "Select one of your saved templates. The template determines the design of the invitations.",
-        "no_templates": "You don't have any saved templates yet.",
+        "template_title": "Choose the invitation template",
+        "template_desc": "Pick a template from the gallery: you can then change its text, photos and colours.",
+        "no_templates": "No template is available yet.",
         "guest_list": "Guest list",
         "guests_added": "guest(s) added",
         "no_guests_yet": "No guests yet"
@@ -229,14 +298,14 @@
       "edit": {
         "title": "Edit event",
         "update_btn": "Update",
-        "success": "Event updated successfully",
-        "preview_title": "Live preview",
-        "no_preview": "No custom template assigned yet.",
-        "select_template": "Select a template",
-        "configure_invitation": "Configure the invitation",
+        "success": "Event updated",
+        "preview_title": "Preview",
+        "no_preview": "No template has been chosen for this invitation yet.",
+        "select_template": "Choose a template",
+        "configure_invitation": "Customise the invitation",
         "save_and_exit": "Save and exit",
-        "template_saved": "This event template has been saved.",
-        "template_applied": "A copy of the template was applied to the event.",
+        "template_saved": "This event's invitation has been saved.",
+        "template_applied": "The template was applied to the event.",
         "status_label": "Status",
         "status_draft": "Draft",
         "status_active": "Active",
@@ -249,12 +318,25 @@
         "empty_desc": "Pick a template from the gallery, then customise its text, images and colours.",
         "blank_code": "Blank page (code)"
       },
+      "csv": {
+        "hint": "One line per guest: {format}. The phone is optional and a header line is ignored.",
+        "format": "Name,Email,Phone",
+        "choose_file": "Choose a file",
+        "check": "Check",
+        "content_label": "CSV content",
+        "valid": "valid",
+        "invalid": "with errors",
+        "import": "Import {count}",
+        "importing": "Importing…",
+        "error_missing": "Line {line}: missing name or email",
+        "error_email": "Line {line}: invalid email ({email})"
+      },
       "details": {
         "actions": {
           "event_deleted": "Event deleted.",
           "sending": "Sending...",
-          "send_invitations": "Send invitations",
-          "email_sent": "Email sent successfully!",
+          "send_invitations": "Send by email",
+          "email_sent": "Email sent",
           "guest_deleted": "Guest deleted.",
           "back_to_events": "Back to events",
           "edit": "Edit",
@@ -264,17 +346,30 @@
           "overview": "Overview",
           "guests": "Guests"
         },
+        "kpi": {
+          "invited": "Guests",
+          "sent": "Sent",
+          "opened": "Opened",
+          "responded": "Replies"
+        },
+        "meta": {
+          "date": "Date",
+          "time": "Time",
+          "location": "Location"
+        },
         "overview": {
-          "stats_title": "RSVP responses",
-          "copy_link": "Copy link",
-          "link_copied": "Link copied!",
-          "active_template": "Active template preview",
-          "message": "Custom message",
-          "no_details": "No description or custom message yet."
+          "stats_title": "Guest replies",
+          "copy_link": "Copy this page's link",
+          "copy_link_hint": "Handy to share it with a collaborator.",
+          "link_copied": "Link copied",
+          "active_template": "The invitation",
+          "summary": "Details",
+          "message": "Personal message",
+          "no_details": "No description or personal message yet."
         },
         "guests": {
           "title": "Guest list",
-          "subtitle": "Manage your guests and track their individual status",
+          "subtitle": "Add your guests, then send them their personal link",
           "add_btn": "Add",
           "table": {
             "email": "Email",
@@ -283,14 +378,18 @@
           "status": {
             "pending": "Pending",
             "attending": "Attending",
-            "declined": "Declined",
+            "declined": "Not attending",
             "maybe": "Maybe"
           },
+          "opened": "Opened",
+          "not_opened": "Not opened yet",
+          "opened_on": "Invitation opened on {date}",
           "delete_confirm": "Delete this guest?",
           "resend": "Resend",
           "search": "Search a guest...",
           "import_failed": "import(s) failed",
-          "bulk_needs_template": "Choose the invitation design first to be able to send it."
+          "bulk_needs_template": "Choose the invitation template first to be able to send it.",
+          "bulk_hint": "Sends the email to guests who have not received it yet."
         },
         "collaborators": "Collaborators",
         "collaborators_hint": "The person must already have an Invyra account.",
@@ -299,19 +398,24 @@
         "collaborator_removed": "Collaborator removed",
         "role_updated": "Role updated",
         "role_editor": "Editor",
-        "role_viewer": "Viewer"
+        "role_viewer": "Viewer",
+        "collaborator_placeholder": "someone@example.com",
+        "collaborator_add": "Add collaborator",
+        "collaborator_remove": "Remove {email}"
       }
     },
     "templates": {
       "list": {
-        "title": "My templates",
-        "subtitle": "Create and manage your reusable template designs.",
+        "title": "Templates",
+        "subtitle": "The gallery of invitation templates. You pick your event's template from its page, then customise it.",
+        "subtitle_admin": "Create and manage the templates offered in the gallery.",
         "new_btn": "New template",
-        "no_templates": "No templates saved",
-        "no_templates_desc": "Start from a design and make it yours in minutes, no code needed.",
-        "create_first": "Create my first template",
+        "no_templates": "No template is available yet",
+        "no_templates_desc": "Templates published by the Invyra team will show up here.",
+        "no_templates_desc_admin": "Create the first template of the gallery.",
+        "create_first": "Create the first template",
         "delete_confirm": "Are you sure you want to delete this template?",
-        "delete_success": "Template deleted successfully",
+        "delete_success": "Template deleted",
         "preview_btn": "Preview template",
         "edit_btn": "Edit template",
         "status_draft_badge": "Draft",
@@ -332,13 +436,13 @@
       "editor": {
         "save_btn": "Save template",
         "saving": "Saving...",
-        "success": "Template saved!",
+        "success": "Template saved",
         "name_placeholder": "Template name",
         "status_label": "Progress",
         "status_draft_option": "⚪ Draft",
         "status_in_progress_option": "🟡 In progress",
         "status_completed_option": "🟢 Completed",
-        "mode_preview": "Preview mode",
+        "mode_preview": "Preview",
         "title_new": "Create a template",
         "title_edit": "Edit template",
         "name_required": "Give your template a name."
@@ -448,165 +552,321 @@
     "cancel": "Cancel",
     "close": "Close",
     "search": "Search...",
-    "no_results": "No results"
+    "no_results": "No results",
+    "loading": "Loading",
+    "retry": "Try again",
+    "just_now": "just now",
+    "countdown": {
+      "days": "days",
+      "hours": "hours",
+      "minutes": "minutes",
+      "seconds": "seconds",
+      "today": "It's today",
+      "tomorrow": "Tomorrow",
+      "in_days": "In {n} days",
+      "past": "Past",
+      "short": {
+        "days": "d ",
+        "hours": "h ",
+        "minutes": "m",
+        "seconds": "s"
+      }
+    }
+  },
+  "notfound": {
+    "title": "This page went astray",
+    "desc": "The address may be incomplete, or the page has moved.",
+    "home": "Back to home",
+    "dashboard": "My dashboard",
+    "meta_title": "Page not found",
+    "inside_title": "Not found",
+    "inside_desc": "This item does not exist, or you don't have access to it.",
+    "inside_back": "Back to dashboard"
+  },
+  "invite": {
+    "meta_title": "Invitation",
+    "meta_description": "{name}, you are invited. Open your invitation and confirm your attendance.",
+    "invalid_title": "Invalid link",
+    "invalid_desc": "This invitation does not exist or is no longer active.",
+    "unavailable_title": "Your invitation is on its way",
+    "unavailable_desc": "It could not be loaded this time. Try again in a moment: your link is valid.",
+    "preparing_title": "Invitation being prepared",
+    "preparing_desc": "The host has not chosen the template of this invitation yet.",
+    "loading": "Loading your invitation",
+    "rsvp_error": "Your reply could not be saved. Please try again.",
+    "frame_title": "Invitation: {title}"
   },
   "landing": {
+    "meta": {
+      "title": "Invyra · Digital invitations that open like a letter",
+      "description": "Create a digital invitation from a template without code, send each guest a personal link by email or WhatsApp, and follow openings and replies.",
+      "og_alt": "Invyra, digital invitations"
+    },
     "hero": {
-      "tagline": "Custom invitation editor",
-      "title_1": "Create",
-      "title_highlight": "unique invitations",
-      "subtitle": "Create your digital invitations from scratch. Use our complete code editor (HTML, CSS, JS) to bring your interactive invitations to life and amaze your guests.",
-      "cta_primary": "Start creating free",
+      "eyebrow": "Digital invitations",
+      "title_1": "Invitations that open",
+      "title_highlight": "like a letter",
+      "subtitle": "Pick a template, change the text, photos and colours without writing code, then send each guest their personal link by email or WhatsApp. You see who opened it and who replied.",
+      "cta_primary": "Create my invitation",
       "cta_secondary": "See how it works",
-      "stats": {
-        "events": "Events created",
-        "events_value": "10K+",
-        "rsvp": "RSVP rate",
-        "rsvp_value": "98%",
-        "creative": "Creative freedom",
-        "creative_value": "100%"
+      "free_note": "Free up to 15 guests",
+      "facts": [
+        {
+          "value": 3,
+          "label": "animated openings"
+        },
+        {
+          "value": 15,
+          "label": "guests included free"
+        },
+        {
+          "value": 0,
+          "label": "lines of code to write"
+        }
+      ],
+      "scene": {
+        "invited": "You're invited",
+        "guest": "Sophie",
+        "hint": "Tap to open",
+        "card_eyebrow": "Sophie, you're invited to the wedding of",
+        "bride": "Camille",
+        "groom": "Antoine",
+        "place": "Domaine de la Roseraie",
+        "rsvp": "I'll be there",
+        "rsvp_done": "Attendance confirmed",
+        "chip_sent": "Sent on WhatsApp",
+        "chip_opened": "Sophie opened the invitation",
+        "chip_confirmed": "Sophie confirmed attendance"
       }
     },
-    "features": {
-      "title": "Everything you need for ",
-      "title_highlight": "your events",
-      "subtitle": "From custom creation to engagement analytics, Invyra provides professional tools to invite with elegance.",
-      "items": {
-        "ai": {
-          "title": "Total control (HTML/CSS)",
-          "desc": "Design anything you want using a powerful web editor built for absolute customization."
-        },
-        "interactive": {
-          "title": "Interactive experience",
-          "desc": "Write your own JavaScript to create fluid animations and engage your guests on a whole new level."
-        },
-        "guests": {
-          "title": "Intuitive guest management",
-          "desc": "Import your list from an Excel (CSV) file or enter it manually. Handle plus-ones with ease."
-        },
-        "emails": {
-          "title": "WhatsApp & email delivery",
-          "desc": "Distribute unique named links to your guests. Your invitation's design will display perfectly."
-        },
-        "analytics": {
-          "title": "Real-time RSVP tracking",
-          "desc": "Get notified as soon as a loved one views the invitation or confirms their attendance, right on your dashboard."
-        },
-        "preview": {
-          "title": "Live preview",
-          "desc": "Edit your code and instantly see the visual result in real-time thanks to the split preview panel."
-        },
-        "effects": {
-          "title": "Dynamic personalization",
-          "desc": "Insert variable tags (e.g., guest name) directly into the code to generate highly personalized messages."
-        },
-        "security": {
-          "title": "Guaranteed privacy",
-          "desc": "Each guest receives a uniquely tokenized secure access link to ensure your ceremony remains strictly private."
-        }
-      }
+    "marquee": {
+      "label": "For every occasion"
     },
     "how_it_works": {
+      "eyebrow": "In four steps",
       "title": "How it ",
       "title_highlight": "works",
-      "subtitle": "Create and distribute your invitations in 4 simple steps.",
+      "subtitle": "From creating the event to your guests' replies.",
       "steps": {
         "1": {
           "title": "Create your event",
-          "desc": "Set the date, reception location, and key details of your ceremony."
+          "desc": "Title, date, time, venue, dress code and a note for your guests: this information fills in the invitation on its own."
         },
         "2": {
-          "title": "Code your template",
-          "desc": "Open the editor and shape the complete look and behavior of the invitation using HTML, CSS, and JS."
+          "title": "Pick and customise a template",
+          "desc": "Browse the gallery by type of event, then change the text, photos, colours, opening screen and music. The preview follows every change."
         },
         "3": {
-          "title": "Invite your loved ones",
-          "desc": "Complete your guest list and automatically send them a link via Email bursts or WhatsApp."
+          "title": "Add your guests and send",
+          "desc": "Enter them one by one or import a CSV file. Each one receives their personal link by email, or on WhatsApp with a ready-to-send message."
         },
         "4": {
-          "title": "Track responses",
-          "desc": "Stay in control: see who opened the message and track all attendance confirmations (RSVP)."
+          "title": "Follow openings and replies",
+          "desc": "You see who opened their invitation and who is coming, not coming or unsure. A guest can change their mind from their link."
         }
       }
     },
-    "pricing": {
-      "title": "Simple, transparent ",
-      "title_highlight": "pricing",
-      "subtitle": "Choose the perfect plan for your event size. Professional tools, no hidden fees.",
-      "plans": {
-        "free": {
-          "name": "Free",
-          "desc": "Perfect to test the platform",
-          "price": "$0",
-          "period": "forever",
-          "cta": "Try for free",
-          "features": [
-            "1 event max",
-            "Up to 15 guests",
-            "Standard code editor",
-            "Basic delivery tracking",
-            "Blank templates"
-          ]
+    "features": {
+      "eyebrow": "Features",
+      "title": "Everything to invite, ",
+      "title_highlight": "nothing to code",
+      "subtitle": "The platform's tools, from the opening screen to tracking replies.",
+      "items": {
+        "opening": {
+          "title": "An opening that makes an entrance",
+          "desc": "Envelope, wax seal or curtain: the guest first sees their name and your monogram, then taps to open."
         },
-        "pro": {
-          "name": "Pro event",
-          "desc": "For memorable celebrations",
-          "price": "1$",
-          "period": "per person",
-          "cta": "Start creating",
-          "features": [
-            "Unlimited guests",
-            "Advanced template editor",
-            "Live preview",
-            "Mass email delivery",
-            "Priority support"
-          ]
+        "music": {
+          "title": "Opening music",
+          "desc": "Add a song: it fades in when the guest opens the invitation, and a button lets them mute it."
+        },
+        "nocode": {
+          "title": "No-code customisation",
+          "desc": "Text, photos, links and colours are edited in a form, with the invitation preview right beside it."
+        },
+        "guests": {
+          "title": "Guest list",
+          "desc": "Add your guests one by one or import a CSV file (name, email, phone). The same email cannot be added twice."
+        },
+        "sending": {
+          "title": "Email and WhatsApp",
+          "desc": "The email uses your template's photo. For WhatsApp, a pre-filled message opens with the guest's link: all that is left is to send it."
+        },
+        "tracking": {
+          "title": "Reply tracking",
+          "desc": "Sending, opening and reply for each guest (attending, not attending or maybe), plus the event totals."
+        },
+        "privacy": {
+          "title": "One personal link per guest",
+          "desc": "Each link is unique and hard to guess. Invitations are not listed by search engines, and the link preview shows the invitation's photo."
+        },
+        "team": {
+          "title": "Together",
+          "desc": "Invite someone who has an Invyra account as an editor, to edit and send, or as a viewer, to follow along."
         }
       },
-      "popular": "Most popular"
-    },
-    "footer": {
-      "brand": "Invyra",
-      "headline": "Create your digital invitations in just a few clicks.",
-      "description": "Customize your design, share it instantly, and track responses in real time.",
-      "rights": "All rights reserved. Developed by",
-      "explore": "Explore",
-      "help": "Support",
-      "links": {
-        "features": "Features",
-        "pricing": "Pricing",
-        "contact": "Support"
+      "visual": {
+        "title_label": "Title",
+        "typed": "Camille & Antoine",
+        "colors_label": "Colours",
+        "csv_file": "guests.csv",
+        "opened": "Opened",
+        "confirmed": "Attending",
+        "preview_title": "Sophie's invitation"
       }
     },
+    "opening_demo": {
+      "eyebrow": "Try it",
+      "title": "An opening ",
+      "title_highlight": "with their name",
+      "subtitle": "Before the invitation, your guest sees an opening screen: an envelope, a wax seal or a curtain, with their name and your monogram. Pick a style, then tap the screen.",
+      "hint": "Tap the invitation to open it",
+      "replay": "Replay the opening",
+      "model_note": "Real rendering of the “{name}” template, with a sample guest.",
+      "music_note": "If you add music, it starts at that moment."
+    },
     "templates": {
-      "title": "Our templates, ",
-      "title_highlight": "ready to customise",
-      "subtitle": "Pick a design, add your photos and text, and your invitation is ready in minutes.",
-      "preview": "Live preview"
+      "eyebrow": "The gallery",
+      "title": "Templates for ",
+      "title_highlight": "every occasion",
+      "subtitle": "Pick a design from the gallery, add your photos and text: your invitation is ready.",
+      "preview": "Live preview",
+      "cta": "Create my invitation"
     },
     "availability": {
+      "eyebrow": "Calendar",
       "title": "Check your ",
       "title_highlight": "date",
-      "subtitle": "Dates already chosen by our clients show in gold. The calendar updates itself with every new event.",
-      "multiple_note": "A booked date is still available: we handle several weddings on the same day.",
+      "subtitle": "Dates already taken on Invyra show in gold. The calendar updates itself with every new event.",
+      "multiple_note": "A date already taken is still available: several events can happen on the same day.",
       "legend_free": "Available",
-      "legend_booked": "Booked, still available",
-      "month_free": "No bookings this month",
-      "month_booked_one": "date booked this month",
-      "month_booked_many": "dates booked this month",
+      "legend_booked": "Taken, still available",
+      "month_free": "No events this month",
+      "month_booked_one": "date taken this month",
+      "month_booked_many": "dates taken this month",
       "prev": "Previous month",
       "next": "Next month",
       "cta": "Book my date",
-      "upcoming": "Next booked dates",
-      "day_free": "No wedding planned that day: the date is free.",
-      "wedding_one": "wedding already planned that day",
-      "wedding_many": "weddings already planned that day",
-      "still_possible": "The date is still available: we handle several weddings on the same day.",
+      "upcoming": "Next dates taken",
+      "day_free": "No event planned that day: the date is free.",
+      "event_one": "event already planned that day",
+      "event_many": "events already planned that day",
+      "still_possible": "The date is still available: several events can happen on the same day.",
       "book_this_date": "Book this date",
-      "pick_a_date": "Tap a date to see how many weddings are already planned.",
+      "pick_a_date": "Tap a date to see how many events are already planned.",
       "mail_subject": "Booking request",
-      "mail_body": "Hello,\n\nI would like to book {date} for our wedding.\n\nOur names:\nVenue:\nNumber of guests (approx.):\nPhone:\n\nThank you!",
+      "mail_body": "Hello,\n\nI would like to book {date} for our event.\n\nType of event:\nVenue:\nNumber of guests (approx.):\nPhone:\n\nThank you!",
       "mail_date_placeholder": "(date to be confirmed)"
+    },
+    "pricing": {
+      "eyebrow": "Pricing",
+      "title": "Simple ",
+      "title_highlight": "pricing",
+      "subtitle": "Start for free. Go premium when your list grows past 15 guests.",
+      "badge": "For long guest lists",
+      "plans": {
+        "free": {
+          "name": "Starter",
+          "desc": "For a first event",
+          "price": "$0",
+          "period": "forever",
+          "cta": "Start for free",
+          "features": [
+            "1 event",
+            "Up to 15 guests",
+            "The whole template gallery",
+            "No-code customisation",
+            "Sending by email and WhatsApp",
+            "Opening and reply tracking"
+          ]
+        },
+        "pro": {
+          "name": "Premium event",
+          "desc": "When the guest list grows",
+          "price": "$1",
+          "period": "per guest",
+          "cta": "Ask on WhatsApp",
+          "whatsapp_message": "Hello, I would like to upgrade to the Premium event on Invyra.",
+          "features": [
+            "Unlimited guests",
+            "1 event",
+            "Everything in Starter",
+            "Activation and help on WhatsApp"
+          ]
+        }
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Frequently asked ",
+      "title_highlight": "questions",
+      "subtitle": "What to know before creating your invitation.",
+      "items": [
+        {
+          "q": "Do my guests need an account?",
+          "a": "No. Each guest opens their invitation with their personal link and replies right inside it."
+        },
+        {
+          "q": "What can I change in a template?",
+          "a": "The text, photos, links, colours, the opening screen (style, title, monogram) and the music. The layout stays the template's."
+        },
+        {
+          "q": "How does sending on WhatsApp work?",
+          "a": "Invyra opens WhatsApp with a ready-to-send message containing the guest's personal link: you only have to send it. Add your number in your settings, and the guest's number in your list."
+        },
+        {
+          "q": "What does tracking show?",
+          "a": "For each guest: sending by email or WhatsApp, the opening of the invitation and their reply (attending, not attending or maybe). Each event's totals are in your analytics."
+        },
+        {
+          "q": "Can a guest change their reply?",
+          "a": "Yes. By opening their link again, they can reply again: the new reply replaces the previous one."
+        },
+        {
+          "q": "How many guests on the free plan?",
+          "a": "Up to 15 guests for one event. Beyond that, the Premium event costs $1 per guest, with no limit on numbers."
+        },
+        {
+          "q": "Can I prepare the event with others?",
+          "a": "Yes. Add someone who has an Invyra account, as an editor (they edit and send) or as a viewer (they follow the replies)."
+        },
+        {
+          "q": "Are my invitations private?",
+          "a": "Each link is unique and hard to guess, and invitation pages are not listed by search engines."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Your invitation can go out ",
+      "title_highlight": "today",
+      "subtitle": "Create your event, pick a template, add your guests: the first 15 are free.",
+      "button": "Create my invitation",
+      "secondary": "See pricing"
+    },
+    "footer": {
+      "brand": "Invyra",
+      "headline": "Digital invitations that open like a letter.",
+      "description": "Pick a template, customise it without code, send it by email or WhatsApp and follow the replies.",
+      "rights": "All rights reserved.",
+      "made_by": "Developed by",
+      "product": "Product",
+      "account": "Account",
+      "contact": "Contact",
+      "links": {
+        "features": "Features",
+        "opening": "Openings",
+        "templates": "Templates",
+        "how_it_works": "How it works",
+        "availability": "Availability",
+        "pricing": "Pricing",
+        "faq": "FAQ",
+        "sign_in": "Sign in",
+        "register": "Create an account",
+        "dashboard": "Dashboard",
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "instagram": "Instagram"
+      }
     }
   }
 }

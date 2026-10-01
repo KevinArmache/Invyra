@@ -3,8 +3,12 @@ import { redirect } from "next/navigation";
 import { saveUserTemplate } from "@/app/actions/template";
 import { getSession } from "@/app/actions/auth";
 import TemplateEditorForm from "@/components/templates/TemplateEditorForm";
+import { getTranslations } from "@/lib/i18n/server";
 
-export const metadata = { title: "Nouveau modèle" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return { title: t("portal.templates.editor.title_new") };
+}
 
 export default async function NewTemplatePage() {
   const session = await getSession();

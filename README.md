@@ -1,8 +1,10 @@
 # Invyra
 
 Plateforme de création et d'envoi d'invitations d'événement. L'organisateur
-compose son faire-part en HTML, CSS et JavaScript, l'envoie par email ou
-WhatsApp avec un lien nominatif par invité, et suit les réponses en temps réel.
+choisit un modèle de la galerie, le personnalise sans code (textes, photos,
+couleurs, écran d'ouverture, musique), l'envoie par email ou WhatsApp avec un
+lien nominatif par invité, et suit les ouvertures et les réponses. Les modèles
+eux-mêmes sont écrits en HTML, CSS et JavaScript par les administrateurs.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react)](https://react.dev/)
@@ -116,10 +118,38 @@ L'interface est **sombre uniquement**, assumé : une variante claire crédible
 demanderait sa propre direction artistique.
 
 Utilitaires partagés : `.surface`, `.surface-interactive`, `.rule-gold`,
-`.eyebrow`, `.text-gold`, `.grain`, `.reveal`.
+`.eyebrow`, `.text-gold`, `.text-gold-shimmer`, `.grain`, `.spotlight`,
+`.tilt`, `.border-glow`, `.marquee`.
 
 Les primitives d'écran (`PageHeader`, `StatCard`, `Panel`, `EmptyState`,
-`StatusBadge`) sont dans `components/shell/primitives.jsx`.
+`StatusBadge`, `ProgressRing`, `MiniRsvpBar`) sont dans
+`components/shell/primitives.jsx`.
+
+#### Mouvement
+
+Tout le mouvement est en CSS (`app/globals.css`) ; un seul composant client,
+`components/common/MotionRoot.jsx`, monté dans le layout racine, lui donne ce
+qu'il ne peut pas savoir seul.
+
+- **À l'arrivée** : `animate-rise`, `animate-fade-in`, `animate-scale-in`,
+  `animate-pop`, `animate-draw-x`, `animate-grow-x`, décalés par
+  `--rise-delay`. Ils partent au premier rendu, sans attendre le JavaScript :
+  c'est ce qu'on utilise en haut de page.
+- **Au défilement** : `data-reveal` (variantes `fade`, `scale`, `blur`, `left`,
+  `right`, cascade par `--i`). Masqué seulement si les scripts s'exécutent,
+  avec un filet de sécurité qui révèle tout après 2,5 s. Se pose sur une
+  enveloppe, jamais sur un élément qui a ses propres transitions Tailwind.
+- **Boucles** : `data-loop` met en pause tout ce que le bloc contient quand il
+  sort de l'écran.
+- **Nombres** : `AnimatedNumber` compte de 0 à la valeur en CSS
+  (`@property --n`), utilisable dans un composant serveur.
+- `prefers-reduced-motion` coupe tout ; les scènes en boucle (héros,
+  illustrations) ont un état statique explicite.
+
+Piège connu : dans un dégradé appliqué au texte (`background-clip: text`), ne
+mettez que des `var()`. Une couleur oklch écrite en dur vaut au CSS compilé un
+repli `@supports (color: lab())` qui redéclare le raccourci `background` et
+annule le découpage au texte.
 
 ---
 
@@ -136,7 +166,9 @@ app/                      Routes uniquement (pages, layouts, API) et actions
   api/                    better-auth, envoi de fichiers, tâche planifiée
 components/
   ui/                     Primitives shadcn/ui (seulement celles utilisées)
-  common/                 Partagés partout : sélecteur de langue, pagination
+  common/                 Partagés partout : sélecteur de langue, pagination,
+                          marque, MotionRoot, AnimatedNumber, Countdown, 404
+  dashboard/              Accueil de l'espace : bandeau, premiers pas, activité
   shell/                  Coquille de l'espace connecté : DashboardShell,
                           Sidebar, menus (navigation.js), primitives d'écran
   landing/  auth/  admin/  analytics/  settings/
@@ -160,6 +192,7 @@ lib/
     look.js               Fond et photo d'un modèle (aperçu des liens, e-mails)
     categories.js  code-starter.js
   landing/                Données publiques et événement d'exemple de l'accueil
+  site.js                 Adresse publique, contacts (email, WhatsApp), limites
   auth/  i18n/  email/  prisma.js  utils.js (cn)
 hooks/
 locales/                  Dictionnaires fr / en (mêmes clés)

@@ -1,71 +1,162 @@
 import {
   BarChart3,
-  Code2,
-  Lock,
+  LockKeyhole,
   Mail,
+  MailOpen,
   MousePointerClick,
-  Sparkles,
-  SplitSquareHorizontal,
+  Music2,
+  UserPlus,
   Users,
 } from "lucide-react";
 
 import { getTranslations } from "@/lib/i18n/server";
+import { SITE_URL } from "@/lib/site";
+import {
+  GuestsVisual,
+  MusicVisual,
+  NoCodeVisual,
+  OpeningVisual,
+  PrivacyVisual,
+  SendingVisual,
+  TeamVisual,
+  TrackingVisual,
+} from "@/components/landing/FeatureVisuals";
 
+/**
+ * Grille « bento » : la taille d'une carte suit l'importance de la fonction.
+ * Sur grand écran (4 colonnes) :
+ *
+ *   [ ouverture 2×2 ][ sans code  2 ]
+ *   [               ][musique][invités]
+ *   [ envoi      2 ][ suivi       2 ]
+ *   [ liens      2 ][ à plusieurs 2 ]
+ */
 const FEATURES = [
-  { icon: Code2, key: "ai" },
-  { icon: MousePointerClick, key: "interactive" },
-  { icon: Users, key: "guests" },
-  { icon: Mail, key: "emails" },
-  { icon: BarChart3, key: "analytics" },
-  { icon: SplitSquareHorizontal, key: "preview" },
-  { icon: Sparkles, key: "effects" },
-  { icon: Lock, key: "security" },
+  { key: "opening", icon: MailOpen, span: "md:col-span-2 lg:row-span-2", tall: true },
+  { key: "nocode", icon: MousePointerClick, span: "md:col-span-2" },
+  { key: "music", icon: Music2, span: "" },
+  { key: "guests", icon: UserPlus, span: "" },
+  { key: "sending", icon: Mail, span: "lg:col-span-2" },
+  { key: "tracking", icon: BarChart3, span: "lg:col-span-2" },
+  { key: "privacy", icon: LockKeyhole, span: "lg:col-span-2" },
+  { key: "team", icon: Users, span: "lg:col-span-2" },
 ];
 
 export default async function FeaturesSection() {
   const { t } = await getTranslations();
+  const visual = (key) => t(`landing.features.visual.${key}`);
+  const domain = new URL(SITE_URL).host;
+
+  const visuals = {
+    opening: (
+      <OpeningVisual
+        labels={{
+          envelope: t("portal.editor.options.style.envelope"),
+          seal: t("portal.editor.options.style.seal"),
+          curtain: t("portal.editor.options.style.curtain"),
+        }}
+      />
+    ),
+    music: <MusicVisual />,
+    nocode: (
+      <NoCodeVisual
+        labels={{
+          title: visual("title_label"),
+          typed: visual("typed"),
+          colors: visual("colors_label"),
+        }}
+      />
+    ),
+    guests: <GuestsVisual labels={{ file: visual("csv_file") }} />,
+    sending: (
+      <SendingVisual
+        labels={{
+          email: t("portal.events.details.guests.table.email"),
+          whatsapp: t("portal.events.details.guests.table.whatsapp"),
+        }}
+      />
+    ),
+    tracking: (
+      <TrackingVisual
+        labels={{ opened: visual("opened"), confirmed: visual("confirmed") }}
+      />
+    ),
+    privacy: (
+      <PrivacyVisual
+        labels={{ preview: visual("preview_title") }}
+        domain={domain}
+      />
+    ),
+    team: (
+      <TeamVisual
+        labels={{
+          editor: t("portal.events.details.role_editor"),
+          viewer: t("portal.events.details.role_viewer"),
+        }}
+      />
+    ),
+  };
 
   return (
     <section
       id="features"
-      className="scroll-mt-16 border-t border-border/60 px-4 py-24 sm:px-6 lg:px-8 lg:py-32"
+      aria-labelledby="features-title"
+      className="relative scroll-mt-20 border-t border-border/60 px-4 py-24 sm:px-6 lg:px-8 lg:py-32"
     >
       <div className="mx-auto max-w-7xl">
-        <header className="reveal mx-auto max-w-2xl text-center">
-          <h2 className="text-balance text-4xl leading-tight text-ink-50 sm:text-5xl">
+        <header data-reveal className="mx-auto max-w-2xl text-center">
+          <p className="eyebrow text-gold/80">{t("landing.features.eyebrow")}</p>
+          <h2
+            id="features-title"
+            className="mt-4 text-4xl leading-tight text-balance text-ink-50 sm:text-5xl"
+          >
             {t("landing.features.title")}
             <em className="text-gold not-italic">
               {t("landing.features.title_highlight")}
             </em>
           </h2>
           <hr className="rule-gold mx-auto mt-7 w-24" />
-          <p className="mt-7 text-pretty text-lg leading-relaxed text-ink-300">
+          <p className="mt-7 text-lg leading-relaxed text-pretty text-ink-300">
             {t("landing.features.subtitle")}
           </p>
         </header>
 
-        {/* Une grille tenue par des filets plutôt que par huit cartes : le
-            registre éditorial supporte mal l'empilement de boîtes. Le fond de
-            grille est la couleur de bordure, chaque cellule repeint le fond. */}
-        <div className="reveal mt-16 grid gap-px overflow-hidden rounded-lg border border-border/60 bg-border/60 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((feature) => (
-            <article
+        <ul className="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+          {FEATURES.map((feature, index) => (
+            <li
               key={feature.key}
-              className="group bg-background p-7 transition-colors duration-300 hover:bg-ink-850"
+              data-reveal="scale"
+              style={{ "--i": index % 4 }}
+              className={feature.span}
             >
-              <feature.icon
-                className="h-5 w-5 text-gold transition-transform duration-300 group-hover:-translate-y-0.5"
-                strokeWidth={1.5}
-              />
-              <h3 className="mt-5 text-lg leading-snug text-ink-50">
-                {t(`landing.features.items.${feature.key}.title`)}
-              </h3>
-              <p className="mt-2.5 text-sm leading-relaxed text-ink-300">
-                {t(`landing.features.items.${feature.key}.desc`)}
-              </p>
-            </article>
+              <article className="group spotlight surface-interactive flex h-full flex-col overflow-hidden rounded-xl">
+                <div
+                  className={`border-b border-border/50 bg-ink-900/40 ${
+                    feature.tall ? "min-h-56 flex-1 lg:min-h-0" : "h-44"
+                  }`}
+                >
+                  {visuals[feature.key]}
+                </div>
+                <div className="p-6">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-gold/25 bg-gold/5 transition-colors duration-300 group-hover:border-gold/50 group-hover:bg-gold/10">
+                      <feature.icon
+                        className="h-4 w-4 text-gold transition-transform duration-500 group-hover:scale-110"
+                        strokeWidth={1.6}
+                      />
+                    </span>
+                    <h3 className="text-lg leading-snug text-ink-50">
+                      {t(`landing.features.items.${feature.key}.title`)}
+                    </h3>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-pretty text-ink-300">
+                    {t(`landing.features.items.${feature.key}.desc`)}
+                  </p>
+                </div>
+              </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

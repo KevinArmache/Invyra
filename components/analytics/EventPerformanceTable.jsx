@@ -10,7 +10,8 @@ import Link from "next/link";
  * qu'un nombre.
  *
  * Les colonnes numériques sont en chiffres tabulaires pour rester alignées
- * d'une ligne à l'autre.
+ * d'une ligne à l'autre. Les lignes arrivent en cascade et chaque jauge se
+ * remplit jusqu'à sa valeur ; le pourcentage écrit à côté reste la source.
  */
 export default function EventPerformanceTable({ events, locale, t }) {
   return (
@@ -37,18 +38,22 @@ export default function EventPerformanceTable({ events, locale, t }) {
         </thead>
 
         <tbody className="divide-y divide-border/60">
-          {events.map((event) => {
+          {events.map((event, index) => {
             const guests = Number(event.guest_count) || 0;
             const views = Number(event.viewed_count) || 0;
             const confirmed = Number(event.confirmed_count) || 0;
             const rate = guests > 0 ? Math.round((confirmed / guests) * 100) : 0;
 
             return (
-              <tr key={event.id} className="transition-colors hover:bg-ink-800/40">
+              <tr
+                key={event.id}
+                className="animate-rise group transition-colors duration-300 hover:bg-ink-800/40"
+                style={{ "--rise-delay": `${Math.min(index, 10) * 50}ms` }}
+              >
                 <th scope="row" className="max-w-xs px-5 py-3.5 text-left font-normal">
                   <Link
                     href={`/dashboard/events/${event.id}`}
-                    className="block truncate text-ink-100 transition-colors hover:text-gold"
+                    className="block truncate text-ink-100 transition-colors group-hover:text-gold"
                   >
                     {event.title}
                   </Link>
@@ -83,8 +88,11 @@ export default function EventPerformanceTable({ events, locale, t }) {
                       aria-label={`${rate}%`}
                     >
                       <div
-                        className="h-full rounded-full bg-gold"
-                        style={{ width: `${rate}%` }}
+                        className="animate-grow-x h-full rounded-full bg-gold"
+                        style={{
+                          width: `${rate}%`,
+                          "--rise-delay": `${200 + Math.min(index, 10) * 60}ms`,
+                        }}
                       />
                     </div>
                     <span data-numeric className="text-ink-100">

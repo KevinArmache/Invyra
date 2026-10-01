@@ -9,9 +9,10 @@ import {
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { nanoid } from "nanoid";
 import { sendInvitationEmail, sendBulkInvitationEmails } from "./notify";
+import { FREE_GUEST_LIMIT } from "@/lib/site";
 
 const GUEST_LIMITS = {
-  free: 15,
+  free: FREE_GUEST_LIMIT,
   premium: Infinity,
 };
 
@@ -74,7 +75,7 @@ export async function addGuest(eventId, data) {
 
       if (guestCount >= limit) {
         throw new Error(
-          "Limite atteinte : passez au premium pour ajouter plus d'invités.",
+          `L'offre Découverte est limitée à ${FREE_GUEST_LIMIT} invités. Passez à l'Événement premium pour en ajouter d'autres.`,
         );
       }
     }

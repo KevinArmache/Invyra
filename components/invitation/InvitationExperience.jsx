@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { updateRsvpStatus } from "@/app/actions/invitation";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
+import { useTranslation } from "@/lib/i18n/Context";
 
 /**
  * L'invitation telle que la voit l'invité, en plein écran.
@@ -28,6 +29,7 @@ export default function InvitationExperience({
   guest,
   background = "#0a0a0a",
 }) {
+  const { t } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
   // Figé au premier rendu : l'invitation affiche elle-même la réponse de
   // l'invité. Si ces données changeaient, le document serait reconstruit et
@@ -42,10 +44,10 @@ export default function InvitationExperience({
         await updateRsvpStatus(token, payload);
       } catch (caught) {
         console.error("RSVP failed:", caught);
-        toast.error("Votre réponse n'a pas pu être enregistrée. Réessayez.");
+        toast.error(t("invite.rsvp_error"));
       }
     },
-    [token],
+    [token, t],
   );
 
   useEffect(() => {
@@ -92,12 +94,17 @@ export default function InvitationExperience({
         className="flex min-h-dvh flex-col items-center justify-center px-8 text-center text-white/60"
         style={{ background }}
       >
-        <p className="font-display text-2xl text-white/90">
-          Invitation en cours de préparation
+        <span aria-hidden="true" className="animate-breathe mb-8 block">
+          <span className="animate-draw-x block h-px w-16 bg-[#e2b963]/70" />
+        </span>
+        <p className="animate-rise font-display text-2xl text-white/90">
+          {t("invite.preparing_title")}
         </p>
-        <p className="mt-3 max-w-sm text-sm leading-relaxed">
-          L&apos;organisateur n&apos;a pas encore choisi le modèle de cette
-          invitation.
+        <p
+          className="animate-rise mt-3 max-w-sm text-sm leading-relaxed"
+          style={{ "--rise-delay": "120ms" }}
+        >
+          {t("invite.preparing_desc")}
         </p>
       </main>
     );
@@ -111,7 +118,7 @@ export default function InvitationExperience({
         event={event}
         guestName={guest.name}
         rsvpData={initialRsvp}
-        title={`Invitation : ${event.title}`}
+        title={t("invite.frame_title").replace("{title}", event.title)}
         onLoad={() => setIsLoaded(true)}
         // Invisible, l'invitation ne reçoit pas les touchers : sinon un
         // invité impatient ouvrirait l'enveloppe sans la voir.
@@ -128,7 +135,7 @@ export default function InvitationExperience({
           isLoaded ? "opacity-0" : "opacity-100"
         }`}
       >
-        <span className="sr-only">Chargement de votre invitation</span>
+        <span className="sr-only">{t("invite.loading")}</span>
         <span className="block h-px w-16 animate-pulse bg-[#e2b963]/70" />
       </div>
     </main>

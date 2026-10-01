@@ -124,16 +124,22 @@ export default function EventTemplateEditor({
         <div className="min-w-0">
           <Link
             href={`/dashboard/events/${event.id}`}
-            className="inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-foreground"
+            className="animate-fade-in group inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-foreground"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
             {event.title}
           </Link>
-          <h1 className="mt-2 text-2xl leading-tight text-ink-50 sm:text-3xl">
+          <h1 className="animate-rise mt-2 text-2xl leading-tight text-ink-50 sm:text-3xl">
             {t("portal.events.edit.configure_invitation")}
           </h1>
-          <hr className="rule-gold-left mt-3 w-14" />
-          <p className="mt-3 flex max-w-xl items-start gap-2 text-sm leading-relaxed text-ink-400">
+          <hr
+            className="rule-gold-left animate-draw-x mt-3 w-14"
+            style={{ "--rise-delay": "150ms" }}
+          />
+          <p
+            className="animate-rise mt-3 flex max-w-xl items-start gap-2 text-sm leading-relaxed text-ink-400"
+            style={{ "--rise-delay": "100ms" }}
+          >
             <Info className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
             <span>
               {t("portal.events.edit.copy_notice")}
@@ -213,8 +219,12 @@ export default function EventTemplateEditor({
           </Tabs>
         </div>
 
-        <div className="surface flex min-h-[32rem] items-center justify-center overflow-hidden p-4 sm:p-6 lg:min-h-0">
-          <div className="relative aspect-3/4 h-full max-h-full w-full max-w-[560px] overflow-hidden rounded-md border border-border/60 bg-ink-900 shadow-elevation-3">
+        <div className="surface relative flex min-h-[32rem] items-center justify-center overflow-hidden rounded-xl p-4 sm:p-6 lg:min-h-0">
+          <div
+            aria-hidden="true"
+            className="glow-gold animate-breathe pointer-events-none absolute inset-0"
+          />
+          <div className="animate-scale-in relative aspect-3/4 h-full max-h-full w-full max-w-[560px] overflow-hidden rounded-[1.4rem] border border-ink-600 bg-ink-900 shadow-elevation-3 ring-1 ring-gold/10">
             {template ? (
               <LivePreview
                 template={template}

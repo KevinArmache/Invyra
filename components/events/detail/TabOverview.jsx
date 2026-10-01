@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Check, Copy, LayoutTemplate } from "lucide-react";
+import { Check, Copy, LayoutTemplate, Palette } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { EmptyState, Panel } from "@/components/shell/primitives";
 import RsvpBreakdown from "@/components/analytics/RsvpBreakdown";
+import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { useTranslation } from "@/lib/i18n/Context";
 
@@ -25,10 +26,10 @@ function countByStatus(guests) {
 }
 
 /** Champ de résumé : n'affiche rien si la valeur est vide. */
-function SummaryField({ label, children }) {
+function SummaryField({ label, children, index = 0 }) {
   if (!children) return null;
   return (
-    <div>
+    <div className="animate-rise" style={{ "--rise-delay": `${200 + index * 70}ms` }}>
       <dt className="eyebrow">{label}</dt>
       <dd className="mt-2 text-sm leading-relaxed text-ink-100">{children}</dd>
     </div>
@@ -41,9 +42,10 @@ export default function TabOverview({ event, guests, sampleEvent }) {
 
   const counts = countByStatus(guests);
 
-  async function copyPublicLink() {
+  async function copyPageLink() {
     // Il n'existe pas de lien public unique : chaque invité a son jeton. On
-    // copie donc l'adresse de l'espace de gestion, pas une fausse invitation.
+    // copie donc l'adresse de cette page de gestion, utile à un
+    // collaborateur, et le libellé le dit.
     const url = `${window.location.origin}/dashboard/events/${event.id}`;
     try {
       await navigator.clipboard.writeText(url);
@@ -61,19 +63,27 @@ export default function TabOverview({ event, guests, sampleEvent }) {
         <RsvpBreakdown counts={counts} total={guests.length} t={t} />
       </Panel>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
         {/* « Personnaliser l'invitation » est déjà le bouton principal de
-            l'en-tête de la page : pas de doublon ici. */}
-        <Panel title={t("portal.events.details.overview.active_template")}>
+            l'en-tête de la page : ici, un simple rappel sous l'aperçu. */}
+        <Panel title={t("portal.events.details.overview.active_template")} delay={100}>
           {event.invitationTemplate ? (
             <div className="p-5">
-              <div className="relative h-64 overflow-hidden rounded-md border border-border/60 bg-ink-900">
+              <DeviceFrame className="max-w-[15rem]">
                 <InvitationPreview
                   template={event.invitationTemplate}
                   event={sampleEvent}
-                  guestName="Exemple Invité"
+                  guestName={t("landing.hero.scene.guest")}
                   readOnly
                 />
+              </DeviceFrame>
+              <div className="mt-5 text-center">
+                <Button asChild variant="outline" size="sm" className="group">
+                  <Link href={`/dashboard/events/${event.id}/template`}>
+                    <Palette className="transition-transform duration-500 group-hover:-rotate-12" />
+                    {t("portal.events.details.actions.customize_invitation")}
+                  </Link>
+                </Button>
               </div>
             </div>
           ) : (
@@ -92,30 +102,38 @@ export default function TabOverview({ event, guests, sampleEvent }) {
         </Panel>
 
         <Panel
-          title={t("portal.events.details.tabs.overview")}
+          delay={160}
+          title={t("portal.events.details.overview.summary")}
           action={
-            <Button variant="ghost" size="sm" onClick={copyPublicLink}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={copyPageLink}
+              title={t("portal.events.details.overview.copy_link_hint")}
+            >
               {copied ? (
-                <Check className="mr-1.5 h-3.5 w-3.5 text-positive" />
+                <Check className="animate-pop h-3.5 w-3.5 text-positive" />
               ) : (
-                <Copy className="mr-1.5 h-3.5 w-3.5" />
+                <Copy className="h-3.5 w-3.5" />
               )}
               {t("portal.events.details.overview.copy_link")}
             </Button>
           }
         >
           <dl className="space-y-6 p-5">
-            <SummaryField label={t("portal.events.new.labels.description")}>
+            <SummaryField index={0} label={t("portal.events.new.labels.description")}>
               {event.description}
             </SummaryField>
 
-            <SummaryField label={t("portal.events.new.labels.dress_code")}>
+            <SummaryField index={1} label={t("portal.events.new.labels.dress_code")}>
               {event.dressCode}
             </SummaryField>
 
-            <SummaryField label={t("portal.events.details.overview.message")}>
+            <SummaryField index={2} label={t("portal.events.details.overview.message")}>
               {event.customMessage && (
-                <span className="italic">« {event.customMessage} »</span>
+                <span className="block border-l-2 border-gold/50 pl-4 font-display text-base italic">
+                  « {event.customMessage} »
+                </span>
               )}
             </SummaryField>
 

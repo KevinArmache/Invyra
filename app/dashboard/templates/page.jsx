@@ -9,7 +9,10 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shell/primitives";
 import TemplatesBrowser from "@/components/templates/TemplatesBrowser";
 
-export const metadata = { title: "Modèles" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return { title: t("portal.templates.list.title") };
+}
 
 /**
  * Galerie des modèles, paginée. Filtre et recherche vivent dans l'URL
@@ -30,13 +33,18 @@ export default async function TemplatesPage({ searchParams }) {
     <>
       <PageHeader
         title={t("portal.templates.list.title")}
-        subtitle={t("portal.templates.list.subtitle")}
+        // Les clients choisissent un modèle ; seuls les admins en créent.
+        subtitle={t(
+          user.role === "admin"
+            ? "portal.templates.list.subtitle_admin"
+            : "portal.templates.list.subtitle",
+        )}
         action={
           // La création de modèles est réservée aux administrateurs.
           user.role === "admin" ? (
-            <Button asChild size="lg">
+            <Button asChild size="lg" className="group">
               <Link href="/dashboard/templates/new">
-                <Plus size={18} className="mr-2" />
+                <Plus size={18} className="transition-transform duration-300 group-hover:rotate-90" />
                 {t("portal.templates.list.new_btn")}
               </Link>
             </Button>

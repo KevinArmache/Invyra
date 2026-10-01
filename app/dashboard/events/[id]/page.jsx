@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getEventById } from "@/app/actions/event";
 import { getGuests } from "@/app/actions/guest";
 import { getCollaborators } from "@/app/actions/collaborator";
+import { countdownTarget } from "@/lib/invitation/document";
+import { getTranslations } from "@/lib/i18n/server";
 import EventDetailView from "@/components/events/detail/EventDetailView";
 
 export async function generateMetadata({ params }) {
@@ -11,8 +13,14 @@ export async function generateMetadata({ params }) {
     const event = await getEventById(id);
     return { title: event.title };
   } catch {
-    return { title: "Événement" };
+    const { t } = await getTranslations();
+    return { title: t("portal.sidebar.events") };
   }
+}
+
+/** Heure de la requête : une donnée, comme la session (voir le tableau de bord). */
+function requestTime() {
+  return Date.now();
 }
 
 export default async function EventDetailPage({ params }) {
@@ -34,11 +42,18 @@ export default async function EventDetailPage({ params }) {
     notFound();
   }
 
+  // Compte à rebours seulement pour un événement daté, pas encore passé.
+  const now = requestTime();
+  const target = countdownTarget(data.event);
+  const countdown =
+    target && new Date(target).getTime() > now ? { target, now } : null;
+
   return (
     <EventDetailView
       event={data.event}
       guests={data.guests}
       collaborators={data.collaborators}
+      countdown={countdown}
     />
   );
 }

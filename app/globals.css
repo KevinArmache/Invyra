@@ -40,6 +40,7 @@
   --gold-bright: oklch(0.875 0.095 88); /* survol, reflets */
   --gold: oklch(0.805 0.115 84); /* champagne, couleur de marque */
   --gold-deep: oklch(0.665 0.125 70); /* dégradés, texte sur clair */
+  --gold-glint: oklch(0.96 0.045 92); /* reflet qui traverse le texte or */
 
   /* ── États ──────────────────────────────────────────────────────────── */
   --positive: oklch(0.755 0.145 155);
@@ -103,6 +104,31 @@
   --elevation-1: 0 1px 2px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(1 0 0 / 0.03);
   --elevation-2: 0 4px 16px -4px oklch(0 0 0 / 0.5), inset 0 1px 0 oklch(1 0 0 / 0.04);
   --elevation-3: 0 16px 48px -12px oklch(0 0 0 / 0.65), inset 0 1px 0 oklch(1 0 0 / 0.05);
+
+  /* ── Mouvement ──────────────────────────────────────────────────────────
+     Une sortie très amortie pour presque tout : l'élément arrive vite et se
+     pose lentement, ce qui se lit comme du poids plutôt que de l'agitation.
+     Le ressort est réservé aux petites confirmations (une coche, un badge). */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Écart entre deux éléments d'une cascade (voir data-reveal et --i). */
+  --stagger: 80ms;
+}
+
+/* Propriétés typées : sans elles, un angle ou un entier ne s'interpolent pas
+   et l'animation saute d'une valeur à l'autre. */
+@property --angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --n {
+  syntax: '<integer>';
+  inherits: false;
+  initial-value: 0;
 }
 
 @theme inline {
@@ -330,6 +356,174 @@
       transparent 70%
     );
   }
+
+  /* ── Texte or animé ──────────────────────────────────────────────────
+     Le même or que .text-gold, traversé de temps en temps par un reflet
+     plus clair. Le reflet passe puis se repose : un balayage continu
+     fatiguerait l'œil. */
+  .text-gold-shimmer {
+    /* Que des var() dans ce dégradé : une couleur oklch écrite en dur
+       vaudrait au CSS compilé un repli @supports (color: lab()) qui
+       redéclare le raccourci `background`, remet background-clip à
+       border-box, et le dégradé recouvrirait tout le bloc au lieu du seul
+       texte. */
+    background: linear-gradient(
+      110deg,
+      var(--gold-deep) 0%,
+      var(--gold) 28%,
+      var(--gold-bright) 44%,
+      var(--gold-glint) 50%,
+      var(--gold-bright) 56%,
+      var(--gold) 72%,
+      var(--gold-deep) 100%
+    );
+    background-size: 260% 100%;
+    background-position: 100% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--gold);
+    animation: gold-sweep 7s var(--ease-in-out) 1.2s infinite;
+  }
+
+  /* ── Halo qui suit le pointeur ───────────────────────────────────────
+     MotionRoot pose --mx et --my (en px) sur l'élément survolé. Le halo
+     est peint entre le fond de la carte et son contenu (z-index négatif
+     dans le contexte isolé de la carte). */
+  .spotlight {
+    position: relative;
+    isolation: isolate;
+  }
+  .spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, -30%),
+      color-mix(in oklch, var(--gold) 11%, transparent),
+      transparent 62%
+    );
+    opacity: 0;
+    transition: opacity 450ms ease;
+  }
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  /* ── Inclinaison au survol ───────────────────────────────────────────
+     --rx et --ry viennent de MotionRoot. `transform` reste libre pour
+     l'inclinaison : les translations de Tailwind passent par la propriété
+     `translate`, elles se composent avec. */
+  .tilt {
+    transform: perspective(1000px) rotateX(var(--rx, 0deg))
+      rotateY(var(--ry, 0deg));
+    /* Reprend les transitions de .surface-interactive, que celle-ci
+       remplacerait sinon (même couche, déclarée après). */
+    transition:
+      transform 600ms var(--ease-out-expo),
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      background-color 200ms ease;
+  }
+
+  /* ── Bordure qui tourne ──────────────────────────────────────────────
+     Un arc d'or fait le tour de la carte mise en avant. Le masque ne garde
+     que l'épaisseur du bord. */
+  .border-glow {
+    position: relative;
+    isolation: isolate;
+  }
+  .border-glow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: 1;
+    padding: 1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: conic-gradient(
+      from var(--angle),
+      transparent 0deg,
+      color-mix(in oklch, var(--gold) 90%, transparent) 50deg,
+      transparent 110deg,
+      transparent 180deg,
+      color-mix(in oklch, var(--gold) 45%, transparent) 230deg,
+      transparent 290deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-spin 7s linear infinite;
+  }
+
+  /* ── Bandeau défilant ────────────────────────────────────────────────
+     La piste contient deux copies de la liste : à -50 %, la seconde a pris
+     exactement la place de la première, la boucle ne se voit pas. */
+  .marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 12%,
+      black 88%,
+      transparent
+    );
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee var(--marquee-duration, 45s) linear infinite;
+  }
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* ── Poussière d'or ──────────────────────────────────────────────────
+     Positions, tailles et durées fixées par l'appelant (Particles). */
+  .particle {
+    position: absolute;
+    border-radius: 999px;
+    background: var(--gold-bright);
+    box-shadow: 0 0 8px color-mix(in oklch, var(--gold) 70%, transparent);
+    opacity: 0;
+    pointer-events: none;
+    animation: particle-rise var(--dur, 10s) linear var(--delay, 0s) infinite;
+  }
+
+  /* ── Mot révélé ──────────────────────────────────────────────────────
+     Chaque mot glisse depuis le bas de sa propre fenêtre. Le débord
+     vertical laisse la place aux accents et aux jambages de la serif. */
+  .word-mask {
+    display: inline-block;
+    overflow: hidden;
+    padding: 0.14em 0.04em 0.1em;
+    margin: -0.14em -0.04em -0.1em;
+    vertical-align: top;
+  }
+  .word-mask > span {
+    display: inline-block;
+    animation: word-rise 1100ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i, 0) * 70ms + var(--word-delay, 100ms));
+  }
+
+  /* ── Compteur ────────────────────────────────────────────────────────
+     Un entier qui monte de 0 à --to, sans JavaScript : --n est une
+     propriété typée, interpolée par le navigateur, affichée par counter().
+     Voir AnimatedNumber, qui double la valeur pour les lecteurs d'écran. */
+  .count-up {
+    --n: var(--to, 0);
+    counter-reset: n var(--n);
+    animation: count-up var(--count-duration, 1600ms) var(--ease-out-expo)
+      var(--count-delay, 150ms) both;
+  }
+  .count-up::after {
+    content: counter(n);
+  }
 }
 
 @layer utilities {
@@ -405,23 +599,6 @@
   animation-delay: var(--rise-delay, 0ms);
 }
 
-/* Révélation au défilement, sans une ligne de JavaScript.
-   `animation-timeline: view()` accroche l'animation à la position de
-   l'élément dans la fenêtre. Là où ce n'est pas encore implémenté (Firefox à
-   ce jour), la règle entière est ignorée et le contenu s'affiche simplement :
-   c'est la bonne dégradation. Une bibliothèque d'animation ferait l'inverse —
-   elle poserait opacity:0 au rendu serveur et laisserait la section vide si le
-   script ne s'exécute pas. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 50%;
-    }
-  }
-}
-
 .animate-breathe {
   animation: breathe 5s ease-in-out infinite;
 }
@@ -442,7 +619,294 @@
   border-radius: var(--radius-sm);
 }
 
-/* Quiconque a demandé moins d'animation n'en reçoit aucune. */
+/* ── Keyframes partagées ──────────────────────────────────────────────── */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+@keyframes word-rise {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+}
+
+/* Filets qui se tracent depuis leur origine (transform-origin de l'élément). */
+@keyframes draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes draw-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Halos de fond : une dérive lente, presque imperceptible. */
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+  }
+}
+
+@keyframes gold-sweep {
+  0% {
+    background-position: 100% 50%;
+  }
+  45%,
+  100% {
+    background-position: -60% 50%;
+  }
+}
+
+@keyframes border-spin {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* Anneau qui s'élargit et s'efface (pastilles, points d'état). */
+@keyframes ring-out {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+/* Petite confirmation : l'élément arrive un peu trop grand puis se pose. */
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes particle-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  15%,
+  80% {
+    opacity: var(--particle-opacity, 0.55);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift-x, 12px), -140px, 0);
+  }
+}
+
+@keyframes count-up {
+  from {
+    --n: 0;
+  }
+}
+
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: var(--dash, 24);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes reveal-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ── Utilitaires d'animation ──────────────────────────────────────────── */
+
+.animate-page-in {
+  animation: page-in 600ms var(--ease-out-expo) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 700ms var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+.animate-scale-in {
+  animation: scale-in 700ms var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+.animate-pop {
+  animation: pop 520ms var(--ease-spring) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-drift {
+  animation: drift 18s ease-in-out infinite;
+}
+
+/* Filet or qui se trace de gauche à droite à l'arrivée. */
+.animate-draw-x {
+  transform-origin: left center;
+  animation: draw-x 1100ms var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+/* Barre de progression ou segment qui pousse depuis la gauche. */
+.animate-grow-x {
+  transform-origin: left center;
+  animation: grow-x 1200ms var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+/* Anneau d'appel autour d'une pastille (le parent doit être positionné).
+   --ring-delay décale plusieurs anneaux concentriques. */
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid color-mix(in oklch, var(--gold) 55%, transparent);
+  pointer-events: none;
+  animation: ring-out 2.4s var(--ease-out-quart) var(--ring-delay, 0s)
+    infinite;
+}
+
+/* ── Révélation au défilement ─────────────────────────────────────────────
+   Un élément marqué `data-reveal` apparaît quand il entre dans la fenêtre :
+   MotionRoot lui pose `data-visible` (un attribut, que React ne touche pas
+   lors d'un nouveau rendu, contrairement à className). Variantes : fade,
+   scale, blur, left, right. `--i` décale les éléments d'une même cascade.
+
+   Le contenu n'est masqué que si le navigateur exécute des scripts : sans
+   JavaScript, tout reste visible. Et si le script tarde (hydratation lente,
+   erreur), un filet de sécurité révèle tout au bout de 2,5 s.
+
+   Convention : `data-reveal` se pose sur un enveloppe, jamais sur un élément
+   qui porte ses propres transitions Tailwind (la règle ci-dessous, hors
+   couche, l'emporterait sur elles). */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 28px, 0);
+    transition:
+      opacity 900ms var(--ease-out-expo),
+      transform 1000ms var(--ease-out-expo),
+      filter 900ms var(--ease-out-expo);
+    transition-delay: calc(
+      var(--i, 0) * var(--stagger) + var(--reveal-delay, 0ms)
+    );
+  }
+  [data-reveal='fade'] {
+    transform: none;
+  }
+  [data-reveal='scale'] {
+    transform: scale(0.94);
+  }
+  [data-reveal='blur'] {
+    transform: translate3d(0, 12px, 0);
+    filter: blur(12px);
+  }
+  [data-reveal='left'] {
+    transform: translate3d(-40px, 0, 0);
+  }
+  [data-reveal='right'] {
+    transform: translate3d(40px, 0, 0);
+  }
+  [data-reveal][data-visible] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  html:not([data-motion='ready']) [data-reveal] {
+    animation: reveal-failsafe 600ms var(--ease-out-expo) 2.5s forwards;
+  }
+
+  /* Ce qui vit dans un bloc pas encore révélé attend son tour : compteurs,
+     barres et filets ne partent qu'avec lui. Seulement une fois MotionRoot
+     en place : sans lui, rien ne viendrait les relancer. */
+  html[data-motion='ready'] [data-reveal]:not([data-visible]) :is(
+      .count-up,
+      .animate-grow-x,
+      .animate-draw-x,
+      .animate-pop,
+      [data-reveal-child]
+    ) {
+    animation-play-state: paused;
+  }
+}
+
+/* Boucles infinies hors écran : MotionRoot pose data-inview="false" sur les
+   blocs marqués data-loop, et tout ce qu'ils contiennent s'arrête. */
+[data-loop][data-inview='false'],
+[data-loop][data-inview='false'] *,
+[data-loop][data-inview='false'] *::before,
+[data-loop][data-inview='false'] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Quiconque a demandé moins d'animation n'en reçoit aucune : chaque
+   animation saute à son état final, délais compris. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -451,7 +915,68 @@
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
   }
+}
+
+/* ── Espace connecté ──────────────────────────────────────────────────── */
+
+/* Repère vertical (menu actif) qui se déplie depuis son centre. */
+.animate-draw-y {
+  transform-origin: center;
+  animation: draw-y 500ms var(--ease-out-expo) both;
+}
+
+/* Anneau de progression : le trait se dessine jusqu'à sa valeur.
+   --ring-circ est la circonférence, posée par ProgressRing. */
+@keyframes ring-fill {
+  from {
+    stroke-dashoffset: var(--ring-circ);
+  }
+}
+
+.animate-ring-fill {
+  animation: ring-fill 1400ms var(--ease-out-expo) both;
+  animation-delay: var(--rise-delay, 0ms);
+}
+
+/* Infobulle d'un segment de graphique : la valeur d'abord, au survol comme
+   au clavier. Elle complète la légende, qui donne déjà toutes les valeurs. */
+.chart-tip {
+  position: relative;
+  outline: none;
+}
+.chart-tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  z-index: 20;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--popover);
+  box-shadow: var(--elevation-2);
+  color: var(--ink-50);
+  font-size: 0.75rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition:
+    opacity 200ms ease,
+    transform 200ms var(--ease-out-expo);
+}
+.chart-tip:hover::after,
+.chart-tip:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.chart-tip:focus-visible > * {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }

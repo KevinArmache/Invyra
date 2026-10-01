@@ -2,8 +2,10 @@ import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
 import { I18nProvider } from "@/lib/i18n/Context";
-import { getLocale, getDictionary } from "@/lib/i18n/server";
+import { getLocale, getDictionary, getTranslations } from "@/lib/i18n/server";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { Toaster } from "@/components/ui/sonner";
+import MotionRoot from "@/components/common/MotionRoot";
 
 import "./globals.css";
 
@@ -30,48 +32,57 @@ const fraunces = Fraunces({
   axes: ["SOFT", "WONK", "opsz"],
 });
 
-export const metadata = {
-  metadataBase: process.env.NEXT_PUBLIC_APP_URL
-    ? new URL(process.env.NEXT_PUBLIC_APP_URL)
-    : undefined,
-  title: {
-    default: "Invyra — Invitations d'événement sur mesure",
-    template: "%s · Invyra",
-  },
-  description:
-    "Composez des invitations en HTML, CSS et JavaScript, envoyez-les par email ou WhatsApp, et suivez les réponses en temps réel.",
-  applicationName: "Invyra",
-  keywords: [
-    "invitation",
-    "événement",
-    "RSVP",
-    "mariage",
-    "HTML",
-    "faire-part",
-    "gestion d'invités",
-  ],
-  authors: [{ name: "Invyra" }],
-  openGraph: {
-    title: "Invyra — Invitations d'événement sur mesure",
-    description:
-      "Composez des invitations en HTML, CSS et JavaScript, et suivez les réponses en temps réel.",
-    type: "website",
-    siteName: "Invyra",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Invyra — Invitations d'événement sur mesure",
-    description:
-      "Composez des invitations en HTML, CSS et JavaScript, et suivez les réponses en temps réel.",
-  },
-  // favicon.ico (16, 32 et 48 px) et apple-icon.png (180 px) sont tirés du
-  // logo ; logo-favicon.png, en 1536 × 1024, est bien trop lourd pour un
-  // onglet.
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-icon.png",
-  },
-};
+/**
+ * Métadonnées par défaut, dans la langue du visiteur. Chaque page publique
+ * précise son titre ; les pages privées ne sont pas indexées (voir les
+ * layouts dashboard et admin). L'image de partage vient de
+ * app/opengraph-image.jsx.
+ */
+export async function generateMetadata() {
+  const { t, locale } = await getTranslations();
+  const title = t("landing.meta.title");
+  const description = t("landing.meta.description");
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: title,
+      template: `%s · ${SITE_NAME}`,
+    },
+    description,
+    applicationName: SITE_NAME,
+    keywords: [
+      "invitation numérique",
+      "faire-part",
+      "invitation mariage",
+      "RSVP",
+      "gestion d'invités",
+      "invitation WhatsApp",
+      "digital invitation",
+    ],
+    authors: [{ name: SITE_NAME }],
+    formatDetection: { telephone: false },
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      siteName: SITE_NAME,
+      locale: locale === "fr" ? "fr_FR" : "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    // favicon.ico (16, 32 et 48 px) et apple-icon.png (180 px) sont tirés du
+    // logo ; logo-favicon.png, en 1536 × 1024, est bien trop lourd pour un
+    // onglet.
+    icons: {
+      icon: "/favicon.ico",
+      apple: "/apple-icon.png",
+    },
+  };
+}
 
 export const viewport = {
   themeColor: "#232020",
@@ -94,6 +105,7 @@ export default async function RootLayout({ children }) {
         <I18nProvider locale={locale} dictionary={dictionary}>
           {children}
           <Toaster position="top-center" richColors closeButton />
+          <MotionRoot />
           <Analytics />
         </I18nProvider>
       </body>

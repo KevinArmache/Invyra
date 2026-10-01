@@ -1,12 +1,13 @@
 import { cache } from "react";
 import { headers } from "next/headers";
-import { XCircle } from "lucide-react";
+import { MailX } from "lucide-react";
 
 import { getInvitationByToken } from "@/app/actions/invitation";
 import InvitationExperience from "@/components/invitation/InvitationExperience";
 import InvitationUnavailable from "@/components/invitation/InvitationUnavailable";
 import { toEditableConfig } from "@/lib/templates/validation";
 import { templateLook as lookOf } from "@/lib/templates/look";
+import { getTranslations } from "@/lib/i18n/server";
 
 /**
  * Robots qui génèrent l'aperçu d'un lien partagé (WhatsApp, iMessage,
@@ -62,16 +63,19 @@ function templateLook(invitation) {
 
 export async function generateMetadata({ params }) {
   const { token } = await params;
-  const { invitation } = await loadInvitation(token);
+  const [{ invitation }, { t }] = await Promise.all([
+    loadInvitation(token),
+    getTranslations(),
+  ]);
 
   // Une invitation est nominative : elle ne doit jamais être indexée.
   const robots = { index: false, follow: false };
-  if (!invitation) return { title: "Invitation", robots };
+  if (!invitation) return { title: t("invite.meta_title"), robots };
 
   const { event, guest } = invitation;
   const { image } = templateLook(invitation);
-  const title = `${event.title} · Invitation`;
-  const description = `${guest.name}, vous êtes invité(e). Ouvrez votre invitation et confirmez votre présence.`;
+  const title = `${event.title} · ${t("invite.meta_title")}`;
+  const description = t("invite.meta_description").replace("{name}", guest.name);
 
   return {
     title: { absolute: title },
@@ -99,12 +103,29 @@ export default async function InvitationPage({ params }) {
   if (failed) return <InvitationUnavailable />;
 
   if (!invitation) {
+    const { t } = await getTranslations();
     return (
       <main className="flex min-h-dvh flex-col items-center justify-center bg-[#0a0a0a] px-6 text-center">
-        <XCircle className="mb-6 h-12 w-12 text-white/25" strokeWidth={1.25} />
-        <h1 className="font-display text-3xl text-white/90">Lien invalide</h1>
-        <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/45">
-          Cette invitation n&apos;existe pas ou n&apos;est plus active.
+        <span className="animate-scale-in relative mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-white/10">
+          <span className="pulse-ring absolute inset-0 rounded-full" />
+          <MailX className="h-7 w-7 text-white/40" strokeWidth={1.25} />
+        </span>
+        <h1
+          className="animate-rise font-display text-3xl text-white/90"
+          style={{ "--rise-delay": "150ms" }}
+        >
+          {t("invite.invalid_title")}
+        </h1>
+        <span
+          aria-hidden="true"
+          className="animate-draw-x mt-5 block h-px w-16 bg-[#e2b963]/60"
+          style={{ "--rise-delay": "300ms" }}
+        />
+        <p
+          className="animate-rise mt-5 max-w-sm text-sm leading-relaxed text-white/45"
+          style={{ "--rise-delay": "250ms" }}
+        >
+          {t("invite.invalid_desc")}
         </p>
       </main>
     );

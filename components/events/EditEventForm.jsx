@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { Panel } from "@/components/shell/primitives";
 import EventFields from "@/components/events/EventFields";
+import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { updateEvent } from "@/app/actions/event";
 import { useTranslation } from "@/lib/i18n/Context";
@@ -68,22 +69,25 @@ export default function EditEventForm({ event }) {
     <div>
       <Link
         href={`/dashboard/events/${event.id}`}
-        className="inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-foreground"
+        className="animate-fade-in group inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-foreground"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
         {event.title}
       </Link>
 
       <header className="mt-4 mb-8">
-        <h1 className="text-3xl leading-tight text-ink-50 sm:text-4xl">
+        <h1 className="animate-rise text-3xl leading-tight text-ink-50 sm:text-4xl">
           {t("portal.events.edit.title")}
         </h1>
-        <hr className="rule-gold-left mt-3.5 w-16" />
+        <hr
+          className="rule-gold-left animate-draw-x mt-3.5 w-16"
+          style={{ "--rise-delay": "150ms" }}
+        />
       </header>
 
       <form onSubmit={handleSubmit}>
         <div className="grid gap-6 lg:grid-cols-[1fr_minmax(0,340px)]">
-          <Panel title={t("portal.events.new.details_title")}>
+          <Panel title={t("portal.events.new.details_title")} delay={80}>
             <div className="p-5">
               <EventFields
                 defaults={{
@@ -119,6 +123,7 @@ export default function EditEventForm({ event }) {
 
           <div className="space-y-6">
             <Panel
+              delay={160}
               title={t("portal.events.edit.preview_title")}
               action={
                 <Button asChild variant="outline" size="sm">
@@ -130,14 +135,14 @@ export default function EditEventForm({ event }) {
             >
               <div className="p-5">
                 {event.invitationTemplate ? (
-                  <div className="relative aspect-3/4 overflow-hidden rounded-md border border-border/60 bg-ink-900">
+                  <DeviceFrame className="max-w-[14rem]">
                     <InvitationPreview
                       template={event.invitationTemplate}
                       event={event}
-                      guestName="Exemple Invité"
+                      guestName={t("landing.hero.scene.guest")}
                       readOnly
                     />
-                  </div>
+                  </DeviceFrame>
                 ) : (
                   <p className="text-sm leading-relaxed text-ink-400">
                     {t("portal.events.edit.no_preview")}
@@ -149,13 +154,14 @@ export default function EditEventForm({ event }) {
             <Button
               type="submit"
               size="lg"
-              className="w-full"
+              className="animate-rise w-full"
+              style={{ "--rise-delay": "240ms" }}
               disabled={isSaving}
             >
               {isSaving ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Save className="mr-2 h-4 w-4" />
+                <Save className="h-4 w-4" />
               )}
               {isSaving
                 ? t("settings.saving")

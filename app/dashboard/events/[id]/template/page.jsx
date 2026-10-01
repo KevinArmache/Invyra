@@ -4,8 +4,12 @@ import { getSession } from "@/app/actions/auth";
 import { getEventById } from "@/app/actions/event";
 import { getTemplates } from "@/app/actions/template";
 import EventTemplateEditor from "@/components/events/detail/EventTemplateEditor";
+import { getTranslations } from "@/lib/i18n/server";
 
-export const metadata = { title: "Configurer l'invitation" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return { title: t("portal.events.edit.configure_invitation") };
+}
 
 export default async function EventTemplatePage({ params }) {
   const { id } = await params;

@@ -124,13 +124,13 @@ export default function CollaboratorModal({
           <div className="flex flex-col gap-2 sm:flex-row">
             <div className="flex-1 space-y-1.5">
               <Label htmlFor="collaborator-email" className="sr-only">
-                Email
+                {t("login.email")}
               </Label>
               <Input
                 id="collaborator-email"
                 name="email"
                 type="email"
-                placeholder="collaborateur@exemple.com"
+                placeholder={t("portal.events.details.collaborator_placeholder")}
                 required
               />
             </div>
@@ -151,11 +151,11 @@ export default function CollaboratorModal({
 
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <UserPlus className="mr-2 h-4 w-4" />
+              <UserPlus className="h-4 w-4" />
             )}
-            {t("portal.events.new.buttons.add")}
+            {t("portal.events.details.collaborator_add")}
           </Button>
         </form>
 
@@ -165,10 +165,11 @@ export default function CollaboratorModal({
           </p>
         ) : (
           <ul className="max-h-64 space-y-2 overflow-y-auto">
-            {collaborators.map((collaborator) => (
+            {collaborators.map((collaborator, index) => (
               <li
                 key={collaborator.id}
-                className="flex items-center gap-3 rounded-md border border-border/60 px-3 py-2.5"
+                className="animate-in fade-in-0 slide-in-from-bottom-1 fill-mode-both flex items-center gap-3 rounded-md border border-border/60 px-3 py-2.5 duration-300"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gold/25 bg-gold/10 font-display text-xs text-gold">
                   {(collaborator.user.name || collaborator.user.email)
@@ -178,7 +179,7 @@ export default function CollaboratorModal({
 
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm text-ink-100">
-                    {collaborator.user.name || "—"}
+                    {collaborator.user.name || collaborator.user.email}
                   </p>
                   <p className="truncate text-xs text-ink-400">
                     {collaborator.user.email}
@@ -209,7 +210,10 @@ export default function CollaboratorModal({
                   className="h-8 w-8 shrink-0 text-ink-400 hover:bg-destructive/10 hover:text-destructive"
                   onClick={() => handleRemove(collaborator.id)}
                   disabled={isPending}
-                  aria-label={`Retirer ${collaborator.user.email}`}
+                  aria-label={t("portal.events.details.collaborator_remove").replace(
+                    "{email}",
+                    collaborator.user.email,
+                  )}
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>

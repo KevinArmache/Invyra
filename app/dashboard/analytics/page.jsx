@@ -12,7 +12,10 @@ import {
 import RsvpBreakdown from "@/components/analytics/RsvpBreakdown";
 import EventPerformanceTable from "@/components/analytics/EventPerformanceTable";
 
-export const metadata = { title: "Statistiques" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return { title: t("portal.analytics.title") };
+}
 
 export default async function AnalyticsPage() {
   const [events, { t, locale }] = await Promise.all([
@@ -26,22 +29,22 @@ export default async function AnalyticsPage() {
       views: total.views + (Number(event.viewed_count) || 0),
       confirmed: total.confirmed + (Number(event.confirmed_count) || 0),
       declined: total.declined + (Number(event.declined_count) || 0),
+      maybe: total.maybe + (Number(event.maybe_count) || 0),
     }),
-    { guests: 0, views: 0, confirmed: 0, declined: 0 },
+    { guests: 0, views: 0, confirmed: 0, declined: 0, maybe: 0 },
   );
 
-  // Un invité qui n'a ni accepté ni décliné est en attente. La soustraction
-  // est bornée à zéro : des compteurs incohérents ne doivent pas produire un
-  // segment négatif dans la barre.
-  const pending = Math.max(
-    0,
-    totals.guests - totals.confirmed - totals.declined,
-  );
+  // « Peut-être » est une réponse : elle compte dans le taux de réponse, et
+  // seuls les invités qui n'ont rien répondu sont « sans réponse », comme sur
+  // la fiche d'un événement. La soustraction est bornée à zéro : des
+  // compteurs incohérents ne doivent pas produire un segment négatif.
+  const responded = totals.confirmed + totals.declined + totals.maybe;
+  const pending = Math.max(0, totals.guests - responded);
 
   const percent = (part) =>
     totals.guests > 0 ? Math.round((part / totals.guests) * 100) : 0;
 
-  const responseRate = percent(totals.confirmed + totals.declined);
+  const responseRate = percent(responded);
   const viewRate = percent(totals.views);
 
   return (
@@ -53,31 +56,40 @@ export default async function AnalyticsPage() {
 
       <StatGrid>
         <StatCard
+          index={0}
           label={t("portal.analytics.total_events")}
           value={events.length}
           icon={Calendar}
         />
         <StatCard
+          index={1}
           label={t("portal.analytics.total_guests")}
           value={totals.guests}
           icon={Users}
         />
         <StatCard
+          index={2}
           label={t("portal.analytics.view_rate")}
-          value={`${viewRate}%`}
+          value={viewRate}
+          suffix="%"
+          progress={viewRate / 100}
           hint={`${totals.views} ${t("portal.analytics.views")}`}
           icon={Eye}
         />
         <StatCard
+          index={3}
           label={t("portal.analytics.response_rate")}
-          value={`${responseRate}%`}
-          hint={`${totals.confirmed + totals.declined} / ${totals.guests}`}
+          value={responseRate}
+          suffix="%"
+          progress={responseRate / 100}
+          hint={`${responded} / ${totals.guests}`}
           icon={TrendingUp}
         />
       </StatGrid>
 
       <Panel
         className="mt-8"
+        delay={300}
         title={t("portal.analytics.rsvp_breakdown_title")}
         description={t("portal.analytics.rsvp_breakdown_desc")}
       >
@@ -85,15 +97,18 @@ export default async function AnalyticsPage() {
           counts={{
             confirmed: totals.confirmed,
             declined: totals.declined,
+            maybe: totals.maybe,
             pending,
           }}
           total={totals.guests}
           t={t}
+          delay={300}
         />
       </Panel>
 
       <Panel
         className="mt-8"
+        reveal
         title={t("portal.analytics.event_performance_title")}
         description={t("portal.analytics.event_performance_desc")}
       >

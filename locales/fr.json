@@ -5,51 +5,61 @@
     "pricing": "Tarifs",
     "sign_in": "Se connecter",
     "get_started": "Commencer",
-    "dashboard": "Tableau de Bord",
+    "dashboard": "Tableau de bord",
     "templates": "Modèles",
-    "availability": "Disponibilités"
+    "availability": "Disponibilités",
+    "faq": "FAQ",
+    "open_menu": "Ouvrir le menu",
+    "close_menu": "Fermer le menu",
+    "main": "Navigation principale",
+    "skip": "Aller au contenu"
   },
   "login": {
     "title": "Bon retour !",
-    "subtitle": "Connectez-vous à votre compte pour continuer",
+    "subtitle": "Connectez-vous pour retrouver vos événements et les réponses de vos invités.",
     "email": "Email",
-    "password": "Mot de Passe",
+    "password": "Mot de passe",
     "password_placeholder": "Entrez votre mot de passe",
     "submit": "Se connecter",
     "submitting": "Connexion...",
     "no_account": "Vous n'avez pas de compte ?",
     "create_one": "En créer un",
     "error_generic": "Email ou mot de passe invalide",
-    "tagline": "Vos invitations vous attendent."
+    "tagline": "Vos invitations vous attendent.",
+    "meta_title": "Connexion",
+    "meta_description": "Connectez-vous à Invyra pour gérer vos événements, vos invitations et les réponses de vos invités."
   },
   "register": {
-    "title": "Créer un Compte",
-    "subtitle": "Commencez à créer des invitations magnifiques",
+    "title": "Créer un compte",
+    "subtitle": "Votre premier événement et jusqu'à 15 invités sont offerts.",
     "name": "Nom complet",
     "name_placeholder": "Votre nom",
     "email": "Email",
-    "password": "Mot de Passe",
+    "password": "Mot de passe",
     "password_placeholder": "Créez un mot de passe sécurisé",
-    "submit": "Créer le Compte",
+    "submit": "Créer mon compte",
     "submitting": "Création...",
     "has_account": "Vous avez déjà un compte ?",
     "sign_in": "Se connecter",
     "phone": "Numéro de téléphone",
-    "phone_placeholder": "+33 6 12 34 56 78",
+    "phone_placeholder": "+243 81 234 5678",
+    "phone_hint": "Nécessaire pour envoyer vos invitations par WhatsApp.",
     "confirm_password": "Confirmer le mot de passe",
     "password_mismatch": "Les mots de passe ne correspondent pas",
     "password_too_short": "Le mot de passe doit contenir au moins 8 caractères",
     "company": "Société",
     "company_placeholder": "Optionnel",
     "optional": "optionnel",
-    "tagline": "Composez votre première invitation en quelques minutes."
+    "tagline": "Composez votre première invitation en quelques minutes.",
+    "meta_title": "Créer un compte",
+    "meta_description": "Créez votre compte Invyra gratuitement : un événement et jusqu'à 15 invités offerts, sans écrire de code."
   },
   "settings": {
     "title": "Paramètres",
-    "subtitle": "Gérez les paramètres de votre compte",
-    "profile_success": "Profil mis à jour avec succès",
+    "subtitle": "Votre profil, votre formule et la sécurité de votre compte.",
+    "profile_success": "Profil mis à jour",
     "profile_title": "Profil",
-    "profile_desc": "Mettez à jour vos informations personnelles",
+    "profile_desc": "Vos informations personnelles",
     "email": "Email",
     "email_desc": "L'email ne peut pas être modifié",
     "name": "Nom complet",
@@ -57,11 +67,12 @@
     "company": "Entreprise",
     "company_placeholder": "Votre entreprise",
     "phone": "Numéro de téléphone",
-    "phone_placeholder": "+33 6 12 34 56 78",
+    "phone_placeholder": "+243 81 234 5678",
+    "phone_hint": "Nécessaire pour envoyer vos invitations par WhatsApp.",
     "save": "Enregistrer les modifications",
     "saving": "Enregistrement...",
     "password_title": "Changer le mot de passe",
-    "password_desc": "Mettez à jour votre mot de passe pour sécuriser votre compte",
+    "password_desc": "Les autres appareils connectés seront déconnectés",
     "current_password": "Mot de passe actuel",
     "current_password_placeholder": "Entrez le mot de passe actuel",
     "new_password": "Nouveau mot de passe",
@@ -70,47 +81,89 @@
     "confirm_password_placeholder": "Confirmez le nouveau mot de passe",
     "change_password": "Changer le mot de passe",
     "changing": "Modification...",
-    "password_success": "Mot de passe modifié avec succès",
+    "password_success": "Mot de passe modifié",
     "password_mismatch": "Les nouveaux mots de passe ne correspondent pas",
     "password_length": "Le mot de passe doit contenir au moins 8 caractères",
-    "danger_zone": "Zone de Danger",
+    "plan_title": "Votre formule",
+    "plan_desc": "Ce que comprend votre compte",
+    "plan_free_name": "Découverte",
+    "plan_premium_name": "Événement premium",
+    "plan_free_limits": "1 événement, jusqu'à 15 invités",
+    "plan_premium_limits": "1 événement, invités illimités",
+    "plan_admin_limits": "Compte administrateur : aucune limite d'événements ni d'invités.",
+    "plan_upgrade": "Passer au premium sur WhatsApp",
+    "plan_upgrade_hint": "1 $ par invité. Notre équipe active la formule après votre message.",
+    "plan_upgrade_message": "Bonjour, je souhaite passer à l'Événement premium sur Invyra. Mon email : {email}",
+    "plan_premium_hint": "Ajoutez autant d'invités que nécessaire.",
+    "danger_zone": "Zone de danger",
     "irreversible": "Actions irréversibles",
-    "delete_account": "Supprimer le Compte",
-    "delete_desc": "La suppression de compte est actuellement possible. Contactez le support si vous avez des problèmes pour supprimer votre compte.",
+    "delete_account": "Supprimer le compte",
+    "delete_desc": "La suppression efface vos événements, vos invités et leurs réponses. Elle est définitive.",
     "delete_confirm_word": "SUPPRIMER",
     "delete_dialog_title": "Supprimer définitivement votre compte ?",
-    "delete_dialog_body": "Vos événements, vos invités et leurs réponses seront effacés. Vos modèles partagés resteront disponibles pour les autres. Cette action est irréversible.",
+    "delete_dialog_body": "Vos événements, vos invités et leurs réponses seront effacés. Les modèles que vous avez créés resteront disponibles pour les autres. Cette action est irréversible.",
     "delete_type_to_confirm": "Tapez {word} pour confirmer",
     "admin_cannot_delete": "Les comptes administrateur ne peuvent pas être supprimés depuis cette page."
   },
   "dashboard": {
-    "title": "Tableau de Bord",
-    "welcome": "Bon retour ! Voici un aperçu de vos événements.",
+    "title": "Tableau de bord",
+    "welcome": "Voici où en sont vos événements.",
+    "greeting": "Bonjour {name}",
+    "greeting_anonymous": "Bonjour",
     "create_event": "Créer un événement",
-    "total_events": "Total événements",
-    "total_guests": "Total invités",
-    "invitations_viewed": "Invitations vues",
-    "confirmed_rsvps": "RSVP Confirmés",
+    "total_events": "Événements",
+    "total_guests": "Invités",
+    "invitations_viewed": "Invitations ouvertes",
+    "confirmed_rsvps": "Présences confirmées",
     "recent_events": "Événements récents",
-    "no_events": "Aucun événement pour l'instant. Créez votre premier !",
+    "no_events": "Aucun événement pour l'instant",
+    "no_events_desc": "Créez votre premier événement : un modèle, vos invités, et c'est parti.",
     "view_all": "Voir tous les événements",
-    "guests": "invités"
+    "guests": "invités",
+    "next_event": "Prochain événement",
+    "no_upcoming_title": "Aucun événement à venir",
+    "no_upcoming_desc": "Donnez une date à votre événement pour suivre le compte à rebours ici.",
+    "open_event": "Ouvrir l'événement",
+    "checklist": {
+      "title": "Vos premiers pas",
+      "progress": "{done} sur {total}",
+      "create": "Créer votre événement",
+      "template": "Choisir le modèle de l'invitation",
+      "guests": "Ajouter vos invités",
+      "send": "Envoyer les invitations"
+    },
+    "activity": {
+      "title": "Activité récente",
+      "empty": "Les ouvertures et les réponses de vos invités apparaîtront ici.",
+      "viewed": "a ouvert son invitation",
+      "confirmed": "a confirmé sa présence",
+      "declined": "ne pourra pas venir",
+      "maybe": "hésite encore"
+    }
   },
   "portal": {
     "sidebar": {
-      "dashboard": "Tableau de Bord",
+      "dashboard": "Tableau de bord",
       "events": "Événements",
       "templates": "Modèles",
       "analytics": "Statistiques",
       "settings": "Paramètres",
       "sign_out": "Déconnexion",
       "open_sidebar": "Ouvrir le menu",
+      "close_sidebar": "Fermer le menu",
+      "collapse": "Replier le menu",
+      "expand": "Déplier le menu",
+      "main_nav": "Navigation de l'espace",
       "admin": "Administration",
-      "account": "Mon compte"
+      "account": "Mon compte",
+      "new_event": "Nouvel événement",
+      "plan_free": "Découverte",
+      "plan_premium": "Premium",
+      "upgrade": "Passer au premium"
     },
     "admin": {
       "overview": "Vue d'ensemble",
-      "overview_subtitle": "Statistiques globales de la plateforme Invyra",
+      "overview_subtitle": "Les chiffres de la plateforme Invyra",
       "users": "Utilisateurs",
       "events": "Événements",
       "templates": "Modèles",
@@ -121,12 +174,19 @@
       "users_count": "{count} utilisateur(s) inscrit(s)",
       "user": "Utilisateur",
       "role": "Rôle",
+      "role_admin": "Admin",
+      "plan": "Formule",
+      "plan_free": "Découverte",
+      "plan_premium": "Premium",
+      "set_premium": "Passer en premium",
+      "set_free": "Repasser en Découverte",
+      "plan_updated": "Formule de {name} : {plan}",
       "status": "Statut",
       "registered_on": "Inscrit le",
       "active": "Actif",
       "suspended": "Suspendu",
       "standard_user": "Utilisateur",
-      "role_updated": "Rôle mis à jour : {name} -> {role}",
+      "role_updated": "Rôle de {name} : {role}",
       "account_suspended": "Compte suspendu",
       "account_reactivated": "Compte réactivé",
       "delete_account_confirm": "Supprimer définitivement le compte de {name} ?",
@@ -138,34 +198,42 @@
       "delete_forever": "Supprimer définitivement",
       "no_users": "Aucun utilisateur",
       "you": "vous",
-      "delete_account_body": "Ses événements, ses invités et leurs réponses seront supprimés. Les modèles qu'il a partagés sont réattribués et restent disponibles."
+      "actions": "Actions",
+      "actions_for": "Actions pour {name}",
+      "delete_account_body": "Ses événements, ses invités et leurs réponses seront supprimés. Les modèles qu'il a créés restent disponibles."
     },
     "analytics": {
       "title": "Statistiques",
-      "subtitle": "Suivez les performances de vos invitations sur tous vos événements",
-      "total_events": "Total événements",
-      "total_guests": "Total invités",
-      "view_rate": "Taux de vues",
+      "subtitle": "Ouvertures et réponses, sur tous vos événements",
+      "total_events": "Événements",
+      "total_guests": "Invités",
+      "view_rate": "Taux d'ouverture",
       "response_rate": "Taux de réponse",
-      "views": "vues",
-      "rsvp_breakdown_title": "Répartition RSVP",
-      "rsvp_breakdown_desc": "Résumé de toutes les réponses invitées",
-      "confirmed": "Confirmé",
-      "declined": "Refusé",
-      "pending": "En attente",
-      "event_performance_title": "Performance des événements",
-      "event_performance_desc": "Statistiques individuelles par événement",
-      "no_events": "Aucun événement pour le moment. Créez un événement pour voir les statistiques.",
+      "views": "ouvertures",
+      "rsvp_breakdown_title": "Répartition des réponses",
+      "rsvp_breakdown_desc": "Toutes les réponses de vos invités",
+      "confirmed": "Présents",
+      "declined": "Absents",
+      "pending": "Sans réponse",
+      "event_performance_title": "Par événement",
+      "event_performance_desc": "Invités, ouvertures et présences de chaque événement",
+      "no_events": "Aucun événement pour le moment. Créez un événement pour voir ses statistiques.",
       "no_date": "Date non définie",
       "guests": "Invités",
-      "rate": "Taux"
+      "rate": "Taux de présence"
+    },
+    "error": {
+      "title": "Cette page n'a pas pu s'afficher",
+      "desc": "Une erreur est survenue pendant le chargement. Réessayez ; si le problème persiste, rechargez la page.",
+      "reference": "Référence :",
+      "retry": "Réessayer"
     },
     "events": {
       "list": {
         "title": "Événements",
-        "subtitle": "Gérez tous vos événements et invitations",
-        "create_btn": "Créer un Événement",
-        "search_placeholder": "Rechercher des événements...",
+        "subtitle": "Vos événements, leurs invitations et leurs invités",
+        "create_btn": "Créer un événement",
+        "search_placeholder": "Rechercher un événement...",
         "no_events_found": "Aucun événement trouvé",
         "try_different_search": "Essayez un autre terme de recherche",
         "no_events_yet": "Aucun événement",
@@ -174,34 +242,35 @@
         "guests": "invités",
         "delete_confirm": "Êtes-vous sûr de vouloir supprimer cet événement ? Cette action est irréversible.",
         "delete_btn": "Supprimer",
-        "edit_btn": "Éditer",
-        "preview_btn": "Aperçu de l'invitation"
+        "edit_btn": "Modifier",
+        "preview_btn": "Aperçu de l'invitation",
+        "no_template": "Modèle à choisir"
       },
       "new": {
         "title": "Créer un événement",
-        "subtitle": "Configurez votre invitation en étapes simples",
+        "subtitle": "Trois étapes : l'événement, son modèle, ses invités.",
         "steps": {
           "details": "Détails",
           "template": "Modèle",
           "guests": "Invités"
         },
-        "success_event": "Événement créé avec succès",
-        "success_guest": "Invité ajouté avec succès",
+        "success_event": "Événement créé",
+        "success_guest": "Invité ajouté",
         "error_guest": "Erreur lors de l'ajout",
-        "import_csv": "Import CSV en masse",
+        "import_csv": "Import CSV",
         "add_guest": "Ajouter manuellement",
         "details_title": "Informations de l'événement",
-        "details_desc": "Décrivez votre événement pour la personnalisation",
+        "details_desc": "Ces informations remplissent automatiquement l'invitation.",
         "labels": {
           "title": "Titre *",
           "date": "Date",
-          "time": "Heure (affiché sur l'invitation)",
+          "time": "Heure (affichée sur l'invitation)",
           "location": "Lieu",
           "dress_code": "Dress code",
           "description": "Description",
           "name": "Nom complet *",
           "email": "Email *",
-          "phone": "Téléphone (optionnel)"
+          "phone": "Téléphone (pour WhatsApp)"
         },
         "placeholders": {
           "title": "Mariage de Marie & Jean",
@@ -213,15 +282,15 @@
         "buttons": {
           "continue": "Continuer",
           "creating": "Création...",
-          "first_template": "Créer mon premier modèle",
+          "first_template": "Créer le premier modèle",
           "continue_with_template": "Continuer avec ce modèle",
-          "skip": "Passer cette étape",
+          "skip": "Choisir plus tard",
           "add": "Ajouter l'invité",
           "finish": "Terminer et gérer l'événement"
         },
-        "template_title": "Choisir un modèle d'invitation",
-        "template_desc": "Sélectionnez un de vos modèles sauvegardés. Le modèle détermine le design des invitations.",
-        "no_templates": "Vous n'avez pas encore de modèle sauvegardé.",
+        "template_title": "Choisir le modèle de l'invitation",
+        "template_desc": "Choisissez un modèle de la galerie : vous pourrez ensuite changer ses textes, ses photos et ses couleurs.",
+        "no_templates": "Aucun modèle n'est disponible pour le moment.",
         "guest_list": "Liste des invités",
         "guests_added": "invité(s) ajouté(s)",
         "no_guests_yet": "Aucun invité pour l'instant"
@@ -230,13 +299,13 @@
         "title": "Modifier l'événement",
         "update_btn": "Mettre à jour",
         "success": "Événement mis à jour",
-        "preview_title": "Aperçu en Direct",
-        "no_preview": "Aucun modèle personnalisé n'a été assigné.",
-        "select_template": "Sélectionner un modèle",
-        "configure_invitation": "Configurer l'invitation",
+        "preview_title": "Aperçu",
+        "no_preview": "Aucun modèle n'est encore choisi pour cette invitation.",
+        "select_template": "Choisir un modèle",
+        "configure_invitation": "Personnaliser l'invitation",
         "save_and_exit": "Enregistrer et quitter",
-        "template_saved": "Le modèle de cet événement a été enregistré.",
-        "template_applied": "Une copie du modèle a été appliquée à l'événement.",
+        "template_saved": "L'invitation de cet événement a été enregistrée.",
+        "template_applied": "Le modèle a été appliqué à l'événement.",
         "status_label": "Statut",
         "status_draft": "Brouillon",
         "status_active": "Actif",
@@ -249,32 +318,58 @@
         "empty_desc": "Choisissez un modèle dans la galerie, puis personnalisez ses textes, ses images et ses couleurs.",
         "blank_code": "Page vierge (code)"
       },
+      "csv": {
+        "hint": "Une ligne par invité : {format}. Le téléphone est facultatif et une ligne d'en-tête est ignorée.",
+        "format": "Nom,Email,Téléphone",
+        "choose_file": "Choisir un fichier",
+        "check": "Vérifier",
+        "content_label": "Contenu CSV",
+        "valid": "valides",
+        "invalid": "en erreur",
+        "import": "Importer {count}",
+        "importing": "Import…",
+        "error_missing": "Ligne {line} : nom ou email manquant",
+        "error_email": "Ligne {line} : email invalide ({email})"
+      },
       "details": {
         "actions": {
           "event_deleted": "Événement supprimé.",
           "sending": "Envoi...",
-          "send_invitations": "Envoyer les invitations",
-          "email_sent": "Email envoyé avec succès !",
+          "send_invitations": "Envoyer par email",
+          "email_sent": "Email envoyé",
           "guest_deleted": "Invité supprimé.",
           "back_to_events": "Retour aux événements",
-          "edit": "Éditer",
+          "edit": "Modifier",
           "customize_invitation": "Personnaliser l'invitation"
         },
         "tabs": {
           "overview": "Aperçu",
           "guests": "Invités"
         },
+        "kpi": {
+          "invited": "Invités",
+          "sent": "Envoyées",
+          "opened": "Ouvertes",
+          "responded": "Réponses"
+        },
+        "meta": {
+          "date": "Date",
+          "time": "Heure",
+          "location": "Lieu"
+        },
         "overview": {
-          "stats_title": "Confirmations (RSVP)",
-          "copy_link": "Copier le lien",
-          "link_copied": "Lien copié !",
-          "active_template": "Aperçu du modèle actif",
-          "message": "Message personnalisé",
-          "no_details": "Aucune description ni message personnalisé."
+          "stats_title": "Réponses des invités",
+          "copy_link": "Copier le lien de cette page",
+          "copy_link_hint": "Pratique pour la partager avec un collaborateur.",
+          "link_copied": "Lien copié",
+          "active_template": "L'invitation",
+          "summary": "Informations",
+          "message": "Message personnel",
+          "no_details": "Aucune description ni message personnel."
         },
         "guests": {
           "title": "Liste des invités",
-          "subtitle": "Gérez vos invités et suivez leurs statuts individuels",
+          "subtitle": "Ajoutez vos invités puis envoyez-leur leur lien personnel",
           "add_btn": "Ajouter",
           "table": {
             "email": "Email",
@@ -282,38 +377,47 @@
           },
           "status": {
             "pending": "En attente",
-            "attending": "Confirmé",
-            "declined": "Refusé",
+            "attending": "Présent",
+            "declined": "Absent",
             "maybe": "Peut-être"
           },
+          "opened": "Ouverte",
+          "not_opened": "Pas encore ouverte",
+          "opened_on": "Invitation ouverte le {date}",
           "delete_confirm": "Supprimer cet invité ?",
           "resend": "Renvoyer",
           "search": "Rechercher un invité...",
           "import_failed": "import(s) en échec",
-          "bulk_needs_template": "Choisissez d'abord le design de l'invitation pour pouvoir l'envoyer."
+          "bulk_needs_template": "Choisissez d'abord le modèle de l'invitation pour pouvoir l'envoyer.",
+          "bulk_hint": "Envoie l'email aux invités qui ne l'ont pas encore reçu."
         },
         "collaborators": "Collaborateurs",
-        "collaborators_hint": "L'utilisateur doit déjà avoir un compte Invyra.",
+        "collaborators_hint": "La personne doit déjà avoir un compte Invyra.",
         "no_collaborators": "Aucun collaborateur pour le moment",
         "collaborator_added": "{name} a été ajouté",
         "collaborator_removed": "Collaborateur retiré",
         "role_updated": "Rôle mis à jour",
         "role_editor": "Éditeur",
-        "role_viewer": "Lecteur"
+        "role_viewer": "Lecteur",
+        "collaborator_placeholder": "proche@exemple.com",
+        "collaborator_add": "Ajouter le collaborateur",
+        "collaborator_remove": "Retirer {email}"
       }
     },
     "templates": {
       "list": {
-        "title": "Mes modèles",
-        "subtitle": "Créez et gérez vos designs réutilisables pour vos invitations.",
+        "title": "Modèles",
+        "subtitle": "La galerie des modèles d'invitation. Vous choisissez celui de votre événement depuis sa page, puis vous le personnalisez.",
+        "subtitle_admin": "Créez et gérez les modèles proposés dans la galerie.",
         "new_btn": "Nouveau modèle",
-        "no_templates": "Aucun modèle sauvegardé",
-        "no_templates_desc": "Partez d'un design et personnalisez-le en quelques minutes, sans écrire de code.",
-        "create_first": "Créer mon premier modèle",
+        "no_templates": "Aucun modèle n'est disponible pour le moment",
+        "no_templates_desc": "Les modèles publiés par l'équipe Invyra apparaîtront ici.",
+        "no_templates_desc_admin": "Créez le premier modèle de la galerie.",
+        "create_first": "Créer le premier modèle",
         "delete_confirm": "Êtes-vous sûr de vouloir supprimer ce modèle ?",
-        "delete_success": "Modèle supprimé avec succès",
+        "delete_success": "Modèle supprimé",
         "preview_btn": "Aperçu du modèle",
-        "edit_btn": "Éditer le modèle",
+        "edit_btn": "Modifier le modèle",
         "status_draft_badge": "Brouillon",
         "status_in_progress_badge": "En construction",
         "status_completed_badge": "Terminé",
@@ -330,15 +434,15 @@
         "reset_filters": "Voir tous les modèles"
       },
       "editor": {
-        "save_btn": "Sauvegarder le modèle",
-        "saving": "Sauvegarde...",
-        "success": "Modèle sauvegardé !",
+        "save_btn": "Enregistrer le modèle",
+        "saving": "Enregistrement...",
+        "success": "Modèle enregistré",
         "name_placeholder": "Nom du modèle",
         "status_label": "État d'avancement",
         "status_draft_option": "⚪ Brouillon",
         "status_in_progress_option": "🟡 En construction",
         "status_completed_option": "🟢 Terminé",
-        "mode_preview": "Mode aperçu",
+        "mode_preview": "Aperçu",
         "title_new": "Créer un modèle",
         "title_edit": "Modifier le modèle",
         "name_required": "Donnez un nom à votre modèle."
@@ -448,165 +552,321 @@
     "cancel": "Annuler",
     "close": "Fermer",
     "search": "Rechercher...",
-    "no_results": "Aucun résultat"
+    "no_results": "Aucun résultat",
+    "loading": "Chargement",
+    "retry": "Réessayer",
+    "just_now": "à l'instant",
+    "countdown": {
+      "days": "jours",
+      "hours": "heures",
+      "minutes": "minutes",
+      "seconds": "secondes",
+      "today": "C'est aujourd'hui",
+      "tomorrow": "Demain",
+      "in_days": "Dans {n} jours",
+      "past": "Terminé",
+      "short": {
+        "days": " j ",
+        "hours": " h ",
+        "minutes": " min",
+        "seconds": " s"
+      }
+    }
+  },
+  "notfound": {
+    "title": "Cette page s'est égarée",
+    "desc": "L'adresse est peut-être incomplète, ou la page a été déplacée.",
+    "home": "Retour à l'accueil",
+    "dashboard": "Mon tableau de bord",
+    "meta_title": "Page introuvable",
+    "inside_title": "Introuvable",
+    "inside_desc": "Cet élément n'existe pas, ou vous n'y avez pas accès.",
+    "inside_back": "Retour au tableau de bord"
+  },
+  "invite": {
+    "meta_title": "Invitation",
+    "meta_description": "{name}, vous êtes invité(e). Ouvrez votre invitation et confirmez votre présence.",
+    "invalid_title": "Lien invalide",
+    "invalid_desc": "Cette invitation n'existe pas ou n'est plus active.",
+    "unavailable_title": "Votre invitation arrive",
+    "unavailable_desc": "Elle n'a pas pu être chargée cette fois-ci. Réessayez dans un instant : votre lien est bien valide.",
+    "preparing_title": "Invitation en cours de préparation",
+    "preparing_desc": "L'organisateur n'a pas encore choisi le modèle de cette invitation.",
+    "loading": "Chargement de votre invitation",
+    "rsvp_error": "Votre réponse n'a pas pu être enregistrée. Réessayez.",
+    "frame_title": "Invitation : {title}"
   },
   "landing": {
+    "meta": {
+      "title": "Invyra · Invitations numériques qui s'ouvrent comme une lettre",
+      "description": "Créez une invitation numérique sans code à partir d'un modèle, envoyez un lien personnel à chaque invité par email ou WhatsApp et suivez les ouvertures et les réponses.",
+      "og_alt": "Invyra, invitations numériques"
+    },
     "hero": {
-      "tagline": "Éditeur d'invitations sur-mesure",
-      "title_1": "Créez des Invitations",
-      "title_highlight": "Uniques",
-      "subtitle": "Créez vos faire-part numériques de A à Z. Utilisez notre éditeur de code complet (HTML, CSS, JS) pour donner vie à vos invitations interactives et surprendre vos invités.",
-      "cta_primary": "Créer gratuitement",
-      "cta_secondary": "Comment ça marche ?",
-      "stats": {
-        "events": "Événements créés",
-        "events_value": "10K+",
-        "rsvp": "Taux de Réponse",
-        "rsvp_value": "98%",
-        "creative": "Liberté créative",
-        "creative_value": "100%"
+      "eyebrow": "Invitations numériques",
+      "title_1": "Des invitations qui s'ouvrent",
+      "title_highlight": "comme une lettre",
+      "subtitle": "Choisissez un modèle, changez textes, photos et couleurs sans écrire de code, puis envoyez à chaque invité son lien personnel par email ou WhatsApp. Vous voyez qui l'a ouvert et qui a répondu.",
+      "cta_primary": "Créer mon invitation",
+      "cta_secondary": "Voir comment ça marche",
+      "free_note": "Gratuit jusqu'à 15 invités",
+      "facts": [
+        {
+          "value": 3,
+          "label": "ouvertures animées"
+        },
+        {
+          "value": 15,
+          "label": "invités offerts"
+        },
+        {
+          "value": 0,
+          "label": "ligne de code à écrire"
+        }
+      ],
+      "scene": {
+        "invited": "Vous êtes invitée",
+        "guest": "Sophie",
+        "hint": "Touchez pour ouvrir",
+        "card_eyebrow": "Sophie, vous êtes invitée au mariage de",
+        "bride": "Camille",
+        "groom": "Antoine",
+        "place": "Domaine de la Roseraie",
+        "rsvp": "Je confirme ma présence",
+        "rsvp_done": "Présence confirmée",
+        "chip_sent": "Envoyée par WhatsApp",
+        "chip_opened": "Sophie a ouvert son invitation",
+        "chip_confirmed": "Sophie a confirmé sa présence"
+      }
+    },
+    "marquee": {
+      "label": "Pour chaque occasion"
+    },
+    "how_it_works": {
+      "eyebrow": "En quatre étapes",
+      "title": "Comment ",
+      "title_highlight": "ça marche",
+      "subtitle": "De la création de l'événement aux réponses de vos invités.",
+      "steps": {
+        "1": {
+          "title": "Créez votre événement",
+          "desc": "Titre, date, heure, lieu, dress code et un mot pour vos invités : ces informations remplissent l'invitation toute seule."
+        },
+        "2": {
+          "title": "Choisissez et personnalisez un modèle",
+          "desc": "Parcourez la galerie par type d'événement, puis changez les textes, les photos, les couleurs, l'écran d'ouverture et la musique. L'aperçu suit chaque modification."
+        },
+        "3": {
+          "title": "Ajoutez vos invités et envoyez",
+          "desc": "Saisissez-les un par un ou importez un fichier CSV. Chacun reçoit son lien personnel par email, ou par WhatsApp avec un message prêt à partir."
+        },
+        "4": {
+          "title": "Suivez les ouvertures et les réponses",
+          "desc": "Vous voyez qui a ouvert son invitation et qui vient, ne vient pas ou hésite. Un invité peut changer d'avis depuis son lien."
+        }
       }
     },
     "features": {
-      "title": "Tout le nécessaire pour vos ",
-      "title_highlight": "Événements",
-      "subtitle": "De la création sur-mesure aux statistiques d'engagement, Invyra met à votre disposition des outils professionnels pour inviter avec élégance.",
+      "eyebrow": "Fonctionnalités",
+      "title": "Tout pour inviter, ",
+      "title_highlight": "rien à coder",
+      "subtitle": "Les outils de la plateforme, de l'écran d'ouverture au suivi des réponses.",
       "items": {
-        "ai": {
-          "title": "Contrôle total (HTML/CSS)",
-          "desc": "Concevez le design de votre choix grâce à un éditeur web puissant, pensé pour une personnalisation absolue."
+        "opening": {
+          "title": "Une ouverture qui fait effet",
+          "desc": "Enveloppe, cachet de cire ou rideau : l'invité découvre d'abord son nom et votre monogramme, puis touche pour ouvrir."
         },
-        "interactive": {
-          "title": "Expérience interactive",
-          "desc": "Intégrez vos propres scripts JavaScript pour créer des animations fluides et engager vos invités."
+        "music": {
+          "title": "Musique à l'ouverture",
+          "desc": "Ajoutez un morceau : il démarre en fondu quand l'invité ouvre l'invitation, et un bouton permet de le couper."
+        },
+        "nocode": {
+          "title": "Personnalisation sans code",
+          "desc": "Textes, photos, liens et couleurs se modifient dans un formulaire, avec l'aperçu de l'invitation juste à côté."
         },
         "guests": {
-          "title": "Gestion des invités intuitive",
-          "desc": "Importez votre liste depuis un fichier Excel (CSV) ou saisissez-la manuellement. Gérez facilement les accompagnants."
+          "title": "Liste d'invités",
+          "desc": "Ajoutez vos invités un par un ou importez un fichier CSV (nom, email, téléphone). Un même email ne peut pas être ajouté deux fois."
         },
-        "emails": {
-          "title": "Envoi WhatsApp & email",
-          "desc": "Distribuez des liens nominatifs uniques à vos invités. Le design de votre faire-part s'affichera de manière parfaite."
+        "sending": {
+          "title": "Email et WhatsApp",
+          "desc": "L'email reprend la photo de votre modèle. Pour WhatsApp, un message pré-rempli s'ouvre avec le lien de l'invité : il ne reste qu'à l'envoyer."
         },
-        "analytics": {
-          "title": "Suivi RSVP en temps réel",
-          "desc": "Soyez notifié dès qu'un proche consulte l'invitation ou confirme sa présence, directement sur votre tableau de bord."
+        "tracking": {
+          "title": "Suivi des réponses",
+          "desc": "Envoi, ouverture et réponse de chaque invité (présent, absent ou peut-être), et les totaux de l'événement."
         },
-        "preview": {
-          "title": "Aperçu en Direct",
-          "desc": "Modifiez votre code et observez le résultat visuel en temps réel grâce à la prévisualisation scindée."
+        "privacy": {
+          "title": "Un lien personnel par invité",
+          "desc": "Chaque lien est unique et difficile à deviner. Les invitations ne sont pas référencées par les moteurs de recherche, et l'aperçu du lien montre la photo de l'invitation."
         },
-        "effects": {
-          "title": "Personnalisation dynamique",
-          "desc": "Insérez des balises de variables (ex: Nom de l'invité) directement dans le code pour générer des messages ultra-personnalisés."
-        },
-        "security": {
-          "title": "Confidentialité assurée",
-          "desc": "Chaque invité reçoit un lien d'accès tokenisé sécurisé pour garantir que votre cérémonie reste strictement privée."
+        "team": {
+          "title": "À plusieurs",
+          "desc": "Invitez un proche qui a un compte Invyra comme éditeur, pour modifier et envoyer, ou comme lecteur, pour suivre."
         }
+      },
+      "visual": {
+        "title_label": "Titre",
+        "typed": "Camille & Antoine",
+        "colors_label": "Couleurs",
+        "csv_file": "invites.csv",
+        "opened": "Ouvertes",
+        "confirmed": "Présents",
+        "preview_title": "Invitation de Sophie"
       }
     },
-    "how_it_works": {
-      "title": "Comment ",
-      "title_highlight": "ça marche",
-      "subtitle": "Créez et diffusez vos invitations en 4 étapes simples.",
-      "steps": {
-        "1": {
-          "title": "Créez l'événement",
-          "desc": "Définissez la date, le lieu de réception et les informations clés de votre cérémonie."
-        },
-        "2": {
-          "title": "Codez votre modèle",
-          "desc": "Ouvrez l'éditeur et façonnez l'apparence complète de l'invitation avec HTML, CSS et JavaScript."
-        },
-        "3": {
-          "title": "Invitez vos proches",
-          "desc": "Complétez votre liste de convives et envoyez-leur automatiquement un lien par vagues d'Emails ou par WhatsApp."
-        },
-        "4": {
-          "title": "Suivez les retours",
-          "desc": "Gardez le contrôle : visualisez qui a ouvert le message et suivez les confirmations de présence (RSVP)."
-        }
-      }
+    "opening_demo": {
+      "eyebrow": "Essayez",
+      "title": "Une ouverture ",
+      "title_highlight": "à son nom",
+      "subtitle": "Avant l'invitation, votre invité voit un écran d'ouverture : une enveloppe, un cachet de cire ou un rideau, avec son nom et votre monogramme. Choisissez un style, puis touchez l'écran.",
+      "hint": "Touchez l'invitation pour l'ouvrir",
+      "replay": "Rejouer l'ouverture",
+      "model_note": "Rendu réel du modèle « {name} », avec un invité fictif.",
+      "music_note": "Si vous ajoutez une musique, elle démarre à ce moment-là."
+    },
+    "templates": {
+      "eyebrow": "La galerie",
+      "title": "Des modèles pour ",
+      "title_highlight": "chaque occasion",
+      "subtitle": "Choisissez un design de la galerie, ajoutez vos photos et vos textes : votre invitation est prête.",
+      "preview": "Voir en direct",
+      "cta": "Créer mon invitation"
+    },
+    "availability": {
+      "eyebrow": "Calendrier",
+      "title": "Vérifiez votre ",
+      "title_highlight": "date",
+      "subtitle": "Les dates déjà retenues sur Invyra apparaissent en doré. Le calendrier se met à jour à chaque nouvel événement.",
+      "multiple_note": "Une date déjà retenue reste disponible : plusieurs événements peuvent avoir lieu le même jour.",
+      "legend_free": "Disponible",
+      "legend_booked": "Date retenue, encore disponible",
+      "month_free": "Aucun événement ce mois-ci",
+      "month_booked_one": "date retenue ce mois-ci",
+      "month_booked_many": "dates retenues ce mois-ci",
+      "prev": "Mois précédent",
+      "next": "Mois suivant",
+      "cta": "Réserver ma date",
+      "upcoming": "Prochaines dates retenues",
+      "day_free": "Aucun événement prévu ce jour-là : la date est libre.",
+      "event_one": "événement déjà prévu ce jour-là",
+      "event_many": "événements déjà prévus ce jour-là",
+      "still_possible": "La date reste disponible : plusieurs événements peuvent avoir lieu le même jour.",
+      "book_this_date": "Réserver cette date",
+      "pick_a_date": "Touchez une date pour voir combien d'événements y sont déjà prévus.",
+      "mail_subject": "Demande de réservation",
+      "mail_body": "Bonjour,\n\nJe souhaite réserver la date du {date} pour notre événement.\n\nType d'événement :\nLieu de la réception :\nNombre d'invités (environ) :\nTéléphone :\n\nMerci et à bientôt !",
+      "mail_date_placeholder": "(date à préciser)"
     },
     "pricing": {
-      "title": "Tarifs simples et ",
-      "title_highlight": "Transparents",
-      "subtitle": "Choisissez la dimension parfaite pour votre événement. Nos outils restent accessibles, sans aucun frais caché.",
+      "eyebrow": "Tarifs",
+      "title": "Des tarifs ",
+      "title_highlight": "simples",
+      "subtitle": "Commencez gratuitement. Passez au premium quand votre liste dépasse 15 invités.",
+      "badge": "Pour les grandes listes d'invités",
       "plans": {
         "free": {
           "name": "Découverte",
-          "desc": "Idéal pour tester la plateforme",
-          "price": "0€",
-          "period": "à vie",
-          "cta": "Essayer gratuitement",
+          "desc": "Pour un premier événement",
+          "price": "0 $",
+          "period": "pour toujours",
+          "cta": "Commencer gratuitement",
           "features": [
-            "1 événement max",
+            "1 événement",
             "Jusqu'à 15 invités",
-            "Éditeur de code standard",
-            "Suivi des envois de base",
-            "Modèles vierges"
+            "Toute la galerie de modèles",
+            "Personnalisation sans code",
+            "Envoi par email et WhatsApp",
+            "Suivi des ouvertures et des réponses"
           ]
         },
         "pro": {
           "name": "Événement premium",
-          "desc": "Pour une célébration inoubliable",
-          "price": "1$",
-          "period": "par personne",
-          "cta": "Créer mon Événement",
+          "desc": "Quand la liste d'invités s'allonge",
+          "price": "1 $",
+          "period": "par invité",
+          "cta": "Demander sur WhatsApp",
+          "whatsapp_message": "Bonjour, je souhaite passer à l'Événement premium sur Invyra.",
           "features": [
             "Invités illimités",
-            "Éditeur de modèle avancé",
-            "Aperçu direct",
-            "Envois d'emails massifs",
-            "Support client prioritaire"
+            "1 événement",
+            "Tout ce que comprend Découverte",
+            "Activation et aide sur WhatsApp"
           ]
         }
-      },
-      "popular": "Le plus choisi"
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions ",
+      "title_highlight": "fréquentes",
+      "subtitle": "Ce qu'il faut savoir avant de créer votre invitation.",
+      "items": [
+        {
+          "q": "Mes invités doivent-ils créer un compte ?",
+          "a": "Non. Chaque invité ouvre son invitation avec son lien personnel et répond directement dedans."
+        },
+        {
+          "q": "Que puis-je modifier dans un modèle ?",
+          "a": "Les textes, les photos, les liens, les couleurs, l'écran d'ouverture (style, titre, monogramme) et la musique. La mise en page reste celle du modèle."
+        },
+        {
+          "q": "Comment fonctionne l'envoi par WhatsApp ?",
+          "a": "Invyra ouvre WhatsApp avec un message prêt à partir, qui contient le lien personnel de l'invité : vous n'avez plus qu'à l'envoyer. Ajoutez votre numéro dans vos paramètres, et celui de l'invité dans votre liste."
+        },
+        {
+          "q": "Que montre le suivi ?",
+          "a": "Pour chaque invité : l'envoi par email ou WhatsApp, l'ouverture de l'invitation et sa réponse (présent, absent ou peut-être). Les totaux de chaque événement sont dans vos statistiques."
+        },
+        {
+          "q": "Un invité peut-il changer sa réponse ?",
+          "a": "Oui. En rouvrant son lien, il peut répondre à nouveau : la nouvelle réponse remplace la précédente."
+        },
+        {
+          "q": "Combien d'invités avec l'offre gratuite ?",
+          "a": "Jusqu'à 15 invités pour un événement. Au-delà, l'Événement premium coûte 1 $ par invité, sans limite de nombre."
+        },
+        {
+          "q": "Puis-je préparer l'événement à plusieurs ?",
+          "a": "Oui. Ajoutez un proche qui a un compte Invyra, comme éditeur (il modifie et envoie) ou comme lecteur (il suit les réponses)."
+        },
+        {
+          "q": "Mes invitations sont-elles privées ?",
+          "a": "Chaque lien est unique et difficile à deviner, et les pages d'invitation ne sont pas référencées par les moteurs de recherche."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Votre invitation peut partir ",
+      "title_highlight": "aujourd'hui",
+      "subtitle": "Créez votre événement, choisissez un modèle, ajoutez vos invités : les 15 premiers sont offerts.",
+      "button": "Créer mon invitation",
+      "secondary": "Voir les tarifs"
     },
     "footer": {
       "brand": "Invyra",
-      "headline": "Créez vos invitations digitales en quelques clics.",
-      "description": "Personnalisez votre design, partagez-le en un instant et suivez vos réponses en temps réel.",
-      "rights": "Tous droits réservés. Développé par",
-      "explore": "Explorer",
-      "help": "Support",
+      "headline": "Des invitations numériques qui s'ouvrent comme une lettre.",
+      "description": "Choisissez un modèle, personnalisez-le sans code, envoyez-le par email ou WhatsApp et suivez les réponses.",
+      "rights": "Tous droits réservés.",
+      "made_by": "Développé par",
+      "product": "Produit",
+      "account": "Compte",
+      "contact": "Contact",
       "links": {
         "features": "Fonctionnalités",
+        "opening": "Ouvertures",
+        "templates": "Modèles",
+        "how_it_works": "Comment ça marche",
+        "availability": "Disponibilités",
         "pricing": "Tarifs",
-        "contact": "Support"
+        "faq": "Questions fréquentes",
+        "sign_in": "Se connecter",
+        "register": "Créer un compte",
+        "dashboard": "Tableau de bord",
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "instagram": "Instagram"
       }
-    },
-    "templates": {
-      "title": "Nos modèles, ",
-      "title_highlight": "prêts à personnaliser",
-      "subtitle": "Choisissez un design, ajoutez vos photos et vos textes : votre invitation est prête en quelques minutes.",
-      "preview": "Voir en direct"
-    },
-    "availability": {
-      "title": "Vérifiez votre ",
-      "title_highlight": "date",
-      "subtitle": "Les dates déjà retenues par nos clients apparaissent en doré. Le calendrier se met à jour tout seul à chaque nouvel événement.",
-      "multiple_note": "Une date réservée reste possible : nous accompagnons plusieurs mariages le même jour.",
-      "legend_free": "Disponible",
-      "legend_booked": "Date réservée, encore possible",
-      "month_free": "Aucune réservation ce mois-ci",
-      "month_booked_one": "date réservée ce mois-ci",
-      "month_booked_many": "dates réservées ce mois-ci",
-      "prev": "Mois précédent",
-      "next": "Mois suivant",
-      "cta": "Réserver ma date",
-      "upcoming": "Prochaines dates réservées",
-      "day_free": "Aucun mariage prévu ce jour-là : la date est libre.",
-      "wedding_one": "mariage déjà prévu ce jour-là",
-      "wedding_many": "mariages déjà prévus ce jour-là",
-      "still_possible": "La date reste possible : nous accompagnons plusieurs mariages le même jour.",
-      "book_this_date": "Réserver cette date",
-      "pick_a_date": "Touchez une date pour voir combien de mariages y sont déjà prévus.",
-      "mail_subject": "Demande de réservation",
-      "mail_body": "Bonjour,\n\nJe souhaite réserver la date du {date} pour notre mariage.\n\nNos prénoms :\nLieu de la réception :\nNombre d'invités (environ) :\nTéléphone :\n\nMerci et à bientôt !",
-      "mail_date_placeholder": "(date à préciser)"
     }
   }
 }

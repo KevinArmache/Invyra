@@ -7,6 +7,8 @@ import {
   Check,
   CheckCircle2,
   Clock,
+  Eye,
+  EyeOff,
   HelpCircle,
   Loader2,
   Mail,
@@ -85,7 +87,42 @@ function RsvpBadge({ status }) {
   );
 }
 
-function GuestRow({ guest }) {
+/**
+ * Ouverture de l'invitation : l'œil doré et la date au survol, ou un œil
+ * barré tant que l'invité ne l'a pas ouverte. La date vient de la première
+ * ouverture (getInvitationByToken), robots d'aperçu exclus.
+ */
+function OpenedBadge({ viewedAt }) {
+  const { t, locale } = useTranslation();
+
+  if (!viewedAt) {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs text-ink-400">
+        <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
+        {t("portal.events.details.guests.not_opened")}
+      </span>
+    );
+  }
+
+  const date = new Date(viewedAt).toLocaleString(
+    locale === "fr" ? "fr-FR" : "en-US",
+    { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" },
+  );
+  const label = t("portal.events.details.guests.opened_on").replace("{date}", date);
+
+  return (
+    <span
+      className="inline-flex items-center gap-1 text-xs text-gold"
+      title={label}
+    >
+      <Eye className="h-3.5 w-3.5" aria-hidden="true" />
+      {t("portal.events.details.guests.opened")}
+      <span className="sr-only">: {label}</span>
+    </span>
+  );
+}
+
+function GuestRow({ guest, index }) {
   const { t } = useTranslation();
   const router = useRouter();
   const [sending, setSending] = useState(null);
@@ -134,9 +171,14 @@ function GuestRow({ guest }) {
   }
 
   return (
-    <li className="group flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-ink-800/40 sm:flex-row sm:items-center">
+    <li
+      className="group animate-rise flex flex-col gap-3 px-5 py-4 transition-colors duration-300 hover:bg-ink-800/40 sm:flex-row sm:items-center"
+      // Cascade limitée aux premières lignes : une longue liste ne doit pas
+      // mettre plusieurs secondes à apparaître.
+      style={{ "--rise-delay": `${Math.min(index, 12) * 40}ms` }}
+    >
       <div className="flex min-w-0 flex-1 items-center gap-3">
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold/25 bg-gold/10 font-display text-sm text-gold">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-gold/25 bg-gold/10 font-display text-sm text-gold transition-transform duration-300 group-hover:scale-105">
           {guest.name.charAt(0).toUpperCase()}
         </span>
         <div className="min-w-0">
@@ -159,7 +201,8 @@ function GuestRow({ guest }) {
         </div>
       </div>
 
-      <div className="shrink-0">
+      <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1.5">
+        <OpenedBadge viewedAt={guest.invitationViewedAt} />
         <RsvpBadge status={guest.rsvpStatus} />
       </div>
 
@@ -174,7 +217,7 @@ function GuestRow({ guest }) {
           {sending === "email" ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
           ) : emailSent ? (
-            <Check className="h-3.5 w-3.5" />
+            <Check className="animate-pop h-3.5 w-3.5" />
           ) : (
             <Mail className="h-3.5 w-3.5" />
           )}
@@ -194,7 +237,7 @@ function GuestRow({ guest }) {
             {sending === "whatsapp" ? (
               <Loader2 className="h-3.5 w-3.5 animate-spin" />
             ) : whatsappSent ? (
-              <Check className="h-3.5 w-3.5" />
+              <Check className="animate-pop h-3.5 w-3.5" />
             ) : (
               <MessageCircle className="h-3.5 w-3.5" />
             )}
@@ -339,12 +382,10 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
     router.refresh();
   }
 
-  const confirmed = guests.filter((g) => g.rsvpStatus === "confirmed").length;
-
   return (
     <Panel
       title={t("portal.events.details.guests.title")}
-      description={`${guests.length} ${t("portal.events.list.guests")} · ${confirmed} ${t("portal.events.details.guests.status.attending").toLowerCase()}`}
+      description={t("portal.events.details.guests.subtitle")}
       action={
         <div className="flex flex-wrap items-center gap-2">
           {guests.length > 0 && (
@@ -355,7 +396,7 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
               disabled={!hasTemplate || pendingEmails === 0 || isSendingBulk}
               title={
                 hasTemplate
-                  ? undefined
+                  ? t("portal.events.details.guests.bulk_hint")
                   : t("portal.events.details.guests.bulk_needs_template")
               }
             >
@@ -388,7 +429,7 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
       }
     >
       {showAdd && (
-        <div className="grid gap-8 border-b border-border/60 bg-ink-800/30 p-5 md:grid-cols-2">
+        <div className="grid animate-in fade-in-0 slide-in-from-top-2 gap-8 border-b border-border/60 bg-ink-800/30 p-5 duration-500 md:grid-cols-2">
           <form onSubmit={handleAdd} className="space-y-3">
             <h3 className="eyebrow">{t("portal.events.new.add_guest")}</h3>
 
@@ -491,8 +532,8 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
             <EmptyState icon={Search} title={t("common.no_results")} />
           ) : (
             <ul className="divide-y divide-border/60">
-              {filtered.map((guest) => (
-                <GuestRow key={guest.id} guest={guest} />
+              {filtered.map((guest, index) => (
+                <GuestRow key={guest.id} guest={guest} index={index} />
               ))}
             </ul>
           )}

@@ -31,21 +31,25 @@ const STEPS = [
   { id: 3, icon: Users, key: "portal.events.new.steps.guests" },
 ];
 
-/** Fil d'Ariane des étapes : état courant, franchies, à venir. */
+/**
+ * Fil d'Ariane des étapes : état courant, franchies, à venir. Le filet entre
+ * deux étapes se remplit d'or quand la première est franchie, et l'étape
+ * courante est entourée d'un anneau qui appelle l'œil.
+ */
 function Steps({ current }) {
   const { t } = useTranslation();
 
   return (
-    <ol className="mb-8 flex items-center gap-2 sm:gap-4">
+    <ol className="animate-rise mb-8 flex items-center gap-2 sm:gap-4" style={{ "--rise-delay": "120ms" }}>
       {STEPS.map((step, index) => {
         const isDone = current > step.id;
         const isCurrent = current === step.id;
 
         return (
-          <li key={step.id} className="flex flex-1 items-center gap-2 sm:gap-4">
+          <li key={step.id} className="flex flex-1 items-center gap-2 last:flex-none sm:gap-4">
             <div className="flex min-w-0 items-center gap-2.5">
               <span
-                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm transition-colors ${
+                className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-sm transition-[background-color,border-color,color] duration-500 ${
                   isDone
                     ? "border-gold/40 bg-gold/15 text-gold"
                     : isCurrent
@@ -54,14 +58,15 @@ function Steps({ current }) {
                 }`}
                 aria-current={isCurrent ? "step" : undefined}
               >
+                {isCurrent && <span className="pulse-ring absolute inset-0 rounded-full" />}
                 {isDone ? (
-                  <Check className="h-4 w-4" strokeWidth={2.5} />
+                  <Check className="animate-pop h-4 w-4" strokeWidth={2.5} />
                 ) : (
                   <step.icon className="h-4 w-4" strokeWidth={1.75} />
                 )}
               </span>
               <span
-                className={`hidden truncate text-sm sm:block ${
+                className={`hidden truncate text-sm transition-colors duration-500 sm:block ${
                   isCurrent ? "text-ink-50" : "text-ink-400"
                 }`}
               >
@@ -72,8 +77,13 @@ function Steps({ current }) {
             {index < STEPS.length - 1 && (
               <span
                 aria-hidden="true"
-                className={`h-px flex-1 ${isDone ? "bg-gold/40" : "bg-border"}`}
-              />
+                className="relative h-px flex-1 overflow-hidden bg-border"
+              >
+                <span
+                  className="absolute inset-0 origin-left bg-gold/60 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  style={{ transform: `scaleX(${isDone ? 1 : 0})` }}
+                />
+              </span>
             )}
           </li>
         );
@@ -197,14 +207,14 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
             <EventFields />
 
             <div className="mt-7 flex justify-end">
-              <Button type="submit" size="lg" disabled={isPending}>
-                {isPending ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : null}
+              <Button type="submit" size="lg" disabled={isPending} className="group">
+                {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 {isPending
                   ? t("portal.events.new.buttons.creating")
                   : t("portal.events.new.buttons.continue")}
-                {!isPending && <ArrowRight className="ml-2 h-4 w-4" />}
+                {!isPending && (
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                )}
               </Button>
             </div>
           </form>
@@ -250,9 +260,10 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
                 size="lg"
                 onClick={() => setStep(3)}
                 disabled={isPending || !selectedTemplateId}
+                className="group"
               >
                 {t("portal.events.new.buttons.continue_with_template")}
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
             </div>
           </div>
@@ -306,7 +317,7 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
               </div>
 
               <Button type="submit" className="w-full" disabled={isPending}>
-                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                 {t("portal.events.new.buttons.add")}
               </Button>
             </form>
@@ -320,9 +331,9 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
                   {guests.map((guest) => (
                     <li
                       key={guest.id}
-                      className="flex items-center gap-2 px-2 py-1 text-sm text-ink-300"
+                      className="animate-in fade-in-0 slide-in-from-left-2 flex items-center gap-2 px-2 py-1 text-sm text-ink-300 duration-300"
                     >
-                      <Check className="h-3.5 w-3.5 shrink-0 text-positive" />
+                      <Check className="animate-pop h-3.5 w-3.5 shrink-0 text-positive" />
                       <span className="truncate">{guest.name}</span>
                       <span className="ml-auto truncate text-xs text-ink-400">
                         {guest.email}
@@ -335,9 +346,9 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
           </div>
 
           <div className="flex justify-end border-t border-border/60 px-5 py-4">
-            <Button size="lg" onClick={finish}>
+            <Button size="lg" onClick={finish} className="group">
               {t("portal.events.new.buttons.finish")}
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
           </div>
         </Panel>

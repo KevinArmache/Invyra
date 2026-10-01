@@ -7,6 +7,7 @@ import {
 } from "@/app/actions/template";
 import TemplateEditorForm from "@/components/templates/TemplateEditorForm";
 import { toEditableConfig } from "@/lib/templates/validation";
+import { getTranslations } from "@/lib/i18n/server";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;
@@ -14,7 +15,8 @@ export async function generateMetadata({ params }) {
     const template = await getUserTemplateById(id);
     return { title: template.name };
   } catch {
-    return { title: "Modèle" };
+    const { t } = await getTranslations();
+    return { title: t("portal.templates.list.title") };
   }
 }
 

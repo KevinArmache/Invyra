@@ -34,6 +34,7 @@ import { Input } from "@/components/ui/input";
 import { EmptyState, StatusBadge } from "@/components/shell/primitives";
 import PaginationNav from "@/components/common/PaginationNav";
 import CategoryFilter from "@/components/templates/CategoryFilter";
+import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import {
@@ -177,16 +178,20 @@ export default function TemplatesBrowser({
 
   if (totalAll === 0) {
     return (
-      <div className="surface">
+      <div className="surface animate-rise rounded-xl" style={{ "--rise-delay": "150ms" }}>
         <EmptyState
           icon={LayoutTemplate}
           title={t("portal.templates.list.no_templates")}
-          description={t("portal.templates.list.no_templates_desc")}
+          description={t(
+            currentUser.role === "admin"
+              ? "portal.templates.list.no_templates_desc_admin"
+              : "portal.templates.list.no_templates_desc",
+          )}
           action={
             currentUser.role === "admin" ? (
               <Button asChild>
                 <Link href="/dashboard/templates/new">
-                  <Plus size={18} className="mr-2" />
+                  <Plus size={18} />
                   {t("portal.templates.list.create_first")}
                 </Link>
               </Button>
@@ -205,7 +210,7 @@ export default function TemplatesBrowser({
 
   return (
     <>
-      <div className="mb-6 space-y-4">
+      <div className="animate-rise mb-6 space-y-4" style={{ "--rise-delay": "120ms" }}>
         <div className="relative max-w-md">
           <Search
             className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400"
@@ -235,7 +240,7 @@ export default function TemplatesBrowser({
       </div>
 
       {templates.length === 0 ? (
-        <div className="surface">
+        <div className="surface animate-scale-in rounded-xl">
           <EmptyState
             icon={Search}
             title={t("common.no_results")}
@@ -253,190 +258,195 @@ export default function TemplatesBrowser({
             isSearching ? "opacity-60" : ""
           }`}
         >
-          {templates.map((template) => {
+          {templates.map((template, index) => {
             const editable = canManage(template, currentUser);
             const duplicable = canDuplicate(currentUser);
 
             return (
               <li
                 key={template.id}
-                className="surface-interactive flex flex-col overflow-hidden"
+                data-reveal
+                style={{ "--i": index % 4 }}
               >
-                {/* Vignette : le modèle est rendu à l'échelle réduite, figé,
-                    et seulement quand la carte approche de l'écran. */}
-                <div className="relative aspect-3/4 overflow-hidden border-b border-border/60 bg-ink-900">
-                  <TemplateThumbnail
-                    template={template.config}
-                    event={{ ...SAMPLE_EVENT, title: template.name }}
-                    title={template.name}
-                  />
+                <div className="group tilt spotlight surface-interactive flex h-full flex-col overflow-hidden rounded-xl">
+                  {/* Vignette : le modèle est rendu à l'échelle réduite, figé,
+                      et seulement quand la carte approche de l'écran. */}
+                  <div className="relative aspect-3/4 overflow-hidden border-b border-border/60 bg-ink-900">
+                    <div className="absolute inset-0 origin-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]">
+                      <TemplateThumbnail
+                        template={template.config}
+                        event={{ ...SAMPLE_EVENT, title: template.name }}
+                        title={template.name}
+                      />
+                    </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setPreview(template)}
-                    className="absolute inset-0 flex items-center justify-center bg-ink-900/70 opacity-0 transition-opacity hover:opacity-100 focus-visible:opacity-100"
-                  >
-                    <span className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-ink-850 px-4 py-2 text-xs tracking-wider text-gold uppercase">
-                      <Eye className="h-3.5 w-3.5" />
-                      {t("portal.templates.list.preview_btn")}
-                    </span>
-                  </button>
-                </div>
-
-                <div className="flex flex-1 flex-col p-4">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <StatusBadge
-                      status={template.status ?? "draft"}
-                      label={t(
-                        STATUS_LABEL_KEY[template.status] ??
-                          STATUS_LABEL_KEY.draft,
-                      )}
-                    />
-                    {template.featured && (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-gold/30 bg-gold/10 px-2 py-0.5 text-[11px] text-gold">
-                        <Star className="h-3 w-3" fill="currentColor" />
-                        {t("portal.templates.list.featured_badge")}
+                    <button
+                      type="button"
+                      onClick={() => setPreview(template)}
+                      className="absolute inset-0 flex items-end justify-center bg-linear-to-t from-ink-900/85 via-ink-900/20 to-transparent p-5 opacity-0 transition-opacity duration-500 hover:opacity-100 focus-visible:opacity-100"
+                    >
+                      <span className="inline-flex translate-y-2 items-center gap-2 rounded-full border border-gold/30 bg-ink-850 px-4 py-2 text-xs tracking-wider text-gold uppercase transition-transform duration-500 group-hover:translate-y-0">
+                        <Eye className="h-3.5 w-3.5" />
+                        {t("portal.templates.list.preview_btn")}
                       </span>
-                    )}
+                    </button>
                   </div>
 
-                  <h3 className="mt-3 truncate text-base text-ink-50">
-                    {template.name}
-                  </h3>
-
-                  <p className="mt-1 truncate text-xs text-ink-400">
-                    {template.category && (
-                      <>
-                        <span className="text-ink-300">
-                          {t(`portal.templates.categories.${template.category}`)}
+                  <div className="flex flex-1 flex-col p-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <StatusBadge
+                        status={template.status ?? "draft"}
+                        label={t(
+                          STATUS_LABEL_KEY[template.status] ??
+                            STATUS_LABEL_KEY.draft,
+                        )}
+                      />
+                      {template.featured && (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-gold/30 bg-gold/10 px-2 py-0.5 text-[11px] text-gold">
+                          <Star className="h-3 w-3" fill="currentColor" />
+                          {t("portal.templates.list.featured_badge")}
                         </span>
-                        <span aria-hidden="true"> · </span>
-                      </>
-                    )}
-                    {dateFormat.format(new Date(template.createdAt))}
-                  </p>
-
-                  <p
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs text-ink-400"
-                    title={t("portal.templates.list.usage_hint")}
-                  >
-                    <Copy className="h-3 w-3" aria-hidden="true" />
-                    <span data-numeric>
-                      {template._count?.eventCopies ?? 0}
-                    </span>
-                    <span>{t("portal.templates.list.usage_label")}</span>
-                  </p>
-
-                  {(editable || duplicable) && (
-                    <div className="mt-4 flex items-center gap-1 border-t border-border/60 pt-3">
-                      {editable && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          asChild
-                          className="h-8 w-8 text-ink-400 hover:text-ink-50"
-                        >
-                          <Link
-                            href={`/dashboard/templates/${template.id}`}
-                            aria-label={t("portal.templates.list.edit_btn")}
-                            title={t("portal.templates.list.edit_btn")}
-                          >
-                            <Pencil size={15} />
-                          </Link>
-                        </Button>
-                      )}
-
-                      {duplicable && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDuplicate(template.id)}
-                          disabled={isPending}
-                          className="h-8 w-8 text-ink-400 hover:text-ink-50"
-                          aria-label={t("portal.templates.list.duplicate_btn")}
-                          title={t("portal.templates.list.duplicate_btn")}
-                        >
-                          <CopyPlus size={15} />
-                        </Button>
-                      )}
-
-                      {currentUser.role === "admin" && (
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() =>
-                            handleFeature(template.id, !template.featured)
-                          }
-                          disabled={isPending}
-                          aria-pressed={Boolean(template.featured)}
-                          className={`h-8 w-8 ${
-                            template.featured
-                              ? "text-gold hover:text-gold-bright"
-                              : "text-ink-400 hover:text-ink-50"
-                          }`}
-                          aria-label={t(
-                            template.featured
-                              ? "portal.templates.list.unfeature_btn"
-                              : "portal.templates.list.feature_btn",
-                          )}
-                          title={t(
-                            template.featured
-                              ? "portal.templates.list.unfeature_btn"
-                              : "portal.templates.list.feature_btn",
-                          )}
-                        >
-                          <Star
-                            size={15}
-                            fill={template.featured ? "currentColor" : "none"}
-                          />
-                        </Button>
-                      )}
-
-                      {editable && (
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="ml-auto h-8 w-8 text-ink-400 hover:bg-destructive/10 hover:text-destructive"
-                              aria-label={t("portal.events.list.delete_btn")}
-                            >
-                              <Trash2 size={15} />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>
-                                {t("portal.events.list.delete_btn")} «{" "}
-                                {template.name} » ?
-                              </AlertDialogTitle>
-                              <AlertDialogDescription>
-                                {t("portal.templates.list.delete_confirm")}
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel disabled={isPending}>
-                                {t("common.cancel")}
-                              </AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={(clickEvent) => {
-                                  clickEvent.preventDefault();
-                                  handleDelete(template.id);
-                                }}
-                                disabled={isPending}
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                              >
-                                {isPending && (
-                                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                )}
-                                {t("portal.events.list.delete_btn")}
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
                       )}
                     </div>
-                  )}
+
+                    <h3 className="mt-3 truncate text-base text-ink-50">
+                      {template.name}
+                    </h3>
+
+                    <p className="mt-1 truncate text-xs text-ink-400">
+                      {template.category && (
+                        <>
+                          <span className="text-ink-300">
+                            {t(`portal.templates.categories.${template.category}`)}
+                          </span>
+                          <span aria-hidden="true"> · </span>
+                        </>
+                      )}
+                      {dateFormat.format(new Date(template.createdAt))}
+                    </p>
+
+                    <p
+                      className="mt-2 inline-flex items-center gap-1.5 text-xs text-ink-400"
+                      title={t("portal.templates.list.usage_hint")}
+                    >
+                      <Copy className="h-3 w-3" aria-hidden="true" />
+                      <span data-numeric>
+                        {template._count?.eventCopies ?? 0}
+                      </span>
+                      <span>{t("portal.templates.list.usage_label")}</span>
+                    </p>
+
+                    {(editable || duplicable) && (
+                      <div className="mt-4 flex items-center gap-1 border-t border-border/60 pt-3">
+                        {editable && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            className="h-8 w-8 text-ink-400 hover:text-ink-50"
+                          >
+                            <Link
+                              href={`/dashboard/templates/${template.id}`}
+                              aria-label={t("portal.templates.list.edit_btn")}
+                              title={t("portal.templates.list.edit_btn")}
+                            >
+                              <Pencil size={15} />
+                            </Link>
+                          </Button>
+                        )}
+
+                        {duplicable && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDuplicate(template.id)}
+                            disabled={isPending}
+                            className="h-8 w-8 text-ink-400 hover:text-ink-50"
+                            aria-label={t("portal.templates.list.duplicate_btn")}
+                            title={t("portal.templates.list.duplicate_btn")}
+                          >
+                            <CopyPlus size={15} />
+                          </Button>
+                        )}
+
+                        {currentUser.role === "admin" && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() =>
+                              handleFeature(template.id, !template.featured)
+                            }
+                            disabled={isPending}
+                            aria-pressed={Boolean(template.featured)}
+                            className={`h-8 w-8 ${
+                              template.featured
+                                ? "text-gold hover:text-gold-bright"
+                                : "text-ink-400 hover:text-ink-50"
+                            }`}
+                            aria-label={t(
+                              template.featured
+                                ? "portal.templates.list.unfeature_btn"
+                                : "portal.templates.list.feature_btn",
+                            )}
+                            title={t(
+                              template.featured
+                                ? "portal.templates.list.unfeature_btn"
+                                : "portal.templates.list.feature_btn",
+                            )}
+                          >
+                            <Star
+                              size={15}
+                              fill={template.featured ? "currentColor" : "none"}
+                            />
+                          </Button>
+                        )}
+
+                        {editable && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="ml-auto h-8 w-8 text-ink-400 hover:bg-destructive/10 hover:text-destructive"
+                                aria-label={t("portal.events.list.delete_btn")}
+                              >
+                                <Trash2 size={15} />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  {t("portal.events.list.delete_btn")} «{" "}
+                                  {template.name} » ?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  {t("portal.templates.list.delete_confirm")}
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel disabled={isPending}>
+                                  {t("common.cancel")}
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={(clickEvent) => {
+                                    clickEvent.preventDefault();
+                                    handleDelete(template.id);
+                                  }}
+                                  disabled={isPending}
+                                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                >
+                                  {isPending && (
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                  )}
+                                  {t("portal.events.list.delete_btn")}
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </li>
             );
@@ -460,21 +470,21 @@ export default function TemplatesBrowser({
         open={Boolean(preview)}
         onOpenChange={(open) => !open && setPreview(null)}
       >
-        <DialogContent className="h-[90vh] max-w-[95vw] overflow-hidden border-border bg-black p-0 md:max-w-[620px]">
+        <DialogContent className="max-h-[94dvh] w-auto max-w-[95vw] overflow-y-auto border-0 bg-transparent p-2 shadow-none sm:max-w-none">
           <DialogTitle className="sr-only">
             {t("portal.templates.list.preview_btn")}
           </DialogTitle>
           {preview && (
-            <div className="h-full w-full overflow-auto">
-              {/* Aperçu vivant : le script tourne (effets, compte à rebours,
-                  réponse RSVP simulée). Rien n'est envoyé : aucune page
-                  n'écoute les réponses ici. */}
+            // Aperçu vivant : le script tourne (effets, compte à rebours,
+            // réponse RSVP simulée). Rien n'est envoyé : aucune page
+            // n'écoute les réponses ici.
+            <DeviceFrame glow={false} className="w-[min(88vw,21rem,calc((90dvh-1.5rem)*9/19))]">
               <InvitationPreview
                 template={preview.config}
                 event={{ ...SAMPLE_EVENT, title: preview.name }}
                 guestName="Marie Dupont"
               />
-            </div>
+            </DeviceFrame>
           )}
         </DialogContent>
       </Dialog>

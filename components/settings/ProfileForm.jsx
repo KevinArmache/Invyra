@@ -64,33 +64,42 @@ export default function ProfileForm({ user }) {
         />
       </div>
 
-      <div className="grid items-end gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="settings-company">{t("settings.company")}</Label>
-          <Input
-            id="settings-company"
-            name="company"
-            defaultValue={user.company ?? ""}
-            placeholder={t("settings.company_placeholder")}
-            autoComplete="organization"
-          />
-        </div>
+      <div className="space-y-2">
+        <div className="grid items-end gap-5 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="settings-company">{t("settings.company")}</Label>
+            <Input
+              id="settings-company"
+              name="company"
+              defaultValue={user.company ?? ""}
+              placeholder={t("settings.company_placeholder")}
+              autoComplete="organization"
+            />
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="settings-phone">{t("settings.phone")}</Label>
-          <Input
-            id="settings-phone"
-            name="phone"
-            type="tel"
-            defaultValue={user.phone ?? ""}
-            placeholder={t("settings.phone_placeholder")}
-            autoComplete="tel"
-          />
+          <div className="space-y-2">
+            <Label htmlFor="settings-phone">{t("settings.phone")}</Label>
+            <Input
+              id="settings-phone"
+              name="phone"
+              type="tel"
+              defaultValue={user.phone ?? ""}
+              placeholder={t("settings.phone_placeholder")}
+              autoComplete="tel"
+              aria-describedby="settings-phone-hint"
+            />
+          </div>
         </div>
+        <p
+          id="settings-phone-hint"
+          className="text-xs leading-snug text-ink-400 sm:text-right"
+        >
+          {t("settings.phone_hint")}
+        </p>
       </div>
 
       <Button type="submit" disabled={isPending}>
-        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
         {isPending ? t("settings.saving") : t("settings.save")}
       </Button>
     </form>

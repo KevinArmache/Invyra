@@ -54,18 +54,22 @@ export default function TemplateGallery({ templates, selectedId, onSelect }) {
       />
 
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {visible.map((template) => {
+        {visible.map((template, index) => {
           const isSelected = selectedId === template.id;
 
           return (
-            <li key={template.id}>
+            <li
+              key={template.id}
+              className="animate-in fade-in-0 zoom-in-95 fill-mode-both duration-500"
+              style={{ animationDelay: `${Math.min(index, 11) * 50}ms` }}
+            >
               <button
                 type="button"
                 onClick={() => onSelect(template.id, template.config)}
                 aria-pressed={isSelected}
-                className={`relative aspect-3/4 w-full overflow-hidden rounded-md border bg-ink-900 text-left transition-colors ${
+                className={`group relative aspect-3/4 w-full overflow-hidden rounded-md border bg-ink-900 text-left transition-[border-color,box-shadow,translate] duration-300 hover:-translate-y-0.5 ${
                   isSelected
-                    ? "border-gold"
+                    ? "border-gold shadow-[0_0_24px_-8px_var(--gold)]"
                     : "border-border hover:border-gold/40"
                 }`}
               >
@@ -82,7 +86,7 @@ export default function TemplateGallery({ templates, selectedId, onSelect }) {
                 </span>
 
                 {isSelected && (
-                  <span className="absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold">
+                  <span className="animate-pop absolute top-2 right-2 flex h-5 w-5 items-center justify-center rounded-full bg-gold">
                     <Check
                       className="h-3 w-3 text-primary-foreground"
                       strokeWidth={3}

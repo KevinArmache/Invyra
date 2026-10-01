@@ -7,7 +7,14 @@ import { getTranslations } from "@/lib/i18n/server";
 import AuthShell from "@/components/auth/AuthShell";
 import LoginForm from "@/components/auth/LoginForm";
 
-export const metadata = { title: "Connexion" };
+export async function generateMetadata() {
+  const { t } = await getTranslations();
+  return {
+    title: t("login.meta_title"),
+    description: t("login.meta_description"),
+    alternates: { canonical: "/login" },
+  };
+}
 
 export default async function LoginPage() {
   const session = await auth.api.getSession({ headers: await headers() });
