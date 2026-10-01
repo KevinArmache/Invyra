@@ -373,6 +373,7 @@
         "eclat": "Grand wedding: full-screen photo, gold-foil title, gold dust, countdown and confetti.",
         "origami": "A folded sheet the guest unfolds with a fingertip. Embossed paper, accordion schedule, a reply card that flies off as a paper plane and a final paper figure.",
         "vinyl": "A vinyl album: the guest slides the record out of its sleeve and drops the needle. A tracklist played by the turntable, a record you flip over, a jukebox to reply and a hidden track. Great for a birthday or a party.",
+        "boarding": "A journey: the guest tears off the stub of their boarding pass, the departures board flips its letters, a plane follows the itinerary and the passport fills with stamps. Ideal for a destination wedding.",
         "elegance": "Translucent card and gold trim, title over the photo. For big occasions.",
         "minimal": "Light, airy page with strong typography. Clean and modern.",
         "festive": "Bright gradient, confetti and round buttons. Time to party."
@@ -413,7 +414,9 @@
         "record": "Record colour",
         "fontMono": "Numbers font",
         "rpm": "Record speed",
-        "crackle": "Crackle on opening"
+        "crackle": "Crackle on opening",
+        "flap": "Departure board letters",
+        "sounds": "Airport sounds"
       },
       "sections": {
         "opening": "Invitation opening",

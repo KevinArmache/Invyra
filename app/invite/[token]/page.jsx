@@ -5,8 +5,8 @@ import { XCircle } from "lucide-react";
 import { getInvitationByToken } from "@/app/actions/invitation";
 import InvitationExperience from "@/components/invitation/InvitationExperience";
 import InvitationUnavailable from "@/components/invitation/InvitationUnavailable";
-import { toEditableConfig } from "@/lib/invitation/document";
-import { isDesignConfig } from "@/lib/invitation/template-config";
+import { toEditableConfig } from "@/lib/templates/validation";
+import { isDesignConfig } from "@/lib/templates/config";
 
 /**
  * Robots qui génèrent l'aperçu d'un lien partagé (WhatsApp, iMessage,

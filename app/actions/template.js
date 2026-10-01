@@ -3,9 +3,9 @@
 import { prisma } from "@/lib/prisma";
 import { getSession, isEventOwnerOrAdmin } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
-import { validateTemplateConfig } from "@/lib/invitation/document";
-import { normalizeCategory } from "@/lib/invitation/categories";
-import { isDesignConfig } from "@/lib/invitation/template-config";
+import { validateTemplateConfig } from "@/lib/templates/validation";
+import { normalizeCategory } from "@/lib/templates/categories";
+import { isDesignConfig } from "@/lib/templates/config";
 
 const TEMPLATE_STATUSES = ["draft", "in_progress", "completed"];
 

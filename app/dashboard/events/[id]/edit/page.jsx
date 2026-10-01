@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getEventById } from "@/app/actions/event";
-import EditEventForm from "@/components/dashboard/events/EditEventForm";
+import EditEventForm from "@/components/events/EditEventForm";
 
 export const metadata = { title: "Modifier l'événement" };
 

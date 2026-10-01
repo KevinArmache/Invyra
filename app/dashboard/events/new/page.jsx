@@ -1,6 +1,6 @@
 import { getSession } from "@/app/actions/auth";
 import { getTemplates } from "@/app/actions/template";
-import NewEventWizard from "@/components/dashboard/events/NewEventWizard";
+import NewEventWizard from "@/components/events/NewEventWizard";
 
 export const metadata = { title: "Créer un événement" };
 

@@ -12,7 +12,7 @@ import {
   StatCard,
   StatGrid,
   StatusBadge,
-} from "@/components/dashboard/ui";
+} from "@/components/shell/primitives";
 
 export const metadata = { title: "Tableau de bord" };
 

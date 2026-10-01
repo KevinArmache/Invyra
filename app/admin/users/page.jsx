@@ -1,7 +1,7 @@
 import { getAllUsers } from "@/app/actions/admin";
 import { getCurrentUser } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
-import { PageHeader } from "@/components/dashboard/ui";
+import { PageHeader } from "@/components/shell/primitives";
 import UsersTable from "@/components/admin/UsersTable";
 
 export const metadata = { title: "Utilisateurs" };

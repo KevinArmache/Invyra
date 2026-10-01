@@ -5,9 +5,9 @@ import {
   getUserTemplateById,
   updateUserTemplate,
 } from "@/app/actions/template";
-import TemplateEditorForm from "@/components/dashboard/templates/TemplateEditorForm";
-import { toEditableConfig } from "@/lib/invitation/document";
-import { isDesignConfig } from "@/lib/invitation/template-config";
+import TemplateEditorForm from "@/components/templates/TemplateEditorForm";
+import { toEditableConfig } from "@/lib/templates/validation";
+import { isDesignConfig } from "@/lib/templates/config";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;

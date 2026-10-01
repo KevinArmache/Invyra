@@ -6,8 +6,8 @@ import { getTemplatesPage } from "@/app/actions/template";
 import { getCurrentUser } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/dashboard/ui";
-import TemplatesBrowser from "@/components/dashboard/templates/TemplatesBrowser";
+import { PageHeader } from "@/components/shell/primitives";
+import TemplatesBrowser from "@/components/templates/TemplatesBrowser";
 
 export const metadata = { title: "Modèles" };
 

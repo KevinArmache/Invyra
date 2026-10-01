@@ -4,8 +4,8 @@ import { Plus } from "lucide-react";
 import { getEvents } from "@/app/actions/event";
 import { getTranslations } from "@/lib/i18n/server";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/dashboard/ui";
-import EventsBrowser from "@/components/dashboard/events/EventsBrowser";
+import { PageHeader } from "@/components/shell/primitives";
+import EventsBrowser from "@/components/events/EventsBrowser";
 
 export const metadata = { title: "Événements" };
 

@@ -5,8 +5,8 @@ import {
   getBookedDates,
   getShowcaseTemplates,
   todayKey,
-} from "@/lib/landing";
-import { sampleEvent } from "@/lib/invitation/sample";
+} from "@/lib/landing/data";
+import { sampleEvent } from "@/lib/landing/sample-event";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";

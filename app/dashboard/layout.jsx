@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { getCurrentUser, logout } from "@/app/actions/auth";
-import DashboardShell from "@/components/dashboard/DashboardShell";
+import DashboardShell from "@/components/shell/DashboardShell";
 
 // Chaque écran dépend de la session et de la langue, toutes deux dans des
 // cookies. Le dire explicitement évite à la compilation de tenter un

@@ -7,7 +7,7 @@ import {
   canAccessEvent,
 } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
-import { validateTemplateConfig } from "@/lib/invitation/document";
+import { validateTemplateConfig } from "@/lib/templates/validation";
 
 const PLAN_LIMITS = {
   free: 1,

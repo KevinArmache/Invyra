@@ -373,6 +373,7 @@
         "eclat": "Grand mariage : photo plein écran, titre à la feuille d'or, poussière d'or, compte à rebours et confettis.",
         "origami": "Une feuille pliée que l'invité déplie du bout du doigt. Papier en relief, programme en accordéon, carte-réponse qui s'envole en avion et figure finale en papier.",
         "vinyl": "Un album vinyle : l'invité sort le disque de sa pochette et pose l'aiguille. Tracklist lue par la platine, disque qu'on retourne, jukebox pour répondre et piste cachée. Idéal pour un anniversaire ou une soirée.",
+        "boarding": "Un voyage : l'invité détache le talon de sa carte d'embarquement, le tableau des départs fait claquer ses palettes, un avion suit l'itinéraire et le passeport se remplit de tampons. Idéal pour un mariage à destination.",
         "elegance": "Carte translucide et filet doré, titre posé sur la photo. Pour les grandes occasions.",
         "minimal": "Page claire et aérée, typographie forte. Sobre et moderne.",
         "festive": "Dégradé vif, confettis et boutons ronds. Pour faire la fête."
@@ -413,7 +414,9 @@
         "record": "Couleur du disque",
         "fontMono": "Police des numéros",
         "rpm": "Vitesse du disque",
-        "crackle": "Grésillement à l'ouverture"
+        "crackle": "Grésillement à l'ouverture",
+        "flap": "Lettres du tableau",
+        "sounds": "Sons de l'aéroport"
       },
       "sections": {
         "opening": "Ouverture de l'invitation",

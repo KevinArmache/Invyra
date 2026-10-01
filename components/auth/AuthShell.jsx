@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 
 /**
  * Cadre commun aux pages de connexion et d'inscription.

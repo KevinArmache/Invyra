@@ -70,8 +70,8 @@ La bascule se fait automatiquement à la première connexion de chaque
 utilisateur. Pour tout migrer d'un coup :
 
 ```bash
-node --env-file=.env prisma/migrate-passwords.mjs --dry   # aperçu
-node --env-file=.env prisma/migrate-passwords.mjs         # application
+node --env-file=.env prisma/scripts/migrate-passwords.mjs --dry   # aperçu
+node --env-file=.env prisma/scripts/migrate-passwords.mjs         # application
 ```
 
 Une fois tous les comptes migrés, `legacyPassword` peut être retiré du schéma.
@@ -119,68 +119,110 @@ Utilitaires partagés : `.surface`, `.surface-interactive`, `.rule-gold`,
 `.eyebrow`, `.text-gold`, `.grain`, `.reveal`.
 
 Les primitives d'écran (`PageHeader`, `StatCard`, `Panel`, `EmptyState`,
-`StatusBadge`) sont dans `components/dashboard/ui.jsx`.
+`StatusBadge`) sont dans `components/shell/primitives.jsx`.
 
 ---
 
 ## Organisation
 
+Le code suit le parcours de l'application : un dossier par domaine, avec les
+mêmes noms que les routes (`events`, `templates`, `analytics`, `settings`…).
+
 ```
-app/                    Routes uniquement (pages, layouts, API) et actions
-  actions/              Server actions : logique métier et accès DB
-  dashboard/            Espace connecté (Server Components)
-  admin/                Administration, même coquille que le dashboard
-  invite/[token]/       Page publique d'invitation
-  api/                  better-auth, envoi de fichiers, tâche planifiée
+app/                      Routes uniquement (pages, layouts, API) et actions
+  actions/                Server actions : logique métier et accès DB
+  dashboard/  admin/      Espace connecté et administration
+  invite/[token]/         Page publique d'invitation
+  api/                    better-auth, envoi de fichiers, tâche planifiée
 components/
-  ui/                   Primitives shadcn/ui (.jsx, seulement celles utilisées)
-  landing/  auth/  admin/
-  dashboard/            Coquille (DashboardShell, Sidebar, navigation.js),
-                        primitives d'écran (ui.jsx) et un dossier par écran :
-                        events/, event-details/, templates/, analytics/, settings/
-  invitation/           Invitation rendue (aperçu, page invité, vignettes,
-                        galerie, import CSV)
-    editor/             Éditeur de modèle : sélecteur de design, formulaire
-                        design, éditeur visuel, éditeur de code, ouverture
+  ui/                     Primitives shadcn/ui (seulement celles utilisées)
+  common/                 Partagés partout : sélecteur de langue, pagination
+  shell/                  Coquille de l'espace connecté : DashboardShell,
+                          Sidebar, menus (navigation.js), primitives d'écran
+  landing/  auth/  admin/  analytics/  settings/
+  events/                 Liste, création, édition, import CSV des invités
+    detail/               Fiche d'un événement : aperçu, invités,
+                          collaborateurs, modèle de l'invitation
+  templates/              Galerie, filtres par catégorie, formulaire de modèle
+  editor/                 Éditeur de modèle : choix du design, formulaire
+                          design, éditeur visuel, éditeur de code, ouverture
+  invitation/             Invitation affichée : aperçu (iframe), vignette,
+                          page de l'invité
 lib/
-  invitation/           Construction du document d'invitation
-    designs/            Un fichier ou un dossier par design (registre : index.js)
-    template-config.js  Format des modèles enregistrés en base
-    document.js         Document HTML complet, validation, passage en code
-    opening.js          Écran d'ouverture standard
-    shared.js           Échappement, polices, schéma du contenu, bloc RSVP
+  invitation/             Construction de l'invitation que voit l'invité
+    designs/              Les invitations : un dossier par design
+      _shared/            Pièces partagées (balisage standard, textures…)
+      index.js            Registre des designs
+    document.js           Document HTML complet (point d'entrée du rendu)
+    opening.js            Écran d'ouverture standard
+    content.js            Sections, contenu par défaut, normalisation
+    fonts.js  html.js  rsvp.js
+  templates/              Modèles enregistrés en base
+    config.js             Format des modèles (seul à connaître « theme »)
+    validation.js         Validation avant écriture, configuration éditable
+    convert.js            Passage d'un design en code
+    visual-edit.js        Édition sans code d'un modèle code
+    categories.js  code-starter.js
+  landing/                Données publiques et événement d'exemple de l'accueil
   auth/  i18n/  email/  prisma.js  utils.js (cn)
 hooks/
-locales/                Dictionnaires fr / en (mêmes clés)
+locales/                  Dictionnaires fr / en (mêmes clés)
 prisma/
   schema.prisma
-  seed-design-template.mjs   Enregistre un design comme modèle de la galerie
-  migrate-passwords.mjs
+  migrations-sql/         Migrations SQL rejouables
+  scripts/                Scripts Node (seed des designs, suppression d'un
+                          design, migrations ponctuelles)
 ```
 
 ### Designs et modèles
 
-Un **design** est une mise en page du registre (`lib/invitation/designs/`) :
-Éclat, Origami, Face A… Un **modèle** est ce que l'utilisateur enregistre :
-soit un design avec ses couleurs et ses textes, soit du code HTML/CSS/JS.
+Un **design** est une invitation du registre (`lib/invitation/designs/`) :
+Éclat, Origami, Face A, Embarquement… Chacun vit dans **son propre dossier** :
+
+```
+lib/invitation/designs/<id>/
+  index.js     définition : nom, réglages, ambiances, contenu d'exemple
+  styles.js    CSS
+  markup.js    balisage (facultatif : sinon, le balisage standard partagé)
+  effects.js   scripts d'animation (facultatif)
+  opening.js   écran d'ouverture propre (facultatif)
+```
+
+Un **modèle** est ce que l'utilisateur enregistre : soit un design avec ses
+couleurs et ses textes, soit du code HTML/CSS/JS.
 
 En base, un modèle design porte `type: "theme"` et `themeId` : ce sont des
 noms historiques, gardés pour ne pas migrer les données. Seul
-`lib/invitation/template-config.js` les connaît ; le reste du code passe par
+`lib/templates/config.js` les connaît ; le reste du code passe par
 `isDesignConfig`, `designIdOf`, `toDesignConfig`…
 
 Ajouter un design :
 
-1. créer `lib/invitation/designs/<id>.js` (ou un dossier, s'il a sa propre
-   ouverture) sur le modèle d'`elegance.js` ou de `vinyl/` ;
+1. créer son dossier `lib/invitation/designs/<id>/` sur le modèle de
+   `minimal/` (design simple) ou de `boarding/` (design complet) ;
 2. l'ajouter à `DESIGNS` dans `designs/index.js` ;
 3. ajouter sa description sous `portal.editor.catalog.<id>` dans les deux
    dictionnaires, et les libellés de ses nouveaux réglages ;
 4. l'enregistrer dans la galerie :
-   `node --env-file=.env prisma/seed-design-template.mjs <id> "<Nom>" --category=<clé>`.
+   `node --env-file=.env prisma/scripts/seed-design-template.mjs <id> "<Nom>" --category=<clé>`.
+
+Supprimer un design : supprimez d'abord ses modèles dans l'application, puis
+lancez
+
+```bash
+node --env-file=.env prisma/scripts/remove-design.mjs <id> --dry   # aperçu
+node --env-file=.env prisma/scripts/remove-design.mjs <id>         # suppression
+```
+
+Le script refuse tant qu'un modèle de la galerie ou l'invitation d'un
+événement utilise encore le design (sinon ces invitations s'afficheraient
+cassées). Sinon, il supprime son dossier, son entrée dans le registre et ses
+traductions ; il reste à vérifier (`pnpm build`), commiter et déployer. Le
+site déployé ne peut pas modifier son propre code : cette suppression se fait
+toujours depuis le dépôt.
 
 Un design n'importe jamais les fichiers d'un autre design : ce qui se
-partage vit dans `designs/textures.js` ou dans `lib/invitation/`.
+partage vit dans `designs/_shared/` ou dans `lib/invitation/`.
 
 ### Conventions
 

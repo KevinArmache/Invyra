@@ -8,9 +8,9 @@ import {
   Panel,
   StatCard,
   StatGrid,
-} from "@/components/dashboard/ui";
-import RsvpBreakdown from "@/components/dashboard/analytics/RsvpBreakdown";
-import EventPerformanceTable from "@/components/dashboard/analytics/EventPerformanceTable";
+} from "@/components/shell/primitives";
+import RsvpBreakdown from "@/components/analytics/RsvpBreakdown";
+import EventPerformanceTable from "@/components/analytics/EventPerformanceTable";
 
 export const metadata = { title: "Statistiques" };
 

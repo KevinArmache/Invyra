@@ -1,5 +1,5 @@
 import { getCurrentUser, logout, requireAdmin } from "@/app/actions/auth";
-import DashboardShell from "@/components/dashboard/DashboardShell";
+import DashboardShell from "@/components/shell/DashboardShell";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: { default: "Administration", template: "%s · Admin" } };

@@ -4,7 +4,7 @@ import { Calendar, LayoutTemplate, Shield, Users } from "lucide-react";
 import { getAdminStats } from "@/app/actions/admin";
 import { getTranslations } from "@/lib/i18n/server";
 import { Button } from "@/components/ui/button";
-import { PageHeader, Panel, StatCard, StatGrid } from "@/components/dashboard/ui";
+import { PageHeader, Panel, StatCard, StatGrid } from "@/components/shell/primitives";
 
 export const metadata = { title: "Vue d'ensemble" };
 

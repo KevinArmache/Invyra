@@ -4,8 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { getSession, isEventOwnerOrAdmin } from '@/app/actions/auth'
 import { getMyCollaboratorRole } from '@/app/actions/collaborator'
 import { buildInvitationEmail } from '@/lib/email/invitation-email'
-import { toEditableConfig } from '@/lib/invitation/document'
-import { isDesignConfig } from '@/lib/invitation/template-config'
+import { toEditableConfig } from '@/lib/templates/validation'
+import { isDesignConfig } from '@/lib/templates/config'
 import nodemailer from 'nodemailer'
 
 // ──────────────────────────────────────────────

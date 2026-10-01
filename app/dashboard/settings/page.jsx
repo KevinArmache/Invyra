@@ -3,10 +3,10 @@ import { KeyRound, UserRound } from "lucide-react";
 
 import { getCurrentUser } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
-import { PageHeader, Panel } from "@/components/dashboard/ui";
-import ProfileForm from "@/components/dashboard/settings/ProfileForm";
-import PasswordForm from "@/components/dashboard/settings/PasswordForm";
-import DeleteAccountCard from "@/components/dashboard/settings/DeleteAccountCard";
+import { PageHeader, Panel } from "@/components/shell/primitives";
+import ProfileForm from "@/components/settings/ProfileForm";
+import PasswordForm from "@/components/settings/PasswordForm";
+import DeleteAccountCard from "@/components/settings/DeleteAccountCard";
 
 export const metadata = { title: "Paramètres" };
 

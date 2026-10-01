@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { EmptyState, Panel, StatusBadge } from "@/components/dashboard/ui";
+import { EmptyState, Panel, StatusBadge } from "@/components/shell/primitives";
 import {
   deleteUserAdmin,
   suspendUser,

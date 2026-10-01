@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getEventById } from "@/app/actions/event";
 import { getGuests } from "@/app/actions/guest";
 import { getCollaborators } from "@/app/actions/collaborator";
-import EventDetailView from "@/components/dashboard/event-details/EventDetailView";
+import EventDetailView from "@/components/events/detail/EventDetailView";
 
 export async function generateMetadata({ params }) {
   const { id } = await params;

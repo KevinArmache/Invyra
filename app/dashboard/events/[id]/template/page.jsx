@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getSession } from "@/app/actions/auth";
 import { getEventById } from "@/app/actions/event";
 import { getTemplates } from "@/app/actions/template";
-import EventTemplateEditor from "@/components/dashboard/event-details/EventTemplateEditor";
+import EventTemplateEditor from "@/components/events/detail/EventTemplateEditor";
 
 export const metadata = { title: "Configurer l'invitation" };
 

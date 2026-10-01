@@ -6,7 +6,7 @@ import { ArrowRight, Eye } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
-import { sampleEvent } from "@/lib/invitation/sample";
+import { sampleEvent } from "@/lib/landing/sample-event";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**

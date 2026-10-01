@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 import { useTranslation } from "@/lib/i18n/Context";
 
 const SECTIONS = [
