@@ -15,14 +15,13 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import {
   EmptyState,
   MiniRsvpBar,
   StatusBadge,
 } from "@/components/shell/primitives";
-import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
+import PreviewDialog from "@/components/invitation/PreviewDialog";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import DeleteEventDialog from "@/components/events/DeleteEventDialog";
 import { useTranslation } from "@/lib/i18n/Context";
@@ -305,25 +304,21 @@ export default function EventsBrowser({ events, today }) {
         </ul>
       )}
 
-      <Dialog
+      <PreviewDialog
         open={Boolean(preview)}
         onOpenChange={(open) => !open && setPreview(null)}
+        title={preview?.title ?? t("portal.events.list.preview_btn")}
+        subtitle={t("portal.events.list.preview_btn")}
       >
-        <DialogContent className="max-h-[94dvh] w-auto max-w-[95vw] overflow-y-auto border-0 bg-transparent p-2 shadow-none sm:max-w-none">
-          <DialogTitle className="sr-only">
-            {t("portal.events.list.preview_btn")}
-          </DialogTitle>
-
-          {preview?.invitationTemplate ? (
-            <DeviceFrame glow={false} className="w-[min(88vw,21rem,calc((90dvh-1.5rem)*9/19))]">
-              <InvitationPreview
-                template={preview.invitationTemplate}
-                event={previewEvent(preview)}
-                guestName={t("landing.hero.scene.guest")}
-              />
-            </DeviceFrame>
-          ) : (
-            <div className="surface rounded-xl">
+        {preview?.invitationTemplate ? (
+          <InvitationPreview
+            template={preview.invitationTemplate}
+            event={previewEvent(preview)}
+            guestName={t("landing.hero.scene.guest")}
+          />
+        ) : (
+          preview && (
+            <div className="flex h-full items-center justify-center bg-ink-900">
               <EmptyState
                 icon={Eye}
                 title={t("portal.events.edit.no_preview")}
@@ -339,9 +334,9 @@ export default function EventsBrowser({ events, today }) {
                 }
               />
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          )
+        )}
+      </PreviewDialog>
     </>
   );
 }

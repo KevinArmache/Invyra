@@ -1,8 +1,17 @@
+import { getPublicTemplateIds } from "@/lib/landing/data";
 import { SITE_URL } from "@/lib/site";
 
-/** Pages publiques à indexer. Les invitations sont personnelles : jamais ici. */
-export default function sitemap() {
+/** Relu toutes les heures : un modèle publié y apparaît sans redéploiement. */
+export const revalidate = 3600;
+
+/**
+ * Pages publiques à indexer : l'accueil, l'inscription, la connexion et la
+ * page de chaque modèle publié. Les invitations sont personnelles : jamais
+ * ici.
+ */
+export default async function sitemap() {
   const lastModified = new Date();
+  const templates = await getPublicTemplateIds();
 
   return [
     {
@@ -11,6 +20,12 @@ export default function sitemap() {
       changeFrequency: "weekly",
       priority: 1,
     },
+    ...templates.map((template) => ({
+      url: `${SITE_URL}/templates/${template.id}`,
+      lastModified: template.updatedAt,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    })),
     {
       url: `${SITE_URL}/register`,
       lastModified,

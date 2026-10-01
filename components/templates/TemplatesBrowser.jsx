@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Copy,
   CopyPlus,
+  ExternalLink,
   Eye,
   LayoutTemplate,
   Loader2,
@@ -29,13 +30,13 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { EmptyState, StatusBadge } from "@/components/shell/primitives";
 import PaginationNav from "@/components/common/PaginationNav";
 import CategoryFilter from "@/components/templates/CategoryFilter";
-import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
+import PreviewDialog from "@/components/invitation/PreviewDialog";
+import ShareTemplateButton from "@/components/templates/ShareTemplateButton";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import {
   deleteTemplate,
@@ -59,6 +60,14 @@ function canManage(template, currentUser) {
 /** La duplication crée un modèle : réservée aux admins (voir duplicateTemplate). */
 function canDuplicate(currentUser) {
   return currentUser.role === "admin";
+}
+
+/**
+ * Un modèle se partage hors du site quand sa page publique existe : publié
+ * (terminé) ou mis en avant sur l'accueil (voir getPublicTemplate).
+ */
+function canShare(template) {
+  return template.status === "completed" || Boolean(template.featured);
 }
 
 /** Données fictives injectées dans les aperçus de modèles. */
@@ -261,6 +270,7 @@ export default function TemplatesBrowser({
           {templates.map((template, index) => {
             const editable = canManage(template, currentUser);
             const duplicable = canDuplicate(currentUser);
+            const shareable = canShare(template);
 
             return (
               <li
@@ -336,8 +346,15 @@ export default function TemplatesBrowser({
                       <span>{t("portal.templates.list.usage_label")}</span>
                     </p>
 
-                    {(editable || duplicable) && (
+                    {(editable || duplicable || shareable) && (
                       <div className="mt-4 flex items-center gap-1 border-t border-border/60 pt-3">
+                        {shareable && (
+                          <ShareTemplateButton
+                            template={{ id: template.id, name: template.name }}
+                            align="start"
+                          />
+                        )}
+
                         {editable && (
                           <Button
                             variant="ghost"
@@ -466,28 +483,48 @@ export default function TemplatesBrowser({
         </p>
       )}
 
-      <Dialog
+      <PreviewDialog
         open={Boolean(preview)}
         onOpenChange={(open) => !open && setPreview(null)}
-      >
-        <DialogContent className="max-h-[94dvh] w-auto max-w-[95vw] overflow-y-auto border-0 bg-transparent p-2 shadow-none sm:max-w-none">
-          <DialogTitle className="sr-only">
-            {t("portal.templates.list.preview_btn")}
-          </DialogTitle>
-          {preview && (
-            // Aperçu vivant : le script tourne (effets, compte à rebours,
-            // réponse RSVP simulée). Rien n'est envoyé : aucune page
-            // n'écoute les réponses ici.
-            <DeviceFrame glow={false} className="w-[min(88vw,21rem,calc((90dvh-1.5rem)*9/19))]">
-              <InvitationPreview
-                template={preview.config}
-                event={{ ...SAMPLE_EVENT, title: preview.name }}
-                guestName="Marie Dupont"
+        title={preview?.name ?? t("portal.templates.list.preview_btn")}
+        subtitle={t("public_template.sample_note")}
+        actions={
+          preview &&
+          canShare(preview) && (
+            <>
+              <ShareTemplateButton
+                template={{ id: preview.id, name: preview.name }}
               />
-            </DeviceFrame>
-          )}
-        </DialogContent>
-      </Dialog>
+              <Button
+                variant="ghost"
+                size="icon"
+                asChild
+                className="h-8 w-8 text-ink-400 hover:text-gold"
+              >
+                <Link
+                  href={`/templates/${preview.id}`}
+                  target="_blank"
+                  aria-label={t("public_template.open_page")}
+                  title={t("public_template.open_page")}
+                >
+                  <ExternalLink size={15} />
+                </Link>
+              </Button>
+            </>
+          )
+        }
+      >
+        {/* Aperçu vivant : le script tourne (effets, compte à rebours,
+            réponse RSVP simulée). Rien n'est envoyé : aucune page n'écoute
+            les réponses ici. */}
+        {preview && (
+          <InvitationPreview
+            template={preview.config}
+            event={{ ...SAMPLE_EVENT, title: preview.name }}
+            guestName="Marie Dupont"
+          />
+        )}
+      </PreviewDialog>
     </>
   );
 }

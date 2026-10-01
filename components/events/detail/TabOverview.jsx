@@ -8,7 +8,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { EmptyState, Panel } from "@/components/shell/primitives";
 import RsvpBreakdown from "@/components/analytics/RsvpBreakdown";
-import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { useTranslation } from "@/lib/i18n/Context";
 
@@ -69,14 +68,14 @@ export default function TabOverview({ event, guests, sampleEvent }) {
         <Panel title={t("portal.events.details.overview.active_template")} delay={100}>
           {event.invitationTemplate ? (
             <div className="p-5">
-              <DeviceFrame className="max-w-[15rem]">
+              <div className="relative mx-auto aspect-3/4 w-full max-w-[18rem] overflow-hidden rounded-xl border border-border/60 bg-ink-900">
                 <InvitationPreview
                   template={event.invitationTemplate}
                   event={sampleEvent}
                   guestName={t("landing.hero.scene.guest")}
                   readOnly
                 />
-              </DeviceFrame>
+              </div>
               <div className="mt-5 text-center">
                 <Button asChild variant="outline" size="sm" className="group">
                   <Link href={`/dashboard/events/${event.id}/template`}>

@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MailOpen, Music2, RotateCcw } from "lucide-react";
 
-import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { sampleEvent } from "@/lib/landing/sample-event";
 import { toEditableConfig } from "@/lib/templates/validation";
@@ -147,8 +146,14 @@ export default function OpeningDemo({ template }) {
           </p>
         </div>
 
-        <div data-reveal="scale" ref={frameRef}>
-          <DeviceFrame>
+        <div data-reveal="scale" ref={frameRef} className="relative mx-auto w-full max-w-[22rem]">
+          <div
+            aria-hidden="true"
+            className="glow-gold animate-breathe pointer-events-none absolute -inset-12 -z-10"
+          />
+          {/* Au format d'un écran de téléphone, sans en dessiner la
+              silhouette : l'invitation occupe tout le panneau. */}
+          <div className="relative aspect-[9/16] overflow-hidden rounded-2xl border border-gold/20 bg-black shadow-elevation-3">
             {event && config ? (
               <InvitationPreview
                 key={`${style}-${replay}`}
@@ -160,7 +165,7 @@ export default function OpeningDemo({ template }) {
             ) : (
               <div className="skeleton h-full w-full rounded-none" />
             )}
-          </DeviceFrame>
+          </div>
           <p className="mt-6 text-center text-xs text-ink-400">
             {t("landing.opening_demo.model_note").replace("{name}", template.name)}
           </p>

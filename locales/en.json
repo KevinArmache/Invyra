@@ -596,6 +596,26 @@
     "rsvp_error": "Your reply could not be saved. Please try again.",
     "frame_title": "Invitation: {title}"
   },
+  "share": {
+    "button": "Share",
+    "button_label": "Share the “{name}” template",
+    "native": "Share…",
+    "copy": "Copy link",
+    "copied": "Link copied: paste it anywhere.",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "message": "Have a look at the “{name}” invitation template on Invyra:",
+    "email_subject": "The “{name}” invitation template"
+  },
+  "public_template": {
+    "meta_title": "{name} · Invitation template",
+    "meta_description": "Open the “{name}” invitation template the way your guests will see it, then customise it without code on Invyra.",
+    "eyebrow": "Invitation template",
+    "use": "Use this template",
+    "use_short": "Use it",
+    "sample_note": "Preview with a sample guest and sample details.",
+    "open_page": "Open the template page"
+  },
   "landing": {
     "meta": {
       "title": "Invyra · Digital invitations that open like a letter",

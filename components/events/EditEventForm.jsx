@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/select";
 import { Panel } from "@/components/shell/primitives";
 import EventFields from "@/components/events/EventFields";
-import DeviceFrame from "@/components/invitation/DeviceFrame";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { updateEvent } from "@/app/actions/event";
 import { useTranslation } from "@/lib/i18n/Context";
@@ -135,14 +134,14 @@ export default function EditEventForm({ event }) {
             >
               <div className="p-5">
                 {event.invitationTemplate ? (
-                  <DeviceFrame className="max-w-[14rem]">
+                  <div className="relative aspect-3/4 overflow-hidden rounded-md border border-border/60 bg-ink-900">
                     <InvitationPreview
                       template={event.invitationTemplate}
                       event={event}
                       guestName={t("landing.hero.scene.guest")}
                       readOnly
                     />
-                  </DeviceFrame>
+                  </div>
                 ) : (
                   <p className="text-sm leading-relaxed text-ink-400">
                     {t("portal.events.edit.no_preview")}

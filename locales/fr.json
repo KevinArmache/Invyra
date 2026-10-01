@@ -596,6 +596,26 @@
     "rsvp_error": "Votre réponse n'a pas pu être enregistrée. Réessayez.",
     "frame_title": "Invitation : {title}"
   },
+  "share": {
+    "button": "Partager",
+    "button_label": "Partager le modèle « {name} »",
+    "native": "Partager…",
+    "copy": "Copier le lien",
+    "copied": "Lien copié : collez-le où vous voulez.",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "message": "Découvrez le modèle d'invitation « {name} » sur Invyra :",
+    "email_subject": "Le modèle d'invitation « {name} »"
+  },
+  "public_template": {
+    "meta_title": "{name} · Modèle d'invitation",
+    "meta_description": "Ouvrez le modèle d'invitation « {name} » comme vos invités le verront, puis personnalisez-le sans code sur Invyra.",
+    "eyebrow": "Modèle d'invitation",
+    "use": "Utiliser ce modèle",
+    "use_short": "Utiliser",
+    "sample_note": "Aperçu avec un invité et des informations fictifs.",
+    "open_page": "Ouvrir la page du modèle"
+  },
   "landing": {
     "meta": {
       "title": "Invyra · Invitations numériques qui s'ouvrent comme une lettre",
