@@ -18,6 +18,12 @@
  * ne peut donc pas servir à authentifier l'émetteur. Le parent compare
  * `event.source` à la `contentWindow` de son iframe — voir
  * InvitationExperience, qui passe cette référence via `iframeRef`.
+ *
+ * `allow-popups-to-escape-sandbox` : un lien `target="_blank"` de
+ * l'invitation (la signature Invyra, un plan, un site de liste de mariage)
+ * s'ouvre dans un onglet normal. Sans lui, l'onglet hériterait du bac à
+ * sable, sans cookies ni stockage, et le site ouvert y fonctionnerait mal.
+ * La page hôte n'y est pas plus exposée : l'iframe garde son origine opaque.
  */
 
 import { useMemo } from "react";
@@ -62,7 +68,7 @@ export default function InvitationPreview({
       className={`h-full w-full border-0 ${className}`}
       style={{ minHeight: "100%", display: "block" }}
       // Voir l'en-tête du fichier : `allow-same-origin` est délibérément absent.
-      sandbox="allow-scripts allow-forms allow-popups"
+      sandbox="allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox"
     />
   );
 }

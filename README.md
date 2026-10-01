@@ -251,6 +251,11 @@ Ce qu'un modèle peut utiliser (voir `lib/invitation/document.js`) :
   Un script peut attendre l'ouverture avec `window.whenOpened(fn)`.
 - **Réponse RSVP** : envoyée à la page par `postMessage` ; le code de départ
   montre comment.
+- **Signature** : la plateforme ajoute « Développé par Invyra » (lien vers le
+  site) dans le dernier `<footer>` du modèle, dont elle prend la police et la
+  couleur, avec `--c-accent` et `--c-accent2` pour ses touches de couleur.
+  Sans `<footer>`, elle est ajoutée en fin de page. Les vignettes n'en ont
+  pas. Un modèle n'a donc pas à écrire sa propre mention.
 
 Les sauvegardes de la table `templates` sont écrites dans `prisma/backups/`
 (ignoré par git, elles contiennent des données de production). Pour revenir à
