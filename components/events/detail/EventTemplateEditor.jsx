@@ -31,7 +31,6 @@ export default function EventTemplateEditor({
   event,
   templates,
   isAdmin = false,
-  uploadEnabled = false,
 }) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -103,7 +102,6 @@ export default function EventTemplateEditor({
         value={template}
         onChange={setTemplate}
         allowCode={isAdmin}
-        uploadEnabled={uploadEnabled}
         preview={
           <LivePreview
             template={template}
@@ -204,7 +202,6 @@ export default function EventTemplateEditor({
                 <div className="surface mb-4 shrink-0 p-4">
                   <MusicField
                     value={template.music?.url ?? ""}
-                    uploadEnabled={uploadEnabled}
                     onChange={(url) =>
                       setTemplate((previous) => ({
                         ...previous,

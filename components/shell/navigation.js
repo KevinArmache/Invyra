@@ -55,6 +55,7 @@ export const ADMIN_NAVIGATION = [
     exact: true,
   },
   { href: "/admin/users", icon: Users, key: "portal.admin.users" },
+  { href: "/admin/events", icon: Calendar, key: "portal.admin.events" },
 ];
 
 /** Retour à l'espace principal, en pied du panneau d'administration. */

@@ -57,6 +57,12 @@ export default async function AdminPage() {
             </Link>
           </Button>
           <Button asChild variant="outline">
+            <Link href="/admin/events">
+              <Calendar className="h-4 w-4" />
+              {t("portal.admin.view_events")}
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
             <Link href="/dashboard/templates">
               <LayoutTemplate className="h-4 w-4" />
               {t("portal.admin.templates")}

@@ -29,7 +29,6 @@ export default function InvitationEditor({
   value,
   onChange,
   allowCode = false,
-  uploadEnabled = false,
   preview,
 }) {
   const { t } = useTranslation();
@@ -81,7 +80,6 @@ export default function InvitationEditor({
         <VisualCodeEditor
           template={value}
           onChange={onChange}
-          uploadEnabled={uploadEnabled}
         />
       )}
     </div>

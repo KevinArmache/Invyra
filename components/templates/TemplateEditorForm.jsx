@@ -55,7 +55,6 @@ export default function TemplateEditorForm({
   initialConfig,
   isEditing = false,
   allowCode = false,
-  uploadEnabled = false,
   onSave,
 }) {
   const { t } = useTranslation();
@@ -213,7 +212,6 @@ export default function TemplateEditorForm({
             value={config}
             onChange={setConfig}
             allowCode={allowCode}
-            uploadEnabled={uploadEnabled}
             preview={
               <LivePreview
                 template={config}

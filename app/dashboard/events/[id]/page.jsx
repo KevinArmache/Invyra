@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getEventById } from "@/app/actions/event";
 import { getGuests } from "@/app/actions/guest";
 import { getCollaborators } from "@/app/actions/collaborator";
+import { getSession } from "@/app/actions/auth";
+import { getEventOwnerAdmin } from "@/app/actions/admin";
 import { countdownTarget } from "@/lib/invitation/document";
 import { getTranslations } from "@/lib/i18n/server";
 import EventDetailView from "@/components/events/detail/EventDetailView";
@@ -30,17 +32,26 @@ export default async function EventDetailPage({ params }) {
   // l'événement avant de demander les invités, puis les collaborateurs.
   let data;
   try {
-    const [event, guests, collaborators] = await Promise.all([
+    const [event, guests, collaborators, session] = await Promise.all([
       getEventById(id),
       getGuests(id),
       getCollaborators(id),
+      getSession(),
     ]);
-    data = { event, guests, collaborators };
+    data = { event, guests, collaborators, session };
   } catch {
     // getEventById lève aussi bien pour un identifiant inconnu que pour un
     // accès refusé : dans les deux cas l'utilisateur n'a rien à voir ici.
     notFound();
   }
+
+  // Un admin qui consulte l'événement d'un autre compte voit à qui il
+  // appartient. Hors du try : requireAdmin peut rediriger, ce qui ne doit
+  // pas finir en 404.
+  const owner =
+    data.session?.role === "admin" && data.event.userId !== data.session.userId
+      ? await getEventOwnerAdmin(id)
+      : null;
 
   // Compte à rebours seulement pour un événement daté, pas encore passé.
   const now = requestTime();
@@ -54,6 +65,7 @@ export default async function EventDetailPage({ params }) {
       guests={data.guests}
       collaborators={data.collaborators}
       countdown={countdown}
+      owner={owner}
     />
   );
 }

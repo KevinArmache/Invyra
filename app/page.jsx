@@ -106,18 +106,22 @@ function structuredData(t) {
   };
 }
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }) {
+  // Page de la vitrine des modèles (?page=2). Le canonical reste « / » : ces
+  // variantes ne comptent pas comme des pages distinctes.
+  const { page } = await searchParams;
+
   // Lue sur le serveur : la barre s'affiche d'emblée dans le bon état, au lieu
   // de basculer de « Se connecter » à « Tableau de bord » après l'hydratation.
   const [session, showcase, bookedDates, { t }] = await Promise.all([
     auth.api.getSession({ headers: await headers() }),
-    getShowcaseTemplates(),
+    getShowcaseTemplates({ page }),
     getBookedDates(),
     getTranslations(),
   ]);
 
   const isAuthenticated = Boolean(session?.user);
-  const hasShowcase = showcase.length > 0;
+  const hasShowcase = showcase.total > 0;
   // `<` échappé : une chaîne « </script> » dans un texte fermerait la balise.
   const jsonLd = JSON.stringify(structuredData(t)).replace(/</g, "\\u003c");
 
@@ -129,12 +133,17 @@ export default async function HomePage() {
       />
       <Navbar isAuthenticated={isAuthenticated} hasShowcase={hasShowcase} />
       <main id="main">
-        <HeroSection />
+        <HeroSection hasShowcase={hasShowcase} />
         <CategoryMarquee />
         <HowItWorksSection />
         <FeaturesSection />
-        {hasShowcase && <OpeningDemo template={showcase[0]} />}
-        <TemplatesShowcase templates={showcase} sample={sampleEvent()} />
+        {showcase.first && <OpeningDemo template={showcase.first} />}
+        <TemplatesShowcase
+          templates={showcase.templates}
+          page={showcase.page}
+          pageCount={showcase.pageCount}
+          sample={sampleEvent()}
+        />
         <AvailabilityCalendar
           bookedDates={bookedDates}
           today={todayKey()}

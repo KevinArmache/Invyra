@@ -76,6 +76,59 @@ export async function deleteUserAdmin(userId) {
   return { success: true };
 }
 
+// ─── Événements (Admin seulement) ────────────────────────────────────────────
+
+/**
+ * Tous les événements de la plateforme, avec leur propriétaire : la page
+ * Admin › Événements. Les présents sont comptés en base (groupBy) plutôt
+ * qu'en chargeant chaque invité.
+ */
+export async function getAllEventsAdmin() {
+  await requireAdmin();
+  const [events, confirmed] = await Promise.all([
+    prisma.event.findMany({
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        title: true,
+        eventDate: true,
+        location: true,
+        status: true,
+        createdAt: true,
+        user: { select: { id: true, name: true, email: true } },
+        _count: { select: { guests: true } },
+      },
+    }),
+    prisma.guest.groupBy({
+      by: ["eventId"],
+      where: { rsvpStatus: "confirmed" },
+      _count: { _all: true },
+    }),
+  ]);
+
+  const confirmedByEvent = new Map(
+    confirmed.map((row) => [row.eventId, row._count._all]),
+  );
+  return events.map(({ _count, ...event }) => ({
+    ...event,
+    guestCount: _count.guests,
+    confirmedCount: confirmedByEvent.get(event.id) ?? 0,
+  }));
+}
+
+/**
+ * Propriétaire d'un événement, pour la mention affichée à un admin qui
+ * consulte l'événement d'un autre compte.
+ */
+export async function getEventOwnerAdmin(eventId) {
+  await requireAdmin();
+  const event = await prisma.event.findUnique({
+    where: { id: eventId },
+    select: { user: { select: { id: true, name: true, email: true } } },
+  });
+  return event?.user ?? null;
+}
+
 export async function getAdminStats() {
   await requireAdmin();
   const [totalUsers, totalEvents, totalTemplates, admins] = await Promise.all([

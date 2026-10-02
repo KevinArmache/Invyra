@@ -38,6 +38,19 @@ const RULES = {
 };
 
 export async function POST(request) {
+  // Sans jeton, handleUpload échouerait avec un message obscur : on le dit
+  // clairement dans les journaux. Côté éditeur, le collage d'un lien reste
+  // possible.
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    console.error(
+      "[Upload] BLOB_READ_WRITE_TOKEN manquant : l'import de fichiers est désactivé.",
+    );
+    return NextResponse.json(
+      { error: "Import de fichiers non configuré" },
+      { status: 503 },
+    );
+  }
+
   const body = await request.json();
 
   try {

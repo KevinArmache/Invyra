@@ -29,8 +29,11 @@ function Words({ text, from = 0, className }) {
 /**
  * Entièrement rendu sur le serveur, animé en CSS : rien n'attend
  * l'hydratation, le premier octet contient déjà le héros complet.
+ *
+ * @param {boolean} props.hasShowcase  la vitrine des modèles est affichée :
+ *   l'appel principal y mène ; sinon, vers l'inscription
  */
-export default async function HeroSection() {
+export default async function HeroSection({ hasShowcase = true }) {
   const { t } = await getTranslations();
 
   const title = t("landing.hero.title_1");
@@ -107,8 +110,12 @@ export default async function HeroSection() {
             style={{ "--rise-delay": "580ms" }}
           >
             <Button asChild size="lg" className="group h-12 w-full px-7 text-[0.95rem] sm:w-auto">
-              <Link href="/register">
-                {t("landing.hero.cta_primary")}
+              <Link href={hasShowcase ? "#templates" : "/register"}>
+                {t(
+                  hasShowcase
+                    ? "landing.hero.cta_primary"
+                    : "landing.hero.cta_register",
+                )}
                 <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </Button>

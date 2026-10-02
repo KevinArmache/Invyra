@@ -21,7 +21,6 @@ export default async function NewTemplatePage() {
     <TemplateEditorForm
       onSave={saveUserTemplate}
       allowCode
-      uploadEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
     />
   );
 }

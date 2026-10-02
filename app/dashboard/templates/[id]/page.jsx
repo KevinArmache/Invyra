@@ -47,7 +47,6 @@ export default async function EditTemplatePage({ params }) {
       // Le code est réservé aux admins (voir updateUserTemplate) ; les autres
       // modifient textes, images, liens et couleurs dans l'éditeur visuel.
       allowCode={session?.role === "admin"}
-      uploadEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
       onSave={saveTemplate}
     />
   );

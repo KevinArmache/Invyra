@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, ExternalLink, Eye } from "lucide-react";
+import { ExternalLink, Eye } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import PaginationNav from "@/components/common/PaginationNav";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import PreviewDialog from "@/components/invitation/PreviewDialog";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
@@ -22,9 +23,19 @@ import { useTranslation } from "@/lib/i18n/Context";
  * vignettes vient du serveur, pour que le rendu serveur et l'hydratation
  * coïncident ; l'aperçu, lui, recalcule sa date à chaque ouverture.
  *
- * @param {object} props.sample  événement fictif des vignettes
+ * Les modèles se feuillettent par pages (?page=N). Chaque lien ramène sur
+ * la section (#templates), pas en haut de l'accueil.
+ *
+ * @param {object} props.sample     événement fictif des vignettes
+ * @param {number} props.page       page affichée (à partir de 1)
+ * @param {number} props.pageCount
  */
-export default function TemplatesShowcase({ templates, sample }) {
+export default function TemplatesShowcase({
+  templates,
+  page = 1,
+  pageCount = 1,
+  sample,
+}) {
   const { t } = useTranslation();
   const guestName = t("landing.hero.scene.guest");
   // { template, event } du modèle ouvert.
@@ -110,14 +121,17 @@ export default function TemplatesShowcase({ templates, sample }) {
           ))}
         </ul>
 
-        <div data-reveal className="mt-14 text-center">
-          <Button asChild size="lg" className="group h-12 px-7">
-            <Link href="/register">
-              {t("landing.templates.cta")}
-              <ArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
-          </Button>
-        </div>
+        {pageCount > 1 && (
+          <div className="mt-6">
+            <PaginationNav
+              page={page}
+              pageCount={pageCount}
+              hrefFor={(target) =>
+                target > 1 ? `/?page=${target}#templates` : "/#templates"
+              }
+            />
+          </div>
+        )}
       </div>
 
       <PreviewDialog

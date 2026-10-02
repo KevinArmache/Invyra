@@ -22,8 +22,9 @@ import {
   VISUAL_SOURCES,
   applyEdits,
   decodeText,
+  decodeUrl,
+  encodeSlotUrl,
   encodeText,
-  encodeUrl,
   expandHex,
   scanSource,
   withSources,
@@ -57,12 +58,15 @@ function groupTitle(title) {
     : title;
 }
 
-/** Un lien vers une image s'édite comme une image, les autres comme du texte. */
-function isImage(slot) {
+/**
+ * Un lien vers une image s'édite comme une image, les autres comme du texte.
+ * `url` est l'adresse d'origine décodée (voir decodeUrl).
+ */
+function isImage(slot, url) {
   return (
     slot.attribute !== "href" ||
-    IMAGE_EXTENSION.test(slot.value) ||
-    slot.value.includes("images.unsplash.com")
+    IMAGE_EXTENSION.test(url) ||
+    url.includes("images.unsplash.com")
   );
 }
 
@@ -103,11 +107,7 @@ function LinkField({ label, value, onChange }) {
  * @param {object}   props.template  config `{ type: "code", … }`
  * @param {function} props.onChange  reçoit une mise à jour fonctionnelle
  */
-export default function VisualCodeEditor({
-  template,
-  onChange,
-  uploadEnabled,
-}) {
+export default function VisualCodeEditor({ template, onChange }) {
   const { t } = useTranslation();
 
   // Le code de départ : les emplacements sont repérés une fois pour toutes.
@@ -150,7 +150,7 @@ export default function VisualCodeEditor({
           edits[index] =
             slot.kind === "text"
               ? encodeText(values[key])
-              : encodeUrl(values[key]);
+              : encodeSlotUrl(values[key], source.kind === "html");
         }
       });
       next[source.key] = applyEdits(source.text, source.slots, edits);
@@ -166,11 +166,19 @@ export default function VisualCodeEditor({
       source.slots.forEach((slot, index) => {
         if (slot.kind === "color") return;
         if (slot.kind === "text" && !slot.meaningful) return;
-        // Liens mailto:, tel:, ancres, chemins relatifs : laissés au code.
+        // Adresse lisible, d'après la valeur d'origine : décider entre image
+        // et lien en cours de frappe ferait perdre le focus.
+        const url =
+          slot.kind === "url"
+            ? decodeUrl(slot.value, source.kind === "html")
+            : undefined;
+        // Seules les adresses web s'éditent ici, plus les images vides
+        // (retirées), pour pouvoir en remettre une. Liens mailto:, tel:,
+        // ancres, chemins relatifs et références internes d'une texture SVG
+        // (`filter='url(%23n)'`) restent au code.
         if (
           slot.kind === "url" &&
-          !isImage(slot) &&
-          !/^https?:/.test(slot.value)
+          !(url ? /^https?:/.test(url) : isImage(slot, url))
         ) {
           return;
         }
@@ -194,7 +202,7 @@ export default function VisualCodeEditor({
         }
         byId
           .get(id)
-          .items.push({ key: `${source.key}:${index}`, slot, source });
+          .items.push({ key: `${source.key}:${index}`, slot, source, url });
       });
     }
     return result;
@@ -217,9 +225,7 @@ export default function VisualCodeEditor({
 
   function valueOf(item) {
     if (item.key in values) return values[item.key];
-    return item.slot.kind === "text"
-      ? decodeText(item.slot.value)
-      : item.slot.value;
+    return item.slot.kind === "text" ? decodeText(item.slot.value) : item.url;
   }
 
   function setValue(key, next) {
@@ -232,14 +238,13 @@ export default function VisualCodeEditor({
     const value = valueOf(item);
 
     if (slot.kind === "url") {
-      if (isImage(slot)) {
+      if (isImage(slot, item.url)) {
         return (
           <ImageField
             key={key}
             label={slot.selector ? `${label} · ${slot.selector}` : label}
             value={value}
             onChange={(next) => setValue(key, next)}
-            uploadEnabled={uploadEnabled}
           />
         );
       }

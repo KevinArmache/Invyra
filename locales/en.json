@@ -200,7 +200,21 @@
       "you": "you",
       "actions": "Actions",
       "actions_for": "Actions for {name}",
-      "delete_account_body": "Their events, guests and replies will be deleted. Templates they created stay available."
+      "delete_account_body": "Their events, guests and replies will be deleted. Templates they created stay available.",
+      "events_management": "All events",
+      "events_count": "{count} event(s) on the platform",
+      "view_events": "View events",
+      "event": "Event",
+      "owner": "Owner",
+      "date": "Date",
+      "guests": "Guests",
+      "created_on": "Created on",
+      "no_events": "No events yet",
+      "search_events": "Event, venue or owner…",
+      "filter_status": "Filter by status",
+      "all_statuses": "All",
+      "view_event": "View event",
+      "edit_event": "Edit event"
     },
     "analytics": {
       "title": "Analytics",
@@ -337,7 +351,9 @@
         "error_email": "Line {line}: invalid email ({email})"
       },
       "details": {
+        "owner": "Owner of this event",
         "actions": {
+          "back_to_admin_events": "Back to all events",
           "event_deleted": "Event deleted.",
           "sending": "Sending...",
           "send_invitations": "Send by email",
@@ -524,12 +540,19 @@
         "hint": "Call to open"
       },
       "image": {
-        "url_placeholder": "https://…",
+        "url_placeholder": "Or paste an image link (https://…)",
+        "url_label": "Image link",
+        "invalid_url": "The link must start with https://",
+        "drop_title": "Drop an image here",
+        "drop_hint": "Or upload one from your device. JPG, PNG, WebP or GIF, 25 MB max. It is resized and fits its slot automatically.",
         "upload": "Upload",
-        "uploading": "Uploading…",
+        "replace": "Replace",
+        "processing": "Optimizing the image…",
+        "uploading": "Uploading… {n}%",
         "remove": "Remove",
-        "upload_error": "The image could not be uploaded.",
-        "too_large": "Image too large (5 MB max)."
+        "upload_error": "The image could not be uploaded. Try again, or paste a link.",
+        "unsupported": "This format is not supported. Choose a JPG, PNG, WebP or GIF image.",
+        "too_large": "Image too large (25 MB max)."
       },
       "options": {
         "style": {
@@ -543,6 +566,7 @@
         "hint": "It starts with a fade when the guest opens the invitation. A button lets them mute it. MP3 recommended, 15 MB max.",
         "placeholder": "Link to an audio file (https://…)",
         "remove": "Remove music",
+        "upload_error": "The audio file could not be uploaded. Try again, or paste a link.",
         "too_large": "Audio file too large (15 MB max)."
       },
       "mode": {
@@ -665,7 +689,8 @@
       "title_1": "Invitations that open",
       "title_highlight": "like a letter",
       "subtitle": "Pick a template, change the text, photos and colours without writing code, then send each guest their personal link by email or WhatsApp. You see who opened it and who replied.",
-      "cta_primary": "Create my invitation",
+      "cta_primary": "Explore the templates",
+      "cta_register": "Create my account",
       "cta_secondary": "See how it works",
       "free_note": "Free up to 15 guests",
       "facts": [
@@ -788,8 +813,7 @@
       "title": "Templates for ",
       "title_highlight": "every occasion",
       "subtitle": "Pick a design from the gallery, add your photos and text: your invitation is ready.",
-      "preview": "Live preview",
-      "cta": "Create my invitation"
+      "preview": "Live preview"
     },
     "availability": {
       "eyebrow": "Calendar",
@@ -898,7 +922,7 @@
       "title": "Your invitation can go out ",
       "title_highlight": "today",
       "subtitle": "Create your event, pick a template, add your guests: the first 15 are free.",
-      "button": "Create my invitation",
+      "button": "Create my account",
       "secondary": "See pricing"
     },
     "footer": {

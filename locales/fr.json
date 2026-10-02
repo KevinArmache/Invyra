@@ -200,7 +200,21 @@
       "you": "vous",
       "actions": "Actions",
       "actions_for": "Actions pour {name}",
-      "delete_account_body": "Ses événements, ses invités et leurs réponses seront supprimés. Les modèles qu'il a créés restent disponibles."
+      "delete_account_body": "Ses événements, ses invités et leurs réponses seront supprimés. Les modèles qu'il a créés restent disponibles.",
+      "events_management": "Tous les événements",
+      "events_count": "{count} événement(s) sur la plateforme",
+      "view_events": "Voir les événements",
+      "event": "Événement",
+      "owner": "Propriétaire",
+      "date": "Date",
+      "guests": "Invités",
+      "created_on": "Créé le",
+      "no_events": "Aucun événement pour l'instant",
+      "search_events": "Événement, lieu ou propriétaire…",
+      "filter_status": "Filtrer par statut",
+      "all_statuses": "Tous",
+      "view_event": "Voir l'événement",
+      "edit_event": "Modifier l'événement"
     },
     "analytics": {
       "title": "Statistiques",
@@ -337,7 +351,9 @@
         "error_email": "Ligne {line} : email invalide ({email})"
       },
       "details": {
+        "owner": "Propriétaire de cet événement",
         "actions": {
+          "back_to_admin_events": "Retour à tous les événements",
           "event_deleted": "Événement supprimé.",
           "sending": "Envoi...",
           "send_invitations": "Envoyer par email",
@@ -524,12 +540,19 @@
         "hint": "Invitation à ouvrir"
       },
       "image": {
-        "url_placeholder": "https://…",
+        "url_placeholder": "Ou collez le lien d'une image (https://…)",
+        "url_label": "Lien de l'image",
+        "invalid_url": "Le lien doit commencer par https://",
+        "drop_title": "Glissez une image ici",
+        "drop_hint": "Ou importez-la depuis votre appareil. JPG, PNG, WebP ou GIF, 25 Mo maximum. Elle est redimensionnée et s'ajuste à son emplacement.",
         "upload": "Importer",
-        "uploading": "Envoi…",
+        "replace": "Remplacer",
+        "processing": "Optimisation de l'image…",
+        "uploading": "Envoi… {n} %",
         "remove": "Retirer",
-        "upload_error": "L'image n'a pas pu être envoyée.",
-        "too_large": "Image trop lourde (5 Mo maximum)."
+        "upload_error": "L'image n'a pas pu être envoyée. Réessayez, ou collez un lien.",
+        "unsupported": "Ce format n'est pas pris en charge. Choisissez une image JPG, PNG, WebP ou GIF.",
+        "too_large": "Image trop lourde (25 Mo maximum)."
       },
       "options": {
         "style": {
@@ -543,6 +566,7 @@
         "hint": "Elle démarre quand l'invité ouvre son invitation, avec un fondu. Un bouton lui permet de la couper. MP3 conseillé, 15 Mo maximum.",
         "placeholder": "Lien vers un fichier audio (https://…)",
         "remove": "Retirer la musique",
+        "upload_error": "Le fichier audio n'a pas pu être envoyé. Réessayez, ou collez un lien.",
         "too_large": "Fichier audio trop lourd (15 Mo maximum)."
       },
       "mode": {
@@ -665,7 +689,8 @@
       "title_1": "Des invitations qui s'ouvrent",
       "title_highlight": "comme une lettre",
       "subtitle": "Choisissez un modèle, changez textes, photos et couleurs sans écrire de code, puis envoyez à chaque invité son lien personnel par email ou WhatsApp. Vous voyez qui l'a ouvert et qui a répondu.",
-      "cta_primary": "Créer mon invitation",
+      "cta_primary": "Découvrir les modèles",
+      "cta_register": "Créer mon compte",
       "cta_secondary": "Voir comment ça marche",
       "free_note": "Gratuit jusqu'à 15 invités",
       "facts": [
@@ -788,8 +813,7 @@
       "title": "Des modèles pour ",
       "title_highlight": "chaque occasion",
       "subtitle": "Choisissez un design de la galerie, ajoutez vos photos et vos textes : votre invitation est prête.",
-      "preview": "Voir en direct",
-      "cta": "Créer mon invitation"
+      "preview": "Voir en direct"
     },
     "availability": {
       "eyebrow": "Calendrier",
@@ -898,7 +922,7 @@
       "title": "Votre invitation peut partir ",
       "title_highlight": "aujourd'hui",
       "subtitle": "Créez votre événement, choisissez un modèle, ajoutez vos invités : les 15 premiers sont offerts.",
-      "button": "Créer mon invitation",
+      "button": "Créer mon compte",
       "secondary": "Voir les tarifs"
     },
     "footer": {

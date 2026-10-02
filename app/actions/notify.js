@@ -4,9 +4,9 @@ import { prisma } from '@/lib/prisma'
 import { getSession, isEventOwnerOrAdmin } from '@/app/actions/auth'
 import { getMyCollaboratorRole } from '@/app/actions/collaborator'
 import { buildInvitationEmail } from '@/lib/email/invitation-email'
+import { sendMail } from '@/lib/email/transport'
 import { toEditableConfig } from '@/lib/templates/validation'
 import { templateLook } from '@/lib/templates/look'
-import nodemailer from 'nodemailer'
 
 // ──────────────────────────────────────────────
 // Droits : envoyer une invitation, ou récupérer son lien, est réservé au
@@ -55,21 +55,6 @@ function emailFor(guest, event, appUrl) {
 }
 
 // ──────────────────────────────────────────────
-// Transporteur SMTP Gmail (SSL sur le port 465)
-// ──────────────────────────────────────────────
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '465'),
-    secure: parseInt(process.env.SMTP_PORT || '465') === 465, // true pour 465 (SSL), false pour 587 (TLS)
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  })
-}
-
-// ──────────────────────────────────────────────
 // Envoi individuel (1 invité)
 // ──────────────────────────────────────────────
 export async function sendInvitationEmail(guestId) {
@@ -84,16 +69,8 @@ export async function sendInvitationEmail(guestId) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   const { subject, text, html } = emailFor(guest, guest.event, appUrl)
 
-  const transporter = createTransporter()
-
   try {
-    const info = await transporter.sendMail({
-      from: `"Invyra" <${process.env.SMTP_USER}>`,
-      to: guest.email,
-      subject,
-      text,
-      html,
-    })
+    const info = await sendMail({ to: guest.email, subject, text, html })
     console.log('[Email] Envoyé avec succès :', info.messageId)
   } catch (err) {
     console.error('[Email] Erreur d\'envoi :', err.message)
@@ -137,7 +114,6 @@ export async function sendBulkInvitationEmails(eventId) {
   }
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-  const transporter = createTransporter()
 
   let sent = 0
   const errors = []
@@ -146,13 +122,7 @@ export async function sendBulkInvitationEmails(eventId) {
     const { subject, text, html } = emailFor(guest, event, appUrl)
 
     try {
-      await transporter.sendMail({
-        from: `"Invyra" <${process.env.SMTP_USER}>`,
-        to: guest.email,
-        subject,
-        text,
-        html,
-      })
+      await sendMail({ to: guest.email, subject, text, html })
 
       await prisma.guest.update({
         where: { id: guest.id },

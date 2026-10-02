@@ -14,6 +14,7 @@ import {
   Pencil,
   Phone,
   Send,
+  UserRound,
   Users,
 } from "lucide-react";
 
@@ -33,8 +34,16 @@ import { useTranslation } from "@/lib/i18n/Context";
  *
  * @param {object} [props.countdown]  `{ target, now }` calculés côté serveur,
  *   ou absent si l'événement n'a pas de date à venir
+ * @param {object} [props.owner]  `{ name, email }` du propriétaire, quand un
+ *   admin consulte l'événement d'un autre compte
  */
-export default function EventDetailView({ event, guests, collaborators, countdown }) {
+export default function EventDetailView({
+  event,
+  guests,
+  collaborators,
+  countdown,
+  owner = null,
+}) {
   const { t, locale } = useTranslation();
   const router = useRouter();
   const [showCollaborators, setShowCollaborators] = useState(false);
@@ -81,12 +90,17 @@ export default function EventDetailView({ event, guests, collaborators, countdow
 
   return (
     <>
+      {/* Un admin arrive ici depuis la liste de tous les événements. */}
       <Link
-        href="/dashboard/events"
+        href={owner ? "/admin/events" : "/dashboard/events"}
         className="animate-fade-in group inline-flex items-center gap-1.5 text-sm text-ink-400 transition-colors hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
-        {t("portal.events.details.actions.back_to_events")}
+        {t(
+          owner
+            ? "portal.events.details.actions.back_to_admin_events"
+            : "portal.events.details.actions.back_to_events",
+        )}
       </Link>
 
       <header className="mt-4 mb-8 flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -105,6 +119,22 @@ export default function EventDetailView({ event, guests, collaborators, countdow
             className="rule-gold-left animate-draw-x mt-3.5 w-16"
             style={{ "--rise-delay": "180ms" }}
           />
+
+          {owner && (
+            <p
+              className="animate-rise mt-4 inline-flex max-w-full items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-3 py-1 text-xs text-gold"
+              style={{ "--rise-delay": "80ms" }}
+            >
+              <UserRound className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+              <span className="truncate">
+                {t("portal.events.details.owner")} :{" "}
+                <span className="text-ink-50">{owner.name || owner.email}</span>
+                {owner.name && (
+                  <span className="text-gold/80"> · {owner.email}</span>
+                )}
+              </span>
+            </p>
+          )}
 
           <dl
             className="animate-rise mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-300"

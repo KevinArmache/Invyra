@@ -34,7 +34,6 @@ export default async function EventTemplatePage({ params }) {
       event={event}
       templates={templates}
       isAdmin={session?.role === "admin"}
-      uploadEnabled={Boolean(process.env.BLOB_READ_WRITE_TOKEN)}
     />
   );
 }
