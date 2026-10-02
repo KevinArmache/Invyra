@@ -20,8 +20,22 @@ export type GuestModel = runtime.Types.Result.DefaultSelection<Prisma.$GuestPayl
 
 export type AggregateGuest = {
   _count: GuestCountAggregateOutputType | null
+  _avg: GuestAvgAggregateOutputType | null
+  _sum: GuestSumAggregateOutputType | null
   _min: GuestMinAggregateOutputType | null
   _max: GuestMaxAggregateOutputType | null
+}
+
+export type GuestAvgAggregateOutputType = {
+  seats: number | null
+  attendingCount: number | null
+  checkedInCount: number | null
+}
+
+export type GuestSumAggregateOutputType = {
+  seats: number | null
+  attendingCount: number | null
+  checkedInCount: number | null
 }
 
 export type GuestMinAggregateOutputType = {
@@ -33,8 +47,13 @@ export type GuestMinAggregateOutputType = {
   dietaryRestrictions: string | null
   plusOne: boolean | null
   notes: string | null
+  seats: number | null
+  attendingCount: number | null
   invitationToken: string | null
   rsvpStatus: string | null
+  ticketCode: string | null
+  checkedInAt: Date | null
+  checkedInCount: number | null
   invitationSentAt: Date | null
   emailSentAt: Date | null
   whatsappSentAt: Date | null
@@ -53,8 +72,13 @@ export type GuestMaxAggregateOutputType = {
   dietaryRestrictions: string | null
   plusOne: boolean | null
   notes: string | null
+  seats: number | null
+  attendingCount: number | null
   invitationToken: string | null
   rsvpStatus: string | null
+  ticketCode: string | null
+  checkedInAt: Date | null
+  checkedInCount: number | null
   invitationSentAt: Date | null
   emailSentAt: Date | null
   whatsappSentAt: Date | null
@@ -73,8 +97,13 @@ export type GuestCountAggregateOutputType = {
   dietaryRestrictions: number
   plusOne: number
   notes: number
+  seats: number
+  attendingCount: number
   invitationToken: number
   rsvpStatus: number
+  ticketCode: number
+  checkedInAt: number
+  checkedInCount: number
   invitationSentAt: number
   emailSentAt: number
   whatsappSentAt: number
@@ -86,6 +115,18 @@ export type GuestCountAggregateOutputType = {
 }
 
 
+export type GuestAvgAggregateInputType = {
+  seats?: true
+  attendingCount?: true
+  checkedInCount?: true
+}
+
+export type GuestSumAggregateInputType = {
+  seats?: true
+  attendingCount?: true
+  checkedInCount?: true
+}
+
 export type GuestMinAggregateInputType = {
   id?: true
   eventId?: true
@@ -95,8 +136,13 @@ export type GuestMinAggregateInputType = {
   dietaryRestrictions?: true
   plusOne?: true
   notes?: true
+  seats?: true
+  attendingCount?: true
   invitationToken?: true
   rsvpStatus?: true
+  ticketCode?: true
+  checkedInAt?: true
+  checkedInCount?: true
   invitationSentAt?: true
   emailSentAt?: true
   whatsappSentAt?: true
@@ -115,8 +161,13 @@ export type GuestMaxAggregateInputType = {
   dietaryRestrictions?: true
   plusOne?: true
   notes?: true
+  seats?: true
+  attendingCount?: true
   invitationToken?: true
   rsvpStatus?: true
+  ticketCode?: true
+  checkedInAt?: true
+  checkedInCount?: true
   invitationSentAt?: true
   emailSentAt?: true
   whatsappSentAt?: true
@@ -135,8 +186,13 @@ export type GuestCountAggregateInputType = {
   dietaryRestrictions?: true
   plusOne?: true
   notes?: true
+  seats?: true
+  attendingCount?: true
   invitationToken?: true
   rsvpStatus?: true
+  ticketCode?: true
+  checkedInAt?: true
+  checkedInCount?: true
   invitationSentAt?: true
   emailSentAt?: true
   whatsappSentAt?: true
@@ -185,6 +241,18 @@ export type GuestAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: GuestAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: GuestSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: GuestMinAggregateInputType
@@ -215,6 +283,8 @@ export type GuestGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: GuestCountAggregateInputType | true
+  _avg?: GuestAvgAggregateInputType
+  _sum?: GuestSumAggregateInputType
   _min?: GuestMinAggregateInputType
   _max?: GuestMaxAggregateInputType
 }
@@ -228,8 +298,13 @@ export type GuestGroupByOutputType = {
   dietaryRestrictions: string | null
   plusOne: boolean
   notes: string | null
+  seats: number
+  attendingCount: number | null
   invitationToken: string
   rsvpStatus: string | null
+  ticketCode: string | null
+  checkedInAt: Date | null
+  checkedInCount: number | null
   invitationSentAt: Date | null
   emailSentAt: Date | null
   whatsappSentAt: Date | null
@@ -238,6 +313,8 @@ export type GuestGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   _count: GuestCountAggregateOutputType | null
+  _avg: GuestAvgAggregateOutputType | null
+  _sum: GuestSumAggregateOutputType | null
   _min: GuestMinAggregateOutputType | null
   _max: GuestMaxAggregateOutputType | null
 }
@@ -269,8 +346,13 @@ export type GuestWhereInput = {
   dietaryRestrictions?: Prisma.StringNullableFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableFilter<"Guest"> | string | null
+  seats?: Prisma.IntFilter<"Guest"> | number
+  attendingCount?: Prisma.IntNullableFilter<"Guest"> | number | null
   invitationToken?: Prisma.StringFilter<"Guest"> | string
   rsvpStatus?: Prisma.StringNullableFilter<"Guest"> | string | null
+  ticketCode?: Prisma.StringNullableFilter<"Guest"> | string | null
+  checkedInAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
+  checkedInCount?: Prisma.IntNullableFilter<"Guest"> | number | null
   invitationSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
   emailSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
   whatsappSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
@@ -279,6 +361,8 @@ export type GuestWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
+  guestbookMessages?: Prisma.GuestbookMessageListRelationFilter
+  photos?: Prisma.EventPhotoListRelationFilter
 }
 
 export type GuestOrderByWithRelationInput = {
@@ -290,8 +374,13 @@ export type GuestOrderByWithRelationInput = {
   dietaryRestrictions?: Prisma.SortOrderInput | Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  seats?: Prisma.SortOrder
+  attendingCount?: Prisma.SortOrderInput | Prisma.SortOrder
   invitationToken?: Prisma.SortOrder
   rsvpStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  ticketCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkedInAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkedInCount?: Prisma.SortOrderInput | Prisma.SortOrder
   invitationSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -300,11 +389,14 @@ export type GuestOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   event?: Prisma.EventOrderByWithRelationInput
+  guestbookMessages?: Prisma.GuestbookMessageOrderByRelationAggregateInput
+  photos?: Prisma.EventPhotoOrderByRelationAggregateInput
 }
 
 export type GuestWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   invitationToken?: string
+  ticketCode?: string
   eventId_email?: Prisma.GuestEventIdEmailCompoundUniqueInput
   AND?: Prisma.GuestWhereInput | Prisma.GuestWhereInput[]
   OR?: Prisma.GuestWhereInput[]
@@ -316,7 +408,11 @@ export type GuestWhereUniqueInput = Prisma.AtLeast<{
   dietaryRestrictions?: Prisma.StringNullableFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableFilter<"Guest"> | string | null
+  seats?: Prisma.IntFilter<"Guest"> | number
+  attendingCount?: Prisma.IntNullableFilter<"Guest"> | number | null
   rsvpStatus?: Prisma.StringNullableFilter<"Guest"> | string | null
+  checkedInAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
+  checkedInCount?: Prisma.IntNullableFilter<"Guest"> | number | null
   invitationSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
   emailSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
   whatsappSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
@@ -325,7 +421,9 @@ export type GuestWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
   event?: Prisma.XOR<Prisma.EventScalarRelationFilter, Prisma.EventWhereInput>
-}, "id" | "invitationToken" | "eventId_email">
+  guestbookMessages?: Prisma.GuestbookMessageListRelationFilter
+  photos?: Prisma.EventPhotoListRelationFilter
+}, "id" | "invitationToken" | "ticketCode" | "eventId_email">
 
 export type GuestOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -336,8 +434,13 @@ export type GuestOrderByWithAggregationInput = {
   dietaryRestrictions?: Prisma.SortOrderInput | Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  seats?: Prisma.SortOrder
+  attendingCount?: Prisma.SortOrderInput | Prisma.SortOrder
   invitationToken?: Prisma.SortOrder
   rsvpStatus?: Prisma.SortOrderInput | Prisma.SortOrder
+  ticketCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkedInAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkedInCount?: Prisma.SortOrderInput | Prisma.SortOrder
   invitationSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   emailSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
   whatsappSentAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -346,8 +449,10 @@ export type GuestOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GuestCountOrderByAggregateInput
+  _avg?: Prisma.GuestAvgOrderByAggregateInput
   _max?: Prisma.GuestMaxOrderByAggregateInput
   _min?: Prisma.GuestMinOrderByAggregateInput
+  _sum?: Prisma.GuestSumOrderByAggregateInput
 }
 
 export type GuestScalarWhereWithAggregatesInput = {
@@ -362,8 +467,13 @@ export type GuestScalarWhereWithAggregatesInput = {
   dietaryRestrictions?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolWithAggregatesFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
+  seats?: Prisma.IntWithAggregatesFilter<"Guest"> | number
+  attendingCount?: Prisma.IntNullableWithAggregatesFilter<"Guest"> | number | null
   invitationToken?: Prisma.StringWithAggregatesFilter<"Guest"> | string
   rsvpStatus?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
+  ticketCode?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
+  checkedInAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Guest"> | Date | string | null
+  checkedInCount?: Prisma.IntNullableWithAggregatesFilter<"Guest"> | number | null
   invitationSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Guest"> | Date | string | null
   emailSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Guest"> | Date | string | null
   whatsappSentAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Guest"> | Date | string | null
@@ -381,8 +491,13 @@ export type GuestCreateInput = {
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
+  seats?: number
+  attendingCount?: number | null
   invitationToken: string
   rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
   invitationSentAt?: Date | string | null
   emailSentAt?: Date | string | null
   whatsappSentAt?: Date | string | null
@@ -391,6 +506,8 @@ export type GuestCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   event: Prisma.EventCreateNestedOneWithoutGuestsInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutGuestInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutGuestInput
 }
 
 export type GuestUncheckedCreateInput = {
@@ -402,8 +519,13 @@ export type GuestUncheckedCreateInput = {
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
+  seats?: number
+  attendingCount?: number | null
   invitationToken: string
   rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
   invitationSentAt?: Date | string | null
   emailSentAt?: Date | string | null
   whatsappSentAt?: Date | string | null
@@ -411,6 +533,8 @@ export type GuestUncheckedCreateInput = {
   rsvpRespondedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutGuestInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutGuestInput
 }
 
 export type GuestUpdateInput = {
@@ -421,8 +545,13 @@ export type GuestUpdateInput = {
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
   rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -431,6 +560,8 @@ export type GuestUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   event?: Prisma.EventUpdateOneRequiredWithoutGuestsNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutGuestNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutGuestNestedInput
 }
 
 export type GuestUncheckedUpdateInput = {
@@ -442,8 +573,13 @@ export type GuestUncheckedUpdateInput = {
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
   rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -451,6 +587,8 @@ export type GuestUncheckedUpdateInput = {
   rsvpRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutGuestNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutGuestNestedInput
 }
 
 export type GuestCreateManyInput = {
@@ -462,8 +600,13 @@ export type GuestCreateManyInput = {
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
+  seats?: number
+  attendingCount?: number | null
   invitationToken: string
   rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
   invitationSentAt?: Date | string | null
   emailSentAt?: Date | string | null
   whatsappSentAt?: Date | string | null
@@ -481,8 +624,13 @@ export type GuestUpdateManyMutationInput = {
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
   rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -501,8 +649,13 @@ export type GuestUncheckedUpdateManyInput = {
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
   rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -536,8 +689,13 @@ export type GuestCountOrderByAggregateInput = {
   dietaryRestrictions?: Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  seats?: Prisma.SortOrder
+  attendingCount?: Prisma.SortOrder
   invitationToken?: Prisma.SortOrder
   rsvpStatus?: Prisma.SortOrder
+  ticketCode?: Prisma.SortOrder
+  checkedInAt?: Prisma.SortOrder
+  checkedInCount?: Prisma.SortOrder
   invitationSentAt?: Prisma.SortOrder
   emailSentAt?: Prisma.SortOrder
   whatsappSentAt?: Prisma.SortOrder
@@ -545,6 +703,12 @@ export type GuestCountOrderByAggregateInput = {
   rsvpRespondedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type GuestAvgOrderByAggregateInput = {
+  seats?: Prisma.SortOrder
+  attendingCount?: Prisma.SortOrder
+  checkedInCount?: Prisma.SortOrder
 }
 
 export type GuestMaxOrderByAggregateInput = {
@@ -556,8 +720,13 @@ export type GuestMaxOrderByAggregateInput = {
   dietaryRestrictions?: Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  seats?: Prisma.SortOrder
+  attendingCount?: Prisma.SortOrder
   invitationToken?: Prisma.SortOrder
   rsvpStatus?: Prisma.SortOrder
+  ticketCode?: Prisma.SortOrder
+  checkedInAt?: Prisma.SortOrder
+  checkedInCount?: Prisma.SortOrder
   invitationSentAt?: Prisma.SortOrder
   emailSentAt?: Prisma.SortOrder
   whatsappSentAt?: Prisma.SortOrder
@@ -576,8 +745,13 @@ export type GuestMinOrderByAggregateInput = {
   dietaryRestrictions?: Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  seats?: Prisma.SortOrder
+  attendingCount?: Prisma.SortOrder
   invitationToken?: Prisma.SortOrder
   rsvpStatus?: Prisma.SortOrder
+  ticketCode?: Prisma.SortOrder
+  checkedInAt?: Prisma.SortOrder
+  checkedInCount?: Prisma.SortOrder
   invitationSentAt?: Prisma.SortOrder
   emailSentAt?: Prisma.SortOrder
   whatsappSentAt?: Prisma.SortOrder
@@ -585,6 +759,17 @@ export type GuestMinOrderByAggregateInput = {
   rsvpRespondedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type GuestSumOrderByAggregateInput = {
+  seats?: Prisma.SortOrder
+  attendingCount?: Prisma.SortOrder
+  checkedInCount?: Prisma.SortOrder
+}
+
+export type GuestScalarRelationFilter = {
+  is?: Prisma.GuestWhereInput
+  isNot?: Prisma.GuestWhereInput
 }
 
 export type GuestCreateNestedManyWithoutEventInput = {
@@ -629,6 +814,50 @@ export type GuestUncheckedUpdateManyWithoutEventNestedInput = {
   deleteMany?: Prisma.GuestScalarWhereInput | Prisma.GuestScalarWhereInput[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type GuestCreateNestedOneWithoutGuestbookMessagesInput = {
+  create?: Prisma.XOR<Prisma.GuestCreateWithoutGuestbookMessagesInput, Prisma.GuestUncheckedCreateWithoutGuestbookMessagesInput>
+  connectOrCreate?: Prisma.GuestCreateOrConnectWithoutGuestbookMessagesInput
+  connect?: Prisma.GuestWhereUniqueInput
+}
+
+export type GuestUpdateOneRequiredWithoutGuestbookMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.GuestCreateWithoutGuestbookMessagesInput, Prisma.GuestUncheckedCreateWithoutGuestbookMessagesInput>
+  connectOrCreate?: Prisma.GuestCreateOrConnectWithoutGuestbookMessagesInput
+  upsert?: Prisma.GuestUpsertWithoutGuestbookMessagesInput
+  connect?: Prisma.GuestWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GuestUpdateToOneWithWhereWithoutGuestbookMessagesInput, Prisma.GuestUpdateWithoutGuestbookMessagesInput>, Prisma.GuestUncheckedUpdateWithoutGuestbookMessagesInput>
+}
+
+export type GuestCreateNestedOneWithoutPhotosInput = {
+  create?: Prisma.XOR<Prisma.GuestCreateWithoutPhotosInput, Prisma.GuestUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.GuestCreateOrConnectWithoutPhotosInput
+  connect?: Prisma.GuestWhereUniqueInput
+}
+
+export type GuestUpdateOneRequiredWithoutPhotosNestedInput = {
+  create?: Prisma.XOR<Prisma.GuestCreateWithoutPhotosInput, Prisma.GuestUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.GuestCreateOrConnectWithoutPhotosInput
+  upsert?: Prisma.GuestUpsertWithoutPhotosInput
+  connect?: Prisma.GuestWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.GuestUpdateToOneWithWhereWithoutPhotosInput, Prisma.GuestUpdateWithoutPhotosInput>, Prisma.GuestUncheckedUpdateWithoutPhotosInput>
+}
+
 export type GuestCreateWithoutEventInput = {
   id?: string
   name: string
@@ -637,8 +866,13 @@ export type GuestCreateWithoutEventInput = {
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
+  seats?: number
+  attendingCount?: number | null
   invitationToken: string
   rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
   invitationSentAt?: Date | string | null
   emailSentAt?: Date | string | null
   whatsappSentAt?: Date | string | null
@@ -646,6 +880,8 @@ export type GuestCreateWithoutEventInput = {
   rsvpRespondedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutGuestInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutGuestInput
 }
 
 export type GuestUncheckedCreateWithoutEventInput = {
@@ -656,8 +892,13 @@ export type GuestUncheckedCreateWithoutEventInput = {
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
+  seats?: number
+  attendingCount?: number | null
   invitationToken: string
   rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
   invitationSentAt?: Date | string | null
   emailSentAt?: Date | string | null
   whatsappSentAt?: Date | string | null
@@ -665,6 +906,8 @@ export type GuestUncheckedCreateWithoutEventInput = {
   rsvpRespondedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutGuestInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutGuestInput
 }
 
 export type GuestCreateOrConnectWithoutEventInput = {
@@ -705,8 +948,13 @@ export type GuestScalarWhereInput = {
   dietaryRestrictions?: Prisma.StringNullableFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableFilter<"Guest"> | string | null
+  seats?: Prisma.IntFilter<"Guest"> | number
+  attendingCount?: Prisma.IntNullableFilter<"Guest"> | number | null
   invitationToken?: Prisma.StringFilter<"Guest"> | string
   rsvpStatus?: Prisma.StringNullableFilter<"Guest"> | string | null
+  ticketCode?: Prisma.StringNullableFilter<"Guest"> | string | null
+  checkedInAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
+  checkedInCount?: Prisma.IntNullableFilter<"Guest"> | number | null
   invitationSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
   emailSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
   whatsappSentAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
@@ -714,6 +962,246 @@ export type GuestScalarWhereInput = {
   rsvpRespondedAt?: Prisma.DateTimeNullableFilter<"Guest"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Guest"> | Date | string
+}
+
+export type GuestCreateWithoutGuestbookMessagesInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  dietaryRestrictions?: string | null
+  plusOne?: boolean
+  notes?: string | null
+  seats?: number
+  attendingCount?: number | null
+  invitationToken: string
+  rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
+  invitationSentAt?: Date | string | null
+  emailSentAt?: Date | string | null
+  whatsappSentAt?: Date | string | null
+  invitationViewedAt?: Date | string | null
+  rsvpRespondedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  event: Prisma.EventCreateNestedOneWithoutGuestsInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutGuestInput
+}
+
+export type GuestUncheckedCreateWithoutGuestbookMessagesInput = {
+  id?: string
+  eventId: string
+  name: string
+  email: string
+  phone?: string | null
+  dietaryRestrictions?: string | null
+  plusOne?: boolean
+  notes?: string | null
+  seats?: number
+  attendingCount?: number | null
+  invitationToken: string
+  rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
+  invitationSentAt?: Date | string | null
+  emailSentAt?: Date | string | null
+  whatsappSentAt?: Date | string | null
+  invitationViewedAt?: Date | string | null
+  rsvpRespondedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutGuestInput
+}
+
+export type GuestCreateOrConnectWithoutGuestbookMessagesInput = {
+  where: Prisma.GuestWhereUniqueInput
+  create: Prisma.XOR<Prisma.GuestCreateWithoutGuestbookMessagesInput, Prisma.GuestUncheckedCreateWithoutGuestbookMessagesInput>
+}
+
+export type GuestUpsertWithoutGuestbookMessagesInput = {
+  update: Prisma.XOR<Prisma.GuestUpdateWithoutGuestbookMessagesInput, Prisma.GuestUncheckedUpdateWithoutGuestbookMessagesInput>
+  create: Prisma.XOR<Prisma.GuestCreateWithoutGuestbookMessagesInput, Prisma.GuestUncheckedCreateWithoutGuestbookMessagesInput>
+  where?: Prisma.GuestWhereInput
+}
+
+export type GuestUpdateToOneWithWhereWithoutGuestbookMessagesInput = {
+  where?: Prisma.GuestWhereInput
+  data: Prisma.XOR<Prisma.GuestUpdateWithoutGuestbookMessagesInput, Prisma.GuestUncheckedUpdateWithoutGuestbookMessagesInput>
+}
+
+export type GuestUpdateWithoutGuestbookMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
+  rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invitationViewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rsvpRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUpdateOneRequiredWithoutGuestsNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutGuestNestedInput
+}
+
+export type GuestUncheckedUpdateWithoutGuestbookMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
+  rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invitationViewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rsvpRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutGuestNestedInput
+}
+
+export type GuestCreateWithoutPhotosInput = {
+  id?: string
+  name: string
+  email: string
+  phone?: string | null
+  dietaryRestrictions?: string | null
+  plusOne?: boolean
+  notes?: string | null
+  seats?: number
+  attendingCount?: number | null
+  invitationToken: string
+  rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
+  invitationSentAt?: Date | string | null
+  emailSentAt?: Date | string | null
+  whatsappSentAt?: Date | string | null
+  invitationViewedAt?: Date | string | null
+  rsvpRespondedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  event: Prisma.EventCreateNestedOneWithoutGuestsInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutGuestInput
+}
+
+export type GuestUncheckedCreateWithoutPhotosInput = {
+  id?: string
+  eventId: string
+  name: string
+  email: string
+  phone?: string | null
+  dietaryRestrictions?: string | null
+  plusOne?: boolean
+  notes?: string | null
+  seats?: number
+  attendingCount?: number | null
+  invitationToken: string
+  rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
+  invitationSentAt?: Date | string | null
+  emailSentAt?: Date | string | null
+  whatsappSentAt?: Date | string | null
+  invitationViewedAt?: Date | string | null
+  rsvpRespondedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutGuestInput
+}
+
+export type GuestCreateOrConnectWithoutPhotosInput = {
+  where: Prisma.GuestWhereUniqueInput
+  create: Prisma.XOR<Prisma.GuestCreateWithoutPhotosInput, Prisma.GuestUncheckedCreateWithoutPhotosInput>
+}
+
+export type GuestUpsertWithoutPhotosInput = {
+  update: Prisma.XOR<Prisma.GuestUpdateWithoutPhotosInput, Prisma.GuestUncheckedUpdateWithoutPhotosInput>
+  create: Prisma.XOR<Prisma.GuestCreateWithoutPhotosInput, Prisma.GuestUncheckedCreateWithoutPhotosInput>
+  where?: Prisma.GuestWhereInput
+}
+
+export type GuestUpdateToOneWithWhereWithoutPhotosInput = {
+  where?: Prisma.GuestWhereInput
+  data: Prisma.XOR<Prisma.GuestUpdateWithoutPhotosInput, Prisma.GuestUncheckedUpdateWithoutPhotosInput>
+}
+
+export type GuestUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
+  rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invitationViewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rsvpRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  event?: Prisma.EventUpdateOneRequiredWithoutGuestsNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutGuestNestedInput
+}
+
+export type GuestUncheckedUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  eventId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
+  rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  invitationViewedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  rsvpRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutGuestNestedInput
 }
 
 export type GuestCreateManyEventInput = {
@@ -724,8 +1212,13 @@ export type GuestCreateManyEventInput = {
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
+  seats?: number
+  attendingCount?: number | null
   invitationToken: string
   rsvpStatus?: string | null
+  ticketCode?: string | null
+  checkedInAt?: Date | string | null
+  checkedInCount?: number | null
   invitationSentAt?: Date | string | null
   emailSentAt?: Date | string | null
   whatsappSentAt?: Date | string | null
@@ -743,8 +1236,13 @@ export type GuestUpdateWithoutEventInput = {
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
   rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -752,6 +1250,8 @@ export type GuestUpdateWithoutEventInput = {
   rsvpRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutGuestNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutGuestNestedInput
 }
 
 export type GuestUncheckedUpdateWithoutEventInput = {
@@ -762,8 +1262,13 @@ export type GuestUncheckedUpdateWithoutEventInput = {
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
   rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -771,6 +1276,8 @@ export type GuestUncheckedUpdateWithoutEventInput = {
   rsvpRespondedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutGuestNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutGuestNestedInput
 }
 
 export type GuestUncheckedUpdateManyWithoutEventInput = {
@@ -781,8 +1288,13 @@ export type GuestUncheckedUpdateManyWithoutEventInput = {
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  seats?: Prisma.IntFieldUpdateOperationsInput | number
+  attendingCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationToken?: Prisma.StringFieldUpdateOperationsInput | string
   rsvpStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkedInAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  checkedInCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   invitationSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   whatsappSentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -792,6 +1304,44 @@ export type GuestUncheckedUpdateManyWithoutEventInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type GuestCountOutputType
+ */
+
+export type GuestCountOutputType = {
+  guestbookMessages: number
+  photos: number
+}
+
+export type GuestCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  guestbookMessages?: boolean | GuestCountOutputTypeCountGuestbookMessagesArgs
+  photos?: boolean | GuestCountOutputTypeCountPhotosArgs
+}
+
+/**
+ * GuestCountOutputType without action
+ */
+export type GuestCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuestCountOutputType
+   */
+  select?: Prisma.GuestCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * GuestCountOutputType without action
+ */
+export type GuestCountOutputTypeCountGuestbookMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuestbookMessageWhereInput
+}
+
+/**
+ * GuestCountOutputType without action
+ */
+export type GuestCountOutputTypeCountPhotosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventPhotoWhereInput
+}
 
 
 export type GuestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -803,8 +1353,13 @@ export type GuestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
+  seats?: boolean
+  attendingCount?: boolean
   invitationToken?: boolean
   rsvpStatus?: boolean
+  ticketCode?: boolean
+  checkedInAt?: boolean
+  checkedInCount?: boolean
   invitationSentAt?: boolean
   emailSentAt?: boolean
   whatsappSentAt?: boolean
@@ -813,6 +1368,9 @@ export type GuestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   createdAt?: boolean
   updatedAt?: boolean
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
+  guestbookMessages?: boolean | Prisma.Guest$guestbookMessagesArgs<ExtArgs>
+  photos?: boolean | Prisma.Guest$photosArgs<ExtArgs>
+  _count?: boolean | Prisma.GuestCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["guest"]>
 
 export type GuestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -824,8 +1382,13 @@ export type GuestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
+  seats?: boolean
+  attendingCount?: boolean
   invitationToken?: boolean
   rsvpStatus?: boolean
+  ticketCode?: boolean
+  checkedInAt?: boolean
+  checkedInCount?: boolean
   invitationSentAt?: boolean
   emailSentAt?: boolean
   whatsappSentAt?: boolean
@@ -845,8 +1408,13 @@ export type GuestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
+  seats?: boolean
+  attendingCount?: boolean
   invitationToken?: boolean
   rsvpStatus?: boolean
+  ticketCode?: boolean
+  checkedInAt?: boolean
+  checkedInCount?: boolean
   invitationSentAt?: boolean
   emailSentAt?: boolean
   whatsappSentAt?: boolean
@@ -866,8 +1434,13 @@ export type GuestSelectScalar = {
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
+  seats?: boolean
+  attendingCount?: boolean
   invitationToken?: boolean
   rsvpStatus?: boolean
+  ticketCode?: boolean
+  checkedInAt?: boolean
+  checkedInCount?: boolean
   invitationSentAt?: boolean
   emailSentAt?: boolean
   whatsappSentAt?: boolean
@@ -877,9 +1450,12 @@ export type GuestSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GuestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "name" | "email" | "phone" | "dietaryRestrictions" | "plusOne" | "notes" | "invitationToken" | "rsvpStatus" | "invitationSentAt" | "emailSentAt" | "whatsappSentAt" | "invitationViewedAt" | "rsvpRespondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["guest"]>
+export type GuestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "name" | "email" | "phone" | "dietaryRestrictions" | "plusOne" | "notes" | "seats" | "attendingCount" | "invitationToken" | "rsvpStatus" | "ticketCode" | "checkedInAt" | "checkedInCount" | "invitationSentAt" | "emailSentAt" | "whatsappSentAt" | "invitationViewedAt" | "rsvpRespondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["guest"]>
 export type GuestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
+  guestbookMessages?: boolean | Prisma.Guest$guestbookMessagesArgs<ExtArgs>
+  photos?: boolean | Prisma.Guest$photosArgs<ExtArgs>
+  _count?: boolean | Prisma.GuestCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type GuestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
@@ -892,6 +1468,8 @@ export type $GuestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Guest"
   objects: {
     event: Prisma.$EventPayload<ExtArgs>
+    guestbookMessages: Prisma.$GuestbookMessagePayload<ExtArgs>[]
+    photos: Prisma.$EventPhotoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -900,10 +1478,33 @@ export type $GuestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     email: string
     phone: string | null
     dietaryRestrictions: string | null
+    /**
+     * Déprécié : remplacé par `seats` (voir 004-guest-ticket-checkin.sql).
+     */
     plusOne: boolean
+    /**
+     * Mot de l'invité pour les hôtes, laissé avec sa réponse.
+     */
     notes: string | null
+    /**
+     * Places réservées par l'hôte, l'invité compris.
+     */
+    seats: number
+    /**
+     * Personnes annoncées par l'invité (1 à `seats`) ; null tant qu'il ne
+     * l'a pas précisé, on compte alors toutes ses places.
+     */
+    attendingCount: number | null
     invitationToken: string
     rsvpStatus: string | null
+    /**
+     * Code du billet d'entrée (lib/tickets.js). Distinct du jeton
+     * d'invitation : montrer son billet ne donne pas le droit de modifier sa
+     * réponse.
+     */
+    ticketCode: string | null
+    checkedInAt: Date | null
+    checkedInCount: number | null
     invitationSentAt: Date | null
     emailSentAt: Date | null
     whatsappSentAt: Date | null
@@ -1306,6 +1907,8 @@ readonly fields: GuestFieldRefs;
 export interface Prisma__GuestClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   event<T extends Prisma.EventDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EventDefaultArgs<ExtArgs>>): Prisma.Prisma__EventClient<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  guestbookMessages<T extends Prisma.Guest$guestbookMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guest$guestbookMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuestbookMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  photos<T extends Prisma.Guest$photosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Guest$photosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1343,8 +1946,13 @@ export interface GuestFieldRefs {
   readonly dietaryRestrictions: Prisma.FieldRef<"Guest", 'String'>
   readonly plusOne: Prisma.FieldRef<"Guest", 'Boolean'>
   readonly notes: Prisma.FieldRef<"Guest", 'String'>
+  readonly seats: Prisma.FieldRef<"Guest", 'Int'>
+  readonly attendingCount: Prisma.FieldRef<"Guest", 'Int'>
   readonly invitationToken: Prisma.FieldRef<"Guest", 'String'>
   readonly rsvpStatus: Prisma.FieldRef<"Guest", 'String'>
+  readonly ticketCode: Prisma.FieldRef<"Guest", 'String'>
+  readonly checkedInAt: Prisma.FieldRef<"Guest", 'DateTime'>
+  readonly checkedInCount: Prisma.FieldRef<"Guest", 'Int'>
   readonly invitationSentAt: Prisma.FieldRef<"Guest", 'DateTime'>
   readonly emailSentAt: Prisma.FieldRef<"Guest", 'DateTime'>
   readonly whatsappSentAt: Prisma.FieldRef<"Guest", 'DateTime'>
@@ -1750,6 +2358,54 @@ export type GuestDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Guests to delete.
    */
   limit?: number
+}
+
+/**
+ * Guest.guestbookMessages
+ */
+export type Guest$guestbookMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuestbookMessage
+   */
+  select?: Prisma.GuestbookMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GuestbookMessage
+   */
+  omit?: Prisma.GuestbookMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuestbookMessageInclude<ExtArgs> | null
+  where?: Prisma.GuestbookMessageWhereInput
+  orderBy?: Prisma.GuestbookMessageOrderByWithRelationInput | Prisma.GuestbookMessageOrderByWithRelationInput[]
+  cursor?: Prisma.GuestbookMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuestbookMessageScalarFieldEnum | Prisma.GuestbookMessageScalarFieldEnum[]
+}
+
+/**
+ * Guest.photos
+ */
+export type Guest$photosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventPhoto
+   */
+  select?: Prisma.EventPhotoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventPhoto
+   */
+  omit?: Prisma.EventPhotoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventPhotoInclude<ExtArgs> | null
+  where?: Prisma.EventPhotoWhereInput
+  orderBy?: Prisma.EventPhotoOrderByWithRelationInput | Prisma.EventPhotoOrderByWithRelationInput[]
+  cursor?: Prisma.EventPhotoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventPhotoScalarFieldEnum | Prisma.EventPhotoScalarFieldEnum[]
 }
 
 /**

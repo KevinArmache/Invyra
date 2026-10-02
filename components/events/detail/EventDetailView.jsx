@@ -27,6 +27,8 @@ import DeleteEventDialog from "@/components/events/DeleteEventDialog";
 import CollaboratorModal from "@/components/events/detail/CollaboratorModal";
 import TabOverview from "@/components/events/detail/TabOverview";
 import TabGuests from "@/components/events/detail/TabGuests";
+import TabCheckIn from "@/components/events/detail/TabCheckIn";
+import TabMemories from "@/components/events/detail/TabMemories";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**
@@ -36,6 +38,9 @@ import { useTranslation } from "@/lib/i18n/Context";
  *   ou absent si l'événement n'a pas de date à venir
  * @param {object} [props.owner]  `{ name, email }` du propriétaire, quand un
  *   admin consulte l'événement d'un autre compte
+ * @param {{ canManage: boolean, url: string | null }} props.checkIn  lien
+ *   de l'équipe d'accueil (voir getCheckInLink)
+ * @param {object} props.memories  livre d'or et photos (voir getEventMemories)
  */
 export default function EventDetailView({
   event,
@@ -43,6 +48,8 @@ export default function EventDetailView({
   collaborators,
   countdown,
   owner = null,
+  checkIn,
+  memories,
 }) {
   const { t, locale } = useTranslation();
   const router = useRouter();
@@ -255,14 +262,23 @@ export default function EventDetailView({
       </dl>
 
       <Tabs defaultValue="overview">
-        <TabsList className="animate-fade-in" style={{ "--rise-delay": "300ms" }}>
-          <TabsTrigger value="overview">
-            {t("portal.events.details.tabs.overview")}
-          </TabsTrigger>
-          <TabsTrigger value="guests">
-            {t("portal.events.details.tabs.guests")} ({guests.length})
-          </TabsTrigger>
-        </TabsList>
+        {/* Quatre onglets : la liste défile horizontalement sur petit écran. */}
+        <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+          <TabsList className="animate-fade-in" style={{ "--rise-delay": "300ms" }}>
+            <TabsTrigger value="overview">
+              {t("portal.events.details.tabs.overview")}
+            </TabsTrigger>
+            <TabsTrigger value="guests">
+              {t("portal.events.details.tabs.guests")} ({guests.length})
+            </TabsTrigger>
+            <TabsTrigger value="checkin">
+              {t("portal.events.details.tabs.checkin")}
+            </TabsTrigger>
+            <TabsTrigger value="memories">
+              {t("portal.events.details.tabs.memories")}
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
         <TabsContent value="overview" className="mt-6">
           <TabOverview
@@ -278,6 +294,19 @@ export default function EventDetailView({
             eventId={event.id}
             hasTemplate={Boolean(event.invitationTemplate)}
           />
+        </TabsContent>
+
+        <TabsContent value="checkin" className="mt-6">
+          <TabCheckIn
+            eventId={event.id}
+            eventTitle={event.title}
+            guests={guests}
+            checkIn={checkIn}
+          />
+        </TabsContent>
+
+        <TabsContent value="memories" className="mt-6">
+          <TabMemories eventId={event.id} memories={memories} />
         </TabsContent>
       </Tabs>
 

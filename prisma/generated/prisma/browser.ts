@@ -57,3 +57,13 @@ export type EventCollaborator = Prisma.EventCollaboratorModel
  * 
  */
 export type Guest = Prisma.GuestModel
+/**
+ * Model GuestbookMessage
+ * 
+ */
+export type GuestbookMessage = Prisma.GuestbookMessageModel
+/**
+ * Model EventPhoto
+ * 
+ */
+export type EventPhoto = Prisma.EventPhotoModel

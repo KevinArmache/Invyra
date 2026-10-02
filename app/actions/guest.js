@@ -10,6 +10,7 @@ import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { nanoid } from "nanoid";
 import { sendInvitationEmail, sendBulkInvitationEmails } from "./notify";
 import { FREE_GUEST_LIMIT } from "@/lib/site";
+import { clampSeats, newTicketCode } from "@/lib/tickets";
 
 const GUEST_LIMITS = {
   free: FREE_GUEST_LIMIT,
@@ -87,7 +88,7 @@ export async function addGuest(eventId, data) {
     });
     if (!event) throw new Error("Event not found");
 
-    const { name, email, phone, dietary_restrictions, plus_one, notes } = data;
+    const { name, email, phone, seats } = data;
     if (!name || !email) throw new Error("Name and email are required");
 
     const existing = await prisma.guest.findFirst({
@@ -101,10 +102,9 @@ export async function addGuest(eventId, data) {
         name,
         email,
         phone: phone || null,
-        dietaryRestrictions: dietary_restrictions || null,
-        plusOne: plus_one || false,
-        notes: notes || null,
+        seats: clampSeats(seats),
         invitationToken: nanoid(32),
+        ticketCode: newTicketCode(),
       },
     });
 
@@ -123,6 +123,46 @@ export async function addGuest(eventId, data) {
     console.error("Error adding guest:", error);
     throw new Error(error.message || "Failed to add guest");
   }
+}
+
+/**
+ * Modifie un invité : nom, email, téléphone et places réservées. Si l'invité
+ * avait annoncé plus de personnes que ses nouvelles places, sa réponse est
+ * ramenée à ce nombre.
+ */
+export async function updateGuest(guestId, data) {
+  const guest = await prisma.guest.findUnique({
+    where: { id: guestId },
+    select: { id: true, eventId: true, attendingCount: true },
+  });
+  if (!guest) throw new Error("Invité introuvable");
+
+  await checkEditorAccess(guest.eventId);
+
+  const name = String(data?.name ?? "").trim().slice(0, 120);
+  const email = String(data?.email ?? "").trim().slice(0, 200);
+  const phone = String(data?.phone ?? "").trim().slice(0, 30);
+  const seats = clampSeats(data?.seats);
+  if (!name || !email.includes("@")) {
+    throw new Error("Le nom et un email valide sont obligatoires.");
+  }
+
+  const duplicate = await prisma.guest.findFirst({
+    where: { eventId: guest.eventId, email, NOT: { id: guest.id } },
+    select: { id: true },
+  });
+  if (duplicate) throw new Error("Un autre invité utilise déjà cet email.");
+
+  return prisma.guest.update({
+    where: { id: guest.id },
+    data: {
+      name,
+      email,
+      phone: phone || null,
+      seats,
+      ...(guest.attendingCount > seats && { attendingCount: seats }),
+    },
+  });
 }
 
 export async function deleteGuest(guestId) {

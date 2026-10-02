@@ -1,7 +1,8 @@
 import { SITE_URL } from "@/lib/site";
 
 /**
- * L'espace connecté, l'administration et l'API ne sont pas à explorer.
+ * L'espace connecté, l'administration, l'API et l'accueil des invités le
+ * jour J (/check-in/…) ne sont pas à explorer.
  *
  * Les pages d'invitation (/invite/…) ne sont volontairement pas bloquées
  * ici : elles portent déjà `noindex`, qu'un robot ne peut lire que s'il a le
@@ -14,7 +15,7 @@ export default function robots() {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/dashboard", "/admin", "/api/"],
+        disallow: ["/dashboard", "/admin", "/api/", "/check-in/"],
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

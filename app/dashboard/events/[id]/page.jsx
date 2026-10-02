@@ -4,6 +4,8 @@ import { getEventById } from "@/app/actions/event";
 import { getGuests } from "@/app/actions/guest";
 import { getCollaborators } from "@/app/actions/collaborator";
 import { getSession } from "@/app/actions/auth";
+import { getCheckInLink } from "@/app/actions/checkin";
+import { getEventMemories } from "@/app/actions/memories";
 import { getEventOwnerAdmin } from "@/app/actions/admin";
 import { countdownTarget } from "@/lib/invitation/document";
 import { getTranslations } from "@/lib/i18n/server";
@@ -28,17 +30,20 @@ function requestTime() {
 export default async function EventDetailPage({ params }) {
   const { id } = await params;
 
-  // Les trois requêtes partent ensemble : en série, la page attendait
+  // Les requêtes partent ensemble : en série, la page attendait
   // l'événement avant de demander les invités, puis les collaborateurs.
   let data;
   try {
-    const [event, guests, collaborators, session] = await Promise.all([
-      getEventById(id),
-      getGuests(id),
-      getCollaborators(id),
-      getSession(),
-    ]);
-    data = { event, guests, collaborators, session };
+    const [event, guests, collaborators, session, checkIn, memories] =
+      await Promise.all([
+        getEventById(id),
+        getGuests(id),
+        getCollaborators(id),
+        getSession(),
+        getCheckInLink(id),
+        getEventMemories(id),
+      ]);
+    data = { event, guests, collaborators, session, checkIn, memories };
   } catch {
     // getEventById lève aussi bien pour un identifiant inconnu que pour un
     // accès refusé : dans les deux cas l'utilisateur n'a rien à voir ici.
@@ -66,6 +71,8 @@ export default async function EventDetailPage({ params }) {
       collaborators={data.collaborators}
       countdown={countdown}
       owner={owner}
+      checkIn={data.checkIn}
+      memories={data.memories}
     />
   );
 }

@@ -6,8 +6,9 @@ import { AlertTriangle, Check, Upload, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "@/lib/i18n/Context";
+import { clampSeats } from "@/lib/tickets";
 
-const EXAMPLE = `Marie Dupont,marie@exemple.com,+33600000001
+const EXAMPLE = `Marie Dupont,marie@exemple.com,+33600000001,2
 Jean Martin,jean@exemple.com
 Sophie Bernard,sophie@exemple.com,+33600000003`;
 
@@ -81,7 +82,7 @@ function parseCsv(text) {
 
     if (index === 0 && looksLikeHeader(fields)) return;
 
-    const [name, email, phone] = fields;
+    const [name, email, phone, seats] = fields;
 
     if (!name || !email) {
       errors.push({ key: "error_missing", line: index + 1 });
@@ -92,7 +93,13 @@ function parseCsv(text) {
       return;
     }
 
-    guests.push({ name, email, phone: phone || null });
+    // Places : 1 par défaut, invité compris.
+    guests.push({
+      name,
+      email,
+      phone: phone || null,
+      seats: seats ? clampSeats(seats) : 1,
+    });
   });
 
   return { guests, errors };
@@ -205,6 +212,11 @@ export default function CSVImporter({ onImport, loading = false }) {
                 >
                   <Check className="h-3 w-3 shrink-0 text-positive" />
                   <span className="truncate text-ink-100">{guest.name}</span>
+                  {guest.seats > 1 && (
+                    <span className="shrink-0 rounded-full bg-gold/15 px-1.5 py-0.5 text-[10px] text-gold">
+                      {guest.seats}
+                    </span>
+                  )}
                   <span className="ml-auto truncate text-ink-400">
                     {guest.email}
                   </span>

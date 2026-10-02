@@ -40,12 +40,14 @@ const STATUS_COLORS = {
 
 /** Largeur de chaque colonne du tableau. */
 const COLUMNS = {
-  index: "5%",
-  name: "23%",
-  email: "26%",
-  phone: "15%",
-  status: "12%",
-  notes: "19%",
+  index: "4%",
+  name: "20%",
+  email: "22%",
+  phone: "13%",
+  status: "11%",
+  people: "6%",
+  arrived: "9%",
+  notes: "15%",
 };
 
 const styles = StyleSheet.create({
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
   rule: { marginTop: 12, width: 48, height: 1.2, backgroundColor: BRAND_HEX.goldDeep },
   summary: { marginTop: 16, flexDirection: "row", flexWrap: "wrap", marginHorizontal: -3 },
   stat: {
-    width: "16.66%",
+    width: "14.28%",
     paddingHorizontal: 3,
     marginBottom: 6,
   },
@@ -120,7 +122,8 @@ const styles = StyleSheet.create({
   cell: { paddingHorizontal: 4, fontSize: 8.5, lineHeight: 1.35 },
   index: { color: MUTED },
   name: { fontFamily: "Helvetica-Bold" },
-  plusOne: { marginTop: 1, fontSize: 7, color: BRAND_HEX.goldDeep },
+  seats: { marginTop: 1, fontSize: 7, color: BRAND_HEX.goldDeep },
+  people: { textAlign: "center" },
   email: { flexDirection: "row", flexWrap: "wrap", fontSize: 7.5 },
   status: { flexDirection: "row", alignItems: "center" },
   dot: { width: 5, height: 5, borderRadius: 2.5, marginRight: 4 },
@@ -159,8 +162,10 @@ function Email({ value }) {
 /**
  * @param {object} props
  * @param {{ title: string, dateLabel?: string, time?: string, location?: string, contactPhone?: string }} props.event
- * @param {Array<{ id: string, name: string, email: string, phone?: string, plusOne: boolean, status: "confirmed"|"declined"|"maybe"|"pending", notes?: string }>} props.guests
- * @param {{ total: number, confirmed: number, declined: number, maybe: number, pending: number, expected: number }} props.summary
+ * @param {Array<{ id: string, name: string, email: string, phone?: string, seats: number, people: number, arrived: string, status: "confirmed"|"declined"|"maybe"|"pending", notes?: string }>} props.guests
+ *   `people` : personnes attendues (annoncées par un confirmé, sinon ses
+ *   places) ; `arrived` : heure et nombre de personnes entrées, ou ""
+ * @param {{ total: number, confirmed: number, declined: number, maybe: number, pending: number, expected: number, arrived: number }} props.summary
  * @param {object} props.labels  textes traduits (voir la route)
  * @param {Buffer} [props.logo]  logo PNG
  * @param {string} props.locale
@@ -174,7 +179,15 @@ export default function GuestListDocument({
   locale,
 }) {
   const meta = [event.dateLabel, event.time, event.location].filter(Boolean);
-  const stats = ["total", "confirmed", "declined", "maybe", "pending", "expected"];
+  const stats = [
+    "total",
+    "confirmed",
+    "declined",
+    "maybe",
+    "pending",
+    "expected",
+    "arrived",
+  ];
 
   return (
     <Document
@@ -235,6 +248,12 @@ export default function GuestListDocument({
               <Text style={[styles.headCell, { width: COLUMNS.status }]}>
                 {labels.columns.status}
               </Text>
+              <Text style={[styles.headCell, styles.people, { width: COLUMNS.people }]}>
+                {labels.columns.people}
+              </Text>
+              <Text style={[styles.headCell, { width: COLUMNS.arrived }]}>
+                {labels.columns.arrived}
+              </Text>
               <Text style={[styles.headCell, { width: COLUMNS.notes }]}>
                 {labels.columns.notes}
               </Text>
@@ -251,7 +270,11 @@ export default function GuestListDocument({
                 </Text>
                 <View style={[styles.cell, { width: COLUMNS.name }]}>
                   <Text style={styles.name}>{guest.name}</Text>
-                  {guest.plusOne && <Text style={styles.plusOne}>+1</Text>}
+                  {guest.seats > 1 && (
+                    <Text style={styles.seats}>
+                      {labels.seats.replace("{count}", String(guest.seats))}
+                    </Text>
+                  )}
                 </View>
                 <View style={[styles.cell, { width: COLUMNS.email }]}>
                   {guest.email ? <Email value={guest.email} /> : <Text>-</Text>}
@@ -265,6 +288,12 @@ export default function GuestListDocument({
                   />
                   <Text>{labels.status[guest.status]}</Text>
                 </View>
+                <Text style={[styles.cell, styles.people, { width: COLUMNS.people }]}>
+                  {guest.people}
+                </Text>
+                <Text style={[styles.cell, { width: COLUMNS.arrived }]}>
+                  {guest.arrived}
+                </Text>
                 <Text style={[styles.cell, styles.notes, { width: COLUMNS.notes }]}>
                   {guest.notes || ""}
                 </Text>

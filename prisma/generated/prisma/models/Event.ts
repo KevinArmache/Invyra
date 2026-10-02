@@ -38,6 +38,9 @@ export type EventMinAggregateOutputType = {
   emailTemplate: string | null
   status: string | null
   autoSend: boolean | null
+  checkInToken: string | null
+  guestbookEnabled: boolean | null
+  photosEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -56,6 +59,9 @@ export type EventMaxAggregateOutputType = {
   emailTemplate: string | null
   status: string | null
   autoSend: boolean | null
+  checkInToken: string | null
+  guestbookEnabled: boolean | null
+  photosEnabled: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -76,6 +82,9 @@ export type EventCountAggregateOutputType = {
   emailTemplate: number
   status: number
   autoSend: number
+  checkInToken: number
+  guestbookEnabled: number
+  photosEnabled: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -96,6 +105,9 @@ export type EventMinAggregateInputType = {
   emailTemplate?: true
   status?: true
   autoSend?: true
+  checkInToken?: true
+  guestbookEnabled?: true
+  photosEnabled?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -114,6 +126,9 @@ export type EventMaxAggregateInputType = {
   emailTemplate?: true
   status?: true
   autoSend?: true
+  checkInToken?: true
+  guestbookEnabled?: true
+  photosEnabled?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -134,6 +149,9 @@ export type EventCountAggregateInputType = {
   emailTemplate?: true
   status?: true
   autoSend?: true
+  checkInToken?: true
+  guestbookEnabled?: true
+  photosEnabled?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -227,6 +245,9 @@ export type EventGroupByOutputType = {
   emailTemplate: string | null
   status: string
   autoSend: boolean
+  checkInToken: string | null
+  guestbookEnabled: boolean
+  photosEnabled: boolean
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
@@ -268,12 +289,17 @@ export type EventWhereInput = {
   emailTemplate?: Prisma.StringNullableFilter<"Event"> | string | null
   status?: Prisma.StringFilter<"Event"> | string
   autoSend?: Prisma.BoolFilter<"Event"> | boolean
+  checkInToken?: Prisma.StringNullableFilter<"Event"> | string | null
+  guestbookEnabled?: Prisma.BoolFilter<"Event"> | boolean
+  photosEnabled?: Prisma.BoolFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   guests?: Prisma.GuestListRelationFilter
   collaborators?: Prisma.EventCollaboratorListRelationFilter
   templateCopy?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
+  guestbookMessages?: Prisma.GuestbookMessageListRelationFilter
+  photos?: Prisma.EventPhotoListRelationFilter
 }
 
 export type EventOrderByWithRelationInput = {
@@ -292,16 +318,22 @@ export type EventOrderByWithRelationInput = {
   emailTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
+  checkInToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  guestbookEnabled?: Prisma.SortOrder
+  photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   guests?: Prisma.GuestOrderByRelationAggregateInput
   collaborators?: Prisma.EventCollaboratorOrderByRelationAggregateInput
   templateCopy?: Prisma.TemplateOrderByWithRelationInput
+  guestbookMessages?: Prisma.GuestbookMessageOrderByRelationAggregateInput
+  photos?: Prisma.EventPhotoOrderByRelationAggregateInput
 }
 
 export type EventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  checkInToken?: string
   AND?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   OR?: Prisma.EventWhereInput[]
   NOT?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
@@ -319,13 +351,17 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   emailTemplate?: Prisma.StringNullableFilter<"Event"> | string | null
   status?: Prisma.StringFilter<"Event"> | string
   autoSend?: Prisma.BoolFilter<"Event"> | boolean
+  guestbookEnabled?: Prisma.BoolFilter<"Event"> | boolean
+  photosEnabled?: Prisma.BoolFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   guests?: Prisma.GuestListRelationFilter
   collaborators?: Prisma.EventCollaboratorListRelationFilter
   templateCopy?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
-}, "id">
+  guestbookMessages?: Prisma.GuestbookMessageListRelationFilter
+  photos?: Prisma.EventPhotoListRelationFilter
+}, "id" | "checkInToken">
 
 export type EventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -343,6 +379,9 @@ export type EventOrderByWithAggregationInput = {
   emailTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
+  checkInToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  guestbookEnabled?: Prisma.SortOrder
+  photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
@@ -369,6 +408,9 @@ export type EventScalarWhereWithAggregatesInput = {
   emailTemplate?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"Event"> | string
   autoSend?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
+  checkInToken?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  guestbookEnabled?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
+  photosEnabled?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
 }
@@ -388,12 +430,17 @@ export type EventCreateInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEventsInput
   guests?: Prisma.GuestCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateInput = {
@@ -412,11 +459,16 @@ export type EventUncheckedCreateInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventUpdateInput = {
@@ -434,12 +486,17 @@ export type EventUpdateInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
   guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateInput = {
@@ -458,11 +515,16 @@ export type EventUncheckedUpdateInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateManyInput = {
@@ -481,6 +543,9 @@ export type EventCreateManyInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -500,6 +565,9 @@ export type EventUpdateManyMutationInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -520,6 +588,9 @@ export type EventUncheckedUpdateManyInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -555,6 +626,9 @@ export type EventCountOrderByAggregateInput = {
   emailTemplate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
+  checkInToken?: Prisma.SortOrder
+  guestbookEnabled?: Prisma.SortOrder
+  photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -573,6 +647,9 @@ export type EventMaxOrderByAggregateInput = {
   emailTemplate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
+  checkInToken?: Prisma.SortOrder
+  guestbookEnabled?: Prisma.SortOrder
+  photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -591,6 +668,9 @@ export type EventMinOrderByAggregateInput = {
   emailTemplate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
+  checkInToken?: Prisma.SortOrder
+  guestbookEnabled?: Prisma.SortOrder
+  photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -686,6 +766,34 @@ export type EventUpdateOneRequiredWithoutGuestsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutGuestsInput, Prisma.EventUpdateWithoutGuestsInput>, Prisma.EventUncheckedUpdateWithoutGuestsInput>
 }
 
+export type EventCreateNestedOneWithoutGuestbookMessagesInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutGuestbookMessagesInput, Prisma.EventUncheckedCreateWithoutGuestbookMessagesInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutGuestbookMessagesInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUpdateOneRequiredWithoutGuestbookMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutGuestbookMessagesInput, Prisma.EventUncheckedCreateWithoutGuestbookMessagesInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutGuestbookMessagesInput
+  upsert?: Prisma.EventUpsertWithoutGuestbookMessagesInput
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutGuestbookMessagesInput, Prisma.EventUpdateWithoutGuestbookMessagesInput>, Prisma.EventUncheckedUpdateWithoutGuestbookMessagesInput>
+}
+
+export type EventCreateNestedOneWithoutPhotosInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutPhotosInput, Prisma.EventUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutPhotosInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUpdateOneRequiredWithoutPhotosNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutPhotosInput, Prisma.EventUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutPhotosInput
+  upsert?: Prisma.EventUpsertWithoutPhotosInput
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutPhotosInput, Prisma.EventUpdateWithoutPhotosInput>, Prisma.EventUncheckedUpdateWithoutPhotosInput>
+}
+
 export type EventCreateWithoutUserInput = {
   id?: string
   title: string
@@ -701,11 +809,16 @@ export type EventCreateWithoutUserInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutUserInput = {
@@ -723,11 +836,16 @@ export type EventUncheckedCreateWithoutUserInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutUserInput = {
@@ -775,6 +893,9 @@ export type EventScalarWhereInput = {
   emailTemplate?: Prisma.StringNullableFilter<"Event"> | string | null
   status?: Prisma.StringFilter<"Event"> | string
   autoSend?: Prisma.BoolFilter<"Event"> | boolean
+  checkInToken?: Prisma.StringNullableFilter<"Event"> | string | null
+  guestbookEnabled?: Prisma.BoolFilter<"Event"> | boolean
+  photosEnabled?: Prisma.BoolFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
 }
@@ -794,11 +915,16 @@ export type EventCreateWithoutTemplateCopyInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEventsInput
   guests?: Prisma.GuestCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutTemplateCopyInput = {
@@ -817,10 +943,15 @@ export type EventUncheckedCreateWithoutTemplateCopyInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutTemplateCopyInput = {
@@ -854,11 +985,16 @@ export type EventUpdateWithoutTemplateCopyInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
   guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutTemplateCopyInput = {
@@ -877,10 +1013,15 @@ export type EventUncheckedUpdateWithoutTemplateCopyInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateWithoutCollaboratorsInput = {
@@ -898,11 +1039,16 @@ export type EventCreateWithoutCollaboratorsInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEventsInput
   guests?: Prisma.GuestCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutCollaboratorsInput = {
@@ -921,10 +1067,15 @@ export type EventUncheckedCreateWithoutCollaboratorsInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutCollaboratorsInput = {
@@ -958,11 +1109,16 @@ export type EventUpdateWithoutCollaboratorsInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
   guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutCollaboratorsInput = {
@@ -981,10 +1137,15 @@ export type EventUncheckedUpdateWithoutCollaboratorsInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateWithoutGuestsInput = {
@@ -1002,11 +1163,16 @@ export type EventCreateWithoutGuestsInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
 }
 
 export type EventUncheckedCreateWithoutGuestsInput = {
@@ -1025,10 +1191,15 @@ export type EventUncheckedCreateWithoutGuestsInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutEventInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
 }
 
 export type EventCreateOrConnectWithoutGuestsInput = {
@@ -1062,11 +1233,16 @@ export type EventUpdateWithoutGuestsInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutGuestsInput = {
@@ -1085,10 +1261,263 @@ export type EventUncheckedUpdateWithoutGuestsInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventCreateWithoutGuestbookMessagesInput = {
+  id?: string
+  title: string
+  description?: string | null
+  eventDate?: Date | string | null
+  location?: string | null
+  time?: string | null
+  dressCode?: string | null
+  customMessage?: string | null
+  contactPhone?: string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: string | null
+  status?: string
+  autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutEventsInput
+  guests?: Prisma.GuestCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
+  templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
+  photos?: Prisma.EventPhotoCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutGuestbookMessagesInput = {
+  id?: string
+  userId: string
+  title: string
+  description?: string | null
+  eventDate?: Date | string | null
+  location?: string | null
+  time?: string | null
+  dressCode?: string | null
+  customMessage?: string | null
+  contactPhone?: string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: string | null
+  status?: string
+  autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
+  templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
+  photos?: Prisma.EventPhotoUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutGuestbookMessagesInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutGuestbookMessagesInput, Prisma.EventUncheckedCreateWithoutGuestbookMessagesInput>
+}
+
+export type EventUpsertWithoutGuestbookMessagesInput = {
+  update: Prisma.XOR<Prisma.EventUpdateWithoutGuestbookMessagesInput, Prisma.EventUncheckedUpdateWithoutGuestbookMessagesInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutGuestbookMessagesInput, Prisma.EventUncheckedCreateWithoutGuestbookMessagesInput>
+  where?: Prisma.EventWhereInput
+}
+
+export type EventUpdateToOneWithWhereWithoutGuestbookMessagesInput = {
+  where?: Prisma.EventWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutGuestbookMessagesInput, Prisma.EventUncheckedUpdateWithoutGuestbookMessagesInput>
+}
+
+export type EventUpdateWithoutGuestbookMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
+  guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
+  templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutGuestbookMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
+}
+
+export type EventCreateWithoutPhotosInput = {
+  id?: string
+  title: string
+  description?: string | null
+  eventDate?: Date | string | null
+  location?: string | null
+  time?: string | null
+  dressCode?: string | null
+  customMessage?: string | null
+  contactPhone?: string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: string | null
+  status?: string
+  autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutEventsInput
+  guests?: Prisma.GuestCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
+  templateCopy?: Prisma.TemplateCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutPhotosInput = {
+  id?: string
+  userId: string
+  title: string
+  description?: string | null
+  eventDate?: Date | string | null
+  location?: string | null
+  time?: string | null
+  dressCode?: string | null
+  customMessage?: string | null
+  contactPhone?: string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: string | null
+  status?: string
+  autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  guests?: Prisma.GuestUncheckedCreateNestedManyWithoutEventInput
+  collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
+  templateCopy?: Prisma.TemplateUncheckedCreateNestedOneWithoutEventInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutPhotosInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutPhotosInput, Prisma.EventUncheckedCreateWithoutPhotosInput>
+}
+
+export type EventUpsertWithoutPhotosInput = {
+  update: Prisma.XOR<Prisma.EventUpdateWithoutPhotosInput, Prisma.EventUncheckedUpdateWithoutPhotosInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutPhotosInput, Prisma.EventUncheckedCreateWithoutPhotosInput>
+  where?: Prisma.EventWhereInput
+}
+
+export type EventUpdateToOneWithWhereWithoutPhotosInput = {
+  where?: Prisma.EventWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutPhotosInput, Prisma.EventUncheckedUpdateWithoutPhotosInput>
+}
+
+export type EventUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutEventsNestedInput
+  guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
+  templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
+  collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventCreateManyUserInput = {
@@ -1106,6 +1535,9 @@ export type EventCreateManyUserInput = {
   emailTemplate?: string | null
   status?: string
   autoSend?: boolean
+  checkInToken?: string | null
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1125,11 +1557,16 @@ export type EventUpdateWithoutUserInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateWithoutUserInput = {
@@ -1147,11 +1584,16 @@ export type EventUncheckedUpdateWithoutUserInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   guests?: Prisma.GuestUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   templateCopy?: Prisma.TemplateUncheckedUpdateOneWithoutEventNestedInput
+  guestbookMessages?: Prisma.GuestbookMessageUncheckedUpdateManyWithoutEventNestedInput
+  photos?: Prisma.EventPhotoUncheckedUpdateManyWithoutEventNestedInput
 }
 
 export type EventUncheckedUpdateManyWithoutUserInput = {
@@ -1169,6 +1611,9 @@ export type EventUncheckedUpdateManyWithoutUserInput = {
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1181,11 +1626,15 @@ export type EventUncheckedUpdateManyWithoutUserInput = {
 export type EventCountOutputType = {
   guests: number
   collaborators: number
+  guestbookMessages: number
+  photos: number
 }
 
 export type EventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   guests?: boolean | EventCountOutputTypeCountGuestsArgs
   collaborators?: boolean | EventCountOutputTypeCountCollaboratorsArgs
+  guestbookMessages?: boolean | EventCountOutputTypeCountGuestbookMessagesArgs
+  photos?: boolean | EventCountOutputTypeCountPhotosArgs
 }
 
 /**
@@ -1212,6 +1661,20 @@ export type EventCountOutputTypeCountCollaboratorsArgs<ExtArgs extends runtime.T
   where?: Prisma.EventCollaboratorWhereInput
 }
 
+/**
+ * EventCountOutputType without action
+ */
+export type EventCountOutputTypeCountGuestbookMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.GuestbookMessageWhereInput
+}
+
+/**
+ * EventCountOutputType without action
+ */
+export type EventCountOutputTypeCountPhotosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventPhotoWhereInput
+}
+
 
 export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1229,12 +1692,17 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   emailTemplate?: boolean
   status?: boolean
   autoSend?: boolean
+  checkInToken?: boolean
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   guests?: boolean | Prisma.Event$guestsArgs<ExtArgs>
   collaborators?: boolean | Prisma.Event$collaboratorsArgs<ExtArgs>
   templateCopy?: boolean | Prisma.Event$templateCopyArgs<ExtArgs>
+  guestbookMessages?: boolean | Prisma.Event$guestbookMessagesArgs<ExtArgs>
+  photos?: boolean | Prisma.Event$photosArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["event"]>
 
@@ -1254,6 +1722,9 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   emailTemplate?: boolean
   status?: boolean
   autoSend?: boolean
+  checkInToken?: boolean
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1275,6 +1746,9 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   emailTemplate?: boolean
   status?: boolean
   autoSend?: boolean
+  checkInToken?: boolean
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1296,16 +1770,21 @@ export type EventSelectScalar = {
   emailTemplate?: boolean
   status?: boolean
   autoSend?: boolean
+  checkInToken?: boolean
+  guestbookEnabled?: boolean
+  photosEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "time" | "dressCode" | "customMessage" | "contactPhone" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "time" | "dressCode" | "customMessage" | "contactPhone" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "checkInToken" | "guestbookEnabled" | "photosEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   guests?: boolean | Prisma.Event$guestsArgs<ExtArgs>
   collaborators?: boolean | Prisma.Event$collaboratorsArgs<ExtArgs>
   templateCopy?: boolean | Prisma.Event$templateCopyArgs<ExtArgs>
+  guestbookMessages?: boolean | Prisma.Event$guestbookMessagesArgs<ExtArgs>
+  photos?: boolean | Prisma.Event$photosArgs<ExtArgs>
   _count?: boolean | Prisma.EventCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EventIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1322,6 +1801,8 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     guests: Prisma.$GuestPayload<ExtArgs>[]
     collaborators: Prisma.$EventCollaboratorPayload<ExtArgs>[]
     templateCopy: Prisma.$TemplatePayload<ExtArgs> | null
+    guestbookMessages: Prisma.$GuestbookMessagePayload<ExtArgs>[]
+    photos: Prisma.$EventPhotoPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1347,6 +1828,16 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     emailTemplate: string | null
     status: string
     autoSend: boolean
+    /**
+     * Lien secret de l'équipe d'accueil (/check-in/<jeton>), créé à la
+     * demande et régénérable par l'hôte (voir app/actions/checkin.js).
+     */
+    checkInToken: string | null
+    /**
+     * L'hôte peut couper le livre d'or ou le mur de photos des invités.
+     */
+    guestbookEnabled: boolean
+    photosEnabled: boolean
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["event"]>
@@ -1747,6 +2238,8 @@ export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Ty
   guests<T extends Prisma.Event$guestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$guestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   collaborators<T extends Prisma.Event$collaboratorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$collaboratorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   templateCopy<T extends Prisma.Event$templateCopyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$templateCopyArgs<ExtArgs>>): Prisma.Prisma__TemplateClient<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  guestbookMessages<T extends Prisma.Event$guestbookMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$guestbookMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$GuestbookMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  photos<T extends Prisma.Event$photosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$photosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1791,6 +2284,9 @@ export interface EventFieldRefs {
   readonly emailTemplate: Prisma.FieldRef<"Event", 'String'>
   readonly status: Prisma.FieldRef<"Event", 'String'>
   readonly autoSend: Prisma.FieldRef<"Event", 'Boolean'>
+  readonly checkInToken: Prisma.FieldRef<"Event", 'String'>
+  readonly guestbookEnabled: Prisma.FieldRef<"Event", 'Boolean'>
+  readonly photosEnabled: Prisma.FieldRef<"Event", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Event", 'DateTime'>
 }
@@ -2258,6 +2754,54 @@ export type Event$templateCopyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   include?: Prisma.TemplateInclude<ExtArgs> | null
   where?: Prisma.TemplateWhereInput
+}
+
+/**
+ * Event.guestbookMessages
+ */
+export type Event$guestbookMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the GuestbookMessage
+   */
+  select?: Prisma.GuestbookMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the GuestbookMessage
+   */
+  omit?: Prisma.GuestbookMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.GuestbookMessageInclude<ExtArgs> | null
+  where?: Prisma.GuestbookMessageWhereInput
+  orderBy?: Prisma.GuestbookMessageOrderByWithRelationInput | Prisma.GuestbookMessageOrderByWithRelationInput[]
+  cursor?: Prisma.GuestbookMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.GuestbookMessageScalarFieldEnum | Prisma.GuestbookMessageScalarFieldEnum[]
+}
+
+/**
+ * Event.photos
+ */
+export type Event$photosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventPhoto
+   */
+  select?: Prisma.EventPhotoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventPhoto
+   */
+  omit?: Prisma.EventPhotoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventPhotoInclude<ExtArgs> | null
+  where?: Prisma.EventPhotoWhereInput
+  orderBy?: Prisma.EventPhotoOrderByWithRelationInput | Prisma.EventPhotoOrderByWithRelationInput[]
+  cursor?: Prisma.EventPhotoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventPhotoScalarFieldEnum | Prisma.EventPhotoScalarFieldEnum[]
 }
 
 /**

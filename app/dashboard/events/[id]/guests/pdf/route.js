@@ -5,8 +5,10 @@ import { renderToBuffer } from "@react-pdf/renderer";
 
 import { canAccessEvent } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
+import { clockLabel } from "@/lib/invitation/dates";
 import GuestListDocument from "@/lib/pdf/GuestListDocument";
 import { prisma } from "@/lib/prisma";
+import { expectedPeople } from "@/lib/tickets";
 
 /**
  * Liste des invités d'un événement en PDF, téléchargée depuis l'onglet
@@ -60,7 +62,10 @@ export async function GET(request, { params }) {
         name: true,
         email: true,
         phone: true,
-        plusOne: true,
+        seats: true,
+        attendingCount: true,
+        checkedInAt: true,
+        checkedInCount: true,
         rsvpStatus: true,
         dietaryRestrictions: true,
         notes: true,
@@ -79,7 +84,16 @@ export async function GET(request, { params }) {
       name: guest.name,
       email: guest.email,
       phone: guest.phone,
-      plusOne: guest.plusOne,
+      seats: guest.seats,
+      // Personnes : celles annoncées par un confirmé, sinon ses places.
+      people:
+        guest.rsvpStatus === "confirmed" ? expectedPeople(guest) : guest.seats,
+      arrived: guest.checkedInAt
+        ? `${clockLabel(guest.checkedInAt, locale)} · ${guest.checkedInCount ?? expectedPeople(guest)}`
+        : "",
+      arrivedPeople: guest.checkedInAt
+        ? (guest.checkedInCount ?? expectedPeople(guest))
+        : 0,
       status: RSVP_STATUSES.has(guest.rsvpStatus) ? guest.rsvpStatus : "pending",
       notes: [guest.dietaryRestrictions, guest.notes]
         .map((value) => value?.trim())
@@ -88,11 +102,22 @@ export async function GET(request, { params }) {
     }))
     .sort((a, b) => a.name.localeCompare(b.name, intl, { sensitivity: "base" }));
 
-  // « Personnes attendues » : chaque confirmé, plus son accompagnant.
-  const summary = { total: rows.length, confirmed: 0, declined: 0, maybe: 0, pending: 0, expected: 0 };
+  // « Personnes attendues » : pour chaque confirmé, le nombre de personnes
+  // qu'il a annoncé, sinon toutes ses places. « Arrivées » : personnes
+  // entrées le jour J.
+  const summary = {
+    total: rows.length,
+    confirmed: 0,
+    declined: 0,
+    maybe: 0,
+    pending: 0,
+    expected: 0,
+    arrived: 0,
+  };
   for (const row of rows) {
     summary[row.status] += 1;
-    if (row.status === "confirmed") summary.expected += row.plusOne ? 2 : 1;
+    if (row.status === "confirmed") summary.expected += row.people;
+    summary.arrived += row.arrivedPeople;
   }
 
   // Lu en UTC : les dates d'événement sont enregistrées à minuit UTC.
@@ -121,6 +146,8 @@ export async function GET(request, { params }) {
       email: pdf("columns.email"),
       phone: pdf("columns.phone"),
       status: pdf("columns.status"),
+      people: pdf("columns.people"),
+      arrived: pdf("columns.arrived"),
       notes: pdf("columns.notes"),
     },
     summary: {
@@ -130,7 +157,9 @@ export async function GET(request, { params }) {
       maybe: pdf("summary.maybe"),
       pending: pdf("summary.pending"),
       expected: pdf("summary.expected"),
+      arrived: pdf("summary.arrived"),
     },
+    seats: t(`${guestsKey}.seats_badge`),
     // Mêmes libellés que les badges de la liste.
     status: {
       confirmed: t(`${guestsKey}.status.attending`),

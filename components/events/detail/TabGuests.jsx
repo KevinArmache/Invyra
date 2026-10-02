@@ -7,6 +7,7 @@ import {
   Check,
   CheckCircle2,
   Clock,
+  DoorOpen,
   Eye,
   EyeOff,
   FileDown,
@@ -14,6 +15,7 @@ import {
   Loader2,
   Mail,
   MessageCircle,
+  Pencil,
   Search,
   Trash2,
   UserPlus,
@@ -37,6 +39,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -48,13 +58,16 @@ import {
   addGuest,
   deleteGuest,
   sendBulkInvitations,
+  updateGuest,
 } from "@/app/actions/guest";
 import {
   generateWhatsAppLink,
   markWhatsAppSent,
   sendInvitationEmail,
 } from "@/app/actions/notify";
+import { clockLabel } from "@/lib/invitation/dates";
 import { useTranslation } from "@/lib/i18n/Context";
+import { MAX_SEATS } from "@/lib/tickets";
 
 const RSVP_STYLES = {
   confirmed: {
@@ -130,10 +143,37 @@ function OpenedBadge({ viewedAt }) {
   );
 }
 
-function GuestRow({ guest, index }) {
+/**
+ * Places de l'invité : « 3 places », ou « 2/3 pers. » une fois qu'il a
+ * confirmé et précisé combien ils seront. Rien pour une seule place.
+ */
+function SeatsBadge({ guest }) {
   const { t } = useTranslation();
+  if (guest.seats <= 1) return null;
+  const label =
+    guest.rsvpStatus === "confirmed" && guest.attendingCount != null
+      ? t("portal.events.details.guests.attending_badge")
+          .replace("{attending}", String(guest.attendingCount))
+          .replace("{seats}", String(guest.seats))
+      : t("portal.events.details.guests.seats_badge").replace(
+          "{count}",
+          String(guest.seats),
+        );
+  return (
+    <span
+      data-numeric
+      className="shrink-0 rounded-full bg-gold/15 px-1.5 py-0.5 text-[10px] text-gold"
+    >
+      {label}
+    </span>
+  );
+}
+
+function GuestRow({ guest, index }) {
+  const { t, locale } = useTranslation();
   const router = useRouter();
   const [sending, setSending] = useState(null);
+  const [editing, setEditing] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const emailSent = Boolean(guest.emailSentAt || guest.invitationSentAt);
@@ -192,11 +232,7 @@ function GuestRow({ guest, index }) {
         <div className="min-w-0">
           <p className="flex items-center gap-2 text-sm text-ink-50">
             <span className="truncate">{guest.name}</span>
-            {guest.plusOne && (
-              <span className="shrink-0 rounded-full bg-gold/15 px-1.5 py-0.5 text-[10px] text-gold">
-                +1
-              </span>
-            )}
+            <SeatsBadge guest={guest} />
           </p>
           <p className="truncate text-xs text-ink-400">{guest.email}</p>
           {(guest.dietaryRestrictions || guest.notes) && (
@@ -212,6 +248,15 @@ function GuestRow({ guest, index }) {
       <div className="flex shrink-0 flex-wrap items-center gap-x-4 gap-y-1.5">
         <OpenedBadge viewedAt={guest.invitationViewedAt} />
         <RsvpBadge status={guest.rsvpStatus} />
+        {guest.checkedInAt && (
+          <span className="inline-flex items-center gap-1 text-xs whitespace-nowrap text-positive">
+            <DoorOpen className="h-3.5 w-3.5" aria-hidden="true" />
+            {t("portal.events.details.guests.arrived_badge").replace(
+              "{time}",
+              clockLabel(guest.checkedInAt, locale),
+            )}
+          </span>
+        )}
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5">
@@ -255,6 +300,17 @@ function GuestRow({ guest, index }) {
           </Button>
         )}
 
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-ink-400 hover:text-gold"
+          onClick={() => setEditing(true)}
+          aria-label={`${t("portal.events.details.guests.edit")} ${guest.name}`}
+        >
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <EditGuestDialog guest={guest} open={editing} onOpenChange={setEditing} />
+
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
@@ -295,6 +351,112 @@ function GuestRow({ guest, index }) {
         </AlertDialog>
       </div>
     </li>
+  );
+}
+
+/** Modification d'un invité : identité, contact et places réservées. */
+function EditGuestDialog({ guest, open, onOpenChange }) {
+  const { t } = useTranslation();
+  const g = (key) => t(`portal.events.details.guests.${key}`);
+  const router = useRouter();
+  const [saving, setSaving] = useState(false);
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    setSaving(true);
+    try {
+      await updateGuest(guest.id, {
+        name: form.get("name"),
+        email: form.get("email"),
+        phone: form.get("phone"),
+        seats: form.get("seats"),
+      });
+      toast.success(g("saved"));
+      onOpenChange(false);
+      router.refresh();
+    } catch (caught) {
+      toast.error(caught.message || t("common.error"));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>{g("edit_title")}</DialogTitle>
+          <DialogDescription>{g("edit_desc")}</DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="grid gap-4">
+          <div className="grid gap-1.5">
+            <Label htmlFor={`edit-name-${guest.id}`}>
+              {t("portal.events.new.labels.name")}
+            </Label>
+            <Input
+              id={`edit-name-${guest.id}`}
+              name="name"
+              defaultValue={guest.name}
+              required
+              maxLength={120}
+            />
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor={`edit-email-${guest.id}`}>
+              {t("portal.events.new.labels.email")}
+            </Label>
+            <Input
+              id={`edit-email-${guest.id}`}
+              name="email"
+              type="email"
+              defaultValue={guest.email}
+              required
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-[1fr_7rem]">
+            <div className="grid gap-1.5">
+              <Label htmlFor={`edit-phone-${guest.id}`}>
+                {t("portal.events.new.labels.phone")}
+              </Label>
+              <Input
+                id={`edit-phone-${guest.id}`}
+                name="phone"
+                type="tel"
+                defaultValue={guest.phone ?? ""}
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor={`edit-seats-${guest.id}`}>{g("seats_label")}</Label>
+              <Input
+                id={`edit-seats-${guest.id}`}
+                name="seats"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={MAX_SEATS}
+                defaultValue={guest.seats ?? 1}
+                required
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+              disabled={saving}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button type="submit" disabled={saving}>
+              {saving && <Loader2 className="animate-spin" />}
+              {g("save")}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -392,6 +554,7 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
         name: formData.get("name"),
         email: formData.get("email"),
         phone: formData.get("phone"),
+        seats: formData.get("seats"),
       });
       toast.success(t("portal.events.new.success_guest"));
       form.reset();
@@ -557,6 +720,29 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
                 type="tel"
                 placeholder={t("portal.events.new.labels.phone")}
               />
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Label
+                htmlFor="guest-seats"
+                className="shrink-0 text-xs font-normal text-ink-300"
+              >
+                {t("portal.events.details.guests.seats_label")}
+              </Label>
+              <Input
+                id="guest-seats"
+                name="seats"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={MAX_SEATS}
+                defaultValue={1}
+                required
+                className="w-20"
+              />
+              <span className="text-xs leading-snug text-ink-400">
+                {t("portal.events.details.guests.seats_hint")}
+              </span>
             </div>
 
             <Button type="submit" className="w-full" disabled={isAdding}>

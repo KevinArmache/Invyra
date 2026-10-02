@@ -1,8 +1,8 @@
 import { cache } from "react";
 import { headers } from "next/headers";
-import { MailX } from "lucide-react";
 
 import { getInvitationByToken } from "@/app/actions/invitation";
+import InvalidLink from "@/components/invitation/InvalidLink";
 import InvitationExperience from "@/components/invitation/InvitationExperience";
 import InvitationUnavailable from "@/components/invitation/InvitationUnavailable";
 import { toEditableConfig } from "@/lib/templates/validation";
@@ -47,11 +47,15 @@ const loadInvitation = cache(async (token) => {
   }
 });
 
-/** Couleur de fond et photo principale du modèle, pour la transition et l'aperçu du lien. */
+/**
+ * Couleurs et photo principale du modèle : fond pour la transition, accent
+ * pour le panneau de réponse, photo pour l'aperçu du lien.
+ */
 function templateLook(invitation) {
   const look = lookOf(toEditableConfig(invitation?.event.invitationTemplate));
   return {
     background: look.background ?? DEFAULT_BACKGROUND,
+    accent: look.accent,
     image: look.image,
   };
 }
@@ -105,38 +109,21 @@ export default async function InvitationPage({ params }) {
   if (!invitation) {
     const { t } = await getTranslations();
     return (
-      <main className="flex min-h-dvh flex-col items-center justify-center bg-[#0a0a0a] px-6 text-center">
-        <span className="animate-scale-in relative mb-8 flex h-16 w-16 items-center justify-center rounded-full border border-white/10">
-          <span className="pulse-ring absolute inset-0 rounded-full" />
-          <MailX className="h-7 w-7 text-white/40" strokeWidth={1.25} />
-        </span>
-        <h1
-          className="animate-rise font-display text-3xl text-white/90"
-          style={{ "--rise-delay": "150ms" }}
-        >
-          {t("invite.invalid_title")}
-        </h1>
-        <span
-          aria-hidden="true"
-          className="animate-draw-x mt-5 block h-px w-16 bg-[#e2b963]/60"
-          style={{ "--rise-delay": "300ms" }}
-        />
-        <p
-          className="animate-rise mt-5 max-w-sm text-sm leading-relaxed text-white/45"
-          style={{ "--rise-delay": "250ms" }}
-        >
-          {t("invite.invalid_desc")}
-        </p>
-      </main>
+      <InvalidLink
+        title={t("invite.invalid_title")}
+        description={t("invite.invalid_desc")}
+      />
     );
   }
 
+  const { background, accent } = templateLook(invitation);
   return (
     <InvitationExperience
       token={token}
       event={invitation.event}
       guest={invitation.guest}
-      background={templateLook(invitation).background}
+      background={background}
+      accent={accent}
     />
   );
 }

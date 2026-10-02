@@ -177,13 +177,23 @@ model Event {
   status   String  @default("draft") // "draft" | "active" | "archived"
   autoSend Boolean @default(false)
 
+  /// Lien secret de l'équipe d'accueil (/check-in/<jeton>), créé à la
+  /// demande et régénérable par l'hôte (voir app/actions/checkin.js).
+  checkInToken String? @unique
+
+  /// L'hôte peut couper le livre d'or ou le mur de photos des invités.
+  guestbookEnabled Boolean @default(true)
+  photosEnabled    Boolean @default(true)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  guests        Guest[]
-  collaborators EventCollaborator[]
-  templateCopy  Template?           @relation("EventTemplateCopy")
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  guests            Guest[]
+  collaborators     EventCollaborator[]
+  templateCopy      Template?           @relation("EventTemplateCopy")
+  guestbookMessages GuestbookMessage[]
+  photos            EventPhoto[]
 
   @@index([userId])
   @@map("events")
@@ -216,11 +226,26 @@ model Guest {
   email               String
   phone               String?
   dietaryRestrictions String?
+  /// Déprécié : remplacé par `seats` (voir 004-guest-ticket-checkin.sql).
   plusOne             Boolean @default(false)
+  /// Mot de l'invité pour les hôtes, laissé avec sa réponse.
   notes               String?
+
+  /// Places réservées par l'hôte, l'invité compris.
+  seats          Int  @default(1)
+  /// Personnes annoncées par l'invité (1 à `seats`) ; null tant qu'il ne
+  /// l'a pas précisé, on compte alors toutes ses places.
+  attendingCount Int?
 
   invitationToken String  @unique
   rsvpStatus      String? // "confirmed" | "declined" | "maybe" | null
+
+  /// Code du billet d'entrée (lib/tickets.js). Distinct du jeton
+  /// d'invitation : montrer son billet ne donne pas le droit de modifier sa
+  /// réponse.
+  ticketCode     String?   @unique
+  checkedInAt    DateTime?
+  checkedInCount Int?
 
   invitationSentAt   DateTime?
   emailSentAt        DateTime?
@@ -231,9 +256,54 @@ model Guest {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  event             Event              @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  guestbookMessages GuestbookMessage[]
+  photos            EventPhoto[]
 
   @@unique([eventId, email])
   @@index([eventId, rsvpStatus])
   @@map("guests")
+}
+
+// ─── Souvenirs : livre d'or et photos des invités ───────────────────────────
+
+model GuestbookMessage {
+  id      String @id @default(cuid())
+  eventId String
+  guestId String
+
+  message String
+  /// Masqué par l'hôte : il n'apparaît plus aux invités.
+  hidden  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  guest Guest @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, createdAt])
+  @@index([guestId])
+  @@map("guestbook_messages")
+}
+
+model EventPhoto {
+  id      String @id @default(cuid())
+  eventId String
+  guestId String
+
+  /// Fichier sur Vercel Blob, sous memories/<eventId>/.
+  url      String
+  pathname String
+  width    Int?
+  height   Int?
+  hidden   Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  guest Guest @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@index([eventId, createdAt])
+  @@index([guestId])
+  @@map("event_photos")
 }

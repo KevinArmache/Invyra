@@ -112,6 +112,7 @@ export async function getEvents() {
       ...e,
       invitationTemplate: e.templateCopy?.config || e.invitationTemplate,
       templateCopy: undefined,
+      checkInToken: undefined,
       guest_count: e._count.guests,
       ...guestCounts(e.guests),
       guests: undefined,
@@ -153,6 +154,9 @@ export async function getEventById(id) {
         event.templateCopy?.config || event.invitationTemplate,
       templateSourceId: event.templateCopy?.sourceTemplateId ?? null,
       templateCopy: undefined,
+      // Le lien d'accueil ne passe que par getCheckInLink, réservé à ceux
+      // qui peuvent modifier l'événement.
+      checkInToken: undefined,
       guest_count: event._count.guests,
       ...guestCounts(event.guests),
       guests: undefined,

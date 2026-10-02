@@ -4,8 +4,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { updateRsvpStatus } from "@/app/actions/invitation";
+import GuestBar from "@/components/invitation/GuestBar";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
+import RsvpDetailsSheet from "@/components/invitation/RsvpDetailsSheet";
 import { useTranslation } from "@/lib/i18n/Context";
+
+/**
+ * Délai avant le panneau de réponse : le modèle joue d'abord sa propre
+ * confirmation (confettis, cachet, avion en papier).
+ */
+const SHEET_DELAY = 1400;
 
 /**
  * L'invitation telle que la voit l'invité, en plein écran.
@@ -21,27 +29,44 @@ import { useTranslation } from "@/lib/i18n/Context";
  * `contentWindow` de notre propre iframe. Sans ce contrôle, n'importe quel
  * script de la page pourrait envoyer une réponse à la place de l'invité.
  *
+ * Après une réponse, le panneau de réponse (RsvpDetailsSheet) s'ouvre
+ * par-dessus le modèle. Une fois l'enveloppe ouverte (`INVITATION_OPENED`),
+ * la barre de l'invité (GuestBar) mène à son billet et aux souvenirs.
+ *
  * @param {string} props.background  couleur de fond du modèle
+ * @param {string} [props.accent]    couleur d'accent du modèle
  */
 export default function InvitationExperience({
   token,
   event,
   guest,
   background = "#0a0a0a",
+  accent,
 }) {
   const { t } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isOpened, setIsOpened] = useState(false);
   // Figé au premier rendu : l'invitation affiche elle-même la réponse de
   // l'invité. Si ces données changeaient, le document serait reconstruit et
   // l'invitation rechargée (retour en haut, animations rejouées).
   const [initialRsvp] = useState(guest);
+  // Réponse à jour, pour le panneau et la barre de l'invité.
+  const [rsvp, setRsvp] = useState(guest);
+  // `key` remonte le panneau à chaque réponse, avec ses champs à jour.
+  const [sheet, setSheet] = useState(null);
   const iframeRef = useRef(null);
+  const sheetTimer = useRef(null);
 
   const submitRsvp = useCallback(
     async (payload) => {
       if (!payload?.rsvp_status) return;
       try {
-        await updateRsvpStatus(token, payload);
+        const result = await updateRsvpStatus(token, payload);
+        setRsvp(result.guest);
+        clearTimeout(sheetTimer.current);
+        sheetTimer.current = setTimeout(() => {
+          setSheet({ status: result.guest.rsvp_status, key: Date.now(), open: true });
+        }, SHEET_DELAY);
       } catch (caught) {
         console.error("RSVP failed:", caught);
         toast.error(t("invite.rsvp_error"));
@@ -50,16 +75,23 @@ export default function InvitationExperience({
     [token, t],
   );
 
+  useEffect(() => () => clearTimeout(sheetTimer.current), []);
+
   useEffect(() => {
     function handleMessage(messageEvent) {
       if (messageEvent.source !== iframeRef.current?.contentWindow) return;
+      const type = messageEvent.data?.type;
       // Document analysé et polices prêtes (voir READY_SCRIPT dans
       // lib/invitation/document.js) : on n'attend pas les photos.
-      if (messageEvent.data?.type === "INVITATION_READY") {
+      if (type === "INVITATION_READY") {
         setIsLoaded(true);
         return;
       }
-      if (messageEvent.data?.type !== "RSVP_SUBMIT") return;
+      if (type === "INVITATION_OPENED") {
+        setIsOpened(true);
+        return;
+      }
+      if (type !== "RSVP_SUBMIT") return;
       submitRsvp(messageEvent.data.data);
     }
 
@@ -138,6 +170,28 @@ export default function InvitationExperience({
         <span className="sr-only">{t("invite.loading")}</span>
         <span className="block h-px w-16 animate-pulse bg-[#e2b963]/70" />
       </div>
+
+      {isOpened && !sheet?.open && (
+        <GuestBar
+          token={token}
+          showTicket={rsvp.rsvp_status === "confirmed"}
+          showMemories={Boolean(event.guestbookEnabled || event.photosEnabled)}
+        />
+      )}
+
+      {sheet && (
+        <RsvpDetailsSheet
+          key={sheet.key}
+          open={sheet.open}
+          onOpenChange={(open) => setSheet((current) => ({ ...current, open }))}
+          status={sheet.status}
+          token={token}
+          guest={rsvp}
+          accent={accent}
+          showMemories={Boolean(event.guestbookEnabled || event.photosEnabled)}
+          onSaved={setRsvp}
+        />
+      )}
     </main>
   );
 }

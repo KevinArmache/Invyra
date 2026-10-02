@@ -58,7 +58,9 @@ export const ModelName = {
   Template: 'Template',
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
-  Guest: 'Guest'
+  Guest: 'Guest',
+  GuestbookMessage: 'GuestbookMessage',
+  EventPhoto: 'EventPhoto'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -174,6 +176,9 @@ export const EventScalarFieldEnum = {
   emailTemplate: 'emailTemplate',
   status: 'status',
   autoSend: 'autoSend',
+  checkInToken: 'checkInToken',
+  guestbookEnabled: 'guestbookEnabled',
+  photosEnabled: 'photosEnabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -203,8 +208,13 @@ export const GuestScalarFieldEnum = {
   dietaryRestrictions: 'dietaryRestrictions',
   plusOne: 'plusOne',
   notes: 'notes',
+  seats: 'seats',
+  attendingCount: 'attendingCount',
   invitationToken: 'invitationToken',
   rsvpStatus: 'rsvpStatus',
+  ticketCode: 'ticketCode',
+  checkedInAt: 'checkedInAt',
+  checkedInCount: 'checkedInCount',
   invitationSentAt: 'invitationSentAt',
   emailSentAt: 'emailSentAt',
   whatsappSentAt: 'whatsappSentAt',
@@ -215,6 +225,33 @@ export const GuestScalarFieldEnum = {
 } as const
 
 export type GuestScalarFieldEnum = (typeof GuestScalarFieldEnum)[keyof typeof GuestScalarFieldEnum]
+
+
+export const GuestbookMessageScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  guestId: 'guestId',
+  message: 'message',
+  hidden: 'hidden',
+  createdAt: 'createdAt'
+} as const
+
+export type GuestbookMessageScalarFieldEnum = (typeof GuestbookMessageScalarFieldEnum)[keyof typeof GuestbookMessageScalarFieldEnum]
+
+
+export const EventPhotoScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  guestId: 'guestId',
+  url: 'url',
+  pathname: 'pathname',
+  width: 'width',
+  height: 'height',
+  hidden: 'hidden',
+  createdAt: 'createdAt'
+} as const
+
+export type EventPhotoScalarFieldEnum = (typeof EventPhotoScalarFieldEnum)[keyof typeof EventPhotoScalarFieldEnum]
 
 
 export const SortOrder = {

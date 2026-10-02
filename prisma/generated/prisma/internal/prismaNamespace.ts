@@ -391,7 +391,9 @@ export const ModelName = {
   Template: 'Template',
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
-  Guest: 'Guest'
+  Guest: 'Guest',
+  GuestbookMessage: 'GuestbookMessage',
+  EventPhoto: 'EventPhoto'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "template" | "event" | "eventCollaborator" | "guest"
+    modelProps: "user" | "session" | "account" | "verification" | "template" | "event" | "eventCollaborator" | "guest" | "guestbookMessage" | "eventPhoto"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1005,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    GuestbookMessage: {
+      payload: Prisma.$GuestbookMessagePayload<ExtArgs>
+      fields: Prisma.GuestbookMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GuestbookMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GuestbookMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.GuestbookMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GuestbookMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>
+        }
+        findMany: {
+          args: Prisma.GuestbookMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>[]
+        }
+        create: {
+          args: Prisma.GuestbookMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>
+        }
+        createMany: {
+          args: Prisma.GuestbookMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GuestbookMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.GuestbookMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>
+        }
+        update: {
+          args: Prisma.GuestbookMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.GuestbookMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GuestbookMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GuestbookMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.GuestbookMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GuestbookMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.GuestbookMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGuestbookMessage>
+        }
+        groupBy: {
+          args: Prisma.GuestbookMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuestbookMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GuestbookMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GuestbookMessageCountAggregateOutputType> | number
+        }
+      }
+    }
+    EventPhoto: {
+      payload: Prisma.$EventPhotoPayload<ExtArgs>
+      fields: Prisma.EventPhotoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EventPhotoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EventPhotoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        findFirst: {
+          args: Prisma.EventPhotoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EventPhotoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        findMany: {
+          args: Prisma.EventPhotoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>[]
+        }
+        create: {
+          args: Prisma.EventPhotoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        createMany: {
+          args: Prisma.EventPhotoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EventPhotoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>[]
+        }
+        delete: {
+          args: Prisma.EventPhotoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        update: {
+          args: Prisma.EventPhotoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        deleteMany: {
+          args: Prisma.EventPhotoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EventPhotoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EventPhotoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>[]
+        }
+        upsert: {
+          args: Prisma.EventPhotoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventPhotoPayload>
+        }
+        aggregate: {
+          args: Prisma.EventPhotoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEventPhoto>
+        }
+        groupBy: {
+          args: Prisma.EventPhotoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventPhotoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EventPhotoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventPhotoCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1139,6 +1289,9 @@ export const EventScalarFieldEnum = {
   emailTemplate: 'emailTemplate',
   status: 'status',
   autoSend: 'autoSend',
+  checkInToken: 'checkInToken',
+  guestbookEnabled: 'guestbookEnabled',
+  photosEnabled: 'photosEnabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1168,8 +1321,13 @@ export const GuestScalarFieldEnum = {
   dietaryRestrictions: 'dietaryRestrictions',
   plusOne: 'plusOne',
   notes: 'notes',
+  seats: 'seats',
+  attendingCount: 'attendingCount',
   invitationToken: 'invitationToken',
   rsvpStatus: 'rsvpStatus',
+  ticketCode: 'ticketCode',
+  checkedInAt: 'checkedInAt',
+  checkedInCount: 'checkedInCount',
   invitationSentAt: 'invitationSentAt',
   emailSentAt: 'emailSentAt',
   whatsappSentAt: 'whatsappSentAt',
@@ -1180,6 +1338,33 @@ export const GuestScalarFieldEnum = {
 } as const
 
 export type GuestScalarFieldEnum = (typeof GuestScalarFieldEnum)[keyof typeof GuestScalarFieldEnum]
+
+
+export const GuestbookMessageScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  guestId: 'guestId',
+  message: 'message',
+  hidden: 'hidden',
+  createdAt: 'createdAt'
+} as const
+
+export type GuestbookMessageScalarFieldEnum = (typeof GuestbookMessageScalarFieldEnum)[keyof typeof GuestbookMessageScalarFieldEnum]
+
+
+export const EventPhotoScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  guestId: 'guestId',
+  url: 'url',
+  pathname: 'pathname',
+  width: 'width',
+  height: 'height',
+  hidden: 'hidden',
+  createdAt: 'createdAt'
+} as const
+
+export type EventPhotoScalarFieldEnum = (typeof EventPhotoScalarFieldEnum)[keyof typeof EventPhotoScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1312,6 +1497,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1415,6 +1614,8 @@ export type GlobalOmitConfig = {
   event?: Prisma.EventOmit
   eventCollaborator?: Prisma.EventCollaboratorOmit
   guest?: Prisma.GuestOmit
+  guestbookMessage?: Prisma.GuestbookMessageOmit
+  eventPhoto?: Prisma.EventPhotoOmit
 }
 
 /* Types for Logging */
