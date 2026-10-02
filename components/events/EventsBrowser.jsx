@@ -61,6 +61,7 @@ function previewEvent(event) {
     location: event.location,
     time: event.time,
     dressCode: event.dressCode,
+    contactPhone: event.contactPhone,
     customMessage: event.customMessage,
   };
 }

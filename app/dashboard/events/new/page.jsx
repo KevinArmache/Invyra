@@ -1,4 +1,4 @@
-import { getSession } from "@/app/actions/auth";
+import { getCurrentUser, getSession } from "@/app/actions/auth";
 import { getTemplates } from "@/app/actions/template";
 import NewEventWizard from "@/components/events/NewEventWizard";
 import { getTranslations } from "@/lib/i18n/server";
@@ -11,12 +11,17 @@ export async function generateMetadata() {
 export default async function NewEventPage() {
   // Chargés d'emblée plutôt qu'à l'arrivée sur l'étape 2 : l'assistant n'a
   // alors pas à afficher un état de chargement au milieu du parcours.
-  const [templates, session] = await Promise.all([
+  const [templates, session, user] = await Promise.all([
     getTemplates(),
     getSession(),
+    getCurrentUser(),
   ]);
 
   return (
-    <NewEventWizard templates={templates} isAdmin={session?.role === "admin"} />
+    <NewEventWizard
+      templates={templates}
+      isAdmin={session?.role === "admin"}
+      defaultContactPhone={user?.phone ?? ""}
+    />
   );
 }

@@ -14,6 +14,7 @@ const SAMPLE_EVENT = {
   location: "Lieu de réception",
   time: "19:00",
   dressCode: "Tenue de soirée",
+  contactPhone: "+243 81 000 0000",
 };
 
 /**

@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, Clock, MapPin, Shirt } from "lucide-react";
+import { Calendar, Clock, MapPin, Phone, Shirt } from "lucide-react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,6 +84,31 @@ export default function EventFields({ defaults = {} }) {
             placeholder={t("portal.events.new.placeholders.dress_code")}
           />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="event-contact-phone" className="flex items-center gap-1.5">
+          <Phone className="h-3.5 w-3.5 text-ink-400" />
+          {t("portal.events.new.labels.contact_phone")}
+        </Label>
+        <Input
+          id="event-contact-phone"
+          name="contact_phone"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          maxLength={30}
+          // Parenthèses, point et tiret échappés : les navigateurs récents
+          // compilent `pattern` avec le drapeau `v`, qui les exige.
+          pattern="[+0-9 \(\)\.\-]{6,30}"
+          defaultValue={defaults.contact_phone ?? ""}
+          placeholder={t("portal.events.new.placeholders.contact_phone")}
+          aria-describedby="event-contact-phone-hint"
+          className="sm:max-w-sm"
+        />
+        <p id="event-contact-phone-hint" className="text-xs text-ink-400">
+          {t("portal.events.new.hints.contact_phone")}
+        </p>
       </div>
 
       <div className="space-y-2">

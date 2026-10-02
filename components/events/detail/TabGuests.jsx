@@ -9,6 +9,7 @@ import {
   Clock,
   Eye,
   EyeOff,
+  FileDown,
   HelpCircle,
   Loader2,
   Mail,
@@ -16,6 +17,7 @@ import {
   Search,
   Trash2,
   UserPlus,
+  Users,
   XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -34,6 +36,12 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { EmptyState, Panel } from "@/components/shell/primitives";
 import CSVImporter from "@/components/events/CSVImporter";
 import {
@@ -301,6 +309,7 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
   const [showAdd, setShowAdd] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isSendingBulk, setIsSendingBulk] = useState(false);
+  const [exporting, setExporting] = useState(null);
 
   // Même règle que sendBulkInvitationEmails : seuls ceux qui n'ont pas
   // encore reçu l'email sont concernés.
@@ -318,6 +327,47 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
       toast.error(caught.message || t("common.error"));
     } finally {
       setIsSendingBulk(false);
+    }
+  }
+
+  const confirmedCount = guests.filter(
+    (guest) => guest.rsvpStatus === "confirmed",
+  ).length;
+
+  /**
+   * Le PDF est généré par la route guests/pdf. Il est récupéré ici plutôt que
+   * par un simple lien, pour montrer la génération en cours et signaler un
+   * échec au lieu de télécharger une page d'erreur.
+   *
+   * @param {"all"|"confirmed"} scope
+   */
+  async function handleExport(scope) {
+    setExporting(scope);
+    try {
+      const query = scope === "confirmed" ? "?status=confirmed" : "";
+      const response = await fetch(
+        `/dashboard/events/${eventId}/guests/pdf${query}`,
+      );
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const blob = await response.blob();
+      const filename =
+        /filename="([^"]+)"/.exec(
+          response.headers.get("content-disposition") ?? "",
+        )?.[1] ?? "guests.pdf";
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      // Laisse au navigateur le temps de lancer le téléchargement.
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch {
+      toast.error(t("portal.events.details.guests.export.error"));
+    } finally {
+      setExporting(null);
     }
   }
 
@@ -388,6 +438,45 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
       description={t("portal.events.details.guests.subtitle")}
       action={
         <div className="flex flex-wrap items-center gap-2">
+          {guests.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="outline" disabled={exporting !== null}>
+                  {exporting ? (
+                    <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                  ) : (
+                    <FileDown className="mr-1.5 h-4 w-4" />
+                  )}
+                  {exporting
+                    ? t("portal.events.details.guests.export.exporting")
+                    : t("portal.events.details.guests.export.button")}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem
+                  onSelect={() => handleExport("all")}
+                  className="cursor-pointer"
+                >
+                  <Users className="h-4 w-4 text-gold" />
+                  {t("portal.events.details.guests.export.all")}
+                  <span data-numeric className="ml-auto text-xs text-ink-400">
+                    {guests.length}
+                  </span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => handleExport("confirmed")}
+                  disabled={confirmedCount === 0}
+                  className="cursor-pointer"
+                >
+                  <CheckCircle2 className="h-4 w-4 text-gold" />
+                  {t("portal.events.details.guests.export.confirmed")}
+                  <span data-numeric className="ml-auto text-xs text-ink-400">
+                    {confirmedCount}
+                  </span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           {guests.length > 0 && (
             <Button
               size="sm"

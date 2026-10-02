@@ -270,14 +270,16 @@
           "description": "Description",
           "name": "Full name *",
           "email": "Email *",
-          "phone": "Phone (for WhatsApp)"
+          "phone": "Phone (for WhatsApp)",
+          "contact_phone": "Contact number"
         },
         "placeholders": {
           "title": "Sarah & Mark's Wedding",
           "time": "19:00",
           "location": "Versailles Castle, France",
           "dress_code": "Black Tie",
-          "desc": "Describe your event..."
+          "desc": "Describe your event...",
+          "contact_phone": "+1 234 567 8900"
         },
         "buttons": {
           "continue": "Continue",
@@ -293,7 +295,10 @@
         "no_templates": "No template is available yet.",
         "guest_list": "Guest list",
         "guests_added": "guest(s) added",
-        "no_guests_yet": "No guests yet"
+        "no_guests_yet": "No guests yet",
+        "hints": {
+          "contact_phone": "Shown on every invitation for guests who have a question."
+        }
       },
       "edit": {
         "title": "Edit event",
@@ -355,7 +360,8 @@
         "meta": {
           "date": "Date",
           "time": "Time",
-          "location": "Location"
+          "location": "Location",
+          "contact_phone": "Contact number"
         },
         "overview": {
           "stats_title": "Guest replies",
@@ -389,7 +395,39 @@
           "search": "Search a guest...",
           "import_failed": "import(s) failed",
           "bulk_needs_template": "Choose the invitation template first to be able to send it.",
-          "bulk_hint": "Sends the email to guests who have not received it yet."
+          "bulk_hint": "Sends the email to guests who have not received it yet.",
+          "export": {
+            "button": "Export PDF",
+            "exporting": "Exporting…",
+            "all": "All guests",
+            "confirmed": "Confirmed only",
+            "error": "PDF export failed. Please try again.",
+            "filename": "guests",
+            "filename_confirmed": "confirmed-guests",
+            "pdf": {
+              "title": "Guest list",
+              "title_confirmed": "Confirmed guests",
+              "contact": "Contact:",
+              "columns": {
+                "name": "Name",
+                "email": "Email",
+                "phone": "Phone",
+                "status": "Status",
+                "notes": "Diet · Notes"
+              },
+              "summary": {
+                "total": "Guests",
+                "confirmed": "Attending",
+                "declined": "Not attending",
+                "maybe": "Maybe",
+                "pending": "Pending",
+                "expected": "Expected people"
+              },
+              "generated_on": "Generated on {date}",
+              "page": "Page {page} / {total}",
+              "empty": "No guests to show."
+            }
+          }
         },
         "collaborators": "Collaborators",
         "collaborators_hint": "The person must already have an Invyra account.",

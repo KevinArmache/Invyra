@@ -33,6 +33,7 @@ const SAMPLE_EVENT = {
   location: "Château de Fontainebleau",
   time: "19h30",
   dressCode: "Tenue de gala",
+  contactPhone: "+243 81 000 0000",
 };
 
 const STATUSES = [

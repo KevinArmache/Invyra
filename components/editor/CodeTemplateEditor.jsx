@@ -83,6 +83,7 @@ const VARIABLES = [
   "{{EVENT_LOCATION}}",
   "{{TIME}}",
   "{{DRESS_CODE}}",
+  "{{CONTACT_PHONE}}",
   "{{COUNTDOWN_DATE}}",
   "{{MONOGRAM}}",
 ];

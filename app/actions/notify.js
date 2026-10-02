@@ -46,6 +46,7 @@ function emailFor(guest, event, appUrl) {
     eventLocation: event.location,
     dressCode: event.dressCode,
     customMessage: event.customMessage,
+    contactPhone: event.contactPhone,
     hostName: event.user?.name,
     imageUrl: eventImage(event),
     inviteLink: `${appUrl}/invite/${guest.invitationToken}`,

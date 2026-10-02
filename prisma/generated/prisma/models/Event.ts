@@ -34,6 +34,7 @@ export type EventMinAggregateOutputType = {
   time: string | null
   dressCode: string | null
   customMessage: string | null
+  contactPhone: string | null
   emailTemplate: string | null
   status: string | null
   autoSend: boolean | null
@@ -51,6 +52,7 @@ export type EventMaxAggregateOutputType = {
   time: string | null
   dressCode: string | null
   customMessage: string | null
+  contactPhone: string | null
   emailTemplate: string | null
   status: string | null
   autoSend: boolean | null
@@ -68,6 +70,7 @@ export type EventCountAggregateOutputType = {
   time: number
   dressCode: number
   customMessage: number
+  contactPhone: number
   animationConfig: number
   invitationTemplate: number
   emailTemplate: number
@@ -89,6 +92,7 @@ export type EventMinAggregateInputType = {
   time?: true
   dressCode?: true
   customMessage?: true
+  contactPhone?: true
   emailTemplate?: true
   status?: true
   autoSend?: true
@@ -106,6 +110,7 @@ export type EventMaxAggregateInputType = {
   time?: true
   dressCode?: true
   customMessage?: true
+  contactPhone?: true
   emailTemplate?: true
   status?: true
   autoSend?: true
@@ -123,6 +128,7 @@ export type EventCountAggregateInputType = {
   time?: true
   dressCode?: true
   customMessage?: true
+  contactPhone?: true
   animationConfig?: true
   invitationTemplate?: true
   emailTemplate?: true
@@ -215,6 +221,7 @@ export type EventGroupByOutputType = {
   time: string | null
   dressCode: string | null
   customMessage: string | null
+  contactPhone: string | null
   animationConfig: runtime.JsonValue | null
   invitationTemplate: runtime.JsonValue | null
   emailTemplate: string | null
@@ -255,6 +262,7 @@ export type EventWhereInput = {
   time?: Prisma.StringNullableFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableFilter<"Event"> | string | null
+  contactPhone?: Prisma.StringNullableFilter<"Event"> | string | null
   animationConfig?: Prisma.JsonNullableFilter<"Event">
   invitationTemplate?: Prisma.JsonNullableFilter<"Event">
   emailTemplate?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -278,6 +286,7 @@ export type EventOrderByWithRelationInput = {
   time?: Prisma.SortOrderInput | Prisma.SortOrder
   dressCode?: Prisma.SortOrderInput | Prisma.SortOrder
   customMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   animationConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   invitationTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
   emailTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -304,6 +313,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   time?: Prisma.StringNullableFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableFilter<"Event"> | string | null
+  contactPhone?: Prisma.StringNullableFilter<"Event"> | string | null
   animationConfig?: Prisma.JsonNullableFilter<"Event">
   invitationTemplate?: Prisma.JsonNullableFilter<"Event">
   emailTemplate?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -327,6 +337,7 @@ export type EventOrderByWithAggregationInput = {
   time?: Prisma.SortOrderInput | Prisma.SortOrder
   dressCode?: Prisma.SortOrderInput | Prisma.SortOrder
   customMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  contactPhone?: Prisma.SortOrderInput | Prisma.SortOrder
   animationConfig?: Prisma.SortOrderInput | Prisma.SortOrder
   invitationTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
   emailTemplate?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -352,6 +363,7 @@ export type EventScalarWhereWithAggregatesInput = {
   time?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  contactPhone?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   animationConfig?: Prisma.JsonNullableWithAggregatesFilter<"Event">
   invitationTemplate?: Prisma.JsonNullableWithAggregatesFilter<"Event">
   emailTemplate?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
@@ -370,6 +382,7 @@ export type EventCreateInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -393,6 +406,7 @@ export type EventUncheckedCreateInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -414,6 +428,7 @@ export type EventUpdateInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -437,6 +452,7 @@ export type EventUncheckedUpdateInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -459,6 +475,7 @@ export type EventCreateManyInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -477,6 +494,7 @@ export type EventUpdateManyMutationInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -496,6 +514,7 @@ export type EventUncheckedUpdateManyInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -530,6 +549,7 @@ export type EventCountOrderByAggregateInput = {
   time?: Prisma.SortOrder
   dressCode?: Prisma.SortOrder
   customMessage?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
   animationConfig?: Prisma.SortOrder
   invitationTemplate?: Prisma.SortOrder
   emailTemplate?: Prisma.SortOrder
@@ -549,6 +569,7 @@ export type EventMaxOrderByAggregateInput = {
   time?: Prisma.SortOrder
   dressCode?: Prisma.SortOrder
   customMessage?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
   emailTemplate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
@@ -566,6 +587,7 @@ export type EventMinOrderByAggregateInput = {
   time?: Prisma.SortOrder
   dressCode?: Prisma.SortOrder
   customMessage?: Prisma.SortOrder
+  contactPhone?: Prisma.SortOrder
   emailTemplate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
@@ -673,6 +695,7 @@ export type EventCreateWithoutUserInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -694,6 +717,7 @@ export type EventUncheckedCreateWithoutUserInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -745,6 +769,7 @@ export type EventScalarWhereInput = {
   time?: Prisma.StringNullableFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableFilter<"Event"> | string | null
+  contactPhone?: Prisma.StringNullableFilter<"Event"> | string | null
   animationConfig?: Prisma.JsonNullableFilter<"Event">
   invitationTemplate?: Prisma.JsonNullableFilter<"Event">
   emailTemplate?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -763,6 +788,7 @@ export type EventCreateWithoutTemplateCopyInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -785,6 +811,7 @@ export type EventUncheckedCreateWithoutTemplateCopyInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -821,6 +848,7 @@ export type EventUpdateWithoutTemplateCopyInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -843,6 +871,7 @@ export type EventUncheckedUpdateWithoutTemplateCopyInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -863,6 +892,7 @@ export type EventCreateWithoutCollaboratorsInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -885,6 +915,7 @@ export type EventUncheckedCreateWithoutCollaboratorsInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -921,6 +952,7 @@ export type EventUpdateWithoutCollaboratorsInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -943,6 +975,7 @@ export type EventUncheckedUpdateWithoutCollaboratorsInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -963,6 +996,7 @@ export type EventCreateWithoutGuestsInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -985,6 +1019,7 @@ export type EventUncheckedCreateWithoutGuestsInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -1021,6 +1056,7 @@ export type EventUpdateWithoutGuestsInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1043,6 +1079,7 @@ export type EventUncheckedUpdateWithoutGuestsInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1063,6 +1100,7 @@ export type EventCreateManyUserInput = {
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
+  contactPhone?: string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: string | null
@@ -1081,6 +1119,7 @@ export type EventUpdateWithoutUserInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1102,6 +1141,7 @@ export type EventUncheckedUpdateWithoutUserInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1123,6 +1163,7 @@ export type EventUncheckedUpdateManyWithoutUserInput = {
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  contactPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   animationConfig?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   invitationTemplate?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   emailTemplate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1182,6 +1223,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
+  contactPhone?: boolean
   animationConfig?: boolean
   invitationTemplate?: boolean
   emailTemplate?: boolean
@@ -1206,6 +1248,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
+  contactPhone?: boolean
   animationConfig?: boolean
   invitationTemplate?: boolean
   emailTemplate?: boolean
@@ -1226,6 +1269,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
+  contactPhone?: boolean
   animationConfig?: boolean
   invitationTemplate?: boolean
   emailTemplate?: boolean
@@ -1246,6 +1290,7 @@ export type EventSelectScalar = {
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
+  contactPhone?: boolean
   animationConfig?: boolean
   invitationTemplate?: boolean
   emailTemplate?: boolean
@@ -1255,7 +1300,7 @@ export type EventSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "time" | "dressCode" | "customMessage" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "time" | "dressCode" | "customMessage" | "contactPhone" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   guests?: boolean | Prisma.Event$guestsArgs<ExtArgs>
@@ -1288,6 +1333,11 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     time: string | null
     dressCode: string | null
     customMessage: string | null
+    /**
+     * Numéro que les invités peuvent appeler pour toute question, affiché
+     * sur chaque invitation (voir lib/invitation/document.js).
+     */
+    contactPhone: string | null
     animationConfig: runtime.JsonValue | null
     /**
      * Déprécié : le design vit dans Template (relation templateCopy).
@@ -1735,6 +1785,7 @@ export interface EventFieldRefs {
   readonly time: Prisma.FieldRef<"Event", 'String'>
   readonly dressCode: Prisma.FieldRef<"Event", 'String'>
   readonly customMessage: Prisma.FieldRef<"Event", 'String'>
+  readonly contactPhone: Prisma.FieldRef<"Event", 'String'>
   readonly animationConfig: Prisma.FieldRef<"Event", 'Json'>
   readonly invitationTemplate: Prisma.FieldRef<"Event", 'Json'>
   readonly emailTemplate: Prisma.FieldRef<"Event", 'String'>

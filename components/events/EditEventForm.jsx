@@ -96,6 +96,7 @@ export default function EditEventForm({ event }) {
                   location: event.location,
                   time: event.time,
                   dress_code: event.dressCode,
+                  contact_phone: event.contactPhone,
                   custom_message: event.customMessage,
                 }}
               />

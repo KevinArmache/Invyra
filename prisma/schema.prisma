@@ -164,6 +164,9 @@ model Event {
   time          String?
   dressCode     String?
   customMessage String?
+  /// Numéro que les invités peuvent appeler pour toute question, affiché
+  /// sur chaque invitation (voir lib/invitation/document.js).
+  contactPhone  String?
 
   animationConfig Json?
   /// Déprécié : le design vit dans Template (relation templateCopy).

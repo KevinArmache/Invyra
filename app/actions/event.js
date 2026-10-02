@@ -48,6 +48,14 @@ function guestCounts(guests) {
   return counts;
 }
 
+/**
+ * Numéro de contact affiché sur les invitations : texte libre (le format est
+ * guidé par le champ du formulaire), borné à 30 caractères, null si vide.
+ */
+function cleanContactPhone(value) {
+  return String(value ?? "").trim().slice(0, 30) || null;
+}
+
 async function canCreateEvent() {
   const session = await getSession();
   if (!session) throw new Error("Unauthorized");
@@ -172,6 +180,7 @@ export async function createEvent(data) {
       location,
       time,
       dress_code,
+      contact_phone,
       custom_message,
     } = data;
     if (!title) throw new Error("Title is required");
@@ -190,6 +199,7 @@ export async function createEvent(data) {
         location: location || null,
         time: time || null,
         dressCode: dress_code || null,
+        contactPhone: cleanContactPhone(contact_phone),
         customMessage: custom_message || null,
         status: "draft",
       },
@@ -257,6 +267,10 @@ export async function updateEvent(id, data) {
         location: data.location !== undefined ? data.location : undefined,
         time: data.time !== undefined ? data.time : undefined,
         dressCode: data.dress_code !== undefined ? data.dress_code : undefined,
+        contactPhone:
+          data.contact_phone !== undefined
+            ? cleanContactPhone(data.contact_phone)
+            : undefined,
         customMessage:
           data.custom_message !== undefined ? data.custom_message : undefined,
         animationConfig:

@@ -270,14 +270,16 @@
           "description": "Description",
           "name": "Nom complet *",
           "email": "Email *",
-          "phone": "Téléphone (pour WhatsApp)"
+          "phone": "Téléphone (pour WhatsApp)",
+          "contact_phone": "Numéro de contact"
         },
         "placeholders": {
           "title": "Mariage de Marie & Jean",
           "time": "19:00",
           "location": "Château de Versailles, France",
           "dress_code": "Tenue de gala",
-          "desc": "Décrivez votre événement..."
+          "desc": "Décrivez votre événement...",
+          "contact_phone": "+243 81 234 5678"
         },
         "buttons": {
           "continue": "Continuer",
@@ -293,7 +295,10 @@
         "no_templates": "Aucun modèle n'est disponible pour le moment.",
         "guest_list": "Liste des invités",
         "guests_added": "invité(s) ajouté(s)",
-        "no_guests_yet": "Aucun invité pour l'instant"
+        "no_guests_yet": "Aucun invité pour l'instant",
+        "hints": {
+          "contact_phone": "Affiché sur chaque invitation, pour les invités qui ont une question."
+        }
       },
       "edit": {
         "title": "Modifier l'événement",
@@ -355,7 +360,8 @@
         "meta": {
           "date": "Date",
           "time": "Heure",
-          "location": "Lieu"
+          "location": "Lieu",
+          "contact_phone": "Numéro de contact"
         },
         "overview": {
           "stats_title": "Réponses des invités",
@@ -389,7 +395,39 @@
           "search": "Rechercher un invité...",
           "import_failed": "import(s) en échec",
           "bulk_needs_template": "Choisissez d'abord le modèle de l'invitation pour pouvoir l'envoyer.",
-          "bulk_hint": "Envoie l'email aux invités qui ne l'ont pas encore reçu."
+          "bulk_hint": "Envoie l'email aux invités qui ne l'ont pas encore reçu.",
+          "export": {
+            "button": "Exporter PDF",
+            "exporting": "Export en cours…",
+            "all": "Tous les invités",
+            "confirmed": "Confirmés uniquement",
+            "error": "L’export PDF a échoué. Réessayez.",
+            "filename": "invites",
+            "filename_confirmed": "invites-confirmes",
+            "pdf": {
+              "title": "Liste des invités",
+              "title_confirmed": "Invités confirmés",
+              "contact": "Contact :",
+              "columns": {
+                "name": "Nom",
+                "email": "Email",
+                "phone": "Téléphone",
+                "status": "Statut",
+                "notes": "Régime · Notes"
+              },
+              "summary": {
+                "total": "Invités",
+                "confirmed": "Présents",
+                "declined": "Absents",
+                "maybe": "Peut-être",
+                "pending": "En attente",
+                "expected": "Personnes attendues"
+              },
+              "generated_on": "Généré le {date}",
+              "page": "Page {page} / {total}",
+              "empty": "Aucun invité à afficher."
+            }
+          }
         },
         "collaborators": "Collaborateurs",
         "collaborators_hint": "La personne doit déjà avoir un compte Invyra.",

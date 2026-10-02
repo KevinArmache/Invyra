@@ -236,7 +236,12 @@ Ce qu'un modèle peut utiliser (voir `lib/invitation/document.js`) :
 - **Jetons**, remplacés par les valeurs de l'événement : `{{GUEST_NAME}}`,
   `{{EVENT_TITLE}}`, `{{EVENT_DATE}}`, `{{TIME}}`, `{{EVENT_LOCATION}}`,
   `{{DRESS_CODE}}`, `{{EVENT_DESCRIPTION}}`, `{{CUSTOM_MESSAGE}}`,
-  `{{COUNTDOWN_DATE}}` (pour un compte à rebours) et `{{MONOGRAM}}`.
+  `{{CONTACT_PHONE}}`, `{{COUNTDOWN_DATE}}` (pour un compte à rebours) et
+  `{{MONOGRAM}}`.
+- **Numéro de contact** : s'il est renseigné sur l'événement, il est ajouté
+  au pied de chaque invitation, au-dessus de la signature, avec un lien
+  `tel:`. Un modèle qui place lui-même `{{CONTACT_PHONE}}` ne le reçoit pas
+  une seconde fois.
 - **`data-if="DRESS_CODE"`** : l'élément n'est affiché que si l'événement
   renseigne cette valeur. Plusieurs noms : il suffit que l'un soit renseigné.
   `data-if="!TIME"` inverse la condition.

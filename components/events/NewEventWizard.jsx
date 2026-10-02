@@ -92,7 +92,15 @@ function Steps({ current }) {
   );
 }
 
-export default function NewEventWizard({ templates, isAdmin = false }) {
+/**
+ * @param {string} props.defaultContactPhone  téléphone du profil, proposé
+ *   comme numéro de contact de l'événement.
+ */
+export default function NewEventWizard({
+  templates,
+  isAdmin = false,
+  defaultContactPhone = "",
+}) {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -204,7 +212,7 @@ export default function NewEventWizard({ templates, isAdmin = false }) {
           description={t("portal.events.new.details_desc")}
         >
           <form onSubmit={handleCreate} className="p-5">
-            <EventFields />
+            <EventFields defaults={{ contact_phone: defaultContactPhone }} />
 
             <div className="mt-7 flex justify-end">
               <Button type="submit" size="lg" disabled={isPending} className="group">

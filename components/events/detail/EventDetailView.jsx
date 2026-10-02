@@ -12,6 +12,7 @@ import {
   MapPin,
   Palette,
   Pencil,
+  Phone,
   Send,
   Users,
 } from "lucide-react";
@@ -57,6 +58,7 @@ export default function EventDetailView({ event, guests, collaborators, countdow
     location: event.location,
     time: event.time || "",
     dressCode: event.dressCode || "",
+    contactPhone: event.contactPhone || "",
     customMessage: event.customMessage || "",
   };
 
@@ -127,6 +129,13 @@ export default function EventDetailView({ event, guests, collaborators, countdow
                 <dt className="sr-only">{t("portal.events.details.meta.location")}</dt>
                 <MapPin className="h-4 w-4 shrink-0 text-ink-400" />
                 <dd>{event.location}</dd>
+              </div>
+            )}
+            {event.contactPhone && (
+              <div className="flex items-center gap-1.5">
+                <dt className="sr-only">{t("portal.events.details.meta.contact_phone")}</dt>
+                <Phone className="h-4 w-4 shrink-0 text-ink-400" />
+                <dd data-numeric>{event.contactPhone}</dd>
               </div>
             )}
           </dl>

@@ -61,6 +61,7 @@ export async function getInvitationByToken(token, { markViewed = true } = {}) {
       location: guest.event.location,
       time: guest.event.time,
       dressCode: guest.event.dressCode,
+      contactPhone: guest.event.contactPhone,
       customMessage: guest.event.customMessage,
       invitationTemplate: guest.event.templateCopy?.config || guest.event.invitationTemplate
     }

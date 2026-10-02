@@ -168,6 +168,7 @@ export const EventScalarFieldEnum = {
   time: 'time',
   dressCode: 'dressCode',
   customMessage: 'customMessage',
+  contactPhone: 'contactPhone',
   animationConfig: 'animationConfig',
   invitationTemplate: 'invitationTemplate',
   emailTemplate: 'emailTemplate',
