@@ -1,0 +1,116 @@
+/* Signature du pied de page. Couleurs et courbes du design system
+   (globals.css) : que des var(), aucun or écrit en dur. */
+
+.signature {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  padding-bottom: 0.45rem;
+}
+
+.name {
+  font-size: 0.95rem;
+  line-height: 1.2;
+  letter-spacing: 0.005em;
+  transition:
+    filter 500ms var(--ease-out-expo),
+    letter-spacing 700ms var(--ease-out-expo);
+}
+
+.signature:hover .name,
+.signature:focus-visible .name {
+  filter: brightness(1.18);
+  letter-spacing: 0.03em;
+}
+
+/* L'étoile attend, petite et inclinée, puis se pose au survol. */
+.spark {
+  display: inline-block;
+  color: var(--gold-bright);
+  font-size: 0.65rem;
+  opacity: 0;
+  transform: scale(0.3) rotate(-60deg);
+  transition:
+    opacity 300ms var(--ease-out-expo),
+    transform 600ms var(--ease-spring);
+}
+
+.signature:hover .spark,
+.signature:focus-visible .spark {
+  opacity: 1;
+  transform: none;
+  animation: twinkle 2.4s var(--ease-in-out) 600ms infinite;
+}
+
+/* ── Paraphe ───────────────────────────────────────────────────────────── */
+
+.flourish {
+  position: absolute;
+  left: -0.15rem;
+  right: 0.6rem;
+  bottom: -0.1rem;
+  height: 0.7rem;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Pas de vector-effect: non-scaling-stroke ici : combiné à pathLength, il
+   fausse la longueur des tirets dans certains navigateurs. */
+.stroke,
+.glint {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Le trait se dessine une fois, quand le bas de page apparaît. */
+.stroke {
+  stroke: color-mix(in oklch, var(--gold) 70%, transparent);
+  stroke-width: 1.4;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 1.8s var(--ease-out-expo) 0.4s both;
+}
+
+/* La lueur : un court segment clair qui parcourt le trait au survol. */
+.glint {
+  stroke: var(--gold-glint);
+  stroke-width: 2;
+  stroke-dasharray: 0.16 1.2;
+  stroke-dashoffset: 1.16;
+  opacity: 0;
+  transition: opacity 400ms ease;
+}
+
+.signature:hover .glint,
+.signature:focus-visible .glint {
+  opacity: 1;
+  animation: glint 1.6s var(--ease-in-out) infinite;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes glint {
+  from {
+    stroke-dashoffset: 1.16;
+  }
+  to {
+    stroke-dashoffset: -0.2;
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.75) rotate(45deg);
+    opacity: 0.6;
+  }
+}

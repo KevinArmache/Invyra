@@ -5,9 +5,9 @@ import { SITE_URL } from "@/lib/site";
 export const revalidate = 3600;
 
 /**
- * Pages publiques à indexer : l'accueil, l'inscription, la connexion et la
- * page de chaque modèle publié. Les invitations sont personnelles : jamais
- * ici.
+ * Pages publiques à indexer : l'accueil, la collection des modèles,
+ * l'inscription, la connexion et la page de chaque modèle publié. Les
+ * invitations sont personnelles : jamais ici.
  */
 export default async function sitemap() {
   const lastModified = new Date();
@@ -19,6 +19,12 @@ export default async function sitemap() {
       lastModified,
       changeFrequency: "weekly",
       priority: 1,
+    },
+    {
+      url: `${SITE_URL}/templates`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
     ...templates.map((template) => ({
       url: `${SITE_URL}/templates/${template.id}`,

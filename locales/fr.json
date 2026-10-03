@@ -905,10 +905,29 @@
     "sample_note": "Aperçu avec un invité et des informations fictifs.",
     "open_page": "Ouvrir la page du modèle"
   },
+  "templates_page": {
+    "meta_title": "Modèles d'invitation",
+    "meta_description": "Découvrez notre sélection de modèles d'invitation numérique pour mariage, anniversaire, baptême et plus. Ouvrez chaque modèle en direct, puis personnalisez-le sans code.",
+    "eyebrow": "La collection",
+    "title": "Nos modèles ",
+    "title_highlight": "coups de cœur",
+    "subtitle": "Les modèles choisis par l'équipe Invyra. Ouvrez-en un pour le voir comme vos invités, puis changez textes, photos et couleurs sans code.",
+    "count_one": "{count} modèle",
+    "count_other": "{count} modèles",
+    "empty_title": "La collection arrive bientôt",
+    "empty_desc": "Nous préparons notre sélection de modèles. En attendant, créez votre compte pour parcourir toute la galerie.",
+    "empty_cta": "Créer mon compte",
+    "empty_cta_dashboard": "Voir la galerie",
+    "no_results": "Aucun modèle dans cette catégorie pour le moment.",
+    "breadcrumb_label": "Fil d'Ariane",
+    "breadcrumb_home": "Accueil",
+    "breadcrumb_current": "Modèles",
+    "page_suffix": "Page {n}"
+  },
   "landing": {
     "meta": {
       "title": "Invyra · Invitations numériques qui s'ouvrent comme une lettre",
-      "description": "Créez une invitation numérique sans code à partir d'un modèle, envoyez un lien personnel à chaque invité par email ou WhatsApp et suivez les ouvertures et les réponses.",
+      "description": "Créez une invitation numérique sans code, envoyez-la par email ou WhatsApp, suivez les réponses et accueillez vos invités avec un billet à QR code.",
       "og_alt": "Invyra, invitations numériques"
     },
     "hero": {
@@ -956,7 +975,7 @@
       "eyebrow": "En quatre étapes",
       "title": "Comment ",
       "title_highlight": "ça marche",
-      "subtitle": "De la création de l'événement aux réponses de vos invités.",
+      "subtitle": "De la création de l'événement à l'accueil de vos invités.",
       "steps": {
         "1": {
           "title": "Créez votre événement",
@@ -971,8 +990,8 @@
           "desc": "Saisissez-les un par un ou importez un fichier CSV. Chacun reçoit son lien personnel par email, ou par WhatsApp avec un message prêt à partir."
         },
         "4": {
-          "title": "Suivez les ouvertures et les réponses",
-          "desc": "Vous voyez qui a ouvert son invitation et qui vient, ne vient pas ou hésite. Un invité peut changer d'avis depuis son lien."
+          "title": "Suivez les réponses, accueillez vos invités",
+          "desc": "Vous voyez qui a ouvert son invitation et qui vient. Chaque invité qui confirme reçoit son billet, que vous scannez à l'entrée le jour J."
         }
       }
     },
@@ -980,7 +999,7 @@
       "eyebrow": "Fonctionnalités",
       "title": "Tout pour inviter, ",
       "title_highlight": "rien à coder",
-      "subtitle": "Les outils de la plateforme, de l'écran d'ouverture au suivi des réponses.",
+      "subtitle": "Les outils de la plateforme, de l'écran d'ouverture au livre d'or.",
       "items": {
         "opening": {
           "title": "Une ouverture qui fait effet",
@@ -996,7 +1015,7 @@
         },
         "guests": {
           "title": "Liste d'invités",
-          "desc": "Ajoutez vos invités un par un ou importez un fichier CSV (nom, email, téléphone). Un même email ne peut pas être ajouté deux fois."
+          "desc": "Ajoutez vos invités un par un ou importez un fichier CSV, réservez des places pour chacun, puis exportez la liste en PDF pour le jour J."
         },
         "sending": {
           "title": "Email et WhatsApp",
@@ -1004,7 +1023,23 @@
         },
         "tracking": {
           "title": "Suivi des réponses",
-          "desc": "Envoi, ouverture et réponse de chaque invité (présent, absent ou peut-être), et les totaux de l'événement."
+          "desc": "Ouverture et réponse de chaque invité, nombre de personnes, allergies et mot laissé pour vous, avec les totaux de l'événement."
+        },
+        "ticket": {
+          "title": "Un billet pour chaque invité",
+          "desc": "Dès qu'un invité confirme, il reçoit par email un billet avec QR code. Il le garde sur son téléphone ou le télécharge en PDF."
+        },
+        "checkin": {
+          "title": "L'accueil le jour J",
+          "desc": "Envoyez un lien d'accueil à la personne à l'entrée. Elle scanne les billets avec son téléphone ou cherche un nom, et suit les arrivées en direct, sans compte."
+        },
+        "directions": {
+          "title": "Itinéraire et carte",
+          "desc": "Cérémonie, réception, soirée : placez chaque étape sur la carte. Vos invités ouvrent l'itinéraire dans Google Maps, Waze ou Plans."
+        },
+        "memories": {
+          "title": "Livre d'or, photos et vidéos",
+          "desc": "Depuis leur invitation, vos invités laissent un mot et partagent leurs photos et vidéos. Vous pouvez masquer, supprimer ou fermer chaque espace."
         },
         "privacy": {
           "title": "Un lien personnel par invité",
@@ -1022,7 +1057,8 @@
         "csv_file": "invites.csv",
         "opened": "Ouvertes",
         "confirmed": "Présents",
-        "preview_title": "Invitation de Sophie"
+        "preview_title": "Invitation de Sophie",
+        "guestbook_note": "Quelle belle soirée, merci !"
       }
     },
     "opening_demo": {
@@ -1040,7 +1076,8 @@
       "title": "Des modèles pour ",
       "title_highlight": "chaque occasion",
       "subtitle": "Choisissez un design de la galerie, ajoutez vos photos et vos textes : votre invitation est prête.",
-      "preview": "Voir en direct"
+      "preview": "Voir en direct",
+      "view_all": "Voir toute la collection"
     },
     "availability": {
       "eyebrow": "Calendrier",
@@ -1086,7 +1123,8 @@
             "Toute la galerie de modèles",
             "Personnalisation sans code",
             "Envoi par email et WhatsApp",
-            "Suivi des ouvertures et des réponses"
+            "Suivi des ouvertures et des réponses",
+            "Billets QR, itinéraire et livre d'or"
           ]
         },
         "pro": {
@@ -1132,6 +1170,14 @@
           "a": "Oui. En rouvrant son lien, il peut répondre à nouveau : la nouvelle réponse remplace la précédente."
         },
         {
+          "q": "Comment se passe l'accueil le jour J ?",
+          "a": "Chaque invité qui confirme reçoit un billet avec QR code. Le jour J, la personne à l'entrée ouvre le lien d'accueil sur son téléphone : elle scanne les billets ou cherche un invité par son nom, sans créer de compte."
+        },
+        {
+          "q": "Mes invités peuvent-ils partager leurs photos ?",
+          "a": "Oui. Depuis son invitation, chaque invité accède au livre d'or et peut ajouter ses photos et vidéos, visibles par les autres invités. Vous pouvez masquer un contenu ou fermer le partage à tout moment."
+        },
+        {
           "q": "Combien d'invités avec l'offre gratuite ?",
           "a": "Jusqu'à 15 invités pour un événement. Au-delà, l'Événement premium coûte 1 $ par invité, sans limite de nombre."
         },
@@ -1155,9 +1201,10 @@
     "footer": {
       "brand": "Invyra",
       "headline": "Des invitations numériques qui s'ouvrent comme une lettre.",
-      "description": "Choisissez un modèle, personnalisez-le sans code, envoyez-le par email ou WhatsApp et suivez les réponses.",
+      "description": "Choisissez un modèle, personnalisez-le sans code, envoyez-le par email ou WhatsApp, puis accueillez vos invités le jour J.",
       "rights": "Tous droits réservés.",
       "made_by": "Développé par",
+      "made_by_label": "{name} sur Instagram (nouvel onglet)",
       "product": "Produit",
       "account": "Compte",
       "contact": "Contact",

@@ -905,10 +905,29 @@
     "sample_note": "Preview with a sample guest and sample details.",
     "open_page": "Open the template page"
   },
+  "templates_page": {
+    "meta_title": "Invitation templates",
+    "meta_description": "Browse our selection of digital invitation templates for weddings, birthdays, christenings and more. Open each template live, then customise it without code.",
+    "eyebrow": "The collection",
+    "title": "Our ",
+    "title_highlight": "favourite templates",
+    "subtitle": "Templates picked by the Invyra team. Open one to see it the way your guests will, then change the text, photos and colours without code.",
+    "count_one": "{count} template",
+    "count_other": "{count} templates",
+    "empty_title": "The collection is coming soon",
+    "empty_desc": "We are putting our selection together. In the meantime, create your account to browse the whole gallery.",
+    "empty_cta": "Create my account",
+    "empty_cta_dashboard": "Open the gallery",
+    "no_results": "No template in this category yet.",
+    "breadcrumb_label": "Breadcrumb",
+    "breadcrumb_home": "Home",
+    "breadcrumb_current": "Templates",
+    "page_suffix": "Page {n}"
+  },
   "landing": {
     "meta": {
       "title": "Invyra · Digital invitations that open like a letter",
-      "description": "Create a digital invitation from a template without code, send each guest a personal link by email or WhatsApp, and follow openings and replies.",
+      "description": "Create a digital invitation without code, send it by email or WhatsApp, follow the replies and welcome your guests with a QR code ticket.",
       "og_alt": "Invyra, digital invitations"
     },
     "hero": {
@@ -956,7 +975,7 @@
       "eyebrow": "In four steps",
       "title": "How it ",
       "title_highlight": "works",
-      "subtitle": "From creating the event to your guests' replies.",
+      "subtitle": "From creating the event to welcoming your guests.",
       "steps": {
         "1": {
           "title": "Create your event",
@@ -971,8 +990,8 @@
           "desc": "Enter them one by one or import a CSV file. Each one receives their personal link by email, or on WhatsApp with a ready-to-send message."
         },
         "4": {
-          "title": "Follow openings and replies",
-          "desc": "You see who opened their invitation and who is coming, not coming or unsure. A guest can change their mind from their link."
+          "title": "Follow replies, welcome your guests",
+          "desc": "You see who opened their invitation and who is coming. Each guest who confirms gets their ticket, which you scan at the door on the day."
         }
       }
     },
@@ -980,7 +999,7 @@
       "eyebrow": "Features",
       "title": "Everything to invite, ",
       "title_highlight": "nothing to code",
-      "subtitle": "The platform's tools, from the opening screen to tracking replies.",
+      "subtitle": "The platform's tools, from the opening screen to the guestbook.",
       "items": {
         "opening": {
           "title": "An opening that makes an entrance",
@@ -996,7 +1015,7 @@
         },
         "guests": {
           "title": "Guest list",
-          "desc": "Add your guests one by one or import a CSV file (name, email, phone). The same email cannot be added twice."
+          "desc": "Add your guests one by one or import a CSV file, reserve seats for each one, then export the list as a PDF for the big day."
         },
         "sending": {
           "title": "Email and WhatsApp",
@@ -1004,7 +1023,23 @@
         },
         "tracking": {
           "title": "Reply tracking",
-          "desc": "Sending, opening and reply for each guest (attending, not attending or maybe), plus the event totals."
+          "desc": "Opening and reply for each guest, party size, dietary needs and the note they left you, plus the event totals."
+        },
+        "ticket": {
+          "title": "A ticket for every guest",
+          "desc": "As soon as a guest confirms, they receive a ticket with a QR code by email. They keep it on their phone or download it as a PDF."
+        },
+        "checkin": {
+          "title": "Check-in on the day",
+          "desc": "Send a check-in link to whoever is at the door. They scan tickets with their phone or look up a name, and follow arrivals live, with no account."
+        },
+        "directions": {
+          "title": "Directions and map",
+          "desc": "Ceremony, reception, party: put each stop on the map. Your guests open the route in Google Maps, Waze or Apple Maps."
+        },
+        "memories": {
+          "title": "Guestbook, photos and videos",
+          "desc": "From their invitation, your guests leave a note and share their photos and videos. You can hide, delete or close each space."
         },
         "privacy": {
           "title": "One personal link per guest",
@@ -1022,7 +1057,8 @@
         "csv_file": "guests.csv",
         "opened": "Opened",
         "confirmed": "Attending",
-        "preview_title": "Sophie's invitation"
+        "preview_title": "Sophie's invitation",
+        "guestbook_note": "What a lovely evening, thank you!"
       }
     },
     "opening_demo": {
@@ -1040,7 +1076,8 @@
       "title": "Templates for ",
       "title_highlight": "every occasion",
       "subtitle": "Pick a design from the gallery, add your photos and text: your invitation is ready.",
-      "preview": "Live preview"
+      "preview": "Live preview",
+      "view_all": "See the full collection"
     },
     "availability": {
       "eyebrow": "Calendar",
@@ -1086,7 +1123,8 @@
             "The whole template gallery",
             "No-code customisation",
             "Sending by email and WhatsApp",
-            "Opening and reply tracking"
+            "Opening and reply tracking",
+            "QR tickets, directions and guestbook"
           ]
         },
         "pro": {
@@ -1132,6 +1170,14 @@
           "a": "Yes. By opening their link again, they can reply again: the new reply replaces the previous one."
         },
         {
+          "q": "How does check-in work on the day?",
+          "a": "Each guest who confirms receives a ticket with a QR code. On the day, the person at the door opens the check-in link on their phone: they scan tickets or look up a guest by name, without creating an account."
+        },
+        {
+          "q": "Can my guests share their photos?",
+          "a": "Yes. From their invitation, each guest can reach the guestbook and add their photos and videos, which the other guests can see. You can hide an item or close sharing at any time."
+        },
+        {
           "q": "How many guests on the free plan?",
           "a": "Up to 15 guests for one event. Beyond that, the Premium event costs $1 per guest, with no limit on numbers."
         },
@@ -1155,9 +1201,10 @@
     "footer": {
       "brand": "Invyra",
       "headline": "Digital invitations that open like a letter.",
-      "description": "Pick a template, customise it without code, send it by email or WhatsApp and follow the replies.",
+      "description": "Pick a template, customise it without code, send it by email or WhatsApp, then welcome your guests on the day.",
       "rights": "All rights reserved.",
       "made_by": "Developed by",
+      "made_by_label": "{name} on Instagram (opens in a new tab)",
       "product": "Product",
       "account": "Account",
       "contact": "Contact",

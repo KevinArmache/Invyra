@@ -1,10 +1,14 @@
 import {
   BarChart3,
+  Images,
   LockKeyhole,
   Mail,
   MailOpen,
   MousePointerClick,
   Music2,
+  Route,
+  ScanLine,
+  Ticket,
   UserPlus,
   Users,
 } from "lucide-react";
@@ -12,24 +16,30 @@ import {
 import { getTranslations } from "@/lib/i18n/server";
 import { SITE_URL } from "@/lib/site";
 import {
+  CheckInVisual,
+  DirectionsVisual,
   GuestsVisual,
+  MemoriesVisual,
   MusicVisual,
   NoCodeVisual,
   OpeningVisual,
   PrivacyVisual,
   SendingVisual,
   TeamVisual,
+  TicketVisual,
   TrackingVisual,
 } from "@/components/landing/FeatureVisuals";
 
 /**
  * Grille « bento » : la taille d'une carte suit l'importance de la fonction.
- * Sur grand écran (4 colonnes) :
+ * Sur grand écran (4 colonnes), de l'invitation au jour J :
  *
- *   [ ouverture 2×2 ][ sans code  2 ]
+ *   [ ouverture 2×2 ][ sans code   2 ]
  *   [               ][musique][invités]
- *   [ envoi      2 ][ suivi       2 ]
- *   [ liens      2 ][ à plusieurs 2 ]
+ *   [ envoi       2 ][ suivi       2 ]
+ *   [ billet      2 ][ accueil     2 ]
+ *   [ itinéraire  2 ][ souvenirs   2 ]
+ *   [ liens       2 ][ à plusieurs 2 ]
  */
 const FEATURES = [
   { key: "opening", icon: MailOpen, span: "md:col-span-2 lg:row-span-2", tall: true },
@@ -38,6 +48,10 @@ const FEATURES = [
   { key: "guests", icon: UserPlus, span: "" },
   { key: "sending", icon: Mail, span: "lg:col-span-2" },
   { key: "tracking", icon: BarChart3, span: "lg:col-span-2" },
+  { key: "ticket", icon: Ticket, span: "lg:col-span-2" },
+  { key: "checkin", icon: ScanLine, span: "lg:col-span-2" },
+  { key: "directions", icon: Route, span: "lg:col-span-2" },
+  { key: "memories", icon: Images, span: "lg:col-span-2" },
   { key: "privacy", icon: LockKeyhole, span: "lg:col-span-2" },
   { key: "team", icon: Users, span: "lg:col-span-2" },
 ];
@@ -79,6 +93,42 @@ export default async function FeaturesSection() {
     tracking: (
       <TrackingVisual
         labels={{ opened: visual("opened"), confirmed: visual("confirmed") }}
+      />
+    ),
+    ticket: (
+      <TicketVisual
+        labels={{
+          eyebrow: t("invite.ticket.eyebrow"),
+          guest: t("landing.hero.scene.guest"),
+          pass: t("invite.ticket.pass_other").replace("{count}", "2"),
+        }}
+      />
+    ),
+    checkin: (
+      <CheckInVisual
+        labels={{
+          welcome: t("checkin.result.ok_title"),
+          arrived: t("checkin.people_label"),
+        }}
+      />
+    ),
+    directions: (
+      <DirectionsVisual
+        labels={{
+          apps: [
+            t("invite.directions.google"),
+            t("invite.directions.waze"),
+            t("invite.directions.apple"),
+          ],
+        }}
+      />
+    ),
+    memories: (
+      <MemoriesVisual
+        labels={{
+          guestbook: t("invite.memories.guestbook_title"),
+          note: visual("guestbook_note"),
+        }}
       />
     ),
     privacy: (

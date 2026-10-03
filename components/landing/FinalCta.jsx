@@ -66,7 +66,7 @@ export default async function FinalCta() {
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="h-12 w-full px-8 sm:w-auto">
-            <Link href="#pricing">{t("landing.cta.secondary")}</Link>
+            <Link href="/#pricing">{t("landing.cta.secondary")}</Link>
           </Button>
         </div>
       </div>

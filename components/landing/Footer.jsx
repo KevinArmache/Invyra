@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, MessageCircle } from "lucide-react";
 
 import BrandMark from "@/components/common/BrandMark";
+import Signature from "@/components/landing/Signature";
 import { getTranslations } from "@/lib/i18n/server";
 import { CONTACT_EMAIL, INSTAGRAM_URL, WHATSAPP_URL } from "@/lib/site";
 
@@ -44,7 +45,16 @@ function FooterLink({ href, children, external = false }) {
   );
 }
 
-export default async function Footer({ isAuthenticated = false, hasShowcase = false }) {
+/**
+ * @param {boolean} props.hasShowcase    la vitrine des modèles est sur l'accueil
+ * @param {boolean} props.hasCollection  la collection /templates a des modèles
+ *   mis en avant : « Modèles » y mène plutôt qu'à la section de l'accueil
+ */
+export default async function Footer({
+  isAuthenticated = false,
+  hasShowcase = false,
+  hasCollection = false,
+}) {
   const { t } = await getTranslations();
   const year = new Date().getFullYear();
   const link = (key) => t(`landing.footer.links.${key}`);
@@ -56,9 +66,14 @@ export default async function Footer({ isAuthenticated = false, hasShowcase = fa
         { label: link("how_it_works"), href: "/#how-it-works" },
         { label: link("features"), href: "/#features" },
         ...(hasShowcase
+          ? [{ label: link("opening"), href: "/#opening" }]
+          : []),
+        ...(hasShowcase || hasCollection
           ? [
-              { label: link("opening"), href: "/#opening" },
-              { label: link("templates"), href: "/#templates" },
+              {
+                label: link("templates"),
+                href: hasCollection ? "/templates" : "/#templates",
+              },
             ]
           : []),
         { label: link("availability"), href: "/#availability" },
@@ -148,16 +163,16 @@ export default async function Footer({ isAuthenticated = false, hasShowcase = fa
           <p>
             © {year} Invyra. {t("landing.footer.rights")}
           </p>
-          <p>
-            {t("landing.footer.made_by")}{" "}
-            <a
+          <p data-reveal="fade" className="flex items-baseline gap-1.5">
+            {t("landing.footer.made_by")}
+            <Signature
+              name="Kevin Armache"
               href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ink-300 transition-colors hover:text-gold"
-            >
-              Kevin Armache
-            </a>
+              label={t("landing.footer.made_by_label").replace(
+                "{name}",
+                "Kevin Armache",
+              )}
+            />
           </p>
         </div>
       </div>

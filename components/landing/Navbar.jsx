@@ -23,7 +23,7 @@ const SECTIONS = [
 ];
 
 /**
- * Barre de l'accueil.
+ * Barre de l'accueil et des pages publiques.
  *
  * - progression de lecture : un filet or sous la barre, mis à jour à chaque
  *   image par une écriture directe dans le style (pas de rendu React par
@@ -33,20 +33,35 @@ const SECTIONS = [
  *
  * `isAuthenticated` vient du Server Component parent : pas de bouton fantôme
  * qui bascule après le chargement.
+ *
+ * `current` : "home" sur l'accueil ; "templates" sur la collection, où les
+ * liens ramènent aux sections de l'accueil (/#…) et où « Modèles » mène à
+ * /templates.
  */
 export default function Navbar({
   isAuthenticated = false,
   hasShowcase = false,
+  current = "home",
 }) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [active, setActive] = useState(null);
+  const [observed, setObserved] = useState(null);
   const progressRef = useRef(null);
 
+  const onHome = current === "home";
+  const active = onHome ? observed : current;
   const sections = SECTIONS.filter(
     (section) => hasShowcase || !section.showcaseOnly,
   );
+  const hrefOf = (section) => {
+    if (onHome) return `#${section.id}`;
+    return section.id === current ? `/${current}` : `/#${section.id}`;
+  };
+  const currentAttr = (section) => {
+    if (active !== section.id) return undefined;
+    return onHome ? "true" : "page";
+  };
 
   // ── Défilement : état « décollé » et progression ─────────────────────
   useEffect(() => {
@@ -74,8 +89,9 @@ export default function Navbar({
     };
   }, []);
 
-  // ── Section active ───────────────────────────────────────────────────
+  // ── Section active (accueil seulement) ───────────────────────────────
   useEffect(() => {
+    if (!onHome) return;
     const order = SECTIONS.filter(
       (section) => hasShowcase || !section.showcaseOnly,
     ).map((section) => section.id);
@@ -86,7 +102,7 @@ export default function Navbar({
           if (entry.isIntersecting) visible.add(entry.target.id);
           else visible.delete(entry.target.id);
         }
-        setActive(order.find((id) => visible.has(id)) ?? null);
+        setObserved(order.find((id) => visible.has(id)) ?? null);
       },
       // Une bande au milieu de l'écran : la section qui la traverse est
       // celle qu'on lit.
@@ -97,7 +113,7 @@ export default function Navbar({
       if (element) observer.observe(element);
     }
     return () => observer.disconnect();
-  }, [hasShowcase]);
+  }, [hasShowcase, onHome]);
 
   // ── Menu mobile : page figée dessous, Échap pour fermer ──────────────
   useEffect(() => {
@@ -147,8 +163,8 @@ export default function Navbar({
               return (
                 <Link
                   key={section.id}
-                  href={`#${section.id}`}
-                  aria-current={isActive ? "true" : undefined}
+                  href={hrefOf(section)}
+                  aria-current={currentAttr(section)}
                   className={`group relative rounded-md px-3.5 py-2 text-sm transition-colors duration-300 ${
                     isActive ? "text-ink-50" : "text-muted-foreground hover:text-foreground"
                   }`}
@@ -249,7 +265,8 @@ export default function Navbar({
                   style={{ transitionDelay: isOpen ? `${80 + index * 45}ms` : "0ms" }}
                 >
                   <Link
-                    href={`#${section.id}`}
+                    href={hrefOf(section)}
+                    aria-current={currentAttr(section)}
                     onClick={close}
                     className={`flex items-center justify-between rounded-md px-3 py-3 text-base transition-colors hover:bg-secondary hover:text-foreground ${
                       active === section.id ? "text-ink-50" : "text-muted-foreground"

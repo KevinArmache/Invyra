@@ -1191,6 +1191,679 @@
   }
 }
 
+/* ── 9. QR code (billet et accueil) ─────────────────────────────────────── */
+
+.qr {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  grid-template-rows: repeat(9, minmax(0, 1fr));
+  gap: 1px;
+  width: 3.9rem;
+  aspect-ratio: 1;
+  padding: 0.3rem;
+  border-radius: 0.35rem;
+  background: #fffdf8;
+}
+.qr i {
+  display: block;
+  border-radius: 1px;
+}
+.qrOn {
+  background: var(--ink-900);
+}
+/* Les trois repères d'angle. */
+.qr b {
+  position: relative;
+  border: 2px solid var(--ink-900);
+  border-radius: 2px;
+}
+.qr b::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 1px;
+  background: var(--ink-900);
+}
+.qr b:nth-of-type(1) {
+  grid-area: 1 / 1 / 4 / 4;
+}
+.qr b:nth-of-type(2) {
+  grid-area: 1 / 7 / 4 / 10;
+}
+.qr b:nth-of-type(3) {
+  grid-area: 7 / 1 / 10 / 4;
+}
+
+/* ── 10. Billet ─────────────────────────────────────────────────────────── */
+
+.ticket {
+  --stub: 5.1rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--stub);
+  width: min(100% - 2.5rem, 17.5rem);
+  overflow: hidden;
+  border-radius: 0.7rem;
+  border: 1px solid color-mix(in oklch, var(--gold) 40%, transparent);
+  background:
+    radial-gradient(ellipse at 0% 0%, color-mix(in oklch, var(--gold) 16%, transparent), transparent 60%),
+    var(--ink-900);
+  /* Les deux encoches de la ligne de découpe. */
+  -webkit-mask:
+    radial-gradient(circle at calc(100% - var(--stub)) 0, transparent 0.42rem, #000 0.45rem) top / 100% 51% no-repeat,
+    radial-gradient(circle at calc(100% - var(--stub)) 100%, transparent 0.42rem, #000 0.45rem) bottom / 100% 51% no-repeat;
+  mask:
+    radial-gradient(circle at calc(100% - var(--stub)) 0, transparent 0.42rem, #000 0.45rem) top / 100% 51% no-repeat,
+    radial-gradient(circle at calc(100% - var(--stub)) 100%, transparent 0.42rem, #000 0.45rem) bottom / 100% 51% no-repeat;
+  animation: ticketFloat 6s var(--ease-in-out) infinite;
+}
+/* Le reflet or qui traverse le billet. */
+.ticket::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, color-mix(in oklch, var(--gold) 18%, transparent) 50%, transparent 70%);
+  transform: translateX(-100%);
+  pointer-events: none;
+  animation: sweep 4.5s ease-in-out 1s infinite;
+}
+
+.ticketMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  padding: 0.85rem 0.9rem;
+}
+.ticketEyebrow {
+  font-size: 0.56rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.ticketName {
+  margin-top: 0.15rem;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 1.1;
+  color: var(--ink-50);
+}
+.ticketPass {
+  font-size: 0.62rem;
+  color: var(--ink-300);
+}
+.ticketCode {
+  margin-top: 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-400);
+}
+
+.ticketStub {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-left: 1px dashed color-mix(in oklch, var(--gold) 40%, transparent);
+}
+.scanLine {
+  position: absolute;
+  left: 0.5rem;
+  right: 0.5rem;
+  top: 50%;
+  height: 2px;
+  margin-top: -1.95rem;
+  border-radius: 2px;
+  background: var(--gold-bright);
+  box-shadow: 0 0 10px 2px color-mix(in oklch, var(--gold) 55%, transparent);
+  opacity: 0;
+  animation: scan 3s var(--ease-in-out) infinite;
+}
+
+@keyframes ticketFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+}
+@keyframes scan {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(3.9rem);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+/* ── 11. Accueil le jour J ──────────────────────────────────────────────── */
+
+.checkin {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.viewfinder {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 6.5rem;
+  height: 6.5rem;
+  overflow: hidden;
+  border-radius: 0.9rem;
+  border: 1px solid var(--ink-700);
+  background:
+    radial-gradient(circle at 50% 45%, color-mix(in oklch, var(--gold) 10%, transparent), transparent 70%),
+    var(--ink-900);
+  box-shadow: var(--elevation-2);
+}
+.qrScanned {
+  width: 3.6rem;
+}
+
+.corner {
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--gold);
+  animation: aim 6s ease infinite;
+}
+.cornerTl {
+  top: 0.55rem;
+  left: 0.55rem;
+  border-right: 0;
+  border-bottom: 0;
+  border-top-left-radius: 0.35rem;
+}
+.cornerTr {
+  top: 0.55rem;
+  right: 0.55rem;
+  border-left: 0;
+  border-bottom: 0;
+  border-top-right-radius: 0.35rem;
+}
+.cornerBl {
+  bottom: 0.55rem;
+  left: 0.55rem;
+  border-right: 0;
+  border-top: 0;
+  border-bottom-left-radius: 0.35rem;
+}
+.cornerBr {
+  right: 0.55rem;
+  bottom: 0.55rem;
+  border-left: 0;
+  border-top: 0;
+  border-bottom-right-radius: 0.35rem;
+}
+
+.beam {
+  position: absolute;
+  left: 0.9rem;
+  right: 0.9rem;
+  top: 1rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--gold-bright);
+  box-shadow: 0 0 12px 2px color-mix(in oklch, var(--gold) 50%, transparent);
+  opacity: 0;
+  animation: beam 6s var(--ease-in-out) infinite;
+}
+
+.welcome {
+  position: absolute;
+  inset: auto 0.45rem 0.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 999px;
+  background: var(--positive);
+  color: var(--ink-900);
+  font-size: 0.62rem;
+  font-weight: 600;
+  opacity: 0;
+  animation: welcome 6s var(--ease-spring) infinite;
+}
+.welcome svg {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.counterValue {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--serif);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--ink-50);
+}
+/* Deux chiffres superposés : 23 sort par le haut, 24 entre par le bas. */
+.counterDigits {
+  display: inline-grid;
+  height: 1em;
+  overflow: hidden;
+}
+.counterDigits span {
+  grid-area: 1 / 1;
+  animation: digitOut 6s var(--ease-out-expo) infinite;
+}
+.counterDigits span + span {
+  color: var(--positive);
+  animation-name: digitIn;
+}
+.counterTotal {
+  font-size: 1rem;
+  color: var(--ink-400);
+}
+.counterLabel {
+  font-size: 0.64rem;
+  color: var(--ink-400);
+}
+
+@keyframes aim {
+  0%,
+  36% {
+    border-color: var(--gold);
+  }
+  40%,
+  84% {
+    border-color: var(--positive);
+  }
+  90%,
+  100% {
+    border-color: var(--gold);
+  }
+}
+@keyframes beam {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  6% {
+    opacity: 1;
+  }
+  18% {
+    transform: translateY(4.4rem);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  36%,
+  100% {
+    opacity: 0;
+    transform: translateY(2.2rem);
+  }
+}
+@keyframes welcome {
+  0%,
+  36% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.8);
+  }
+  42%,
+  84% {
+    opacity: 1;
+    transform: none;
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.9);
+  }
+}
+@keyframes digitOut {
+  0%,
+  40% {
+    opacity: 1;
+    transform: none;
+  }
+  46%,
+  92% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes digitIn {
+  0%,
+  40% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  46%,
+  92% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+/* ── 12. Itinéraire ─────────────────────────────────────────────────────── */
+
+.directions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  width: min(100% - 2rem, 19rem);
+}
+
+/* Un plan stylisé : quadrillage discret et deux grands axes. */
+.map {
+  position: relative;
+  width: 100%;
+  height: 6.2rem;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  border: 1px solid var(--ink-700);
+  background:
+    linear-gradient(115deg, transparent 46%, color-mix(in oklch, var(--ink-600) 70%, transparent) 46.5% 49%, transparent 49.5%),
+    linear-gradient(15deg, transparent 62%, color-mix(in oklch, var(--ink-600) 55%, transparent) 62.5% 64.5%, transparent 65%),
+    repeating-linear-gradient(0deg, transparent 0 17px, color-mix(in oklch, var(--ink-700) 40%, transparent) 17px 18px),
+    repeating-linear-gradient(90deg, transparent 0 17px, color-mix(in oklch, var(--ink-700) 40%, transparent) 17px 18px),
+    var(--ink-900);
+}
+
+.route {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.routeGhost {
+  stroke: color-mix(in oklch, var(--gold) 30%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 4;
+}
+.routeLine {
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: route 6s var(--ease-in-out) infinite;
+}
+
+.pin {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin: -0.65rem 0 0 -0.65rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, var(--gold-bright), var(--gold) 50%, var(--gold-deep));
+  box-shadow:
+    0 0 0 3px color-mix(in oklch, var(--gold) 20%, transparent),
+    0 4px 10px oklch(0 0 0 / 0.4);
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--ink-900);
+  opacity: 0;
+}
+.pin1 {
+  animation: pin1 6s var(--ease-spring) infinite;
+}
+.pin2 {
+  animation: pin2 6s var(--ease-spring) infinite;
+}
+.pin3 {
+  animation: pin3 6s var(--ease-spring) infinite;
+}
+
+.apps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.app {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--ink-700);
+  font-size: 0.62rem;
+  color: var(--ink-300);
+  animation: app 6s steps(1, end) calc(var(--app) * 2s) infinite;
+}
+
+@keyframes route {
+  0%,
+  8% {
+    opacity: 1;
+    stroke-dashoffset: 1;
+  }
+  56%,
+  84% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+  92% {
+    opacity: 0;
+    stroke-dashoffset: 0;
+  }
+  100% {
+    opacity: 0;
+    stroke-dashoffset: 1;
+  }
+}
+@keyframes pin1 {
+  0%,
+  6% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  12%,
+  84% {
+    opacity: 1;
+    transform: none;
+  }
+  92%,
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+@keyframes pin2 {
+  0%,
+  30% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  36%,
+  84% {
+    opacity: 1;
+    transform: none;
+  }
+  92%,
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+@keyframes pin3 {
+  0%,
+  52% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  58%,
+  84% {
+    opacity: 1;
+    transform: none;
+  }
+  92%,
+  100% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+}
+@keyframes app {
+  0%,
+  32% {
+    border-color: color-mix(in oklch, var(--gold) 55%, transparent);
+    background: color-mix(in oklch, var(--gold) 12%, transparent);
+    color: var(--ink-50);
+  }
+  33%,
+  100% {
+    border-color: var(--ink-700);
+    background: transparent;
+    color: var(--ink-300);
+  }
+}
+
+/* ── 13. Livre d'or, photos et vidéos ───────────────────────────────────── */
+
+.memories {
+  position: relative;
+  width: min(100% - 2rem, 18rem);
+  height: 8.5rem;
+}
+
+.polaroid {
+  position: absolute;
+  top: 0.7rem;
+  width: 4.6rem;
+  padding: 0.3rem 0.3rem 1rem;
+  border-radius: 0.2rem;
+  background: #fffdf8;
+  box-shadow: 0 10px 24px oklch(0 0 0 / 0.4);
+  opacity: 0;
+  animation: drop 7s var(--ease-out-expo) infinite;
+}
+.polaroid span {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 1px;
+}
+.polaroid1 {
+  --r: -9deg;
+  left: 8%;
+}
+.polaroid1 span {
+  background:
+    radial-gradient(circle at 30% 35%, var(--gold-bright), transparent 45%),
+    radial-gradient(circle at 70% 75%, var(--gold-deep), transparent 60%),
+    color-mix(in oklch, var(--gold-deep) 55%, black);
+}
+.polaroid2 {
+  --r: 3deg;
+  top: 0.3rem;
+  left: 32%;
+  animation-delay: 0.35s;
+}
+.polaroid2 span {
+  background:
+    radial-gradient(circle at 65% 30%, oklch(0.85 0.08 30), transparent 45%),
+    radial-gradient(circle at 30% 80%, oklch(0.6 0.1 15), transparent 60%),
+    oklch(0.42 0.06 15);
+}
+.polaroid3 {
+  --r: 11deg;
+  left: 56%;
+  animation-delay: 0.7s;
+}
+.polaroid3 span {
+  background:
+    radial-gradient(circle at 40% 30%, oklch(0.86 0.06 150), transparent 45%),
+    radial-gradient(circle at 70% 80%, oklch(0.6 0.08 155), transparent 60%),
+    oklch(0.4 0.05 155);
+}
+
+.note {
+  position: absolute;
+  right: 2%;
+  bottom: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  max-width: 9.5rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 0.7rem 0.7rem 0.15rem 0.7rem;
+  border: 1px solid color-mix(in oklch, var(--gold) 40%, transparent);
+  background: var(--ink-850);
+  box-shadow: var(--elevation-2);
+  opacity: 0;
+  animation: noteIn 7s var(--ease-out-expo) infinite;
+}
+.noteLabel {
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.noteText {
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--ink-50);
+}
+
+@keyframes drop {
+  0%,
+  6% {
+    opacity: 0;
+    transform: translateY(-14px) rotate(calc(var(--r) - 8deg)) scale(1.06);
+  }
+  16%,
+  86% {
+    opacity: 1;
+    transform: rotate(var(--r));
+  }
+  96%,
+  100% {
+    opacity: 0;
+    transform: translateY(6px) rotate(var(--r));
+  }
+}
+@keyframes noteIn {
+  0%,
+  24% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.95);
+  }
+  32%,
+  86% {
+    opacity: 1;
+    transform: none;
+  }
+  96%,
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
 /* Sans animation : chaque illustration dans son état « fait ». */
 @media (prefers-reduced-motion: reduce) {
   .visual *,
@@ -1209,7 +1882,26 @@
     border-right-color: transparent;
   }
   .plane,
-  .notes span {
+  .notes span,
+  .scanLine,
+  .beam,
+  .counterDigits span:first-child {
     opacity: 0;
+  }
+  .welcome,
+  .pin,
+  .note {
+    opacity: 1;
+    transform: none;
+  }
+  .polaroid {
+    opacity: 1;
+    transform: rotate(var(--r));
+  }
+  .corner {
+    border-color: var(--positive);
+  }
+  .routeLine {
+    stroke-dashoffset: 0;
   }
 }

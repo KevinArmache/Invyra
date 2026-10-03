@@ -233,6 +233,160 @@ export function PrivacyVisual({ labels, domain }) {
   );
 }
 
+/**
+ * Motif du QR code des billets, 9 × 9. Les trois coins sont les repères
+ * (dessinés à part) : leurs cellules ne sont pas rendues, et la grille place
+ * les autres autour d'eux dans l'ordre de lecture.
+ */
+const QR = [
+  "000101000",
+  "000010000",
+  "000111000",
+  "101100101",
+  "010011010",
+  "110101011",
+  "000110100",
+  "000011010",
+  "000101101",
+];
+const inFinder = (r, c) => (r < 3 && (c < 3 || c > 5)) || (r > 5 && c < 3);
+const QR_CELLS = QR.flatMap((row, r) =>
+  [...row].flatMap((cell, c) =>
+    inFinder(r, c) ? [] : [{ key: `${r}-${c}`, on: cell === "1" }],
+  ),
+);
+
+function QrCode({ className = "" }) {
+  return (
+    <span className={`${styles.qr} ${className}`}>
+      <b />
+      <b />
+      <b />
+      {QR_CELLS.map((cell) => (
+        <i key={cell.key} className={cell.on ? styles.qrOn : undefined} />
+      ))}
+    </span>
+  );
+}
+
+/** Le billet de l'invité : son nom, ses places et le QR code, balayé. */
+export function TicketVisual({ labels }) {
+  return (
+    <Visual>
+      <div className={styles.ticket}>
+        <div className={styles.ticketMain}>
+          <p className={styles.ticketEyebrow}>{labels.eyebrow}</p>
+          <p className={styles.ticketName}>{labels.guest}</p>
+          <p className={styles.ticketPass}>{labels.pass}</p>
+          <p className={styles.ticketCode}>7K3M-Q9PX</p>
+        </div>
+        <div className={styles.ticketStub}>
+          <QrCode />
+          <span className={styles.scanLine} />
+        </div>
+      </div>
+    </Visual>
+  );
+}
+
+/** Le viseur de l'accueil : le billet est lu, l'invité entre, le compte monte. */
+export function CheckInVisual({ labels }) {
+  return (
+    <Visual>
+      <div className={styles.checkin}>
+        <div className={styles.viewfinder}>
+          <QrCode className={styles.qrScanned} />
+          <span className={`${styles.corner} ${styles.cornerTl}`} />
+          <span className={`${styles.corner} ${styles.cornerTr}`} />
+          <span className={`${styles.corner} ${styles.cornerBl}`} />
+          <span className={`${styles.corner} ${styles.cornerBr}`} />
+          <span className={styles.beam} />
+          <span className={styles.welcome}>
+            <Check strokeWidth={2.5} />
+            {labels.welcome}
+          </span>
+        </div>
+        <div className={styles.counter}>
+          <p className={styles.counterValue}>
+            <span className={styles.counterDigits}>
+              <span>23</span>
+              <span>24</span>
+            </span>
+            <span className={styles.counterTotal}>/ 30</span>
+          </p>
+          <p className={styles.counterLabel}>{labels.arrived}</p>
+        </div>
+      </div>
+    </Visual>
+  );
+}
+
+/** Le trajet qui se trace d'une étape à l'autre, et les applis de navigation. */
+export function DirectionsVisual({ labels }) {
+  const route = "M20 80C58 74 66 34 110 36S172 78 220 22";
+  return (
+    <Visual>
+      <div className={styles.directions}>
+        <div className={styles.map}>
+          <svg
+            className={styles.route}
+            viewBox="0 0 240 100"
+            preserveAspectRatio="none"
+            fill="none"
+          >
+            <path className={styles.routeGhost} d={route} />
+            <path className={styles.routeLine} d={route} pathLength="1" />
+          </svg>
+          {/* Positions des épingles : les points du tracé, en % du cadre. */}
+          {[
+            { className: styles.pin1, left: "8.33%", top: "80%" },
+            { className: styles.pin2, left: "45.8%", top: "36%" },
+            { className: styles.pin3, left: "91.7%", top: "22%" },
+          ].map(({ className, ...position }, index) => (
+            <span
+              key={className}
+              className={`${styles.pin} ${className}`}
+              style={position}
+            >
+              {index + 1}
+            </span>
+          ))}
+        </div>
+        <div className={styles.apps}>
+          {labels.apps.map((app, index) => (
+            <span key={app} className={styles.app} style={{ "--app": index }}>
+              {app}
+            </span>
+          ))}
+        </div>
+      </div>
+    </Visual>
+  );
+}
+
+/** Des photos qui se posent en éventail, et un mot laissé au livre d'or. */
+export function MemoriesVisual({ labels }) {
+  return (
+    <Visual>
+      <div className={styles.memories}>
+        <span className={`${styles.polaroid} ${styles.polaroid1}`}>
+          <span />
+        </span>
+        <span className={`${styles.polaroid} ${styles.polaroid2}`}>
+          <span />
+        </span>
+        <span className={`${styles.polaroid} ${styles.polaroid3}`}>
+          <span />
+        </span>
+        <span className={styles.note}>
+          <span className={styles.noteLabel}>{labels.guestbook}</span>
+          <span className={styles.noteText}>{labels.note}</span>
+        </span>
+      </div>
+    </Visual>
+  );
+}
+
 /** Un proche rejoint l'événement, comme éditeur ou comme lecteur. */
 export function TeamVisual({ labels }) {
   return (
