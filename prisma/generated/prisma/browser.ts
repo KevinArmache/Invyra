@@ -64,6 +64,6 @@ export type Guest = Prisma.GuestModel
 export type GuestbookMessage = Prisma.GuestbookMessageModel
 /**
  * Model EventPhoto
- * 
+ * Photo ou vidéo partagée par un invité (voir lib/media/memories.js).
  */
 export type EventPhoto = Prisma.EventPhotoModel

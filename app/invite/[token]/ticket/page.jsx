@@ -16,8 +16,8 @@ import BrandMark from "@/components/common/BrandMark";
 import InvalidLink from "@/components/invitation/InvalidLink";
 import InvitationUnavailable from "@/components/invitation/InvitationUnavailable";
 import { Button } from "@/components/ui/button";
-import { mapsLink } from "@/lib/email/invitation-email";
 import { eventDayLabel } from "@/lib/invitation/dates";
+import { directionsPath, stopLines } from "@/lib/itinerary";
 import { getTranslations } from "@/lib/i18n/server";
 import { ticketQrSvg } from "@/lib/qr";
 import { templateLook } from "@/lib/templates/look";
@@ -99,6 +99,7 @@ export default async function TicketPage({ params }) {
 
   const { guest, event } = ticket;
   const showMemories = event.guestbookEnabled || event.photosEnabled;
+  const stops = event.stops ?? [];
 
   if (!guest.confirmed) {
     return (
@@ -191,24 +192,35 @@ export default async function TicketPage({ params }) {
           )}
         </div>
 
-        {(when || event.location || event.contactPhone) && (
+        {(when || stops.length > 0 || event.contactPhone) && (
           <dl className="grid gap-4 border-t border-border/60 px-6 py-6 text-sm">
             {when && (
               <Detail icon={CalendarDays} label={k("when")}>
                 {when}
               </Detail>
             )}
-            {event.location && (
-              <Detail icon={MapPin} label={k("where")}>
-                <span className="block">{event.location}</span>
-                <a
-                  href={mapsLink(event.location)}
-                  target="_blank"
-                  rel="noopener noreferrer"
+            {stops.length > 0 && (
+              <Detail icon={MapPin} label={stops.length > 1 ? k("program") : k("where")}>
+                {stops.length > 1 ? (
+                  <ol className="space-y-1">
+                    {stopLines(stops).map((line, index) => (
+                      <li key={stops[index].id}>{line}</li>
+                    ))}
+                  </ol>
+                ) : (
+                  <>
+                    <span className="block">{stops[0].place || stops[0].address}</span>
+                    {stops[0].place && stops[0].address && (
+                      <span className="block text-xs text-ink-400">{stops[0].address}</span>
+                    )}
+                  </>
+                )}
+                <Link
+                  href={directionsPath(token)}
                   className="mt-1 inline-block text-xs text-gold underline-offset-4 hover:underline"
                 >
                   {k("directions")}
-                </a>
+                </Link>
               </Detail>
             )}
             {event.contactPhone && (

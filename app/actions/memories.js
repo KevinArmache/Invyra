@@ -9,10 +9,16 @@ import {
   isEventOwnerOrAdmin,
 } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
-import { MAX_MESSAGES_PER_GUEST, MAX_PHOTOS_PER_GUEST } from "@/lib/site";
+import { memoryPathKind } from "@/lib/media/memories";
+import {
+  MAX_MESSAGES_PER_GUEST,
+  MAX_PHOTOS_PER_GUEST,
+  MAX_VIDEOS_PER_GUEST,
+} from "@/lib/site";
 
 /**
- * Souvenirs d'un événement : le livre d'or et les photos des invités.
+ * Souvenirs d'un événement : le livre d'or et les photos et vidéos des
+ * invités (modèle EventPhoto, `kind` = "photo" | "video").
  *
  * Côté invité, tout passe par le jeton de son invitation : seuls les invités
  * écrivent, et chacun ne supprime que ce qu'il a publié. Les messages et les
@@ -44,6 +50,9 @@ function photoView(photo, viewerId) {
   return {
     id: photo.id,
     url: photo.url,
+    kind: photo.kind === "video" ? "video" : "photo",
+    posterUrl: photo.posterUrl,
+    duration: photo.duration,
     width: photo.width,
     height: photo.height,
     name: photo.guest.name,
@@ -53,11 +62,18 @@ function photoView(photo, viewerId) {
   };
 }
 
-/** Supprime un fichier de Vercel Blob, sans bloquer si c'est impossible. */
-async function removeBlob(url) {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return;
+/**
+ * Supprime des fichiers de Vercel Blob, sans bloquer si c'est impossible.
+ *
+ * Le jeton est passé explicitement : sur Vercel, le SDK préférerait sinon
+ * l'authentification OIDC du store désigné par BLOB_STORE_ID, qui peut ne
+ * pas être celui des uploads.
+ */
+async function removeBlob(...urls) {
+  const targets = urls.filter(Boolean);
+  if (!process.env.BLOB_READ_WRITE_TOKEN || targets.length === 0) return;
   try {
-    await del(url);
+    await del(targets, { token: process.env.BLOB_READ_WRITE_TOKEN });
   } catch (error) {
     console.error("[memories] Fichier non supprimé :", error.message);
   }
@@ -101,7 +117,7 @@ export async function getMemories(token) {
   if (!guest) return null;
   const { event } = guest;
 
-  const [messages, photos, myPhotos] = await Promise.all([
+  const [messages, photos, myPhotos, myVideos] = await Promise.all([
     event.guestbookEnabled
       ? prisma.guestbookMessage.findMany({
           where: { eventId: guest.eventId, hidden: false },
@@ -119,10 +135,11 @@ export async function getMemories(token) {
         })
       : [],
     prisma.eventPhoto.count({ where: { guestId: guest.id } }),
+    prisma.eventPhoto.count({ where: { guestId: guest.id, kind: "video" } }),
   ]);
 
   return {
-    guest: { name: guest.name, photoCount: myPhotos },
+    guest: { name: guest.name, photoCount: myPhotos, videoCount: myVideos },
     event: {
       id: guest.eventId,
       title: event.title,
@@ -167,64 +184,102 @@ export async function deleteMyMessage(token, messageId) {
   return { success: true };
 }
 
-/**
- * Enregistre une photo que l'invité vient d'envoyer sur Vercel Blob (voir
- * app/api/upload/route.js). Le fichier doit être dans le dossier de
- * l'événement, sur le stockage Blob : une adresse quelconque est refusée.
- */
-export async function addEventPhoto(token, { url, pathname, width, height } = {}) {
-  const guest = await requireGuest(token);
-  if (!guest.event.photosEnabled) throw new Error("Le partage de photos est fermé.");
-
-  const path = String(pathname ?? "");
+/** Adresse d'un fichier de l'événement sur Vercel Blob, ou null. */
+function blobUrl(value, eventId) {
   let parsed;
   try {
-    parsed = new URL(String(url ?? ""));
+    parsed = new URL(String(value ?? ""));
   } catch {
-    throw new Error("Photo invalide");
+    return null;
   }
+  if (
+    parsed.protocol !== "https:" ||
+    !parsed.hostname.endsWith(".public.blob.vercel-storage.com")
+  ) {
+    return null;
+  }
+  const path = decodeURIComponent(parsed.pathname).slice(1);
+  const kind = memoryPathKind(path, eventId);
+  return kind ? { href: parsed.href, hostname: parsed.hostname, path, kind } : null;
+}
+
+/**
+ * Enregistre une photo ou une vidéo que l'invité vient d'envoyer sur Vercel
+ * Blob (voir app/api/upload/route.js). Le fichier doit être dans le dossier
+ * de l'événement, sur le stockage Blob : une adresse quelconque est refusée.
+ * La nature (photo ou vidéo) se lit dans le chemin, pas dans la requête.
+ *
+ * Renvoie `{ photo }`, ou `{ error }` avec un code ("closed", "limit",
+ * "video_limit", "invalid") : en production, le message d'une erreur levée
+ * n'arrive pas au navigateur. Un fichier refusé est supprimé du stockage.
+ */
+export async function addEventPhoto(
+  token,
+  { url, pathname, width, height, duration, posterUrl } = {},
+) {
+  const guest = await findGuest(token);
+  if (!guest) return { error: "invalid" };
+
+  const media = blobUrl(url, guest.eventId);
   const valid =
-    path.startsWith(`memories/${guest.eventId}/`) &&
-    parsed.protocol === "https:" &&
-    parsed.hostname.endsWith(".public.blob.vercel-storage.com") &&
-    decodeURIComponent(parsed.pathname) === `/${path}`;
-  if (!valid) throw new Error("Photo invalide");
+    media &&
+    (media.kind === "photo" || media.kind === "video") &&
+    media.path === String(pathname ?? "");
+  if (!valid) return { error: "invalid" };
 
-  const count = await prisma.eventPhoto.count({ where: { guestId: guest.id } });
-  if (count >= MAX_PHOTOS_PER_GUEST) {
-    await removeBlob(parsed.href);
-    throw new Error("Limite de photos atteinte");
+  const isVideo = media.kind === "video";
+  // Un aperçu n'est gardé que s'il vient du même store, dans le bon dossier.
+  const poster = isVideo ? blobUrl(posterUrl, guest.eventId) : null;
+  const posterHref =
+    poster?.kind === "poster" && poster.hostname === media.hostname ? poster.href : null;
+
+  async function refuse(error) {
+    await removeBlob(media.href, posterHref);
+    return { error };
   }
 
-  const size = (value) => {
-    const number = Math.trunc(Number(value));
-    return Number.isFinite(number) && number > 0 && number < 20_000 ? number : null;
+  if (!guest.event.photosEnabled) return refuse("closed");
+  const count = await prisma.eventPhoto.count({ where: { guestId: guest.id } });
+  if (count >= MAX_PHOTOS_PER_GUEST) return refuse("limit");
+  if (isVideo) {
+    const videos = await prisma.eventPhoto.count({
+      where: { guestId: guest.id, kind: "video" },
+    });
+    if (videos >= MAX_VIDEOS_PER_GUEST) return refuse("video_limit");
+  }
+
+  const bounded = (value, max) => {
+    const number = Math.round(Number(value));
+    return Number.isFinite(number) && number > 0 && number <= max ? number : null;
   };
 
   const photo = await prisma.eventPhoto.create({
     data: {
       eventId: guest.eventId,
       guestId: guest.id,
-      url: parsed.href,
-      pathname: path,
-      width: size(width),
-      height: size(height),
+      url: media.href,
+      pathname: media.path,
+      kind: media.kind,
+      posterUrl: posterHref,
+      duration: isVideo ? bounded(duration, 6 * 60 * 60) : null,
+      width: bounded(width, 20_000),
+      height: bounded(height, 20_000),
     },
     include: AUTHOR,
   });
-  return photoView(photo, guest.id);
+  return { photo: photoView(photo, guest.id) };
 }
 
 export async function deleteMyPhoto(token, photoId) {
   const guest = await requireGuest(token);
   const photo = await prisma.eventPhoto.findFirst({
     where: { id: String(photoId ?? ""), guestId: guest.id },
-    select: { id: true, url: true },
+    select: { id: true, url: true, posterUrl: true },
   });
   if (!photo) return { success: true };
 
   await prisma.eventPhoto.delete({ where: { id: photo.id } });
-  await removeBlob(photo.url);
+  await removeBlob(photo.url, photo.posterUrl);
   return { success: true };
 }
 
@@ -332,11 +387,11 @@ export async function setPhotoHidden(photoId, hidden) {
 export async function deletePhoto(photoId) {
   const photo = await prisma.eventPhoto.findUnique({
     where: { id: String(photoId ?? "") },
-    select: { id: true, eventId: true, url: true },
+    select: { id: true, eventId: true, url: true, posterUrl: true },
   });
   if (!photo) return { success: true };
   await assertManage(photo.eventId);
   await prisma.eventPhoto.delete({ where: { id: photo.id } });
-  await removeBlob(photo.url);
+  await removeBlob(photo.url, photo.posterUrl);
   return { success: true };
 }

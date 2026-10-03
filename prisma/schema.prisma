@@ -160,7 +160,11 @@ model Event {
   title         String
   description   String?
   eventDate     DateTime?
+  /// Résumé du lieu : la première étape de l'itinéraire, ou le texte saisi
+  /// avant l'itinéraire. Lu par les e-mails, les PDF et les modèles.
   location      String?
+  /// Étapes de l'événement, dans l'ordre (voir lib/itinerary.js).
+  itinerary     Json?
   time          String?
   dressCode     String?
   customMessage String?
@@ -286,6 +290,7 @@ model GuestbookMessage {
   @@map("guestbook_messages")
 }
 
+/// Photo ou vidéo partagée par un invité (voir lib/media/memories.js).
 model EventPhoto {
   id      String @id @default(cuid())
   eventId String
@@ -294,6 +299,12 @@ model EventPhoto {
   /// Fichier sur Vercel Blob, sous memories/<eventId>/.
   url      String
   pathname String
+  kind     String  @default("photo") // "photo" | "video"
+  /// Aperçu d'une vidéo, sous memories/<eventId>/posters/ ; absent si le
+  /// navigateur de l'invité n'a pas pu le produire.
+  posterUrl String?
+  /// Durée d'une vidéo, en secondes.
+  duration Int?
   width    Int?
   height   Int?
   hidden   Boolean @default(false)

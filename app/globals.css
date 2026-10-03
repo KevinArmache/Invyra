@@ -980,3 +980,99 @@
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
+
+/* ─── Carte d'itinéraire (Leaflet) ───────────────────────────────────────────
+   Hors @layer, comme leaflet.css : une règle en couche perdrait toujours
+   contre lui. Deux classes par sélecteur pour passer devant ses règles.
+   Voir components/itinerary/LeafletMap.jsx. */
+
+.itinerary-map.leaflet-container {
+  background: var(--ink-850);
+  color: var(--ink-100);
+  font-family: inherit;
+}
+.itinerary-map.leaflet-container:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+/* Tuiles OpenStreetMap assombries, dans la teinte chaude du thème. */
+.itinerary-map .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9)
+    saturate(0.35) sepia(0.12);
+}
+
+.itinerary-map .leaflet-bar {
+  border: 1px solid var(--ink-700);
+  box-shadow: var(--elevation-2);
+}
+.itinerary-map .leaflet-bar a {
+  border-bottom-color: var(--ink-700);
+  background: var(--ink-800);
+  color: var(--ink-100);
+}
+.itinerary-map .leaflet-bar a:hover,
+.itinerary-map .leaflet-bar a:focus-visible {
+  background: var(--ink-700);
+  color: var(--ink-50);
+}
+.itinerary-map .leaflet-bar a.leaflet-disabled {
+  background: var(--ink-850);
+  color: var(--ink-600);
+}
+
+/* Attribution OSM : obligatoire, discrète. */
+.itinerary-map .leaflet-control-attribution {
+  background: color-mix(in oklch, var(--ink-900) 80%, transparent);
+  color: var(--ink-400);
+  font-size: 10px;
+}
+.itinerary-map .leaflet-control-attribution a {
+  color: var(--ink-300);
+}
+
+/* Tracé entre les étapes. */
+.itinerary-map .itinerary-route {
+  stroke: var(--gold);
+  stroke-opacity: 0.85;
+}
+
+/* Repère numéroté. Leaflet place l'élément avec transform : l'effet de
+   l'étape active porte donc sur le disque intérieur. */
+.itinerary-map .itinerary-pin {
+  background: none;
+  border: 0;
+}
+.itinerary-map .itinerary-pin > span {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--ink-900);
+  border-radius: 9999px;
+  background: var(--gold);
+  color: var(--ink-900);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  box-shadow: 0 4px 12px oklch(0 0 0 / 0.45);
+  transition:
+    transform 250ms var(--ease-out-expo),
+    box-shadow 250ms ease;
+}
+.itinerary-map .itinerary-pin.is-active > span {
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 4px color-mix(in oklch, var(--gold) 35%, transparent),
+    0 4px 12px oklch(0 0 0 / 0.45);
+}
+.itinerary-map .itinerary-pin:focus-visible {
+  outline: none;
+}
+.itinerary-map .itinerary-pin:focus-visible > span {
+  box-shadow:
+    0 0 0 3px var(--ink-900),
+    0 0 0 5px var(--ring);
+}

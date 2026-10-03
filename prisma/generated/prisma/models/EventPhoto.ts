@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model EventPhoto
- * 
+ * Photo ou vidéo partagée par un invité (voir lib/media/memories.js).
  */
 export type EventPhotoModel = runtime.Types.Result.DefaultSelection<Prisma.$EventPhotoPayload>
 
@@ -27,11 +27,13 @@ export type AggregateEventPhoto = {
 }
 
 export type EventPhotoAvgAggregateOutputType = {
+  duration: number | null
   width: number | null
   height: number | null
 }
 
 export type EventPhotoSumAggregateOutputType = {
+  duration: number | null
   width: number | null
   height: number | null
 }
@@ -42,6 +44,9 @@ export type EventPhotoMinAggregateOutputType = {
   guestId: string | null
   url: string | null
   pathname: string | null
+  kind: string | null
+  posterUrl: string | null
+  duration: number | null
   width: number | null
   height: number | null
   hidden: boolean | null
@@ -54,6 +59,9 @@ export type EventPhotoMaxAggregateOutputType = {
   guestId: string | null
   url: string | null
   pathname: string | null
+  kind: string | null
+  posterUrl: string | null
+  duration: number | null
   width: number | null
   height: number | null
   hidden: boolean | null
@@ -66,6 +74,9 @@ export type EventPhotoCountAggregateOutputType = {
   guestId: number
   url: number
   pathname: number
+  kind: number
+  posterUrl: number
+  duration: number
   width: number
   height: number
   hidden: number
@@ -75,11 +86,13 @@ export type EventPhotoCountAggregateOutputType = {
 
 
 export type EventPhotoAvgAggregateInputType = {
+  duration?: true
   width?: true
   height?: true
 }
 
 export type EventPhotoSumAggregateInputType = {
+  duration?: true
   width?: true
   height?: true
 }
@@ -90,6 +103,9 @@ export type EventPhotoMinAggregateInputType = {
   guestId?: true
   url?: true
   pathname?: true
+  kind?: true
+  posterUrl?: true
+  duration?: true
   width?: true
   height?: true
   hidden?: true
@@ -102,6 +118,9 @@ export type EventPhotoMaxAggregateInputType = {
   guestId?: true
   url?: true
   pathname?: true
+  kind?: true
+  posterUrl?: true
+  duration?: true
   width?: true
   height?: true
   hidden?: true
@@ -114,6 +133,9 @@ export type EventPhotoCountAggregateInputType = {
   guestId?: true
   url?: true
   pathname?: true
+  kind?: true
+  posterUrl?: true
+  duration?: true
   width?: true
   height?: true
   hidden?: true
@@ -213,6 +235,9 @@ export type EventPhotoGroupByOutputType = {
   guestId: string
   url: string
   pathname: string
+  kind: string
+  posterUrl: string | null
+  duration: number | null
   width: number | null
   height: number | null
   hidden: boolean
@@ -248,6 +273,9 @@ export type EventPhotoWhereInput = {
   guestId?: Prisma.StringFilter<"EventPhoto"> | string
   url?: Prisma.StringFilter<"EventPhoto"> | string
   pathname?: Prisma.StringFilter<"EventPhoto"> | string
+  kind?: Prisma.StringFilter<"EventPhoto"> | string
+  posterUrl?: Prisma.StringNullableFilter<"EventPhoto"> | string | null
+  duration?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   width?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   height?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   hidden?: Prisma.BoolFilter<"EventPhoto"> | boolean
@@ -262,6 +290,9 @@ export type EventPhotoOrderByWithRelationInput = {
   guestId?: Prisma.SortOrder
   url?: Prisma.SortOrder
   pathname?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  posterUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  duration?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
   hidden?: Prisma.SortOrder
@@ -279,6 +310,9 @@ export type EventPhotoWhereUniqueInput = Prisma.AtLeast<{
   guestId?: Prisma.StringFilter<"EventPhoto"> | string
   url?: Prisma.StringFilter<"EventPhoto"> | string
   pathname?: Prisma.StringFilter<"EventPhoto"> | string
+  kind?: Prisma.StringFilter<"EventPhoto"> | string
+  posterUrl?: Prisma.StringNullableFilter<"EventPhoto"> | string | null
+  duration?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   width?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   height?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   hidden?: Prisma.BoolFilter<"EventPhoto"> | boolean
@@ -293,6 +327,9 @@ export type EventPhotoOrderByWithAggregationInput = {
   guestId?: Prisma.SortOrder
   url?: Prisma.SortOrder
   pathname?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  posterUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  duration?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
   hidden?: Prisma.SortOrder
@@ -313,6 +350,9 @@ export type EventPhotoScalarWhereWithAggregatesInput = {
   guestId?: Prisma.StringWithAggregatesFilter<"EventPhoto"> | string
   url?: Prisma.StringWithAggregatesFilter<"EventPhoto"> | string
   pathname?: Prisma.StringWithAggregatesFilter<"EventPhoto"> | string
+  kind?: Prisma.StringWithAggregatesFilter<"EventPhoto"> | string
+  posterUrl?: Prisma.StringNullableWithAggregatesFilter<"EventPhoto"> | string | null
+  duration?: Prisma.IntNullableWithAggregatesFilter<"EventPhoto"> | number | null
   width?: Prisma.IntNullableWithAggregatesFilter<"EventPhoto"> | number | null
   height?: Prisma.IntNullableWithAggregatesFilter<"EventPhoto"> | number | null
   hidden?: Prisma.BoolWithAggregatesFilter<"EventPhoto"> | boolean
@@ -323,6 +363,9 @@ export type EventPhotoCreateInput = {
   id?: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -337,6 +380,9 @@ export type EventPhotoUncheckedCreateInput = {
   guestId: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -347,6 +393,9 @@ export type EventPhotoUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -361,6 +410,9 @@ export type EventPhotoUncheckedUpdateInput = {
   guestId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -373,6 +425,9 @@ export type EventPhotoCreateManyInput = {
   guestId: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -383,6 +438,9 @@ export type EventPhotoUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -395,6 +453,9 @@ export type EventPhotoUncheckedUpdateManyInput = {
   guestId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -417,6 +478,9 @@ export type EventPhotoCountOrderByAggregateInput = {
   guestId?: Prisma.SortOrder
   url?: Prisma.SortOrder
   pathname?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  posterUrl?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
@@ -424,6 +488,7 @@ export type EventPhotoCountOrderByAggregateInput = {
 }
 
 export type EventPhotoAvgOrderByAggregateInput = {
+  duration?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
 }
@@ -434,6 +499,9 @@ export type EventPhotoMaxOrderByAggregateInput = {
   guestId?: Prisma.SortOrder
   url?: Prisma.SortOrder
   pathname?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  posterUrl?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
@@ -446,6 +514,9 @@ export type EventPhotoMinOrderByAggregateInput = {
   guestId?: Prisma.SortOrder
   url?: Prisma.SortOrder
   pathname?: Prisma.SortOrder
+  kind?: Prisma.SortOrder
+  posterUrl?: Prisma.SortOrder
+  duration?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   hidden?: Prisma.SortOrder
@@ -453,6 +524,7 @@ export type EventPhotoMinOrderByAggregateInput = {
 }
 
 export type EventPhotoSumOrderByAggregateInput = {
+  duration?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
 }
@@ -545,6 +617,9 @@ export type EventPhotoCreateWithoutEventInput = {
   id?: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -557,6 +632,9 @@ export type EventPhotoUncheckedCreateWithoutEventInput = {
   guestId: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -598,6 +676,9 @@ export type EventPhotoScalarWhereInput = {
   guestId?: Prisma.StringFilter<"EventPhoto"> | string
   url?: Prisma.StringFilter<"EventPhoto"> | string
   pathname?: Prisma.StringFilter<"EventPhoto"> | string
+  kind?: Prisma.StringFilter<"EventPhoto"> | string
+  posterUrl?: Prisma.StringNullableFilter<"EventPhoto"> | string | null
+  duration?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   width?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   height?: Prisma.IntNullableFilter<"EventPhoto"> | number | null
   hidden?: Prisma.BoolFilter<"EventPhoto"> | boolean
@@ -608,6 +689,9 @@ export type EventPhotoCreateWithoutGuestInput = {
   id?: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -620,6 +704,9 @@ export type EventPhotoUncheckedCreateWithoutGuestInput = {
   eventId: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -657,6 +744,9 @@ export type EventPhotoCreateManyEventInput = {
   guestId: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -667,6 +757,9 @@ export type EventPhotoUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -679,6 +772,9 @@ export type EventPhotoUncheckedUpdateWithoutEventInput = {
   guestId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -690,6 +786,9 @@ export type EventPhotoUncheckedUpdateManyWithoutEventInput = {
   guestId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -701,6 +800,9 @@ export type EventPhotoCreateManyGuestInput = {
   eventId: string
   url: string
   pathname: string
+  kind?: string
+  posterUrl?: string | null
+  duration?: number | null
   width?: number | null
   height?: number | null
   hidden?: boolean
@@ -711,6 +813,9 @@ export type EventPhotoUpdateWithoutGuestInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -723,6 +828,9 @@ export type EventPhotoUncheckedUpdateWithoutGuestInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -734,6 +842,9 @@ export type EventPhotoUncheckedUpdateManyWithoutGuestInput = {
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   pathname?: Prisma.StringFieldUpdateOperationsInput | string
+  kind?: Prisma.StringFieldUpdateOperationsInput | string
+  posterUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hidden?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -748,6 +859,9 @@ export type EventPhotoSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   guestId?: boolean
   url?: boolean
   pathname?: boolean
+  kind?: boolean
+  posterUrl?: boolean
+  duration?: boolean
   width?: boolean
   height?: boolean
   hidden?: boolean
@@ -762,6 +876,9 @@ export type EventPhotoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   guestId?: boolean
   url?: boolean
   pathname?: boolean
+  kind?: boolean
+  posterUrl?: boolean
+  duration?: boolean
   width?: boolean
   height?: boolean
   hidden?: boolean
@@ -776,6 +893,9 @@ export type EventPhotoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   guestId?: boolean
   url?: boolean
   pathname?: boolean
+  kind?: boolean
+  posterUrl?: boolean
+  duration?: boolean
   width?: boolean
   height?: boolean
   hidden?: boolean
@@ -790,13 +910,16 @@ export type EventPhotoSelectScalar = {
   guestId?: boolean
   url?: boolean
   pathname?: boolean
+  kind?: boolean
+  posterUrl?: boolean
+  duration?: boolean
   width?: boolean
   height?: boolean
   hidden?: boolean
   createdAt?: boolean
 }
 
-export type EventPhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "guestId" | "url" | "pathname" | "width" | "height" | "hidden" | "createdAt", ExtArgs["result"]["eventPhoto"]>
+export type EventPhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "guestId" | "url" | "pathname" | "kind" | "posterUrl" | "duration" | "width" | "height" | "hidden" | "createdAt", ExtArgs["result"]["eventPhoto"]>
 export type EventPhotoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   guest?: boolean | Prisma.GuestDefaultArgs<ExtArgs>
@@ -825,6 +948,16 @@ export type $EventPhotoPayload<ExtArgs extends runtime.Types.Extensions.Internal
      */
     url: string
     pathname: string
+    kind: string
+    /**
+     * Aperçu d'une vidéo, sous memories/<eventId>/posters/ ; absent si le
+     * navigateur de l'invité n'a pas pu le produire.
+     */
+    posterUrl: string | null
+    /**
+     * Durée d'une vidéo, en secondes.
+     */
+    duration: number | null
     width: number | null
     height: number | null
     hidden: boolean
@@ -1259,6 +1392,9 @@ export interface EventPhotoFieldRefs {
   readonly guestId: Prisma.FieldRef<"EventPhoto", 'String'>
   readonly url: Prisma.FieldRef<"EventPhoto", 'String'>
   readonly pathname: Prisma.FieldRef<"EventPhoto", 'String'>
+  readonly kind: Prisma.FieldRef<"EventPhoto", 'String'>
+  readonly posterUrl: Prisma.FieldRef<"EventPhoto", 'String'>
+  readonly duration: Prisma.FieldRef<"EventPhoto", 'Int'>
   readonly width: Prisma.FieldRef<"EventPhoto", 'Int'>
   readonly height: Prisma.FieldRef<"EventPhoto", 'Int'>
   readonly hidden: Prisma.FieldRef<"EventPhoto", 'Boolean'>

@@ -279,18 +279,17 @@
           "title": "Titre *",
           "date": "Date",
           "time": "Heure (affichée sur l'invitation)",
-          "location": "Lieu",
           "dress_code": "Dress code",
           "description": "Description",
           "name": "Nom complet *",
           "email": "Email *",
           "phone": "Téléphone (pour WhatsApp)",
-          "contact_phone": "Numéro de contact"
+          "contact_phone": "Numéro de contact",
+          "itinerary": "Lieu et itinéraire"
         },
         "placeholders": {
           "title": "Mariage de Marie & Jean",
           "time": "19:00",
-          "location": "Château de Versailles, France",
           "dress_code": "Tenue de gala",
           "desc": "Décrivez votre événement...",
           "contact_phone": "+243 81 234 5678"
@@ -311,7 +310,8 @@
         "guests_added": "invité(s) ajouté(s)",
         "no_guests_yet": "Aucun invité pour l'instant",
         "hints": {
-          "contact_phone": "Affiché sur chaque invitation, pour les invités qui ont une question."
+          "contact_phone": "Affiché sur chaque invitation, pour les invités qui ont une question.",
+          "itinerary": "Ajoutez chaque lieu dans l'ordre de la journée. Cherchez-le, touchez la carte ou saisissez l'adresse à la main."
         }
       },
       "edit": {
@@ -379,7 +379,8 @@
           "date": "Date",
           "time": "Heure",
           "location": "Lieu",
-          "contact_phone": "Numéro de contact"
+          "contact_phone": "Numéro de contact",
+          "stops": "{count} étapes"
         },
         "overview": {
           "stats_title": "Réponses des invités",
@@ -498,14 +499,14 @@
         },
         "memories": {
           "title": "Souvenirs",
-          "subtitle": "Messages du livre d'or et photos partagées par vos invités.",
+          "subtitle": "Messages du livre d'or, photos et vidéos partagées par vos invités.",
           "guestbook": "Livre d'or",
-          "photos": "Photos",
+          "photos": "Photos et vidéos",
           "guestbook_toggle": "Livre d'or ouvert aux invités",
-          "photos_toggle": "Partage de photos ouvert aux invités",
+          "photos_toggle": "Partage de photos et vidéos ouvert aux invités",
           "settings_saved": "Réglage enregistré",
           "messages_empty": "Aucun message pour l'instant.",
-          "photos_empty": "Aucune photo pour l'instant.",
+          "photos_empty": "Aucune photo ni vidéo pour l'instant.",
           "hide": "Masquer",
           "show": "Afficher",
           "hidden": "Masqué",
@@ -516,8 +517,39 @@
           "deleted": "Supprimé",
           "open_original": "Ouvrir l'original",
           "by": "par {name}",
-          "guest_access": "Vos invités y accèdent depuis leur invitation (bouton « Souvenirs ») et depuis leur billet."
+          "guest_access": "Vos invités y accèdent depuis leur invitation (bouton « Souvenirs ») et depuis leur billet.",
+          "delete_video_confirm": "Supprimer cette vidéo ?",
+          "video": "Vidéo"
         }
+      },
+      "itinerary": {
+        "search_label": "Rechercher un lieu",
+        "search_placeholder": "Salle, église, hôtel, adresse…",
+        "searching": "Recherche…",
+        "no_results": "Aucun lieu trouvé. Touchez la carte ou saisissez l'adresse à la main.",
+        "search_unavailable": "La recherche ne répond pas pour le moment. Touchez la carte ou saisissez l'adresse à la main.",
+        "use_location": "Ma position",
+        "location_denied": "Accès à votre position refusé. Autorisez-le dans votre navigateur, ou cherchez le lieu.",
+        "location_unavailable": "Position introuvable. Cherchez le lieu ou touchez la carte.",
+        "map_label": "Carte de l'itinéraire",
+        "map_hint": "Touchez la carte pour placer l'étape {n}. Faites glisser un repère pour l'ajuster.",
+        "stop_number": "Étape {n}",
+        "stop_title": "Intitulé",
+        "stop_title_placeholder": "Cérémonie, cocktail, réception…",
+        "stop_time": "Heure",
+        "stop_place": "Lieu",
+        "stop_place_placeholder": "Salle Les Jardins",
+        "stop_address": "Adresse",
+        "stop_address_placeholder": "12 avenue de la Paix, Kinshasa",
+        "pin_set": "Placée sur la carte.",
+        "clear_pin": "Retirer le repère",
+        "pin_missing": "Pas encore sur la carte.",
+        "pin_on_map": "Placer sur la carte",
+        "move_up": "Monter l'étape",
+        "move_down": "Descendre l'étape",
+        "remove_stop": "Supprimer l'étape",
+        "add_stop": "Ajouter une étape",
+        "max_stops": "{count} étapes au maximum."
       }
     },
     "templates": {
@@ -752,7 +784,8 @@
     "guest_bar": {
       "label": "Votre espace invité",
       "ticket": "Mon billet",
-      "memories": "Souvenirs"
+      "memories": "Souvenirs",
+      "directions": "Itinéraire"
     },
     "ticket": {
       "meta_title": "Billet",
@@ -770,19 +803,20 @@
       "directions": "Voir l'itinéraire",
       "download_pdf": "Télécharger en PDF",
       "back_to_invitation": "Revenir à l'invitation",
-      "memories": "Livre d'or et photos",
+      "memories": "Livre d'or, photos et vidéos",
       "checked_in": "Entrée enregistrée le {date}",
       "pending_title": "Votre billet vous attend",
       "pending_desc": "Il apparaîtra ici dès que vous aurez confirmé votre présence depuis votre invitation.",
       "open_invitation": "Ouvrir mon invitation",
       "pdf_title": "Billet d'entrée",
-      "pdf_filename": "billet"
+      "pdf_filename": "billet",
+      "program": "Programme"
     },
     "memories": {
-      "meta_title": "Livre d'or et photos",
-      "meta_description": "Messages et photos des invités de {title}.",
+      "meta_title": "Livre d'or, photos et vidéos",
+      "meta_description": "Messages, photos et vidéos des invités de {title}.",
       "eyebrow": "Souvenirs",
-      "subtitle": "Laissez un mot aux hôtes et partagez vos photos avec les autres invités.",
+      "subtitle": "Laissez un mot aux hôtes et partagez vos photos et vidéos avec les autres invités.",
       "back": "Revenir à l'invitation",
       "ticket": "Mon billet",
       "guestbook_title": "Livre d'or",
@@ -798,22 +832,57 @@
       "deleted": "Supprimé",
       "delete_message_confirm": "Supprimer votre message ?",
       "delete_photo_confirm": "Supprimer votre photo ?",
-      "photos_title": "Photos",
-      "photos_add": "Ajouter des photos",
-      "photos_uploading": "Envoi {done}/{total}…",
+      "photos_title": "Photos et vidéos",
+      "photos_add": "Ajouter des photos ou vidéos",
+      "photos_uploading": "Envoi {done}/{total}",
       "photos_added_one": "1 photo ajoutée",
       "photos_added_other": "{count} photos ajoutées",
-      "photos_empty": "Les premières photos apparaîtront ici.",
-      "photos_disabled": "Les hôtes ont fermé le partage de photos.",
-      "photos_limit": "Vous avez atteint la limite de {count} photos.",
-      "photos_error": "Certaines photos n'ont pas pu être envoyées.",
-      "photos_hint": "Jusqu'à {count} photos par invité.",
+      "photos_empty": "Les premières photos et vidéos apparaîtront ici.",
+      "photos_disabled": "Les hôtes ont fermé le partage de photos et vidéos.",
+      "photos_limit": "Vous avez atteint la limite de {count} photos et vidéos.",
+      "photos_hint": "Jusqu'à {count} photos ou vidéos par invité, dont {videos} vidéos de {size} Mo maximum.",
       "photo_by": "Photo de {name}",
       "viewer_close": "Fermer",
-      "viewer_prev": "Photo précédente",
-      "viewer_next": "Photo suivante",
+      "viewer_prev": "Précédent",
+      "viewer_next": "Suivant",
       "viewer_original": "Ouvrir l'original",
-      "error": "L'action n'a pas abouti. Réessayez."
+      "error": "L'action n'a pas abouti. Réessayez.",
+      "delete_video_confirm": "Supprimer votre vidéo ?",
+      "videos_added_one": "1 vidéo ajoutée",
+      "videos_added_other": "{count} vidéos ajoutées",
+      "media_added": "{count} photos et vidéos ajoutées",
+      "files_other": "{name} et {count} autres",
+      "error_type": "Format non pris en charge : {files}. Photos JPEG, PNG, WebP ou GIF, vidéos MP4, MOV ou WebM.",
+      "error_size": "Photo trop lourde : {files}.",
+      "error_video_size": "Vidéo trop lourde, {size} Mo maximum : {files}.",
+      "error_limit": "Limite de {count} photos et vidéos atteinte. Non envoyé : {files}.",
+      "error_video_limit": "Limite de {count} vidéos atteinte. Non envoyé : {files}.",
+      "error_closed": "Les hôtes ont fermé le partage de photos et vidéos.",
+      "error_refused": "Envoi refusé : {files}. Rechargez la page puis réessayez.",
+      "error_network": "La connexion a coupé pendant l'envoi : {files}. Réessayez.",
+      "error_server": "Envoi impossible pour le moment : {files}. Réessayez un peu plus tard.",
+      "video_by": "Vidéo de {name}",
+      "video_unplayable": "Cette vidéo ne peut pas être lue sur cet appareil.",
+      "video_open": "Ouvrir la vidéo",
+      "photos_percent": "{n} %"
+    },
+    "directions": {
+      "meta_title": "Itinéraire",
+      "meta_description": "Lieux, horaires et itinéraire de {title}.",
+      "eyebrow": "Itinéraire",
+      "subtitle": "Ouvrez chaque étape dans votre application de navigation.",
+      "back": "Revenir à l'invitation",
+      "step": "Étape {n}",
+      "google": "Google Maps",
+      "waze": "Waze",
+      "apple": "Plans",
+      "open_with": "Itinéraire vers {place} avec {app}",
+      "full_route": "Itinéraire complet",
+      "full_route_hint": "Depuis votre position, par toutes les étapes, dans Google Maps.",
+      "show_on_map": "Voir sur la carte",
+      "map_label": "Carte des lieux de l'événement",
+      "empty_title": "Itinéraire bientôt disponible",
+      "empty_desc": "Les hôtes n'ont pas encore indiqué le lieu de l'événement."
     }
   },
   "share": {

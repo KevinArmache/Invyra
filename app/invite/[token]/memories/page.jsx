@@ -11,13 +11,13 @@ import PhotoWall from "@/components/memories/PhotoWall";
 import { Button } from "@/components/ui/button";
 import { eventDayLabel } from "@/lib/invitation/dates";
 import { getTranslations } from "@/lib/i18n/server";
-import { MAX_PHOTOS_PER_GUEST } from "@/lib/site";
+import { MAX_PHOTOS_PER_GUEST, MAX_VIDEOS_PER_GUEST } from "@/lib/site";
 import { templateLook } from "@/lib/templates/look";
 import { toEditableConfig } from "@/lib/templates/validation";
 
 /**
  * Souvenirs d'un événement, vus par un invité : le livre d'or et le mur de
- * photos. Accessible avec le jeton de l'invitation (voir
+ * photos et vidéos. Accessible avec le jeton de l'invitation (voir
  * app/actions/memories.js) ; ne compte pas comme une ouverture.
  */
 
@@ -155,7 +155,9 @@ export default async function MemoriesPage({ params }) {
               eventId={event.id}
               initialPhotos={photos}
               initialCount={guest.photoCount}
+              initialVideoCount={guest.videoCount}
               max={MAX_PHOTOS_PER_GUEST}
+              maxVideos={MAX_VIDEOS_PER_GUEST}
               enabled={event.photosEnabled}
             />
           </section>

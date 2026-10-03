@@ -175,6 +175,7 @@ export default function InvitationExperience({
         <GuestBar
           token={token}
           showTicket={rsvp.rsvp_status === "confirmed"}
+          showDirections={Boolean(event.hasDirections)}
           showMemories={Boolean(event.guestbookEnabled || event.photosEnabled)}
         />
       )}

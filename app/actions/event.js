@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma/client";
 import {
   getSession,
   isEventOwnerOrAdmin,
@@ -8,6 +9,7 @@ import {
 } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { validateTemplateConfig } from "@/lib/templates/validation";
+import { deriveLocation, parseItineraryField } from "@/lib/itinerary";
 
 const PLAN_LIMITS = {
   free: 1,
@@ -54,6 +56,24 @@ function guestCounts(guests) {
  */
 function cleanContactPhone(value) {
   return String(value ?? "").trim().slice(0, 30) || null;
+}
+
+/**
+ * Itinéraire envoyé par le formulaire (voir lib/itinerary.js) et lieu qui
+ * le résume. `undefined` si le champ est absent ou illisible : rien n'est
+ * alors modifié.
+ */
+function itineraryData(raw) {
+  const stops = parseItineraryField(raw);
+  if (stops === undefined) {
+    if (raw !== undefined) console.warn("[event] Itinéraire illisible, ignoré.");
+    return undefined;
+  }
+  return {
+    // Une colonne JSON se vide avec DbNull : `null` y est refusé.
+    itinerary: stops.length > 0 ? stops : Prisma.DbNull,
+    location: deriveLocation(stops),
+  };
 }
 
 async function canCreateEvent() {
@@ -188,6 +208,7 @@ export async function createEvent(data) {
       custom_message,
     } = data;
     if (!title) throw new Error("Title is required");
+    const itinerary = itineraryData(data.itinerary);
 
     // `datetime-local` renvoie une heure locale ; `new Date()` la lit comme
     // telle et Prisma la stocke correctement. Le +1 h appliqué ici décalait
@@ -201,6 +222,7 @@ export async function createEvent(data) {
         description: description || null,
         eventDate,
         location: location || null,
+        ...itinerary,
         time: time || null,
         dressCode: dress_code || null,
         contactPhone: cleanContactPhone(contact_phone),
@@ -239,6 +261,7 @@ export async function updateEvent(id, data) {
 
     // Voir createEvent : aucun décalage ne doit être appliqué ici non plus.
     const eventDate = data.event_date ? new Date(data.event_date) : undefined;
+    const itinerary = itineraryData(data.itinerary);
 
     if (data.invitation_template !== undefined) {
       const config = validateTemplateConfig(data.invitation_template, {
@@ -269,6 +292,8 @@ export async function updateEvent(id, data) {
           data.description !== undefined ? data.description : undefined,
         eventDate,
         location: data.location !== undefined ? data.location : undefined,
+        // L'itinéraire, quand il est envoyé, fixe aussi le lieu.
+        ...itinerary,
         time: data.time !== undefined ? data.time : undefined,
         dressCode: data.dress_code !== undefined ? data.dress_code : undefined,
         contactPhone:

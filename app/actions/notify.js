@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { getSession, isEventOwnerOrAdmin } from '@/app/actions/auth'
 import { getMyCollaboratorRole } from '@/app/actions/collaborator'
 import { buildInvitationEmail } from '@/lib/email/invitation-email'
+import { directionsPath, stopsOf } from '@/lib/itinerary'
 import { sendMail } from '@/lib/email/transport'
 import { toEditableConfig } from '@/lib/templates/validation'
 import { templateLook } from '@/lib/templates/look'
@@ -38,12 +39,15 @@ function eventImage(event) {
 }
 
 function emailFor(guest, event, appUrl) {
+  const stops = stopsOf(event)
   return buildInvitationEmail({
     guestName: guest.name,
     eventTitle: event.title,
     eventDate: event.eventDate,
     eventTime: event.time,
     eventLocation: event.location,
+    stops,
+    directionsLink: stops.length ? `${appUrl}${directionsPath(guest.invitationToken)}` : '',
     dressCode: event.dressCode,
     customMessage: event.customMessage,
     contactPhone: event.contactPhone,

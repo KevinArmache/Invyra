@@ -20,6 +20,7 @@ import EventFields from "@/components/events/EventFields";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { updateEvent } from "@/app/actions/event";
 import { useTranslation } from "@/lib/i18n/Context";
+import { stopsOf } from "@/lib/itinerary";
 
 const STATUSES = [
   { value: "draft", labelKey: "portal.events.edit.status_draft" },
@@ -93,7 +94,7 @@ export default function EditEventForm({ event }) {
                   title: event.title,
                   description: event.description,
                   event_date: toLocalInputValue(event.eventDate),
-                  location: event.location,
+                  itinerary: stopsOf(event),
                   time: event.time,
                   dress_code: event.dressCode,
                   contact_phone: event.contactPhone,

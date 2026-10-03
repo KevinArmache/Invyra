@@ -6,6 +6,7 @@ import { prisma } from '@/lib/prisma'
 import { sendMail } from '@/lib/email/transport'
 import { buildTicketEmail, TICKET_QR_CID } from '@/lib/email/ticket-email'
 import { ticketQrPng, ticketQrSvg } from '@/lib/qr'
+import { directionsPath, stopsOf } from '@/lib/itinerary'
 import { SITE_URL } from '@/lib/site'
 import {
   clampSeats,
@@ -95,6 +96,7 @@ export async function getInvitationByToken(token, { markViewed = true } = {}) {
       customMessage: guest.event.customMessage,
       guestbookEnabled: guest.event.guestbookEnabled,
       photosEnabled: guest.event.photosEnabled,
+      hasDirections: stopsOf(guest.event).length > 0,
       invitationTemplate: guest.event.templateCopy?.config || guest.event.invitationTemplate
     }
   }
@@ -212,6 +214,7 @@ export async function getTicketByToken(token) {
           eventDate: true,
           time: true,
           location: true,
+          itinerary: true,
           contactPhone: true,
           guestbookEnabled: true,
           photosEnabled: true,
@@ -244,9 +247,49 @@ export async function getTicketByToken(token) {
       eventDate: event.eventDate,
       time: event.time,
       location: event.location,
+      stops: stopsOf(event),
       contactPhone: event.contactPhone,
       guestbookEnabled: event.guestbookEnabled,
       photosEnabled: event.photosEnabled,
+      invitationTemplate: event.templateCopy?.config || event.invitationTemplate,
+    },
+  }
+}
+
+/**
+ * Itinéraire de l'événement, pour la page d'itinéraire d'un invité. Ne
+ * compte pas comme une ouverture de l'invitation.
+ *
+ * @returns {Promise<null | { event: object }>}  null pour un jeton inconnu
+ */
+export async function getDirectionsByToken(token) {
+  if (typeof token !== 'string' || token.length > 64) return null
+
+  const guest = await prisma.guest.findUnique({
+    where: { invitationToken: token },
+    select: {
+      event: {
+        select: {
+          title: true,
+          eventDate: true,
+          time: true,
+          location: true,
+          itinerary: true,
+          invitationTemplate: true,
+          templateCopy: { select: { config: true } },
+        },
+      },
+    },
+  })
+  if (!guest) return null
+
+  const { event } = guest
+  return {
+    event: {
+      title: event.title,
+      eventDate: event.eventDate,
+      time: event.time,
+      stops: stopsOf(event),
       invitationTemplate: event.templateCopy?.config || event.invitationTemplate,
     },
   }
@@ -266,10 +309,14 @@ async function sendTicketEmail(guestId) {
         rsvpStatus: true,
         ticketCode: true,
         invitationToken: true,
-        event: { select: { title: true, eventDate: true, time: true, location: true } },
+        event: {
+          select: { title: true, eventDate: true, time: true, location: true, itinerary: true },
+        },
       },
     })
     if (!guest?.email || !guest.ticketCode || guest.rsvpStatus !== 'confirmed') return
+
+    const stops = stopsOf(guest.event)
 
     const { subject, text, html } = buildTicketEmail({
       guestName: guest.name,
@@ -277,6 +324,8 @@ async function sendTicketEmail(guestId) {
       eventDate: guest.event.eventDate,
       eventTime: guest.event.time,
       eventLocation: guest.event.location,
+      stops,
+      directionsLink: stops.length ? `${SITE_URL}${directionsPath(guest.invitationToken)}` : '',
       ticketCode: guest.ticketCode,
       ticketLink: `${SITE_URL}/invite/${guest.invitationToken}/ticket`,
       appUrl: SITE_URL,

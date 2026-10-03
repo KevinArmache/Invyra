@@ -2,6 +2,7 @@
 
 import { Calendar, Clock, MapPin, Phone, Shirt } from "lucide-react";
 
+import ItineraryField from "@/components/events/ItineraryField";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,7 +13,9 @@ import { useTranslation } from "@/lib/i18n/Context";
  *
  * Non contrôlés : les valeurs sont lues à la soumission via FormData. Les deux
  * écrans tenaient auparavant chacun leur propre objet d'état et leurs propres
- * gestionnaires de frappe, et avaient fini par diverger.
+ * gestionnaires de frappe, et avaient fini par diverger. L'itinéraire est
+ * l'exception : ItineraryField tient ses étapes et les place dans un champ
+ * caché. Le lieu (location) en est déduit côté serveur.
  */
 export default function EventFields({ defaults = {} }) {
   const { t } = useTranslation();
@@ -58,18 +61,45 @@ export default function EventFields({ defaults = {} }) {
         </div>
       </div>
 
-      <div className="grid items-end gap-5 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor="event-location" className="flex items-center gap-1.5">
+      <div role="group" aria-labelledby="event-itinerary-title" className="space-y-3">
+        <div className="space-y-1.5">
+          <p
+            id="event-itinerary-title"
+            className="flex items-center gap-1.5 text-sm leading-none font-medium"
+          >
             <MapPin className="h-3.5 w-3.5 text-ink-400" />
-            {t("portal.events.new.labels.location")}
+            {t("portal.events.new.labels.itinerary")}
+          </p>
+          <p className="text-xs leading-relaxed text-ink-400">
+            {t("portal.events.new.hints.itinerary")}
+          </p>
+        </div>
+        <ItineraryField defaultStops={defaults.itinerary} />
+      </div>
+
+      <div className="grid items-start gap-5 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="event-contact-phone" className="flex items-center gap-1.5">
+            <Phone className="h-3.5 w-3.5 text-ink-400" />
+            {t("portal.events.new.labels.contact_phone")}
           </Label>
           <Input
-            id="event-location"
-            name="location"
-            defaultValue={defaults.location ?? ""}
-            placeholder={t("portal.events.new.placeholders.location")}
+            id="event-contact-phone"
+            name="contact_phone"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            maxLength={30}
+            // Parenthèses, point et tiret échappés : les navigateurs récents
+            // compilent `pattern` avec le drapeau `v`, qui les exige.
+            pattern="[+0-9 \(\)\.\-]{6,30}"
+            defaultValue={defaults.contact_phone ?? ""}
+            placeholder={t("portal.events.new.placeholders.contact_phone")}
+            aria-describedby="event-contact-phone-hint"
           />
+          <p id="event-contact-phone-hint" className="text-xs text-ink-400">
+            {t("portal.events.new.hints.contact_phone")}
+          </p>
         </div>
 
         <div className="space-y-2">
@@ -84,31 +114,6 @@ export default function EventFields({ defaults = {} }) {
             placeholder={t("portal.events.new.placeholders.dress_code")}
           />
         </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="event-contact-phone" className="flex items-center gap-1.5">
-          <Phone className="h-3.5 w-3.5 text-ink-400" />
-          {t("portal.events.new.labels.contact_phone")}
-        </Label>
-        <Input
-          id="event-contact-phone"
-          name="contact_phone"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          maxLength={30}
-          // Parenthèses, point et tiret échappés : les navigateurs récents
-          // compilent `pattern` avec le drapeau `v`, qui les exige.
-          pattern="[+0-9 \(\)\.\-]{6,30}"
-          defaultValue={defaults.contact_phone ?? ""}
-          placeholder={t("portal.events.new.placeholders.contact_phone")}
-          aria-describedby="event-contact-phone-hint"
-          className="sm:max-w-sm"
-        />
-        <p id="event-contact-phone-hint" className="text-xs text-ink-400">
-          {t("portal.events.new.hints.contact_phone")}
-        </p>
       </div>
 
       <div className="space-y-2">

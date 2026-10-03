@@ -23,12 +23,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import MediaThumb from "@/components/memories/MediaThumb";
 import { EmptyState, Panel } from "@/components/shell/primitives";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**
- * Onglet « Souvenirs » d'un événement : livre d'or et photos partagés par
- * les invités (voir app/actions/memories.js).
+ * Onglet « Souvenirs » d'un événement : livre d'or, photos et vidéos
+ * partagés par les invités (voir app/actions/memories.js).
  *
  * Le propriétaire et les éditeurs ouvrent ou ferment chaque espace, masquent
  * (l'élément disparaît pour les invités, réversible) ou suppriment. Un
@@ -196,13 +197,10 @@ export default function TabMemories({ eventId, memories }) {
                   key={photo.id}
                   className="group relative aspect-square overflow-hidden rounded-xl bg-ink-800"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element -- photo d'invité sur Vercel Blob, l'optimiseur est désactivé */}
-                  <img
-                    src={photo.url}
-                    alt={k("by").replace("{name}", photo.name)}
-                    loading="lazy"
-                    decoding="async"
-                    className={`h-full w-full object-cover transition-opacity duration-300 ${
+                  <MediaThumb
+                    item={photo}
+                    alt={`${photo.kind === "video" ? `${k("video")} ` : ""}${k("by").replace("{name}", photo.name)}`}
+                    className={`transition-opacity duration-300 ${
                       photo.hidden ? "opacity-35" : ""
                     }`}
                   />
@@ -240,7 +238,11 @@ export default function TabMemories({ eventId, memories }) {
                             {photo.hidden ? <Eye /> : <EyeOff />}
                           </Button>
                           <ConfirmDelete
-                            title={k("delete_photo_confirm")}
+                            title={k(
+                              photo.kind === "video"
+                                ? "delete_video_confirm"
+                                : "delete_photo_confirm",
+                            )}
                             onConfirm={() => removePhoto(photo)}
                             className="text-white/80 hover:bg-white/10 hover:text-destructive"
                           />

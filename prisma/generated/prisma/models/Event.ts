@@ -73,6 +73,7 @@ export type EventCountAggregateOutputType = {
   description: number
   eventDate: number
   location: number
+  itinerary: number
   time: number
   dressCode: number
   customMessage: number
@@ -140,6 +141,7 @@ export type EventCountAggregateInputType = {
   description?: true
   eventDate?: true
   location?: true
+  itinerary?: true
   time?: true
   dressCode?: true
   customMessage?: true
@@ -236,6 +238,7 @@ export type EventGroupByOutputType = {
   description: string | null
   eventDate: Date | null
   location: string | null
+  itinerary: runtime.JsonValue | null
   time: string | null
   dressCode: string | null
   customMessage: string | null
@@ -280,6 +283,7 @@ export type EventWhereInput = {
   description?: Prisma.StringNullableFilter<"Event"> | string | null
   eventDate?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   location?: Prisma.StringNullableFilter<"Event"> | string | null
+  itinerary?: Prisma.JsonNullableFilter<"Event">
   time?: Prisma.StringNullableFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -309,6 +313,7 @@ export type EventOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   eventDate?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  itinerary?: Prisma.SortOrderInput | Prisma.SortOrder
   time?: Prisma.SortOrderInput | Prisma.SortOrder
   dressCode?: Prisma.SortOrderInput | Prisma.SortOrder
   customMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -342,6 +347,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"Event"> | string | null
   eventDate?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   location?: Prisma.StringNullableFilter<"Event"> | string | null
+  itinerary?: Prisma.JsonNullableFilter<"Event">
   time?: Prisma.StringNullableFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -370,6 +376,7 @@ export type EventOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   eventDate?: Prisma.SortOrderInput | Prisma.SortOrder
   location?: Prisma.SortOrderInput | Prisma.SortOrder
+  itinerary?: Prisma.SortOrderInput | Prisma.SortOrder
   time?: Prisma.SortOrderInput | Prisma.SortOrder
   dressCode?: Prisma.SortOrderInput | Prisma.SortOrder
   customMessage?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -399,6 +406,7 @@ export type EventScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   eventDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
   location?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  itinerary?: Prisma.JsonNullableWithAggregatesFilter<"Event">
   time?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
@@ -421,6 +429,7 @@ export type EventCreateInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -450,6 +459,7 @@ export type EventUncheckedCreateInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -477,6 +487,7 @@ export type EventUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -506,6 +517,7 @@ export type EventUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -534,6 +546,7 @@ export type EventCreateManyInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -556,6 +569,7 @@ export type EventUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -579,6 +593,7 @@ export type EventUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -617,6 +632,7 @@ export type EventCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   eventDate?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  itinerary?: Prisma.SortOrder
   time?: Prisma.SortOrder
   dressCode?: Prisma.SortOrder
   customMessage?: Prisma.SortOrder
@@ -800,6 +816,7 @@ export type EventCreateWithoutUserInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -827,6 +844,7 @@ export type EventUncheckedCreateWithoutUserInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -884,6 +902,7 @@ export type EventScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"Event"> | string | null
   eventDate?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   location?: Prisma.StringNullableFilter<"Event"> | string | null
+  itinerary?: Prisma.JsonNullableFilter<"Event">
   time?: Prisma.StringNullableFilter<"Event"> | string | null
   dressCode?: Prisma.StringNullableFilter<"Event"> | string | null
   customMessage?: Prisma.StringNullableFilter<"Event"> | string | null
@@ -906,6 +925,7 @@ export type EventCreateWithoutTemplateCopyInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -934,6 +954,7 @@ export type EventUncheckedCreateWithoutTemplateCopyInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -976,6 +997,7 @@ export type EventUpdateWithoutTemplateCopyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1004,6 +1026,7 @@ export type EventUncheckedUpdateWithoutTemplateCopyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1030,6 +1053,7 @@ export type EventCreateWithoutCollaboratorsInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1058,6 +1082,7 @@ export type EventUncheckedCreateWithoutCollaboratorsInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1100,6 +1125,7 @@ export type EventUpdateWithoutCollaboratorsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1128,6 +1154,7 @@ export type EventUncheckedUpdateWithoutCollaboratorsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1154,6 +1181,7 @@ export type EventCreateWithoutGuestsInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1182,6 +1210,7 @@ export type EventUncheckedCreateWithoutGuestsInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1224,6 +1253,7 @@ export type EventUpdateWithoutGuestsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1252,6 +1282,7 @@ export type EventUncheckedUpdateWithoutGuestsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1278,6 +1309,7 @@ export type EventCreateWithoutGuestbookMessagesInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1306,6 +1338,7 @@ export type EventUncheckedCreateWithoutGuestbookMessagesInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1348,6 +1381,7 @@ export type EventUpdateWithoutGuestbookMessagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1376,6 +1410,7 @@ export type EventUncheckedUpdateWithoutGuestbookMessagesInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1402,6 +1437,7 @@ export type EventCreateWithoutPhotosInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1430,6 +1466,7 @@ export type EventUncheckedCreateWithoutPhotosInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1472,6 +1509,7 @@ export type EventUpdateWithoutPhotosInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1500,6 +1538,7 @@ export type EventUncheckedUpdateWithoutPhotosInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1526,6 +1565,7 @@ export type EventCreateManyUserInput = {
   description?: string | null
   eventDate?: Date | string | null
   location?: string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: string | null
   dressCode?: string | null
   customMessage?: string | null
@@ -1548,6 +1588,7 @@ export type EventUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1575,6 +1616,7 @@ export type EventUncheckedUpdateWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1602,6 +1644,7 @@ export type EventUncheckedUpdateManyWithoutUserInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eventDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itinerary?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   time?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dressCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1683,6 +1726,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   description?: boolean
   eventDate?: boolean
   location?: boolean
+  itinerary?: boolean
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
@@ -1713,6 +1757,7 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   eventDate?: boolean
   location?: boolean
+  itinerary?: boolean
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
@@ -1737,6 +1782,7 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   description?: boolean
   eventDate?: boolean
   location?: boolean
+  itinerary?: boolean
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
@@ -1761,6 +1807,7 @@ export type EventSelectScalar = {
   description?: boolean
   eventDate?: boolean
   location?: boolean
+  itinerary?: boolean
   time?: boolean
   dressCode?: boolean
   customMessage?: boolean
@@ -1777,7 +1824,7 @@ export type EventSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "time" | "dressCode" | "customMessage" | "contactPhone" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "checkInToken" | "guestbookEnabled" | "photosEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "itinerary" | "time" | "dressCode" | "customMessage" | "contactPhone" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "checkInToken" | "guestbookEnabled" | "photosEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   guests?: boolean | Prisma.Event$guestsArgs<ExtArgs>
@@ -1810,7 +1857,15 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     title: string
     description: string | null
     eventDate: Date | null
+    /**
+     * Résumé du lieu : la première étape de l'itinéraire, ou le texte saisi
+     * avant l'itinéraire. Lu par les e-mails, les PDF et les modèles.
+     */
     location: string | null
+    /**
+     * Étapes de l'événement, dans l'ordre (voir lib/itinerary.js).
+     */
+    itinerary: runtime.JsonValue | null
     time: string | null
     dressCode: string | null
     customMessage: string | null
@@ -2275,6 +2330,7 @@ export interface EventFieldRefs {
   readonly description: Prisma.FieldRef<"Event", 'String'>
   readonly eventDate: Prisma.FieldRef<"Event", 'DateTime'>
   readonly location: Prisma.FieldRef<"Event", 'String'>
+  readonly itinerary: Prisma.FieldRef<"Event", 'Json'>
   readonly time: Prisma.FieldRef<"Event", 'String'>
   readonly dressCode: Prisma.FieldRef<"Event", 'String'>
   readonly customMessage: Prisma.FieldRef<"Event", 'String'>

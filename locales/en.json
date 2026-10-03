@@ -279,18 +279,17 @@
           "title": "Title *",
           "date": "Date",
           "time": "Time (shown on the invitation)",
-          "location": "Location",
           "dress_code": "Dress code",
           "description": "Description",
           "name": "Full name *",
           "email": "Email *",
           "phone": "Phone (for WhatsApp)",
-          "contact_phone": "Contact number"
+          "contact_phone": "Contact number",
+          "itinerary": "Venue and itinerary"
         },
         "placeholders": {
           "title": "Sarah & Mark's Wedding",
           "time": "19:00",
-          "location": "Versailles Castle, France",
           "dress_code": "Black Tie",
           "desc": "Describe your event...",
           "contact_phone": "+1 234 567 8900"
@@ -311,7 +310,8 @@
         "guests_added": "guest(s) added",
         "no_guests_yet": "No guests yet",
         "hints": {
-          "contact_phone": "Shown on every invitation for guests who have a question."
+          "contact_phone": "Shown on every invitation for guests who have a question.",
+          "itinerary": "Add each place in the order of the day. Search for it, tap the map or type the address yourself."
         }
       },
       "edit": {
@@ -379,7 +379,8 @@
           "date": "Date",
           "time": "Time",
           "location": "Location",
-          "contact_phone": "Contact number"
+          "contact_phone": "Contact number",
+          "stops": "{count} stops"
         },
         "overview": {
           "stats_title": "Guest replies",
@@ -498,14 +499,14 @@
         },
         "memories": {
           "title": "Memories",
-          "subtitle": "Guestbook messages and photos shared by your guests.",
+          "subtitle": "Guestbook messages, photos and videos shared by your guests.",
           "guestbook": "Guestbook",
-          "photos": "Photos",
+          "photos": "Photos and videos",
           "guestbook_toggle": "Guestbook open to guests",
-          "photos_toggle": "Photo sharing open to guests",
+          "photos_toggle": "Photo and video sharing open to guests",
           "settings_saved": "Setting saved",
           "messages_empty": "No messages yet.",
-          "photos_empty": "No photos yet.",
+          "photos_empty": "No photos or videos yet.",
           "hide": "Hide",
           "show": "Show",
           "hidden": "Hidden",
@@ -516,8 +517,39 @@
           "deleted": "Deleted",
           "open_original": "Open original",
           "by": "by {name}",
-          "guest_access": "Your guests reach it from their invitation (\"Memories\" button) and from their ticket."
+          "guest_access": "Your guests reach it from their invitation (\"Memories\" button) and from their ticket.",
+          "delete_video_confirm": "Delete this video?",
+          "video": "Video"
         }
+      },
+      "itinerary": {
+        "search_label": "Search for a place",
+        "search_placeholder": "Venue, church, hotel, address…",
+        "searching": "Searching…",
+        "no_results": "No place found. Tap the map or type the address yourself.",
+        "search_unavailable": "Search is not responding right now. Tap the map or type the address yourself.",
+        "use_location": "My location",
+        "location_denied": "Location access denied. Allow it in your browser, or search for the place.",
+        "location_unavailable": "Could not find your location. Search for the place or tap the map.",
+        "map_label": "Itinerary map",
+        "map_hint": "Tap the map to place stop {n}. Drag a pin to adjust it.",
+        "stop_number": "Stop {n}",
+        "stop_title": "Title",
+        "stop_title_placeholder": "Ceremony, cocktails, reception…",
+        "stop_time": "Time",
+        "stop_place": "Place",
+        "stop_place_placeholder": "The Garden Hall",
+        "stop_address": "Address",
+        "stop_address_placeholder": "12 Peace Avenue, Kinshasa",
+        "pin_set": "Placed on the map.",
+        "clear_pin": "Remove the pin",
+        "pin_missing": "Not on the map yet.",
+        "pin_on_map": "Place on the map",
+        "move_up": "Move stop up",
+        "move_down": "Move stop down",
+        "remove_stop": "Remove stop",
+        "add_stop": "Add a stop",
+        "max_stops": "{count} stops maximum."
       }
     },
     "templates": {
@@ -752,7 +784,8 @@
     "guest_bar": {
       "label": "Your guest area",
       "ticket": "My ticket",
-      "memories": "Memories"
+      "memories": "Memories",
+      "directions": "Directions"
     },
     "ticket": {
       "meta_title": "Ticket",
@@ -770,19 +803,20 @@
       "directions": "Get directions",
       "download_pdf": "Download as PDF",
       "back_to_invitation": "Back to the invitation",
-      "memories": "Guestbook and photos",
+      "memories": "Guestbook, photos and videos",
       "checked_in": "Checked in on {date}",
       "pending_title": "Your ticket is waiting",
       "pending_desc": "It will appear here as soon as you confirm your attendance from your invitation.",
       "open_invitation": "Open my invitation",
       "pdf_title": "Entry ticket",
-      "pdf_filename": "ticket"
+      "pdf_filename": "ticket",
+      "program": "Schedule"
     },
     "memories": {
-      "meta_title": "Guestbook and photos",
-      "meta_description": "Messages and photos from the guests of {title}.",
+      "meta_title": "Guestbook, photos and videos",
+      "meta_description": "Messages, photos and videos from the guests of {title}.",
       "eyebrow": "Memories",
-      "subtitle": "Leave a note for the hosts and share your photos with the other guests.",
+      "subtitle": "Leave a note for the hosts and share your photos and videos with the other guests.",
       "back": "Back to the invitation",
       "ticket": "My ticket",
       "guestbook_title": "Guestbook",
@@ -798,22 +832,57 @@
       "deleted": "Deleted",
       "delete_message_confirm": "Delete your message?",
       "delete_photo_confirm": "Delete your photo?",
-      "photos_title": "Photos",
-      "photos_add": "Add photos",
-      "photos_uploading": "Uploading {done}/{total}…",
+      "photos_title": "Photos and videos",
+      "photos_add": "Add photos or videos",
+      "photos_uploading": "Uploading {done}/{total}",
       "photos_added_one": "1 photo added",
       "photos_added_other": "{count} photos added",
-      "photos_empty": "The first photos will appear here.",
-      "photos_disabled": "The hosts have closed photo sharing.",
-      "photos_limit": "You have reached the limit of {count} photos.",
-      "photos_error": "Some photos could not be uploaded.",
-      "photos_hint": "Up to {count} photos per guest.",
+      "photos_empty": "The first photos and videos will appear here.",
+      "photos_disabled": "The hosts have closed photo and video sharing.",
+      "photos_limit": "You have reached the limit of {count} photos and videos.",
+      "photos_hint": "Up to {count} photos or videos per guest, including {videos} videos of up to {size} MB.",
       "photo_by": "Photo by {name}",
       "viewer_close": "Close",
-      "viewer_prev": "Previous photo",
-      "viewer_next": "Next photo",
+      "viewer_prev": "Previous",
+      "viewer_next": "Next",
       "viewer_original": "Open original",
-      "error": "That did not work. Please try again."
+      "error": "That did not work. Please try again.",
+      "delete_video_confirm": "Delete your video?",
+      "videos_added_one": "1 video added",
+      "videos_added_other": "{count} videos added",
+      "media_added": "{count} photos and videos added",
+      "files_other": "{name} and {count} more",
+      "error_type": "Unsupported format: {files}. Photos in JPEG, PNG, WebP or GIF, videos in MP4, MOV or WebM.",
+      "error_size": "Photo too large: {files}.",
+      "error_video_size": "Video too large, {size} MB maximum: {files}.",
+      "error_limit": "Limit of {count} photos and videos reached. Not sent: {files}.",
+      "error_video_limit": "Limit of {count} videos reached. Not sent: {files}.",
+      "error_closed": "The hosts have closed photo and video sharing.",
+      "error_refused": "Upload refused: {files}. Reload the page and try again.",
+      "error_network": "The connection dropped during the upload: {files}. Please try again.",
+      "error_server": "Upload unavailable right now: {files}. Please try again a bit later.",
+      "video_by": "Video by {name}",
+      "video_unplayable": "This video cannot be played on this device.",
+      "video_open": "Open the video",
+      "photos_percent": "{n}%"
+    },
+    "directions": {
+      "meta_title": "Directions",
+      "meta_description": "Places, times and directions for {title}.",
+      "eyebrow": "Directions",
+      "subtitle": "Open each stop in your navigation app.",
+      "back": "Back to the invitation",
+      "step": "Stop {n}",
+      "google": "Google Maps",
+      "waze": "Waze",
+      "apple": "Apple Maps",
+      "open_with": "Directions to {place} with {app}",
+      "full_route": "Full route",
+      "full_route_hint": "From where you are, through every stop, in Google Maps.",
+      "show_on_map": "Show on the map",
+      "map_label": "Map of the event venues",
+      "empty_title": "Directions coming soon",
+      "empty_desc": "The hosts have not shared the venue yet."
     }
   },
   "share": {

@@ -30,6 +30,7 @@ import TabGuests from "@/components/events/detail/TabGuests";
 import TabCheckIn from "@/components/events/detail/TabCheckIn";
 import TabMemories from "@/components/events/detail/TabMemories";
 import { useTranslation } from "@/lib/i18n/Context";
+import { cleanItinerary } from "@/lib/itinerary";
 
 /**
  * Fiche d'un événement.
@@ -67,6 +68,8 @@ export default function EventDetailView({
         },
       )
     : null;
+
+  const stopCount = cleanItinerary(event.itinerary).length;
 
   const sampleEvent = {
     title: event.title,
@@ -165,7 +168,15 @@ export default function EventDetailView({
               <div className="flex items-center gap-1.5">
                 <dt className="sr-only">{t("portal.events.details.meta.location")}</dt>
                 <MapPin className="h-4 w-4 shrink-0 text-ink-400" />
-                <dd>{event.location}</dd>
+                <dd>
+                  {event.location}
+                  {stopCount > 1 && (
+                    <span className="text-ink-400">
+                      {" · "}
+                      {t("portal.events.details.meta.stops").replace("{count}", String(stopCount))}
+                    </span>
+                  )}
+                </dd>
               </div>
             )}
             {event.contactPhone && (
