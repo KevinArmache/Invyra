@@ -9,6 +9,7 @@ import {
   getCollectionTemplates,
 } from "@/lib/landing/data";
 import { sampleEvent } from "@/lib/landing/sample-event";
+import { withVoteCounts } from "@/lib/templates/feedback";
 import { getTranslations } from "@/lib/i18n/server";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { Button } from "@/components/ui/button";
@@ -159,6 +160,12 @@ export default async function TemplatesCollectionPage({ searchParams }) {
   ]);
 
   const isAuthenticated = Boolean(session?.user);
+  // Un compte suspendu garde un cookie valide : il ne vote pas.
+  const viewer =
+    session?.user && !session.user.suspended
+      ? { userId: session.user.id, role: session.user.role ?? "user" }
+      : null;
+  const templates = await withVoteCounts(collection.templates, viewer);
   const hasCollection = collection.totalAll > 0;
   const countLabel = t(
     collection.total === 1
@@ -262,12 +269,13 @@ export default async function TemplatesCollectionPage({ searchParams }) {
             <div className="mt-14">
               {hasCollection ? (
                 <TemplatesCollection
-                  templates={collection.templates}
+                  templates={templates}
                   page={collection.page}
                   pageCount={collection.pageCount}
                   category={collection.category ?? ""}
                   categories={collection.categories}
                   sample={sampleEvent()}
+                  isAuthenticated={Boolean(viewer)}
                 />
               ) : (
                 <div className="surface mx-auto max-w-lg rounded-xl px-6 py-14 text-center">

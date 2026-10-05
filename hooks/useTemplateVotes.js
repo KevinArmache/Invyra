@@ -10,7 +10,8 @@ import { useTranslation } from "@/lib/i18n/Context";
 /**
  * Votes après le passage de `current.myVote` à `next`, affichés avant la
  * réponse du serveur : compteurs, et la personne connectée ajoutée en tête
- * des « j'aime » ou retirée.
+ * des « j'aime » ou retirée. Les cartes de la collection n'ont pas de liste
+ * de votants : elle part vide.
  */
 function applyVote(current, next, viewerName) {
   const counts = { likes: current.likes, dislikes: current.dislikes };
@@ -19,7 +20,7 @@ function applyVote(current, next, viewerName) {
   if (next === "like") counts.likes += 1;
   if (next === "dislike") counts.dislikes += 1;
 
-  const others = current.likers.filter((liker) => !liker.mine);
+  const others = (current.likers ?? []).filter((liker) => !liker.mine);
   const me = { id: "me", name: viewerName, mine: true, votedAt: new Date() };
   return {
     ...current,
@@ -30,12 +31,13 @@ function applyVote(current, next, viewerName) {
 }
 
 /**
- * État des votes d'un modèle sur sa page publique. Le vote s'affiche tout
- * de suite, puis prend les votes renvoyés par le serveur ; s'il échoue,
- * l'affichage revient à l'état précédent.
+ * État des votes d'un modèle, sur sa page publique ou sur sa carte dans la
+ * collection. Le vote s'affiche tout de suite, puis prend les votes renvoyés
+ * par le serveur ; s'il échoue, l'affichage revient à l'état précédent.
  *
- * @param {object}  options.initial  voir getTemplateVotes (lib/templates/feedback.js)
- * @param {string|null} options.viewerName  nom public de la personne connectée
+ * @param {object}  options.initial  voir getTemplateVotes ou withVoteCounts
+ *   (lib/templates/feedback.js)
+ * @param {string|null} [options.viewerName]  nom public de la personne connectée
  */
 export function useTemplateVotes({ templateId, initial, isAuthenticated, viewerName }) {
   const { t } = useTranslation();
@@ -44,8 +46,11 @@ export function useTemplateVotes({ templateId, initial, isAuthenticated, viewerN
   // Un vote à la fois : un double clic ne doit pas croiser deux requêtes.
   const voting = useRef(false);
 
+  // Après la connexion, retour à la page où l'on votait (modèle ou
+  // collection, avec son filtre et sa page).
   function promptLogin() {
-    const loginHref = `/login?redirect=${encodeURIComponent(`/templates/${templateId}`)}`;
+    const here = `${window.location.pathname}${window.location.search}`;
+    const loginHref = `/login?redirect=${encodeURIComponent(here)}`;
     toast(t("template_feedback.login_required"), {
       action: {
         label: t("template_feedback.login"),

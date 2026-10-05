@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import PreviewDialog from "@/components/invitation/PreviewDialog";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
+import CardVotes from "@/components/templates/CardVotes";
 import ShareTemplateButton from "@/components/templates/ShareTemplateButton";
 import { sampleEvent } from "@/lib/landing/sample-event";
 import { useTranslation } from "@/lib/i18n/Context";
@@ -16,8 +17,11 @@ import { useTranslation } from "@/lib/i18n/Context";
  * Grille publique des modèles, partagée par la vitrine de l'accueil et la
  * collection (/templates). Les vignettes sont statiques ; un clic ouvre
  * l'aperçu vivant, avec ses animations et la réponse RSVP simulée. Chaque
- * modèle se partage par un lien vers sa page publique (/templates/[id]),
- * où l'on vote ; la carte n'en montre que le nombre de « j'aime ».
+ * modèle se partage par un lien vers sa page publique (/templates/[id]).
+ *
+ * Votes : un modèle qui arrive avec ses `votes` (la collection, voir
+ * withVoteCounts) porte les boutons « j'aime » / « je n'aime pas » sur sa
+ * carte ; sinon (l'accueil), la carte ne montre que le nombre de « j'aime ».
  *
  * L'événement fictif est daté dans le futur (voir sampleEvent) : celui des
  * vignettes vient du serveur, pour que le rendu serveur et l'hydratation
@@ -25,6 +29,7 @@ import { useTranslation } from "@/lib/i18n/Context";
  *
  * @param {object} props.sample     événement fictif des vignettes
  * @param {string} [props.titleTag] balise du nom de chaque modèle
+ * @param {boolean} [props.isAuthenticated] pour voter depuis les cartes
  */
 /**
  * Nombre de « j'aime » d'une carte, seulement s'il y en a. Rien n'est
@@ -45,7 +50,12 @@ function LikeCount({ count = 0 }) {
   );
 }
 
-export default function ShowcaseGrid({ templates, sample, titleTag = "h3" }) {
+export default function ShowcaseGrid({
+  templates,
+  sample,
+  titleTag = "h3",
+  isAuthenticated = false,
+}) {
   const { t } = useTranslation();
   const guestName = t("landing.hero.scene.guest");
   // { template, event } du modèle ouvert.
@@ -64,8 +74,8 @@ export default function ShowcaseGrid({ templates, sample, titleTag = "h3" }) {
             style={{ "--i": index % 3 }}
           >
             {/* La carte entière ouvre l'aperçu (bouton étendu en dessous) ;
-                le partage est un bouton à part, posé au-dessus : jamais un
-                bouton dans un bouton. */}
+                le partage et les votes sont des boutons à part, posés
+                au-dessus : jamais un bouton dans un bouton. */}
             <article className="group tilt spotlight surface-interactive relative overflow-hidden rounded-xl">
               <div className="relative aspect-3/4 overflow-hidden border-b border-border/60 bg-ink-900">
                 <div className="absolute inset-0 origin-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]">
@@ -83,24 +93,39 @@ export default function ShowcaseGrid({ templates, sample, titleTag = "h3" }) {
                   </span>
                 </span>
               </div>
-              <div className="flex items-center justify-between gap-3 p-5">
-                <div className="min-w-0">
-                  <Title className="truncate text-lg text-ink-50">
-                    {template.name}
-                  </Title>
-                  {template.category && (
-                    <p className="mt-0.5 truncate text-xs text-ink-400">
-                      {t(`portal.templates.categories.${template.category}`)}
+              <div className="p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <Title className="truncate text-lg text-ink-50">
+                      {template.name}
+                    </Title>
+                    {template.category && (
+                      <p className="mt-0.5 truncate text-xs text-ink-400">
+                        {t(`portal.templates.categories.${template.category}`)}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex shrink-0 items-center gap-2">
+                    {!template.votes && <LikeCount count={template.likeCount} />}
+                    <ShareTemplateButton
+                      template={{ id: template.id, name: template.name }}
+                      className="relative z-10 shrink-0"
+                    />
+                  </div>
+                </div>
+                {template.votes && (
+                  <div className="mt-4 flex items-center justify-between gap-3 border-t border-border/60 pt-4">
+                    <p className="truncate text-xs text-ink-400">
+                      {t("template_feedback.vote_question")}
                     </p>
-                  )}
-                </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  <LikeCount count={template.likeCount} />
-                  <ShareTemplateButton
-                    template={{ id: template.id, name: template.name }}
-                    className="relative z-10 shrink-0"
-                  />
-                </div>
+                    <CardVotes
+                      templateId={template.id}
+                      initial={template.votes}
+                      isAuthenticated={isAuthenticated}
+                      className="relative z-10 shrink-0"
+                    />
+                  </div>
+                )}
               </div>
               <button
                 type="button"

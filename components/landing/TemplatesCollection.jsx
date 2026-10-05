@@ -26,6 +26,7 @@ function collectionHref({ category, page = 1 }) {
  * @param {string}   props.category    catégorie active ("" = toutes)
  * @param {string[]} props.categories  catégories qui ont des modèles
  * @param {object}   props.sample      événement fictif des vignettes
+ * @param {boolean}  props.isAuthenticated  pour voter depuis les cartes
  */
 export default function TemplatesCollection({
   templates,
@@ -34,6 +35,7 @@ export default function TemplatesCollection({
   category,
   categories,
   sample,
+  isAuthenticated,
 }) {
   const { t } = useTranslation();
 
@@ -50,7 +52,12 @@ export default function TemplatesCollection({
       )}
 
       {templates.length > 0 ? (
-        <ShowcaseGrid templates={templates} sample={sample} titleTag="h2" />
+        <ShowcaseGrid
+          templates={templates}
+          sample={sample}
+          titleTag="h2"
+          isAuthenticated={isAuthenticated}
+        />
       ) : (
         <div className="surface mx-auto max-w-md rounded-xl px-6 py-12 text-center">
           <p className="text-ink-300">{t("templates_page.no_results")}</p>
