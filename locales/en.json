@@ -713,7 +713,7 @@
     },
     "campaigns": {
       "title": "Emails to users",
-      "subtitle": "Announce a new template or a new feature to every Invyra account.",
+      "subtitle": "Announce a new template or a new feature to every Invyra account, or write to a single person.",
       "new": "New email",
       "history": "Previous emails",
       "history_desc": "The last 100, newest first",
@@ -792,7 +792,18 @@
       "failures_desc": "The last 50. An invalid address will fail again.",
       "content_recap": "Email content",
       "template_linked": "Announced template",
-      "button_recap": "Button"
+      "button_recap": "Button",
+      "audience_user": "One person",
+      "person_search_label": "Pick the recipient",
+      "person_search_placeholder": "Name or email address…",
+      "person_none": "No account found",
+      "person_opted_out": "Opted out",
+      "person_suspended": "Suspended",
+      "person_remove": "Remove {name}",
+      "person_required": "Pick the person to write to.",
+      "send_to_person": "Send to {name}",
+      "confirm_title_person": "Send this email to {name}?",
+      "confirm_body_person": "The email goes out as soon as you confirm. You can follow it on the next page."
     }
   },
   "common": {

@@ -104,6 +104,13 @@ export default async function CampaignPage({ params, searchParams }) {
           <dl className="space-y-4 p-5 text-sm">
             <Detail label={t("portal.campaigns.audience")}>
               {t(`portal.campaigns.audience_${campaign.audience}`)}
+              {campaign.audience === "user" && campaign.recipients[0] && (
+                <span className="mt-0.5 block truncate text-xs text-ink-400">
+                  {campaign.recipients[0].name
+                    ? `${campaign.recipients[0].name} · ${campaign.recipients[0].email}`
+                    : campaign.recipients[0].email}
+                </span>
+              )}
             </Detail>
 
             {campaign.template && (

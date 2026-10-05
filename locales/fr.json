@@ -713,7 +713,7 @@
     },
     "campaigns": {
       "title": "E-mails aux utilisateurs",
-      "subtitle": "Annoncez un nouveau modèle ou une nouveauté à tous les comptes Invyra.",
+      "subtitle": "Annoncez un nouveau modèle ou une nouveauté à tous les comptes Invyra, ou écrivez à une seule personne.",
       "new": "Nouvel envoi",
       "history": "Envois précédents",
       "history_desc": "Les 100 derniers, du plus récent au plus ancien",
@@ -792,7 +792,18 @@
       "failures_desc": "Les 50 derniers. Une adresse invalide échouera de nouveau.",
       "content_recap": "Contenu de l'e-mail",
       "template_linked": "Modèle annoncé",
-      "button_recap": "Bouton"
+      "button_recap": "Bouton",
+      "audience_user": "Une personne",
+      "person_search_label": "Choisir le destinataire",
+      "person_search_placeholder": "Nom ou adresse e-mail…",
+      "person_none": "Aucun compte trouvé",
+      "person_opted_out": "Nouveautés refusées",
+      "person_suspended": "Compte suspendu",
+      "person_remove": "Retirer {name}",
+      "person_required": "Choisissez la personne à qui écrire.",
+      "send_to_person": "Envoyer à {name}",
+      "confirm_title_person": "Envoyer cet e-mail à {name} ?",
+      "confirm_body_person": "L'e-mail part dès votre confirmation. Vous suivrez son envoi sur la page suivante."
     }
   },
   "common": {

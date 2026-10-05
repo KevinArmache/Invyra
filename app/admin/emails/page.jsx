@@ -49,6 +49,13 @@ export default async function AdminEmailsPage() {
     t("portal.campaigns.progress_label")
       .replace("{done}", String(campaign.sentCount))
       .replace("{total}", String(campaign.total));
+  // Envoi à une personne : son nom (ou son adresse) plutôt que « Une personne ».
+  const person = (campaign) =>
+    campaign.audience === "user"
+      ? campaign.recipients[0]?.name || campaign.recipients[0]?.email || null
+      : null;
+  const audienceLabel = (campaign) =>
+    person(campaign) ?? t(`portal.campaigns.audience_${campaign.audience}`);
 
   return (
     <>
@@ -91,8 +98,9 @@ export default async function AdminEmailsPage() {
                     <CampaignStatusBadge status={campaign.status} t={t} />
                   </div>
 
-                  <p className="mt-3 text-xs text-ink-400">
-                    {t(`portal.campaigns.audience_${campaign.audience}`)}
+                  <p className="mt-3 truncate text-xs text-ink-400">
+                    {person(campaign) && `${t("portal.campaigns.audience_user")} : `}
+                    {audienceLabel(campaign)}
                     {campaign.template && (
                       <>
                         {" · "}
@@ -172,8 +180,13 @@ export default async function AdminEmailsPage() {
                         )}
                       </th>
 
-                      <td className="px-3 py-3.5 whitespace-nowrap text-ink-300">
-                        {t(`portal.campaigns.audience_${campaign.audience}`)}
+                      <td className="max-w-[14rem] px-3 py-3.5 text-ink-300">
+                        <p className="truncate whitespace-nowrap">{audienceLabel(campaign)}</p>
+                        {person(campaign) && (
+                          <p className="text-xs text-ink-400">
+                            {t("portal.campaigns.audience_user")}
+                          </p>
+                        )}
                       </td>
 
                       <td className="px-3 py-3.5">
