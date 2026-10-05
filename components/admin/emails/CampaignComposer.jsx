@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, LayoutTemplate, Loader2, PenLine, Send, UserRound } from "lucide-react";
+import { AtSign, Eye, LayoutTemplate, Loader2, PenLine, Send, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -35,7 +35,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Panel } from "@/components/shell/primitives";
 import { launchCampaign, previewCampaign, sendCampaignTest } from "@/app/actions/campaign";
-import { AUDIENCES, CAMPAIGN_LIMITS, templateAnnouncement } from "@/lib/email/campaign";
+import { CAMPAIGN_LIMITS, GROUP_AUDIENCES, templateAnnouncement } from "@/lib/email/campaign";
+import RecipientPicker, { canReceive } from "@/components/admin/emails/RecipientPicker";
 import { useTranslation } from "@/lib/i18n/Context";
 
 const EMPTY_FIELDS = {
@@ -94,8 +95,15 @@ function Choice({ active, onSelect, children, className = "" }) {
  * @param {Array<{id: string, name: string, category: string|null}>} props.templates  modèles publics
  * @param {{all: number, free: number, premium: number}} props.audienceCounts
  * @param {string} [props.initialTemplateId]  modèle choisi depuis la galerie
+ * @param {object|null} [props.initialRecipient]  personne choisie depuis la
+ *   liste des utilisateurs (audience « une personne »)
  */
-export default function CampaignComposer({ templates, audienceCounts, initialTemplateId }) {
+export default function CampaignComposer({
+  templates,
+  audienceCounts,
+  initialTemplateId,
+  initialRecipient,
+}) {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -107,12 +115,19 @@ export default function CampaignComposer({ templates, audienceCounts, initialTem
   const [fields, setFields] = useState(() =>
     initialTemplate ? templateAnnouncement(initialTemplate) : EMPTY_FIELDS,
   );
-  const [audience, setAudience] = useState("all");
+  const [audience, setAudience] = useState(initialRecipient ? "user" : "all");
+  // Un compte désabonné n'est pas retenu : le sélecteur le montre, grisé,
+  // avec la raison (sa recherche part de son adresse).
+  const [recipient, setRecipient] = useState(
+    canReceive(initialRecipient) ? initialRecipient : null,
+  );
   const [pending, setPending] = useState(null); // "preview" | "test" | "launch"
   const [preview, setPreview] = useState(null); // { subject, html }
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const count = audienceCounts[audience] ?? 0;
+  const toPerson = audience === "user";
+  const count = toPerson ? (recipient ? 1 : 0) : (audienceCounts[audience] ?? 0);
+  const personName = recipient ? recipient.name || recipient.email : "";
   const ready = Boolean(
     fields.subject.trim() && fields.heading.trim() && fields.message.trim(),
   );
@@ -121,6 +136,7 @@ export default function CampaignComposer({ templates, audienceCounts, initialTem
     ...fields,
     templateId: kind === "template" ? templateId : "",
     audience,
+    recipientId: toPerson ? (recipient?.id ?? "") : "",
   };
 
   function update(name) {
@@ -172,7 +188,9 @@ export default function CampaignComposer({ templates, audienceCounts, initialTem
     }
   }
 
-  const sendLabel = t("portal.campaigns.send").replace("{count}", String(count));
+  const sendLabel = recipient && toPerson
+    ? t("portal.campaigns.send_to_person").replace("{name}", personName)
+    : t("portal.campaigns.send").replace("{count}", String(count));
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
@@ -340,7 +358,7 @@ export default function CampaignComposer({ templates, audienceCounts, initialTem
               aria-label={t("portal.campaigns.audience")}
               className="space-y-2"
             >
-              {AUDIENCES.map((value) => (
+              {GROUP_AUDIENCES.map((value) => (
                 <Choice
                   key={value}
                   active={audience === value}
@@ -354,11 +372,27 @@ export default function CampaignComposer({ templates, audienceCounts, initialTem
                   </span>
                 </Choice>
               ))}
+              <Choice
+                active={toPerson}
+                onSelect={() => setAudience("user")}
+                className="flex w-full items-center justify-between gap-3 rounded-lg px-3.5 py-2.5 text-left text-sm"
+              >
+                <span>{t("portal.campaigns.audience_user")}</span>
+                <AtSign className="h-3.5 w-3.5 text-ink-400" aria-hidden="true" />
+              </Choice>
             </div>
 
-            <p className="text-xs leading-relaxed text-ink-400">
-              {t("portal.campaigns.quota_hint")}
-            </p>
+            {toPerson ? (
+              <RecipientPicker
+                value={recipient}
+                onChange={setRecipient}
+                initialQuery={recipient ? "" : (initialRecipient?.email ?? "")}
+              />
+            ) : (
+              <p className="text-xs leading-relaxed text-ink-400">
+                {t("portal.campaigns.quota_hint")}
+              </p>
+            )}
 
             <div className="flex flex-col gap-2.5 border-t border-border/60 pt-5">
               <Button
@@ -400,7 +434,9 @@ export default function CampaignComposer({ templates, audienceCounts, initialTem
               </Button>
 
               {count === 0 && (
-                <p className="text-xs text-caution">{t("portal.campaigns.no_recipients")}</p>
+                <p className="text-xs text-caution">
+                  {t(toPerson ? "portal.campaigns.person_required" : "portal.campaigns.no_recipients")}
+                </p>
               )}
             </div>
           </div>
@@ -433,9 +469,13 @@ export default function CampaignComposer({ templates, audienceCounts, initialTem
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t("portal.campaigns.confirm_title").replace("{count}", String(count))}
+              {toPerson
+                ? t("portal.campaigns.confirm_title_person").replace("{name}", personName)
+                : t("portal.campaigns.confirm_title").replace("{count}", String(count))}
             </AlertDialogTitle>
-            <AlertDialogDescription>{t("portal.campaigns.confirm_body")}</AlertDialogDescription>
+            <AlertDialogDescription>
+              {t(toPerson ? "portal.campaigns.confirm_body_person" : "portal.campaigns.confirm_body")}
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel disabled={busy}>{t("common.cancel")}</AlertDialogCancel>

@@ -1,11 +1,13 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   Ban,
   CheckCircle2,
   Crown,
+  Mail,
   MoreVertical,
   Search,
   Shield,
@@ -330,6 +332,13 @@ export default function UsersTable({ users, currentUserId }) {
                               {user.suspended
                                 ? t("portal.admin.reactivate_account")
                                 : t("portal.admin.suspend_account")}
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem asChild>
+                              <Link href={`/admin/emails/new?user=${user.id}`}>
+                                <Mail className="mr-2 h-4 w-4" />
+                                {t("portal.admin.send_email")}
+                              </Link>
                             </DropdownMenuItem>
 
                             <DropdownMenuSeparator />

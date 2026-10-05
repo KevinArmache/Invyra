@@ -3,7 +3,12 @@
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/app/actions/auth";
 import { buildAnnouncementEmail } from "@/lib/email/announcement-email";
-import { AUDIENCES, normalizeCampaignInput, recipientsWhere } from "@/lib/email/campaign";
+import {
+  GROUP_AUDIENCES,
+  TECHNICAL_EMAIL_DOMAIN,
+  normalizeCampaignInput,
+  recipientsWhere,
+} from "@/lib/email/campaign";
 import { sendMail } from "@/lib/email/transport";
 import { unsubscribeHeaders, unsubscribeUrl } from "@/lib/email/unsubscribe";
 import { translate } from "@/lib/i18n/config";
@@ -120,13 +125,59 @@ async function countByStatus(campaignId) {
 
 // ─── Préparation ─────────────────────────────────────────────────────────────
 
-/** Nombre de destinataires de chaque audience. */
+/** Nombre de destinataires de chaque audience de groupe. */
 export async function getAudienceCounts() {
   await requireAdmin();
   const counts = await Promise.all(
-    AUDIENCES.map((audience) => prisma.user.count({ where: recipientsWhere(audience) })),
+    GROUP_AUDIENCES.map((audience) => prisma.user.count({ where: recipientsWhere(audience) })),
   );
-  return Object.fromEntries(AUDIENCES.map((audience, index) => [audience, counts[index]]));
+  return Object.fromEntries(
+    GROUP_AUDIENCES.map((audience, index) => [audience, counts[index]]),
+  );
+}
+
+/** Ce que le choix d'un destinataire montre d'un compte. */
+const RECIPIENT_SELECT = {
+  id: true,
+  name: true,
+  email: true,
+  plan: true,
+  marketingEmails: true,
+  suspended: true,
+};
+
+/**
+ * Comptes à qui écrire individuellement, par nom ou adresse. Sans recherche,
+ * les derniers inscrits. Les comptes désabonnés ou suspendus sont renvoyés
+ * aussi, pour que l'admin voie pourquoi il ne peut pas les choisir.
+ */
+export async function searchRecipients(query) {
+  await requireAdmin();
+  const needle = String(query ?? "").trim().slice(0, 100);
+  return prisma.user.findMany({
+    where: {
+      NOT: { email: { endsWith: TECHNICAL_EMAIL_DOMAIN } },
+      ...(needle && {
+        OR: [
+          { name: { contains: needle, mode: "insensitive" } },
+          { email: { contains: needle, mode: "insensitive" } },
+        ],
+      }),
+    },
+    select: RECIPIENT_SELECT,
+    orderBy: { createdAt: "desc" },
+    take: 8,
+  });
+}
+
+/** Un compte, pour préremplir le destinataire (?user=… depuis la liste des utilisateurs). */
+export async function getRecipient(userId) {
+  await requireAdmin();
+  if (typeof userId !== "string" || !userId || userId.length > 64) return null;
+  return prisma.user.findFirst({
+    where: { id: userId, NOT: { email: { endsWith: TECHNICAL_EMAIL_DOMAIN } } },
+    select: RECIPIENT_SELECT,
+  });
 }
 
 /** Modèles publics, ceux qu'un e-mail peut annoncer. Les plus récents d'abord. */
@@ -140,10 +191,13 @@ export async function getAnnounceableTemplates() {
   });
 }
 
-/** Rendu de l'e-mail tel que le recevra l'admin, pour l'aperçu. */
+/**
+ * Rendu de l'e-mail tel que le recevra l'admin, pour l'aperçu. L'audience
+ * n'y change rien : l'aperçu marche avant d'avoir choisi un destinataire.
+ */
 export async function previewCampaign(input) {
   const session = await requireAdmin();
-  const { campaign, template } = await prepare(input);
+  const { campaign, template } = await prepare({ ...input, audience: "all" });
   const { subject, html } = emailFor(campaign, template, {
     userId: session.userId,
     email: session.email,
@@ -155,7 +209,7 @@ export async function previewCampaign(input) {
 /** Envoie l'e-mail à l'admin seul, pour le vérifier dans une vraie messagerie. */
 export async function sendCampaignTest(input) {
   const session = await requireAdmin();
-  const { campaign, template } = await prepare(input);
+  const { campaign, template } = await prepare({ ...input, audience: "all" });
   const recipient = { userId: session.userId, email: session.email, name: session.name };
   const { subject, text, html } = emailFor(campaign, template, recipient);
 
@@ -177,15 +231,21 @@ export async function sendCampaignTest(input) {
  */
 export async function launchCampaign(input) {
   const session = await requireAdmin();
-  const { campaign } = await prepare(input);
+  const {
+    campaign: { recipientId, ...campaign },
+  } = await prepare(input);
 
   const users = await prisma.user.findMany({
-    where: recipientsWhere(campaign.audience),
+    where: recipientsWhere(campaign.audience, recipientId),
     select: { id: true, email: true, name: true },
     orderBy: { createdAt: "asc" },
   });
   if (users.length === 0) {
-    throw new Error("Aucun utilisateur ne correspond à cette audience.");
+    throw new Error(
+      campaign.audience === "user"
+        ? "Cette personne ne reçoit pas les nouveautés d'Invyra : elle s'est désabonnée ou son compte est suspendu."
+        : "Aucun utilisateur ne correspond à cette audience.",
+    );
   }
 
   const created = await prisma.$transaction(async (tx) => {
@@ -370,6 +430,8 @@ export async function getCampaigns() {
       completedAt: true,
       createdBy: { select: { name: true, email: true } },
       template: { select: { id: true, name: true } },
+      // Pour un envoi à une personne : à qui.
+      recipients: { take: 1, select: { name: true, email: true } },
     },
   });
 }
@@ -384,6 +446,7 @@ export async function getCampaign(campaignId) {
     include: {
       createdBy: { select: { name: true, email: true } },
       template: { select: { id: true, name: true } },
+      recipients: { take: 1, select: { name: true, email: true } },
     },
   });
   if (!campaign) return null;

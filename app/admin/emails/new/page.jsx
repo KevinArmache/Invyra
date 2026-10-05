@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import { getAnnounceableTemplates, getAudienceCounts } from "@/app/actions/campaign";
+import {
+  getAnnounceableTemplates,
+  getAudienceCounts,
+  getRecipient,
+} from "@/app/actions/campaign";
 import { getTranslations } from "@/lib/i18n/server";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shell/primitives";
@@ -13,14 +17,17 @@ export async function generateMetadata() {
 }
 
 /**
- * Rédaction d'un e-mail à tous les utilisateurs. `?template=<id>` arrive de
- * la galerie (« Annoncer par e-mail ») : le modèle est déjà choisi.
+ * Rédaction d'un e-mail aux utilisateurs, à tous ou à une personne.
+ * `?template=<id>` arrive de la galerie (« Annoncer par e-mail ») : le
+ * modèle est déjà choisi. `?user=<id>` arrive de la liste des utilisateurs :
+ * le destinataire est déjà choisi.
  */
 export default async function NewEmailPage({ searchParams }) {
-  const { template } = await searchParams;
-  const [templates, audienceCounts, { t }] = await Promise.all([
+  const { template, user } = await searchParams;
+  const [templates, audienceCounts, recipient, { t }] = await Promise.all([
     getAnnounceableTemplates(),
     getAudienceCounts(),
+    typeof user === "string" ? getRecipient(user) : null,
     getTranslations(),
   ]);
 
@@ -43,6 +50,7 @@ export default async function NewEmailPage({ searchParams }) {
         templates={templates}
         audienceCounts={audienceCounts}
         initialTemplateId={typeof template === "string" ? template : ""}
+        initialRecipient={recipient}
       />
     </>
   );
