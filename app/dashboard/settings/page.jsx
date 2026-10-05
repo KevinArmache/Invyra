@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { Check, Crown, KeyRound, MessageCircle, UserRound } from "lucide-react";
+import { Check, Crown, KeyRound, Mail, MessageCircle, UserRound } from "lucide-react";
 
 import { getCurrentUser } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
@@ -9,6 +9,7 @@ import { PageHeader, Panel } from "@/components/shell/primitives";
 import ProfileForm from "@/components/settings/ProfileForm";
 import PasswordForm from "@/components/settings/PasswordForm";
 import DeleteAccountCard from "@/components/settings/DeleteAccountCard";
+import EmailPreferencesForm from "@/components/settings/EmailPreferencesForm";
 
 export async function generateMetadata() {
   const { t } = await getTranslations();
@@ -115,7 +116,15 @@ export default async function SettingsPage() {
           <PasswordForm />
         </Panel>
 
-        <div className="animate-rise" style={{ "--rise-delay": "320ms" }}>
+        <Panel
+          delay={320}
+          title={<PanelTitle icon={Mail}>{t("settings.emails_title")}</PanelTitle>}
+          description={t("settings.emails_desc")}
+        >
+          <EmailPreferencesForm marketingEmails={user.marketingEmails} />
+        </Panel>
+
+        <div className="animate-rise" style={{ "--rise-delay": "400ms" }}>
           <DeleteAccountCard isAdmin={user.role === "admin"} />
         </div>
       </div>

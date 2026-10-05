@@ -10,6 +10,7 @@ import {
   Eye,
   LayoutTemplate,
   Loader2,
+  Mail,
   Pencil,
   Plus,
   Search,
@@ -416,6 +417,23 @@ export default function TemplatesBrowser({
                               size={15}
                               fill={template.featured ? "currentColor" : "none"}
                             />
+                          </Button>
+                        )}
+
+                        {currentUser.role === "admin" && shareable && (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            className="h-8 w-8 text-ink-400 hover:text-ink-50"
+                          >
+                            <Link
+                              href={`/admin/emails/new?template=${template.id}`}
+                              aria-label={t("portal.templates.list.announce_btn")}
+                              title={t("portal.templates.list.announce_btn")}
+                            >
+                              <Mail size={15} />
+                            </Link>
                           </Button>
                         )}
 

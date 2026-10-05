@@ -40,17 +40,11 @@ function canManageReusableTemplate(session, template) {
 }
 
 /**
- * Modèles réutilisables visibles par l'utilisateur : tous pour un admin ;
- * sinon les modèles terminés, plus ses propres modèles quel que soit leur
- * statut. Les brouillons des autres restent privés.
+ * Modèles réutilisables visibles par tout utilisateur connecté : toute la
+ * galerie, quel que soit le statut. Les copies propres aux événements
+ * (eventId) en sont exclues : elles portent les textes d'un client.
  */
-function visibleTemplatesWhere(session) {
-  if (session.role === "admin") return { eventId: null };
-  return {
-    eventId: null,
-    OR: [{ status: "completed" }, { userId: session.userId }],
-  };
-}
+const VISIBLE_TEMPLATES_WHERE = { eventId: null };
 
 /** Même règle que updateEvent : propriétaire, admin ou collaborateur éditeur. */
 async function assertCanEditEvent(eventId) {
@@ -97,7 +91,7 @@ export async function getTemplates() {
   if (!user) return [];
 
   return await prisma.template.findMany({
-    where: visibleTemplatesWhere(user),
+    where: VISIBLE_TEMPLATES_WHERE,
     include: {
       _count: {
         select: {
@@ -131,7 +125,7 @@ export async function getTemplatesPage({ page = 1, category, query } = {}) {
     return { templates: [], total: 0, page: 1, pageCount: 1, categories: [], totalAll: 0 };
   }
 
-  const visible = visibleTemplatesWhere(user);
+  const visible = VISIBLE_TEMPLATES_WHERE;
   const safeCategory = normalizeCategory(category);
   const search = typeof query === "string" ? query.trim().slice(0, 100) : "";
   const where = {
@@ -266,7 +260,7 @@ export async function duplicateTemplate(templateId) {
   assertCanCreateTemplate(user);
 
   const source = await prisma.template.findFirst({
-    where: { id: templateId, ...visibleTemplatesWhere(user) },
+    where: { id: templateId, ...VISIBLE_TEMPLATES_WHERE },
   });
   if (!source) throw new Error("Modèle non trouvé");
 
@@ -338,7 +332,7 @@ export async function saveTemplate(eventId, template, sourceTemplateId) {
   let source = null;
   if (sourceTemplateId) {
     source = await prisma.template.findFirst({
-      where: { id: sourceTemplateId, ...visibleTemplatesWhere(user) },
+      where: { id: sourceTemplateId, ...VISIBLE_TEMPLATES_WHERE },
     });
     if (!source) throw new Error("Modèle introuvable");
   }
@@ -397,7 +391,7 @@ export async function assignTemplateToEvent(eventId, templateId) {
   if (!event) throw new Error("Event not found");
 
   const template = await prisma.template.findFirst({
-    where: { id: templateId, ...visibleTemplatesWhere(user) },
+    where: { id: templateId, ...VISIBLE_TEMPLATES_WHERE },
   });
   if (!template) throw new Error("Modèle introuvable");
 
