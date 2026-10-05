@@ -251,6 +251,8 @@ export type UserWhereInput = {
   collaborations?: Prisma.EventCollaboratorListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  templateComments?: Prisma.TemplateCommentListRelationFilter
+  templateVotes?: Prisma.TemplateVoteListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -272,6 +274,8 @@ export type UserOrderByWithRelationInput = {
   collaborations?: Prisma.EventCollaboratorOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
+  templateComments?: Prisma.TemplateCommentOrderByRelationAggregateInput
+  templateVotes?: Prisma.TemplateVoteOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -296,6 +300,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   collaborations?: Prisma.EventCollaboratorListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
+  templateComments?: Prisma.TemplateCommentListRelationFilter
+  templateVotes?: Prisma.TemplateVoteListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -355,6 +361,8 @@ export type UserCreateInput = {
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -376,6 +384,8 @@ export type UserUncheckedCreateInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -397,6 +407,8 @@ export type UserUpdateInput = {
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -418,6 +430,8 @@ export type UserUncheckedUpdateInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -586,6 +600,34 @@ export type UserUpdateOneWithoutTemplatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTemplatesInput, Prisma.UserUpdateWithoutTemplatesInput>, Prisma.UserUncheckedUpdateWithoutTemplatesInput>
 }
 
+export type UserCreateNestedOneWithoutTemplateCommentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTemplateCommentsInput, Prisma.UserUncheckedCreateWithoutTemplateCommentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTemplateCommentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTemplateCommentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTemplateCommentsInput, Prisma.UserUncheckedCreateWithoutTemplateCommentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTemplateCommentsInput
+  upsert?: Prisma.UserUpsertWithoutTemplateCommentsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTemplateCommentsInput, Prisma.UserUpdateWithoutTemplateCommentsInput>, Prisma.UserUncheckedUpdateWithoutTemplateCommentsInput>
+}
+
+export type UserCreateNestedOneWithoutTemplateVotesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTemplateVotesInput, Prisma.UserUncheckedCreateWithoutTemplateVotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTemplateVotesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTemplateVotesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTemplateVotesInput, Prisma.UserUncheckedCreateWithoutTemplateVotesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTemplateVotesInput
+  upsert?: Prisma.UserUpsertWithoutTemplateVotesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTemplateVotesInput, Prisma.UserUpdateWithoutTemplateVotesInput>, Prisma.UserUncheckedUpdateWithoutTemplateVotesInput>
+}
+
 export type UserCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventsInput
@@ -632,6 +674,8 @@ export type UserCreateWithoutSessionsInput = {
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -652,6 +696,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -688,6 +734,8 @@ export type UserUpdateWithoutSessionsInput = {
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -708,6 +756,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -728,6 +778,8 @@ export type UserCreateWithoutAccountsInput = {
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -748,6 +800,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -784,6 +838,8 @@ export type UserUpdateWithoutAccountsInput = {
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -804,6 +860,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTemplatesInput = {
@@ -824,6 +882,8 @@ export type UserCreateWithoutTemplatesInput = {
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTemplatesInput = {
@@ -844,6 +904,8 @@ export type UserUncheckedCreateWithoutTemplatesInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTemplatesInput = {
@@ -880,6 +942,8 @@ export type UserUpdateWithoutTemplatesInput = {
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTemplatesInput = {
@@ -900,6 +964,216 @@ export type UserUncheckedUpdateWithoutTemplatesInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTemplateCommentsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTemplateCommentsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTemplateCommentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTemplateCommentsInput, Prisma.UserUncheckedCreateWithoutTemplateCommentsInput>
+}
+
+export type UserUpsertWithoutTemplateCommentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTemplateCommentsInput, Prisma.UserUncheckedUpdateWithoutTemplateCommentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTemplateCommentsInput, Prisma.UserUncheckedCreateWithoutTemplateCommentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTemplateCommentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTemplateCommentsInput, Prisma.UserUncheckedUpdateWithoutTemplateCommentsInput>
+}
+
+export type UserUpdateWithoutTemplateCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTemplateCommentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutTemplateVotesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutTemplateVotesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutTemplateVotesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTemplateVotesInput, Prisma.UserUncheckedCreateWithoutTemplateVotesInput>
+}
+
+export type UserUpsertWithoutTemplateVotesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTemplateVotesInput, Prisma.UserUncheckedUpdateWithoutTemplateVotesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTemplateVotesInput, Prisma.UserUncheckedCreateWithoutTemplateVotesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutTemplateVotesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTemplateVotesInput, Prisma.UserUncheckedUpdateWithoutTemplateVotesInput>
+}
+
+export type UserUpdateWithoutTemplateVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTemplateVotesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEventsInput = {
@@ -920,6 +1194,8 @@ export type UserCreateWithoutEventsInput = {
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEventsInput = {
@@ -940,6 +1216,8 @@ export type UserUncheckedCreateWithoutEventsInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEventsInput = {
@@ -976,6 +1254,8 @@ export type UserUpdateWithoutEventsInput = {
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEventsInput = {
@@ -996,6 +1276,8 @@ export type UserUncheckedUpdateWithoutEventsInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCollaborationsInput = {
@@ -1016,6 +1298,8 @@ export type UserCreateWithoutCollaborationsInput = {
   templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCollaborationsInput = {
@@ -1036,6 +1320,8 @@ export type UserUncheckedCreateWithoutCollaborationsInput = {
   templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateComments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCollaborationsInput = {
@@ -1072,6 +1358,8 @@ export type UserUpdateWithoutCollaborationsInput = {
   templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCollaborationsInput = {
@@ -1092,6 +1380,8 @@ export type UserUncheckedUpdateWithoutCollaborationsInput = {
   templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateComments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1105,6 +1395,8 @@ export type UserCountOutputType = {
   collaborations: number
   sessions: number
   accounts: number
+  templateComments: number
+  templateVotes: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1113,6 +1405,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   collaborations?: boolean | UserCountOutputTypeCountCollaborationsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
+  templateComments?: boolean | UserCountOutputTypeCountTemplateCommentsArgs
+  templateVotes?: boolean | UserCountOutputTypeCountTemplateVotesArgs
 }
 
 /**
@@ -1160,6 +1454,20 @@ export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.AccountWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTemplateCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TemplateCommentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTemplateVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TemplateVoteWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1180,6 +1488,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   collaborations?: boolean | Prisma.User$collaborationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  templateComments?: boolean | Prisma.User$templateCommentsArgs<ExtArgs>
+  templateVotes?: boolean | Prisma.User$templateVotesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1238,6 +1548,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   collaborations?: boolean | Prisma.User$collaborationsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
+  templateComments?: boolean | Prisma.User$templateCommentsArgs<ExtArgs>
+  templateVotes?: boolean | Prisma.User$templateVotesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1251,6 +1563,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     collaborations: Prisma.$EventCollaboratorPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
+    templateComments: Prisma.$TemplateCommentPayload<ExtArgs>[]
+    templateVotes: Prisma.$TemplateVotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1671,6 +1985,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   collaborations<T extends Prisma.User$collaborationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$collaborationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  templateComments<T extends Prisma.User$templateCommentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$templateCommentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  templateVotes<T extends Prisma.User$templateVotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$templateVotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2223,6 +2539,54 @@ export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.AccountScalarFieldEnum | Prisma.AccountScalarFieldEnum[]
+}
+
+/**
+ * User.templateComments
+ */
+export type User$templateCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TemplateComment
+   */
+  select?: Prisma.TemplateCommentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TemplateComment
+   */
+  omit?: Prisma.TemplateCommentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TemplateCommentInclude<ExtArgs> | null
+  where?: Prisma.TemplateCommentWhereInput
+  orderBy?: Prisma.TemplateCommentOrderByWithRelationInput | Prisma.TemplateCommentOrderByWithRelationInput[]
+  cursor?: Prisma.TemplateCommentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TemplateCommentScalarFieldEnum | Prisma.TemplateCommentScalarFieldEnum[]
+}
+
+/**
+ * User.templateVotes
+ */
+export type User$templateVotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TemplateVote
+   */
+  select?: Prisma.TemplateVoteSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TemplateVote
+   */
+  omit?: Prisma.TemplateVoteOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TemplateVoteInclude<ExtArgs> | null
+  where?: Prisma.TemplateVoteWhereInput
+  orderBy?: Prisma.TemplateVoteOrderByWithRelationInput | Prisma.TemplateVoteOrderByWithRelationInput[]
+  cursor?: Prisma.TemplateVoteWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TemplateVoteScalarFieldEnum | Prisma.TemplateVoteScalarFieldEnum[]
 }
 
 /**

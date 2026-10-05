@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Activity, CheckCircle2, Eye, HelpCircle, XCircle } from "lucide-react";
 
 import { Panel } from "@/components/shell/primitives";
+import { relativeTime } from "@/lib/i18n/relative-time";
 
 const TYPES = {
   viewed: { icon: Eye, color: "var(--gold)" },
@@ -9,25 +10,6 @@ const TYPES = {
   declined: { icon: XCircle, color: "var(--negative)" },
   maybe: { icon: HelpCircle, color: "var(--info)" },
 };
-
-/** « il y a 5 min », « hier »… à partir de deux horodatages. */
-function relativeTime(date, now, locale, t) {
-  const seconds = Math.round((new Date(date).getTime() - now) / 1000);
-  if (Math.abs(seconds) < 45) return t("common.just_now");
-  const format = new Intl.RelativeTimeFormat(locale === "fr" ? "fr" : "en", {
-    numeric: "auto",
-  });
-  const minutes = Math.round(seconds / 60);
-  if (Math.abs(minutes) < 60) return format.format(minutes, "minute");
-  const hours = Math.round(minutes / 60);
-  if (Math.abs(hours) < 24) return format.format(hours, "hour");
-  const days = Math.round(hours / 24);
-  if (Math.abs(days) < 30) return format.format(days, "day");
-  return new Date(date).toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US", {
-    day: "numeric",
-    month: "short",
-  });
-}
 
 /**
  * Activité récente : les dernières ouvertures et réponses des invités, sur

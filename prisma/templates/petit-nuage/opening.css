@@ -1,0 +1,187 @@
+/* ─── Ouverture : le ticket à gratter ────────────────────────────────────── */
+.pno {
+  --foil-a: #cfd8e6;
+  --foil-b: #f4f6fa;
+  --foil-c: #c3cddd;
+  --foil-ink: #75809b;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--sky, #dcebf5) 0%, #eef4f8 55%, var(--cream, #fdf7f0) 100%);
+  color: var(--ink, #3a3350);
+  font-family: var(--f-round, system-ui, sans-serif);
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.pno.is-open { opacity: 0; pointer-events: none; transition: opacity .8s ease .05s; }
+.pno.is-open .pno-card { transform: translateY(-40px) scale(.96); transition: transform .9s cubic-bezier(.16, 1, .3, 1); }
+
+/* Ciel : nuages qui passent, petites étoiles */
+.pno-sky { position: absolute; inset: 0; pointer-events: none; }
+.pno-cloud {
+  position: absolute;
+  left: 0;
+  width: var(--w);
+  height: calc(var(--w) * .34);
+  border-radius: 999px;
+  background: #ffffff;
+  opacity: .9;
+  animation: pno-drift var(--t) linear infinite;
+}
+.pno-cloud::before, .pno-cloud::after { content: ""; position: absolute; border-radius: 50%; background: inherit; }
+.pno-cloud::before { left: 16%; bottom: 30%; width: 42%; aspect-ratio: 1; }
+.pno-cloud::after { left: 44%; bottom: 22%; width: 34%; aspect-ratio: 1; }
+.pno-cloud--1 { --w: clamp(110px, 30vw, 220px); --t: 60s; top: 9%; animation-delay: -18s; }
+.pno-cloud--2 { --w: clamp(80px, 20vw, 160px); --t: 80s; top: 58%; opacity: .75; animation-delay: -50s; }
+.pno-cloud--3 { --w: clamp(130px, 34vw, 260px); --t: 95s; top: 82%; opacity: .7; animation-delay: -6s; }
+.pno-spark {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--butter, #f5d27a);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  animation: pno-twinkle 2.8s ease-in-out infinite;
+}
+.pno-spark--1 { left: 12%; top: 24%; }
+.pno-spark--2 { right: 14%; top: 16%; width: 10px; height: 10px; animation-delay: -1s; }
+.pno-spark--3 { left: 18%; bottom: 18%; width: 10px; height: 10px; animation-delay: -1.8s; background: var(--apricot, #e48f72); }
+.pno-spark--4 { right: 10%; bottom: 28%; animation-delay: -.6s; }
+
+/* Le ticket */
+.pno-card {
+  position: relative;
+  width: min(100%, 380px);
+  padding: 30px 22px 18px;
+  border-radius: 30px;
+  background: var(--paper, #ffffff);
+  box-shadow: 0 30px 60px rgb(58 51 80 / .16), 0 0 0 1px rgb(58 51 80 / .04);
+  animation: pno-in 1s cubic-bezier(.16, 1, .3, 1) both, pno-float 5s ease-in-out 1s infinite;
+}
+.pno-card::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 2px dashed var(--peach, #f6d3c3);
+  border-radius: 23px;
+  pointer-events: none;
+}
+.pno-kicker {
+  margin: 0;
+  font: 600 12px/1.3 var(--f-round, system-ui, sans-serif);
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--clay, #a8502f);
+}
+.pno-name {
+  margin: 6px 0 18px;
+  font: italic 400 clamp(28px, 8.4vw, 36px)/1.15 var(--f-display, Georgia, serif);
+  color: var(--ink, #3a3350);
+  overflow-wrap: anywhere;
+}
+
+.pno-zone {
+  position: relative;
+  aspect-ratio: 16 / 11;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #eaf2f8, #fdf3ec);
+  touch-action: none;
+  cursor: grab;
+}
+.pno.is-scratching .pno-zone { cursor: grabbing; }
+/* Reflet qui passe sur la zone argentée tant qu'on n'y a pas touché. */
+.pno-zone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / .75) 50%, transparent 65%);
+  background-size: 250% 100%;
+  animation: pno-sheen 3.2s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+.pno.is-touched .pno-zone::after { opacity: 0; animation: none; transition: opacity .3s ease; }
+.pno-secret {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px;
+}
+.pno-secret-moon { width: 58px; height: 58px; margin-bottom: 4px; }
+.pno-moon-body { fill: var(--butter, #f5d27a); }
+.pno-secret-title { margin: 0; font: 400 clamp(25px, 7.4vw, 31px)/1.1 var(--f-display, Georgia, serif); color: var(--ink, #3a3350); }
+.pno-secret-text { max-width: 24ch; margin: 0; font: 400 15px/1.4 var(--f-round, system-ui, sans-serif); color: var(--muted, #6c6580); }
+.pno-foil { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; }
+
+.pno-hint {
+  min-height: 1.4em;
+  margin: 16px 0 2px;
+  font: 600 12px/1.4 var(--f-round, system-ui, sans-serif);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--muted, #6c6580);
+  animation: pno-pulse 2.4s ease-in-out 1.6s infinite;
+}
+.pno.is-touched .pno-hint { animation: none; }
+.pno-skip {
+  padding: 10px 12px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: 500 14px/1 var(--f-round, system-ui, sans-serif);
+  color: var(--clay, #a8502f);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: opacity .3s ease;
+}
+.pno-skip:focus-visible { outline: 2px dashed var(--clay, #a8502f); outline-offset: 2px; border-radius: 8px; }
+
+/* Ticket gratté */
+.pno.is-revealed .pno-foil { opacity: 0; transition: opacity .7s ease; }
+.pno.is-revealed .pno-secret { animation: pno-pop .9s cubic-bezier(.34, 1.56, .64, 1); }
+.pno.is-revealed .pno-secret-moon { animation: pno-wiggle 1.2s ease-in-out .2s; }
+.pno.is-revealed .pno-skip { opacity: 0; pointer-events: none; }
+.pno.is-revealed .pno-card { animation: none; }
+.pno-bit {
+  position: absolute;
+  z-index: 3;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  pointer-events: none;
+}
+.pno-bit--star { clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); width: 16px; height: 16px; margin: -8px 0 0 -8px; }
+.pno-bit--dot { border-radius: 50%; }
+
+@keyframes pno-in { from { opacity: 0; transform: translateY(26px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes pno-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes pno-drift { from { transform: translateX(-40vw); } to { transform: translateX(115vw); } }
+@keyframes pno-twinkle { 0%, 100% { opacity: 1; transform: scale(1) rotate(0); } 50% { opacity: .3; transform: scale(.6) rotate(45deg); } }
+@keyframes pno-sheen { 0% { background-position: 120% 0; } 60%, 100% { background-position: -40% 0; } }
+@keyframes pno-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@keyframes pno-pop { 0% { transform: scale(.92); } 60% { transform: scale(1.06); } 100% { transform: scale(1); } }
+@keyframes pno-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-10deg); } 50% { transform: rotate(8deg); } 75% { transform: rotate(-4deg); } }
+
+/* Téléphone couché : le ticket tient dans la hauteur de l'écran. */
+@media (orientation: landscape) and (max-height: 540px) {
+  .pno-card { width: min(100%, 520px); padding: 18px 20px 10px; }
+  .pno-name { margin-bottom: 10px; font-size: 26px; }
+  .pno-zone { aspect-ratio: 16 / 6; }
+  .pno-secret-moon { display: none; }
+  .pno-hint { margin-top: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pno, .pno * { animation: none !important; }
+  .pno.is-open .pno-card { transform: none; }
+}

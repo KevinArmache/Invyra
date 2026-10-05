@@ -1,0 +1,12 @@
+{
+  "name": "Petit Nuage",
+  "category": "babyshower",
+  "fonts": ["dm-serif", "fredoka"],
+  "opening": {
+    "style": "envelope",
+    "eyebrow": "",
+    "title": "{{GUEST_NAME}}",
+    "monogram": "",
+    "hint": ""
+  }
+}

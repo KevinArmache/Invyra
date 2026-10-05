@@ -477,7 +477,7 @@ appliquer dans l'ordre. Chaque fichier passe dans une transaction : tout est
 écrit, ou rien.
 
 ```bash
-node --env-file=.env prisma/scripts/apply-sql.mjs prisma/migrations-sql/007-event-itinerary.sql
+node --env-file=.env prisma/scripts/apply-sql.mjs prisma/migrations-sql/008-template-feedback.sql
 ```
 
 | Fichier | Contenu |
@@ -489,6 +489,7 @@ node --env-file=.env prisma/scripts/apply-sql.mjs prisma/migrations-sql/007-even
 | `005-guestbook-photos.sql` | Livre d'or et photos des invités |
 | `006-event-photo-videos.sql` | Vidéos des invités |
 | `007-event-itinerary.sql` | Itinéraire de l'événement |
+| `008-template-feedback.sql` | Commentaires et votes sur les modèles |
 
 Pour une nouvelle évolution : modifiez `schema.prisma`, écrivez le fichier
 SQL suivant en le rendant rejouable, appliquez-le, puis relancez

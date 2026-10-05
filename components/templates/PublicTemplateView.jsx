@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import BrandMark from "@/components/common/BrandMark";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import ShareTemplateButton from "@/components/templates/ShareTemplateButton";
+import TemplateFeedback from "@/components/templates/TemplateFeedback";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**
  * Page publique d'un modèle, celle qu'ouvre un lien partagé : l'invitation
  * en plein écran, telle qu'un invité la recevrait (écran d'ouverture
- * compris), sous une barre fine qui rappelle le nom du modèle et propose de
- * le partager à son tour ou de l'utiliser.
+ * compris), sous une barre fine qui rappelle le nom du modèle, porte les
+ * avis (votes et commentaires, dans un panneau latéral) et propose de le
+ * partager à son tour ou de l'utiliser.
  *
  * L'invitation reste rendue dans l'iframe isolée d'InvitationPreview : un
  * modèle contient du code, c'est cette isolation qui protège la page.
@@ -21,12 +23,16 @@ import { useTranslation } from "@/lib/i18n/Context";
  * @param {object} props.event      événement fictif (daté dans le futur)
  * @param {string} props.background couleur de fond du modèle
  * @param {string} [props.categoryLabel]
+ * @param {object} props.feedback   avis du modèle (getTemplateFeedback)
+ * @param {boolean} props.isAuthenticated
  */
 export default function PublicTemplateView({
   template,
   event,
   background,
   categoryLabel,
+  feedback,
+  isAuthenticated,
 }) {
   const { t } = useTranslation();
   const share = { id: template.id, name: template.name };
@@ -52,6 +58,12 @@ export default function PublicTemplateView({
             {template.name}
           </p>
         </div>
+
+        <TemplateFeedback
+          template={share}
+          initial={feedback}
+          isAuthenticated={isAuthenticated}
+        />
 
         <ShareTemplateButton template={share} className="sm:hidden" />
         <ShareTemplateButton

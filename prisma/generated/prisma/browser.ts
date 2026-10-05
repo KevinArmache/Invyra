@@ -43,6 +43,16 @@ export type Verification = Prisma.VerificationModel
  */
 export type Template = Prisma.TemplateModel
 /**
+ * Model TemplateComment
+ * Commentaire d'un utilisateur sur un modèle public (voir app/actions/feedback.js).
+ */
+export type TemplateComment = Prisma.TemplateCommentModel
+/**
+ * Model TemplateVote
+ * Vote d'un utilisateur sur un modèle public : un seul par personne.
+ */
+export type TemplateVote = Prisma.TemplateVoteModel
+/**
  * Model Event
  * 
  */
