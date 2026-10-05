@@ -4,6 +4,7 @@ import {
   Calendar,
   LayoutDashboard,
   LayoutTemplate,
+  Mail,
   Settings,
   Shield,
   Users,
@@ -56,6 +57,7 @@ export const ADMIN_NAVIGATION = [
   },
   { href: "/admin/users", icon: Users, key: "portal.admin.users" },
   { href: "/admin/events", icon: Calendar, key: "portal.admin.events" },
+  { href: "/admin/emails", icon: Mail, key: "portal.admin.emails" },
 ];
 
 /** Retour à l'espace principal, en pied du panneau d'administration. */

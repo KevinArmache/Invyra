@@ -57,6 +57,8 @@ export const ModelName = {
   Verification: 'Verification',
   Template: 'Template',
   TemplateVote: 'TemplateVote',
+  EmailCampaign: 'EmailCampaign',
+  EmailCampaignRecipient: 'EmailCampaignRecipient',
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
   Guest: 'Guest',
@@ -91,6 +93,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   plan: 'plan',
   suspended: 'suspended',
+  marketingEmails: 'marketingEmails',
   legacyPassword: 'legacyPassword',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -171,6 +174,46 @@ export const TemplateVoteScalarFieldEnum = {
 } as const
 
 export type TemplateVoteScalarFieldEnum = (typeof TemplateVoteScalarFieldEnum)[keyof typeof TemplateVoteScalarFieldEnum]
+
+
+export const EmailCampaignScalarFieldEnum = {
+  id: 'id',
+  subject: 'subject',
+  preheader: 'preheader',
+  heading: 'heading',
+  message: 'message',
+  ctaLabel: 'ctaLabel',
+  ctaUrl: 'ctaUrl',
+  templateId: 'templateId',
+  audience: 'audience',
+  status: 'status',
+  total: 'total',
+  sentCount: 'sentCount',
+  failedCount: 'failedCount',
+  lastError: 'lastError',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  completedAt: 'completedAt'
+} as const
+
+export type EmailCampaignScalarFieldEnum = (typeof EmailCampaignScalarFieldEnum)[keyof typeof EmailCampaignScalarFieldEnum]
+
+
+export const EmailCampaignRecipientScalarFieldEnum = {
+  id: 'id',
+  campaignId: 'campaignId',
+  userId: 'userId',
+  email: 'email',
+  name: 'name',
+  status: 'status',
+  error: 'error',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailCampaignRecipientScalarFieldEnum = (typeof EmailCampaignRecipientScalarFieldEnum)[keyof typeof EmailCampaignRecipientScalarFieldEnum]
 
 
 export const EventScalarFieldEnum = {

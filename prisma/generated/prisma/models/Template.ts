@@ -231,6 +231,7 @@ export type TemplateWhereInput = {
   sourceTemplate?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
   eventCopies?: Prisma.TemplateListRelationFilter
   votes?: Prisma.TemplateVoteListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
 }
 
 export type TemplateOrderByWithRelationInput = {
@@ -250,6 +251,7 @@ export type TemplateOrderByWithRelationInput = {
   sourceTemplate?: Prisma.TemplateOrderByWithRelationInput
   eventCopies?: Prisma.TemplateOrderByRelationAggregateInput
   votes?: Prisma.TemplateVoteOrderByRelationAggregateInput
+  emailCampaigns?: Prisma.EmailCampaignOrderByRelationAggregateInput
 }
 
 export type TemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -272,6 +274,7 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   sourceTemplate?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
   eventCopies?: Prisma.TemplateListRelationFilter
   votes?: Prisma.TemplateVoteListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
 }, "id" | "eventId">
 
 export type TemplateOrderByWithAggregationInput = {
@@ -322,6 +325,7 @@ export type TemplateCreateInput = {
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateInput = {
@@ -338,6 +342,7 @@ export type TemplateUncheckedCreateInput = {
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUpdateInput = {
@@ -354,6 +359,7 @@ export type TemplateUpdateInput = {
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateInput = {
@@ -370,6 +376,7 @@ export type TemplateUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateCreateManyInput = {
@@ -589,6 +596,22 @@ export type TemplateUpdateOneRequiredWithoutVotesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TemplateUpdateToOneWithWhereWithoutVotesInput, Prisma.TemplateUpdateWithoutVotesInput>, Prisma.TemplateUncheckedUpdateWithoutVotesInput>
 }
 
+export type TemplateCreateNestedOneWithoutEmailCampaignsInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutEmailCampaignsInput, Prisma.TemplateUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutEmailCampaignsInput
+  connect?: Prisma.TemplateWhereUniqueInput
+}
+
+export type TemplateUpdateOneWithoutEmailCampaignsNestedInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutEmailCampaignsInput, Prisma.TemplateUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutEmailCampaignsInput
+  upsert?: Prisma.TemplateUpsertWithoutEmailCampaignsInput
+  disconnect?: Prisma.TemplateWhereInput | boolean
+  delete?: Prisma.TemplateWhereInput | boolean
+  connect?: Prisma.TemplateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TemplateUpdateToOneWithWhereWithoutEmailCampaignsInput, Prisma.TemplateUpdateWithoutEmailCampaignsInput>, Prisma.TemplateUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
 export type TemplateCreateNestedOneWithoutEventInput = {
   create?: Prisma.XOR<Prisma.TemplateCreateWithoutEventInput, Prisma.TemplateUncheckedCreateWithoutEventInput>
   connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutEventInput
@@ -634,6 +657,7 @@ export type TemplateCreateWithoutUserInput = {
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutUserInput = {
@@ -649,6 +673,7 @@ export type TemplateUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutUserInput = {
@@ -707,6 +732,7 @@ export type TemplateCreateWithoutEventCopiesInput = {
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutEventCopiesInput = {
@@ -722,6 +748,7 @@ export type TemplateUncheckedCreateWithoutEventCopiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutEventCopiesInput = {
@@ -742,6 +769,7 @@ export type TemplateCreateWithoutSourceTemplateInput = {
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutSourceTemplateInput = {
@@ -757,6 +785,7 @@ export type TemplateUncheckedCreateWithoutSourceTemplateInput = {
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutSourceTemplateInput = {
@@ -793,6 +822,7 @@ export type TemplateUpdateWithoutEventCopiesInput = {
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutEventCopiesInput = {
@@ -808,6 +838,7 @@ export type TemplateUncheckedUpdateWithoutEventCopiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUpsertWithWhereUniqueWithoutSourceTemplateInput = {
@@ -839,6 +870,7 @@ export type TemplateCreateWithoutVotesInput = {
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutVotesInput = {
@@ -854,6 +886,7 @@ export type TemplateUncheckedCreateWithoutVotesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutVotesInput = {
@@ -885,6 +918,7 @@ export type TemplateUpdateWithoutVotesInput = {
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutVotesInput = {
@@ -900,6 +934,87 @@ export type TemplateUncheckedUpdateWithoutVotesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
+}
+
+export type TemplateCreateWithoutEmailCampaignsInput = {
+  id?: string
+  name: string
+  status?: $Enums.TemplateStatus | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  category?: string | null
+  featured?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutTemplatesInput
+  event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
+  sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
+  eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
+  votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
+}
+
+export type TemplateUncheckedCreateWithoutEmailCampaignsInput = {
+  id?: string
+  userId?: string | null
+  eventId?: string | null
+  sourceTemplateId?: string | null
+  name: string
+  status?: $Enums.TemplateStatus | null
+  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  category?: string | null
+  featured?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
+  votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
+}
+
+export type TemplateCreateOrConnectWithoutEmailCampaignsInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutEmailCampaignsInput, Prisma.TemplateUncheckedCreateWithoutEmailCampaignsInput>
+}
+
+export type TemplateUpsertWithoutEmailCampaignsInput = {
+  update: Prisma.XOR<Prisma.TemplateUpdateWithoutEmailCampaignsInput, Prisma.TemplateUncheckedUpdateWithoutEmailCampaignsInput>
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutEmailCampaignsInput, Prisma.TemplateUncheckedCreateWithoutEmailCampaignsInput>
+  where?: Prisma.TemplateWhereInput
+}
+
+export type TemplateUpdateToOneWithWhereWithoutEmailCampaignsInput = {
+  where?: Prisma.TemplateWhereInput
+  data: Prisma.XOR<Prisma.TemplateUpdateWithoutEmailCampaignsInput, Prisma.TemplateUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
+export type TemplateUpdateWithoutEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutTemplatesNestedInput
+  event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
+  sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
+  eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
+  votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
+}
+
+export type TemplateUncheckedUpdateWithoutEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  eventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
+  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
+  votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateCreateWithoutEventInput = {
@@ -915,6 +1030,7 @@ export type TemplateCreateWithoutEventInput = {
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutEventInput = {
@@ -930,6 +1046,7 @@ export type TemplateUncheckedCreateWithoutEventInput = {
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutEventInput = {
@@ -961,6 +1078,7 @@ export type TemplateUpdateWithoutEventInput = {
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutEventInput = {
@@ -976,6 +1094,7 @@ export type TemplateUncheckedUpdateWithoutEventInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateCreateManyUserInput = {
@@ -1004,6 +1123,7 @@ export type TemplateUpdateWithoutUserInput = {
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutUserInput = {
@@ -1019,6 +1139,7 @@ export type TemplateUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateManyWithoutUserInput = {
@@ -1060,6 +1181,7 @@ export type TemplateUpdateWithoutSourceTemplateInput = {
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutSourceTemplateInput = {
@@ -1075,6 +1197,7 @@ export type TemplateUncheckedUpdateWithoutSourceTemplateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateManyWithoutSourceTemplateInput = {
@@ -1098,11 +1221,13 @@ export type TemplateUncheckedUpdateManyWithoutSourceTemplateInput = {
 export type TemplateCountOutputType = {
   eventCopies: number
   votes: number
+  emailCampaigns: number
 }
 
 export type TemplateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   eventCopies?: boolean | TemplateCountOutputTypeCountEventCopiesArgs
   votes?: boolean | TemplateCountOutputTypeCountVotesArgs
+  emailCampaigns?: boolean | TemplateCountOutputTypeCountEmailCampaignsArgs
 }
 
 /**
@@ -1129,6 +1254,13 @@ export type TemplateCountOutputTypeCountVotesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.TemplateVoteWhereInput
 }
 
+/**
+ * TemplateCountOutputType without action
+ */
+export type TemplateCountOutputTypeCountEmailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailCampaignWhereInput
+}
+
 
 export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1147,6 +1279,7 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   sourceTemplate?: boolean | Prisma.Template$sourceTemplateArgs<ExtArgs>
   eventCopies?: boolean | Prisma.Template$eventCopiesArgs<ExtArgs>
   votes?: boolean | Prisma.Template$votesArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.Template$emailCampaignsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
 
@@ -1205,6 +1338,7 @@ export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   sourceTemplate?: boolean | Prisma.Template$sourceTemplateArgs<ExtArgs>
   eventCopies?: boolean | Prisma.Template$eventCopiesArgs<ExtArgs>
   votes?: boolean | Prisma.Template$votesArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.Template$emailCampaignsArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1226,6 +1360,7 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     sourceTemplate: Prisma.$TemplatePayload<ExtArgs> | null
     eventCopies: Prisma.$TemplatePayload<ExtArgs>[]
     votes: Prisma.$TemplateVotePayload<ExtArgs>[]
+    emailCampaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1642,6 +1777,7 @@ export interface Prisma__TemplateClient<T, Null = never, ExtArgs extends runtime
   sourceTemplate<T extends Prisma.Template$sourceTemplateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$sourceTemplateArgs<ExtArgs>>): Prisma.Prisma__TemplateClient<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   eventCopies<T extends Prisma.Template$eventCopiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$eventCopiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   votes<T extends Prisma.Template$votesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$votesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailCampaigns<T extends Prisma.Template$emailCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$emailCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2185,6 +2321,30 @@ export type Template$votesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.TemplateVoteScalarFieldEnum | Prisma.TemplateVoteScalarFieldEnum[]
+}
+
+/**
+ * Template.emailCampaigns
+ */
+export type Template$emailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailCampaign
+   */
+  select?: Prisma.EmailCampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailCampaign
+   */
+  omit?: Prisma.EmailCampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailCampaignInclude<ExtArgs> | null
+  where?: Prisma.EmailCampaignWhereInput
+  orderBy?: Prisma.EmailCampaignOrderByWithRelationInput | Prisma.EmailCampaignOrderByWithRelationInput[]
+  cursor?: Prisma.EmailCampaignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailCampaignScalarFieldEnum | Prisma.EmailCampaignScalarFieldEnum[]
 }
 
 /**

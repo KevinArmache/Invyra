@@ -33,6 +33,10 @@ model User {
   plan      String  @default("free") // "free" | "premium"
   suspended Boolean @default(false)
 
+  /// Accepte les e-mails d'annonce (nouveaux modèles…) envoyés depuis
+  /// l'administration. Le lien de désabonnement le passe à faux.
+  marketingEmails Boolean @default(true)
+
   /// Hash bcrypt hérité de l'authentification maison. Plus jamais écrit : le
   /// mot de passe vit désormais dans Account.password (providerId
   /// "credential"). Conservé le temps que tous les comptes soient migrés par
@@ -48,6 +52,9 @@ model User {
   sessions       Session[]
   accounts       Account[]
   templateVotes  TemplateVote[]
+
+  emailCampaigns     EmailCampaign[]
+  campaignDeliveries EmailCampaignRecipient[]
 
   @@map("users")
 }
@@ -146,6 +153,7 @@ model Template {
   sourceTemplate Template?  @relation("TemplateCopies", fields: [sourceTemplateId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   eventCopies    Template[] @relation("TemplateCopies")
   votes          TemplateVote[]
+  emailCampaigns EmailCampaign[]
 
   @@index([userId])
   @@index([featured])
@@ -174,6 +182,71 @@ model TemplateVote {
   @@unique([templateId, userId])
   @@index([userId])
   @@map("template_votes")
+}
+
+// ─── E-mails d'annonce ───────────────────────────────────────────────────────
+
+/// Un envoi groupé depuis l'administration (voir app/actions/campaign.js).
+/// Les destinataires sont figés au lancement ; l'envoi part par lots et peut
+/// reprendre après une pause (quota SMTP atteint, page fermée).
+model EmailCampaign {
+  id String @id @default(cuid())
+
+  subject   String
+  preheader String  @default("")
+  heading   String
+  message   String
+  ctaLabel  String?
+  ctaUrl    String?
+
+  /// Modèle annoncé, s'il y en a un : sa photo et son nom illustrent l'e-mail.
+  templateId String?
+
+  audience String @default("all") // "all" | "free" | "premium"
+  status   String @default("sending") // "sending" | "paused" | "sent"
+
+  total       Int     @default(0)
+  sentCount   Int     @default(0)
+  failedCount Int     @default(0)
+  lastError   String?
+
+  createdById String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+
+  template   Template?                @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  createdBy  User?                    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  recipients EmailCampaignRecipient[]
+
+  @@index([createdAt])
+  @@map("email_campaigns")
+}
+
+/// Un destinataire d'un envoi, et où en est son e-mail.
+model EmailCampaignRecipient {
+  id         String  @id @default(cuid())
+  campaignId String
+  userId     String?
+
+  email String
+  name  String?
+
+  status String    @default("pending") // "pending" | "sending" | "sent" | "failed"
+  error  String?
+  sentAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaign EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([campaignId, email])
+  @@index([campaignId, status])
+  @@index([userId])
+  @@map("email_campaign_recipients")
 }
 
 // ─── Événements ──────────────────────────────────────────────────────────────

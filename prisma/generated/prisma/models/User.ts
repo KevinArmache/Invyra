@@ -35,6 +35,7 @@ export type UserMinAggregateOutputType = {
   role: string | null
   plan: string | null
   suspended: boolean | null
+  marketingEmails: boolean | null
   legacyPassword: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -51,6 +52,7 @@ export type UserMaxAggregateOutputType = {
   role: string | null
   plan: string | null
   suspended: boolean | null
+  marketingEmails: boolean | null
   legacyPassword: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -67,6 +69,7 @@ export type UserCountAggregateOutputType = {
   role: number
   plan: number
   suspended: number
+  marketingEmails: number
   legacyPassword: number
   createdAt: number
   updatedAt: number
@@ -85,6 +88,7 @@ export type UserMinAggregateInputType = {
   role?: true
   plan?: true
   suspended?: true
+  marketingEmails?: true
   legacyPassword?: true
   createdAt?: true
   updatedAt?: true
@@ -101,6 +105,7 @@ export type UserMaxAggregateInputType = {
   role?: true
   plan?: true
   suspended?: true
+  marketingEmails?: true
   legacyPassword?: true
   createdAt?: true
   updatedAt?: true
@@ -117,6 +122,7 @@ export type UserCountAggregateInputType = {
   role?: true
   plan?: true
   suspended?: true
+  marketingEmails?: true
   legacyPassword?: true
   createdAt?: true
   updatedAt?: true
@@ -206,6 +212,7 @@ export type UserGroupByOutputType = {
   role: string
   plan: string
   suspended: boolean
+  marketingEmails: boolean
   legacyPassword: string | null
   createdAt: Date
   updatedAt: Date
@@ -243,6 +250,7 @@ export type UserWhereInput = {
   role?: Prisma.StringFilter<"User"> | string
   plan?: Prisma.StringFilter<"User"> | string
   suspended?: Prisma.BoolFilter<"User"> | boolean
+  marketingEmails?: Prisma.BoolFilter<"User"> | boolean
   legacyPassword?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -252,6 +260,8 @@ export type UserWhereInput = {
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   templateVotes?: Prisma.TemplateVoteListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
+  campaignDeliveries?: Prisma.EmailCampaignRecipientListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -265,6 +275,7 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   suspended?: Prisma.SortOrder
+  marketingEmails?: Prisma.SortOrder
   legacyPassword?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -274,6 +285,8 @@ export type UserOrderByWithRelationInput = {
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   templateVotes?: Prisma.TemplateVoteOrderByRelationAggregateInput
+  emailCampaigns?: Prisma.EmailCampaignOrderByRelationAggregateInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -290,6 +303,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.StringFilter<"User"> | string
   plan?: Prisma.StringFilter<"User"> | string
   suspended?: Prisma.BoolFilter<"User"> | boolean
+  marketingEmails?: Prisma.BoolFilter<"User"> | boolean
   legacyPassword?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -299,6 +313,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   sessions?: Prisma.SessionListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   templateVotes?: Prisma.TemplateVoteListRelationFilter
+  emailCampaigns?: Prisma.EmailCampaignListRelationFilter
+  campaignDeliveries?: Prisma.EmailCampaignRecipientListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -312,6 +328,7 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   suspended?: Prisma.SortOrder
+  marketingEmails?: Prisma.SortOrder
   legacyPassword?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -334,6 +351,7 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.StringWithAggregatesFilter<"User"> | string
   plan?: Prisma.StringWithAggregatesFilter<"User"> | string
   suspended?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  marketingEmails?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   legacyPassword?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -350,6 +368,7 @@ export type UserCreateInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -359,6 +378,8 @@ export type UserCreateInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -372,6 +393,7 @@ export type UserUncheckedCreateInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -381,6 +403,8 @@ export type UserUncheckedCreateInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -394,6 +418,7 @@ export type UserUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -403,6 +428,8 @@ export type UserUpdateInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -416,6 +443,7 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -425,6 +453,8 @@ export type UserUncheckedUpdateInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -438,6 +468,7 @@ export type UserCreateManyInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -454,6 +485,7 @@ export type UserUpdateManyMutationInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -470,6 +502,7 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -486,6 +519,7 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   suspended?: Prisma.SortOrder
+  marketingEmails?: Prisma.SortOrder
   legacyPassword?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -502,6 +536,7 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   suspended?: Prisma.SortOrder
+  marketingEmails?: Prisma.SortOrder
   legacyPassword?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -518,6 +553,7 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   plan?: Prisma.SortOrder
   suspended?: Prisma.SortOrder
+  marketingEmails?: Prisma.SortOrder
   legacyPassword?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -607,6 +643,38 @@ export type UserUpdateOneRequiredWithoutTemplateVotesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTemplateVotesInput, Prisma.UserUpdateWithoutTemplateVotesInput>, Prisma.UserUncheckedUpdateWithoutTemplateVotesInput>
 }
 
+export type UserCreateNestedOneWithoutEmailCampaignsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailCampaignsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutEmailCampaignsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutEmailCampaignsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEmailCampaignsInput
+  upsert?: Prisma.UserUpsertWithoutEmailCampaignsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmailCampaignsInput, Prisma.UserUpdateWithoutEmailCampaignsInput>, Prisma.UserUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
+export type UserCreateNestedOneWithoutCampaignDeliveriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampaignDeliveriesInput, Prisma.UserUncheckedCreateWithoutCampaignDeliveriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampaignDeliveriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCampaignDeliveriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCampaignDeliveriesInput, Prisma.UserUncheckedCreateWithoutCampaignDeliveriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCampaignDeliveriesInput
+  upsert?: Prisma.UserUpsertWithoutCampaignDeliveriesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCampaignDeliveriesInput, Prisma.UserUpdateWithoutCampaignDeliveriesInput>, Prisma.UserUncheckedUpdateWithoutCampaignDeliveriesInput>
+}
+
 export type UserCreateNestedOneWithoutEventsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutEventsInput, Prisma.UserUncheckedCreateWithoutEventsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventsInput
@@ -646,6 +714,7 @@ export type UserCreateWithoutSessionsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -654,6 +723,8 @@ export type UserCreateWithoutSessionsInput = {
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -667,6 +738,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -675,6 +747,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -704,6 +778,7 @@ export type UserUpdateWithoutSessionsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -712,6 +787,8 @@ export type UserUpdateWithoutSessionsInput = {
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -725,6 +802,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -733,6 +811,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -746,6 +826,7 @@ export type UserCreateWithoutAccountsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -754,6 +835,8 @@ export type UserCreateWithoutAccountsInput = {
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -767,6 +850,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -775,6 +859,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -804,6 +890,7 @@ export type UserUpdateWithoutAccountsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -812,6 +899,8 @@ export type UserUpdateWithoutAccountsInput = {
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -825,6 +914,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -833,6 +923,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTemplatesInput = {
@@ -846,6 +938,7 @@ export type UserCreateWithoutTemplatesInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -854,6 +947,8 @@ export type UserCreateWithoutTemplatesInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTemplatesInput = {
@@ -867,6 +962,7 @@ export type UserUncheckedCreateWithoutTemplatesInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -875,6 +971,8 @@ export type UserUncheckedCreateWithoutTemplatesInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTemplatesInput = {
@@ -904,6 +1002,7 @@ export type UserUpdateWithoutTemplatesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -912,6 +1011,8 @@ export type UserUpdateWithoutTemplatesInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTemplatesInput = {
@@ -925,6 +1026,7 @@ export type UserUncheckedUpdateWithoutTemplatesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -933,6 +1035,8 @@ export type UserUncheckedUpdateWithoutTemplatesInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTemplateVotesInput = {
@@ -946,6 +1050,7 @@ export type UserCreateWithoutTemplateVotesInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -954,6 +1059,8 @@ export type UserCreateWithoutTemplateVotesInput = {
   collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTemplateVotesInput = {
@@ -967,6 +1074,7 @@ export type UserUncheckedCreateWithoutTemplateVotesInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -975,6 +1083,8 @@ export type UserUncheckedCreateWithoutTemplateVotesInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTemplateVotesInput = {
@@ -1004,6 +1114,7 @@ export type UserUpdateWithoutTemplateVotesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1012,6 +1123,8 @@ export type UserUpdateWithoutTemplateVotesInput = {
   collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTemplateVotesInput = {
@@ -1025,6 +1138,7 @@ export type UserUncheckedUpdateWithoutTemplateVotesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1033,6 +1147,232 @@ export type UserUncheckedUpdateWithoutTemplateVotesInput = {
   collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEmailCampaignsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  marketingEmails?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEmailCampaignsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  marketingEmails?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEmailCampaignsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutEmailCampaignsInput>
+}
+
+export type UserUpsertWithoutEmailCampaignsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEmailCampaignsInput, Prisma.UserUncheckedUpdateWithoutEmailCampaignsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEmailCampaignsInput, Prisma.UserUncheckedCreateWithoutEmailCampaignsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEmailCampaignsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEmailCampaignsInput, Prisma.UserUncheckedUpdateWithoutEmailCampaignsInput>
+}
+
+export type UserUpdateWithoutEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEmailCampaignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutCampaignDeliveriesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  marketingEmails?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCampaignDeliveriesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  name?: string | null
+  image?: string | null
+  company?: string | null
+  phone?: string | null
+  role?: string
+  plan?: string
+  suspended?: boolean
+  marketingEmails?: boolean
+  legacyPassword?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  events?: Prisma.EventUncheckedCreateNestedManyWithoutUserInput
+  templates?: Prisma.TemplateUncheckedCreateNestedManyWithoutUserInput
+  collaborations?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCampaignDeliveriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampaignDeliveriesInput, Prisma.UserUncheckedCreateWithoutCampaignDeliveriesInput>
+}
+
+export type UserUpsertWithoutCampaignDeliveriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCampaignDeliveriesInput, Prisma.UserUncheckedUpdateWithoutCampaignDeliveriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCampaignDeliveriesInput, Prisma.UserUncheckedCreateWithoutCampaignDeliveriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCampaignDeliveriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCampaignDeliveriesInput, Prisma.UserUncheckedUpdateWithoutCampaignDeliveriesInput>
+}
+
+export type UserUpdateWithoutCampaignDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCampaignDeliveriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  company?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  events?: Prisma.EventUncheckedUpdateManyWithoutUserNestedInput
+  templates?: Prisma.TemplateUncheckedUpdateManyWithoutUserNestedInput
+  collaborations?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutEventsInput = {
@@ -1046,6 +1386,7 @@ export type UserCreateWithoutEventsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1054,6 +1395,8 @@ export type UserCreateWithoutEventsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEventsInput = {
@@ -1067,6 +1410,7 @@ export type UserUncheckedCreateWithoutEventsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1075,6 +1419,8 @@ export type UserUncheckedCreateWithoutEventsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEventsInput = {
@@ -1104,6 +1450,7 @@ export type UserUpdateWithoutEventsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1112,6 +1459,8 @@ export type UserUpdateWithoutEventsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEventsInput = {
@@ -1125,6 +1474,7 @@ export type UserUncheckedUpdateWithoutEventsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1133,6 +1483,8 @@ export type UserUncheckedUpdateWithoutEventsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCollaborationsInput = {
@@ -1146,6 +1498,7 @@ export type UserCreateWithoutCollaborationsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1154,6 +1507,8 @@ export type UserCreateWithoutCollaborationsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCollaborationsInput = {
@@ -1167,6 +1522,7 @@ export type UserUncheckedCreateWithoutCollaborationsInput = {
   role?: string
   plan?: string
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1175,6 +1531,8 @@ export type UserUncheckedCreateWithoutCollaborationsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   templateVotes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutUserInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedCreateNestedManyWithoutCreatedByInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCollaborationsInput = {
@@ -1204,6 +1562,7 @@ export type UserUpdateWithoutCollaborationsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1212,6 +1571,8 @@ export type UserUpdateWithoutCollaborationsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCollaborationsInput = {
@@ -1225,6 +1586,7 @@ export type UserUncheckedUpdateWithoutCollaborationsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   plan?: Prisma.StringFieldUpdateOperationsInput | string
   suspended?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  marketingEmails?: Prisma.BoolFieldUpdateOperationsInput | boolean
   legacyPassword?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1233,6 +1595,8 @@ export type UserUncheckedUpdateWithoutCollaborationsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   templateVotes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutUserNestedInput
+  emailCampaigns?: Prisma.EmailCampaignUncheckedUpdateManyWithoutCreatedByNestedInput
+  campaignDeliveries?: Prisma.EmailCampaignRecipientUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1247,6 +1611,8 @@ export type UserCountOutputType = {
   sessions: number
   accounts: number
   templateVotes: number
+  emailCampaigns: number
+  campaignDeliveries: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1256,6 +1622,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   templateVotes?: boolean | UserCountOutputTypeCountTemplateVotesArgs
+  emailCampaigns?: boolean | UserCountOutputTypeCountEmailCampaignsArgs
+  campaignDeliveries?: boolean | UserCountOutputTypeCountCampaignDeliveriesArgs
 }
 
 /**
@@ -1310,6 +1678,20 @@ export type UserCountOutputTypeCountTemplateVotesArgs<ExtArgs extends runtime.Ty
   where?: Prisma.TemplateVoteWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEmailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailCampaignWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCampaignDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmailCampaignRecipientWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1322,6 +1704,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   plan?: boolean
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1331,6 +1714,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   templateVotes?: boolean | Prisma.User$templateVotesArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.User$emailCampaignsArgs<ExtArgs>
+  campaignDeliveries?: boolean | Prisma.User$campaignDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1345,6 +1730,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   plan?: boolean
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1361,6 +1747,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   plan?: boolean
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1377,12 +1764,13 @@ export type UserSelectScalar = {
   role?: boolean
   plan?: boolean
   suspended?: boolean
+  marketingEmails?: boolean
   legacyPassword?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "image" | "company" | "phone" | "role" | "plan" | "suspended" | "legacyPassword" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "name" | "image" | "company" | "phone" | "role" | "plan" | "suspended" | "marketingEmails" | "legacyPassword" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   events?: boolean | Prisma.User$eventsArgs<ExtArgs>
   templates?: boolean | Prisma.User$templatesArgs<ExtArgs>
@@ -1390,6 +1778,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   templateVotes?: boolean | Prisma.User$templateVotesArgs<ExtArgs>
+  emailCampaigns?: boolean | Prisma.User$emailCampaignsArgs<ExtArgs>
+  campaignDeliveries?: boolean | Prisma.User$campaignDeliveriesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1404,6 +1794,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     templateVotes: Prisma.$TemplateVotePayload<ExtArgs>[]
+    emailCampaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
+    campaignDeliveries: Prisma.$EmailCampaignRecipientPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1416,6 +1808,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: string
     plan: string
     suspended: boolean
+    /**
+     * Accepte les e-mails d'annonce (nouveaux modèles…) envoyés depuis
+     * l'administration. Le lien de désabonnement le passe à faux.
+     */
+    marketingEmails: boolean
     /**
      * Hash bcrypt hérité de l'authentification maison. Plus jamais écrit : le
      * mot de passe vit désormais dans Account.password (providerId
@@ -1825,6 +2222,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   templateVotes<T extends Prisma.User$templateVotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$templateVotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  emailCampaigns<T extends Prisma.User$emailCampaignsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$emailCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  campaignDeliveries<T extends Prisma.User$campaignDeliveriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$campaignDeliveriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailCampaignRecipientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1864,6 +2263,7 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly plan: Prisma.FieldRef<"User", 'String'>
   readonly suspended: Prisma.FieldRef<"User", 'Boolean'>
+  readonly marketingEmails: Prisma.FieldRef<"User", 'Boolean'>
   readonly legacyPassword: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
@@ -2401,6 +2801,54 @@ export type User$templateVotesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.TemplateVoteScalarFieldEnum | Prisma.TemplateVoteScalarFieldEnum[]
+}
+
+/**
+ * User.emailCampaigns
+ */
+export type User$emailCampaignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailCampaign
+   */
+  select?: Prisma.EmailCampaignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailCampaign
+   */
+  omit?: Prisma.EmailCampaignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailCampaignInclude<ExtArgs> | null
+  where?: Prisma.EmailCampaignWhereInput
+  orderBy?: Prisma.EmailCampaignOrderByWithRelationInput | Prisma.EmailCampaignOrderByWithRelationInput[]
+  cursor?: Prisma.EmailCampaignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailCampaignScalarFieldEnum | Prisma.EmailCampaignScalarFieldEnum[]
+}
+
+/**
+ * User.campaignDeliveries
+ */
+export type User$campaignDeliveriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmailCampaignRecipient
+   */
+  select?: Prisma.EmailCampaignRecipientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmailCampaignRecipient
+   */
+  omit?: Prisma.EmailCampaignRecipientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmailCampaignRecipientInclude<ExtArgs> | null
+  where?: Prisma.EmailCampaignRecipientWhereInput
+  orderBy?: Prisma.EmailCampaignRecipientOrderByWithRelationInput | Prisma.EmailCampaignRecipientOrderByWithRelationInput[]
+  cursor?: Prisma.EmailCampaignRecipientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmailCampaignRecipientScalarFieldEnum | Prisma.EmailCampaignRecipientScalarFieldEnum[]
 }
 
 /**

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, LayoutTemplate, Shield, Users } from "lucide-react";
+import { Calendar, LayoutTemplate, Mail, Shield, Users } from "lucide-react";
 
 import { getAdminStats } from "@/app/actions/admin";
 import { getTranslations } from "@/lib/i18n/server";
@@ -66,6 +66,12 @@ export default async function AdminPage() {
             <Link href="/dashboard/templates">
               <LayoutTemplate className="h-4 w-4" />
               {t("portal.admin.templates")}
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link href="/admin/emails/new">
+              <Mail className="h-4 w-4" />
+              {t("portal.admin.send_email")}
             </Link>
           </Button>
         </div>

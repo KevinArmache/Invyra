@@ -124,6 +124,7 @@ export async function getCurrentUser() {
       role: true,
       plan: true,
       suspended: true,
+      marketingEmails: true,
       createdAt: true,
     },
   });
@@ -195,6 +196,19 @@ export async function updateProfile(name, company, phone) {
     },
     select: { id: true, email: true, name: true, company: true, phone: true },
   });
+}
+
+/** Recevoir ou non les e-mails d'annonce (nouveaux modèles, nouveautés). */
+export async function updateMyEmailPreferences(marketingEmails) {
+  const session = await getSession();
+  if (!session) throw new Error("Non authentifié");
+
+  const user = await prisma.user.update({
+    where: { id: session.userId },
+    data: { marketingEmails: Boolean(marketingEmails) },
+    select: { marketingEmails: true },
+  });
+  return user;
 }
 
 export async function changePassword(currentPassword, newPassword) {

@@ -74,6 +74,18 @@ export type Template = Prisma.TemplateModel
  */
 export type TemplateVote = Prisma.TemplateVoteModel
 /**
+ * Model EmailCampaign
+ * Un envoi groupé depuis l'administration (voir app/actions/campaign.js).
+ * Les destinataires sont figés au lancement ; l'envoi part par lots et peut
+ * reprendre après une pause (quota SMTP atteint, page fermée).
+ */
+export type EmailCampaign = Prisma.EmailCampaignModel
+/**
+ * Model EmailCampaignRecipient
+ * Un destinataire d'un envoi, et où en est son e-mail.
+ */
+export type EmailCampaignRecipient = Prisma.EmailCampaignRecipientModel
+/**
  * Model Event
  * 
  */
