@@ -230,7 +230,6 @@ export type TemplateWhereInput = {
   event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.EventWhereInput> | null
   sourceTemplate?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
   eventCopies?: Prisma.TemplateListRelationFilter
-  comments?: Prisma.TemplateCommentListRelationFilter
   votes?: Prisma.TemplateVoteListRelationFilter
 }
 
@@ -250,7 +249,6 @@ export type TemplateOrderByWithRelationInput = {
   event?: Prisma.EventOrderByWithRelationInput
   sourceTemplate?: Prisma.TemplateOrderByWithRelationInput
   eventCopies?: Prisma.TemplateOrderByRelationAggregateInput
-  comments?: Prisma.TemplateCommentOrderByRelationAggregateInput
   votes?: Prisma.TemplateVoteOrderByRelationAggregateInput
 }
 
@@ -273,7 +271,6 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   event?: Prisma.XOR<Prisma.EventNullableScalarRelationFilter, Prisma.EventWhereInput> | null
   sourceTemplate?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
   eventCopies?: Prisma.TemplateListRelationFilter
-  comments?: Prisma.TemplateCommentListRelationFilter
   votes?: Prisma.TemplateVoteListRelationFilter
 }, "id" | "eventId">
 
@@ -324,7 +321,6 @@ export type TemplateCreateInput = {
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
 }
 
@@ -341,7 +337,6 @@ export type TemplateUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -358,7 +353,6 @@ export type TemplateUpdateInput = {
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
 }
 
@@ -375,7 +369,6 @@ export type TemplateUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -582,20 +575,6 @@ export type TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput = {
   deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
 }
 
-export type TemplateCreateNestedOneWithoutCommentsInput = {
-  create?: Prisma.XOR<Prisma.TemplateCreateWithoutCommentsInput, Prisma.TemplateUncheckedCreateWithoutCommentsInput>
-  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutCommentsInput
-  connect?: Prisma.TemplateWhereUniqueInput
-}
-
-export type TemplateUpdateOneRequiredWithoutCommentsNestedInput = {
-  create?: Prisma.XOR<Prisma.TemplateCreateWithoutCommentsInput, Prisma.TemplateUncheckedCreateWithoutCommentsInput>
-  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutCommentsInput
-  upsert?: Prisma.TemplateUpsertWithoutCommentsInput
-  connect?: Prisma.TemplateWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TemplateUpdateToOneWithWhereWithoutCommentsInput, Prisma.TemplateUpdateWithoutCommentsInput>, Prisma.TemplateUncheckedUpdateWithoutCommentsInput>
-}
-
 export type TemplateCreateNestedOneWithoutVotesInput = {
   create?: Prisma.XOR<Prisma.TemplateCreateWithoutVotesInput, Prisma.TemplateUncheckedCreateWithoutVotesInput>
   connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutVotesInput
@@ -654,7 +633,6 @@ export type TemplateCreateWithoutUserInput = {
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
 }
 
@@ -670,7 +648,6 @@ export type TemplateUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -729,7 +706,6 @@ export type TemplateCreateWithoutEventCopiesInput = {
   user?: Prisma.UserCreateNestedOneWithoutTemplatesInput
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
-  comments?: Prisma.TemplateCommentCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
 }
 
@@ -745,7 +721,6 @@ export type TemplateUncheckedCreateWithoutEventCopiesInput = {
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  comments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -766,7 +741,6 @@ export type TemplateCreateWithoutSourceTemplateInput = {
   user?: Prisma.UserCreateNestedOneWithoutTemplatesInput
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
 }
 
@@ -782,7 +756,6 @@ export type TemplateUncheckedCreateWithoutSourceTemplateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -819,7 +792,6 @@ export type TemplateUpdateWithoutEventCopiesInput = {
   user?: Prisma.UserUpdateOneWithoutTemplatesNestedInput
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
-  comments?: Prisma.TemplateCommentUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
 }
 
@@ -835,7 +807,6 @@ export type TemplateUncheckedUpdateWithoutEventCopiesInput = {
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  comments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -855,86 +826,6 @@ export type TemplateUpdateManyWithWhereWithoutSourceTemplateInput = {
   data: Prisma.XOR<Prisma.TemplateUpdateManyMutationInput, Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateInput>
 }
 
-export type TemplateCreateWithoutCommentsInput = {
-  id?: string
-  name: string
-  status?: $Enums.TemplateStatus | null
-  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  category?: string | null
-  featured?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutTemplatesInput
-  event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
-  sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
-  eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
-  votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
-}
-
-export type TemplateUncheckedCreateWithoutCommentsInput = {
-  id?: string
-  userId?: string | null
-  eventId?: string | null
-  sourceTemplateId?: string | null
-  name: string
-  status?: $Enums.TemplateStatus | null
-  config: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  category?: string | null
-  featured?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
-  votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
-}
-
-export type TemplateCreateOrConnectWithoutCommentsInput = {
-  where: Prisma.TemplateWhereUniqueInput
-  create: Prisma.XOR<Prisma.TemplateCreateWithoutCommentsInput, Prisma.TemplateUncheckedCreateWithoutCommentsInput>
-}
-
-export type TemplateUpsertWithoutCommentsInput = {
-  update: Prisma.XOR<Prisma.TemplateUpdateWithoutCommentsInput, Prisma.TemplateUncheckedUpdateWithoutCommentsInput>
-  create: Prisma.XOR<Prisma.TemplateCreateWithoutCommentsInput, Prisma.TemplateUncheckedCreateWithoutCommentsInput>
-  where?: Prisma.TemplateWhereInput
-}
-
-export type TemplateUpdateToOneWithWhereWithoutCommentsInput = {
-  where?: Prisma.TemplateWhereInput
-  data: Prisma.XOR<Prisma.TemplateUpdateWithoutCommentsInput, Prisma.TemplateUncheckedUpdateWithoutCommentsInput>
-}
-
-export type TemplateUpdateWithoutCommentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutTemplatesNestedInput
-  event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
-  sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
-  eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
-  votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
-}
-
-export type TemplateUncheckedUpdateWithoutCommentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  eventId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sourceTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
-  config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
-  votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
-}
-
 export type TemplateCreateWithoutVotesInput = {
   id?: string
   name: string
@@ -948,7 +839,6 @@ export type TemplateCreateWithoutVotesInput = {
   event?: Prisma.EventCreateNestedOneWithoutTemplateCopyInput
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateUncheckedCreateWithoutVotesInput = {
@@ -964,7 +854,6 @@ export type TemplateUncheckedCreateWithoutVotesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutTemplateInput
 }
 
 export type TemplateCreateOrConnectWithoutVotesInput = {
@@ -996,7 +885,6 @@ export type TemplateUpdateWithoutVotesInput = {
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutVotesInput = {
@@ -1012,7 +900,6 @@ export type TemplateUncheckedUpdateWithoutVotesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
 export type TemplateCreateWithoutEventInput = {
@@ -1027,7 +914,6 @@ export type TemplateCreateWithoutEventInput = {
   user?: Prisma.UserCreateNestedOneWithoutTemplatesInput
   sourceTemplate?: Prisma.TemplateCreateNestedOneWithoutEventCopiesInput
   eventCopies?: Prisma.TemplateCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteCreateNestedManyWithoutTemplateInput
 }
 
@@ -1043,7 +929,6 @@ export type TemplateUncheckedCreateWithoutEventInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   eventCopies?: Prisma.TemplateUncheckedCreateNestedManyWithoutSourceTemplateInput
-  comments?: Prisma.TemplateCommentUncheckedCreateNestedManyWithoutTemplateInput
   votes?: Prisma.TemplateVoteUncheckedCreateNestedManyWithoutTemplateInput
 }
 
@@ -1075,7 +960,6 @@ export type TemplateUpdateWithoutEventInput = {
   user?: Prisma.UserUpdateOneWithoutTemplatesNestedInput
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
 }
 
@@ -1091,7 +975,6 @@ export type TemplateUncheckedUpdateWithoutEventInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -1120,7 +1003,6 @@ export type TemplateUpdateWithoutUserInput = {
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   sourceTemplate?: Prisma.TemplateUpdateOneWithoutEventCopiesNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
 }
 
@@ -1136,7 +1018,6 @@ export type TemplateUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -1178,7 +1059,6 @@ export type TemplateUpdateWithoutSourceTemplateInput = {
   user?: Prisma.UserUpdateOneWithoutTemplatesNestedInput
   event?: Prisma.EventUpdateOneWithoutTemplateCopyNestedInput
   eventCopies?: Prisma.TemplateUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUpdateManyWithoutTemplateNestedInput
 }
 
@@ -1194,7 +1074,6 @@ export type TemplateUncheckedUpdateWithoutSourceTemplateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   eventCopies?: Prisma.TemplateUncheckedUpdateManyWithoutSourceTemplateNestedInput
-  comments?: Prisma.TemplateCommentUncheckedUpdateManyWithoutTemplateNestedInput
   votes?: Prisma.TemplateVoteUncheckedUpdateManyWithoutTemplateNestedInput
 }
 
@@ -1218,13 +1097,11 @@ export type TemplateUncheckedUpdateManyWithoutSourceTemplateInput = {
 
 export type TemplateCountOutputType = {
   eventCopies: number
-  comments: number
   votes: number
 }
 
 export type TemplateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   eventCopies?: boolean | TemplateCountOutputTypeCountEventCopiesArgs
-  comments?: boolean | TemplateCountOutputTypeCountCommentsArgs
   votes?: boolean | TemplateCountOutputTypeCountVotesArgs
 }
 
@@ -1243,13 +1120,6 @@ export type TemplateCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
  */
 export type TemplateCountOutputTypeCountEventCopiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TemplateWhereInput
-}
-
-/**
- * TemplateCountOutputType without action
- */
-export type TemplateCountOutputTypeCountCommentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TemplateCommentWhereInput
 }
 
 /**
@@ -1276,7 +1146,6 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   event?: boolean | Prisma.Template$eventArgs<ExtArgs>
   sourceTemplate?: boolean | Prisma.Template$sourceTemplateArgs<ExtArgs>
   eventCopies?: boolean | Prisma.Template$eventCopiesArgs<ExtArgs>
-  comments?: boolean | Prisma.Template$commentsArgs<ExtArgs>
   votes?: boolean | Prisma.Template$votesArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
@@ -1335,7 +1204,6 @@ export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   event?: boolean | Prisma.Template$eventArgs<ExtArgs>
   sourceTemplate?: boolean | Prisma.Template$sourceTemplateArgs<ExtArgs>
   eventCopies?: boolean | Prisma.Template$eventCopiesArgs<ExtArgs>
-  comments?: boolean | Prisma.Template$commentsArgs<ExtArgs>
   votes?: boolean | Prisma.Template$votesArgs<ExtArgs>
   _count?: boolean | Prisma.TemplateCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1357,7 +1225,6 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     event: Prisma.$EventPayload<ExtArgs> | null
     sourceTemplate: Prisma.$TemplatePayload<ExtArgs> | null
     eventCopies: Prisma.$TemplatePayload<ExtArgs>[]
-    comments: Prisma.$TemplateCommentPayload<ExtArgs>[]
     votes: Prisma.$TemplateVotePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1774,7 +1641,6 @@ export interface Prisma__TemplateClient<T, Null = never, ExtArgs extends runtime
   event<T extends Prisma.Template$eventArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$eventArgs<ExtArgs>>): Prisma.Prisma__EventClient<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   sourceTemplate<T extends Prisma.Template$sourceTemplateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$sourceTemplateArgs<ExtArgs>>): Prisma.Prisma__TemplateClient<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   eventCopies<T extends Prisma.Template$eventCopiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$eventCopiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  comments<T extends Prisma.Template$commentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   votes<T extends Prisma.Template$votesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$votesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TemplateVotePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2295,30 +2161,6 @@ export type Template$eventCopiesArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.TemplateScalarFieldEnum | Prisma.TemplateScalarFieldEnum[]
-}
-
-/**
- * Template.comments
- */
-export type Template$commentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the TemplateComment
-   */
-  select?: Prisma.TemplateCommentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the TemplateComment
-   */
-  omit?: Prisma.TemplateCommentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TemplateCommentInclude<ExtArgs> | null
-  where?: Prisma.TemplateCommentWhereInput
-  orderBy?: Prisma.TemplateCommentOrderByWithRelationInput | Prisma.TemplateCommentOrderByWithRelationInput[]
-  cursor?: Prisma.TemplateCommentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.TemplateCommentScalarFieldEnum | Prisma.TemplateCommentScalarFieldEnum[]
 }
 
 /**

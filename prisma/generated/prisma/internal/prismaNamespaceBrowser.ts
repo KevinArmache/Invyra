@@ -56,7 +56,6 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Template: 'Template',
-  TemplateComment: 'TemplateComment',
   TemplateVote: 'TemplateVote',
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
@@ -160,17 +159,6 @@ export const TemplateScalarFieldEnum = {
 } as const
 
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
-
-
-export const TemplateCommentScalarFieldEnum = {
-  id: 'id',
-  templateId: 'templateId',
-  userId: 'userId',
-  message: 'message',
-  createdAt: 'createdAt'
-} as const
-
-export type TemplateCommentScalarFieldEnum = (typeof TemplateCommentScalarFieldEnum)[keyof typeof TemplateCommentScalarFieldEnum]
 
 
 export const TemplateVoteScalarFieldEnum = {

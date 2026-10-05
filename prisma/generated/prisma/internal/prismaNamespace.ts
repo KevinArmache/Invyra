@@ -389,7 +389,6 @@ export const ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Template: 'Template',
-  TemplateComment: 'TemplateComment',
   TemplateVote: 'TemplateVote',
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
@@ -411,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "template" | "templateComment" | "templateVote" | "event" | "eventCollaborator" | "guest" | "guestbookMessage" | "eventPhoto"
+    modelProps: "user" | "session" | "account" | "verification" | "template" | "templateVote" | "event" | "eventCollaborator" | "guest" | "guestbookMessage" | "eventPhoto"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -782,80 +781,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TemplateCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TemplateCountAggregateOutputType> | number
-        }
-      }
-    }
-    TemplateComment: {
-      payload: Prisma.$TemplateCommentPayload<ExtArgs>
-      fields: Prisma.TemplateCommentFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.TemplateCommentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.TemplateCommentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>
-        }
-        findFirst: {
-          args: Prisma.TemplateCommentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.TemplateCommentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>
-        }
-        findMany: {
-          args: Prisma.TemplateCommentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>[]
-        }
-        create: {
-          args: Prisma.TemplateCommentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>
-        }
-        createMany: {
-          args: Prisma.TemplateCommentCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.TemplateCommentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>[]
-        }
-        delete: {
-          args: Prisma.TemplateCommentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>
-        }
-        update: {
-          args: Prisma.TemplateCommentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>
-        }
-        deleteMany: {
-          args: Prisma.TemplateCommentDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.TemplateCommentUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.TemplateCommentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>[]
-        }
-        upsert: {
-          args: Prisma.TemplateCommentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateCommentPayload>
-        }
-        aggregate: {
-          args: Prisma.TemplateCommentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateTemplateComment>
-        }
-        groupBy: {
-          args: Prisma.TemplateCommentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TemplateCommentGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.TemplateCommentCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.TemplateCommentCountAggregateOutputType> | number
         }
       }
     }
@@ -1423,17 +1348,6 @@ export const TemplateScalarFieldEnum = {
 export type TemplateScalarFieldEnum = (typeof TemplateScalarFieldEnum)[keyof typeof TemplateScalarFieldEnum]
 
 
-export const TemplateCommentScalarFieldEnum = {
-  id: 'id',
-  templateId: 'templateId',
-  userId: 'userId',
-  message: 'message',
-  createdAt: 'createdAt'
-} as const
-
-export type TemplateCommentScalarFieldEnum = (typeof TemplateCommentScalarFieldEnum)[keyof typeof TemplateCommentScalarFieldEnum]
-
-
 export const TemplateVoteScalarFieldEnum = {
   id: 'id',
   templateId: 'templateId',
@@ -1788,7 +1702,6 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verification?: Prisma.VerificationOmit
   template?: Prisma.TemplateOmit
-  templateComment?: Prisma.TemplateCommentOmit
   templateVote?: Prisma.TemplateVoteOmit
   event?: Prisma.EventOmit
   eventCollaborator?: Prisma.EventCollaboratorOmit

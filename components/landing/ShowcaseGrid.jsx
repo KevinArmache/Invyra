@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ExternalLink, Eye, MessageSquare, ThumbsUp } from "lucide-react";
+import { ExternalLink, Eye, ThumbsUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
@@ -17,7 +17,7 @@ import { useTranslation } from "@/lib/i18n/Context";
  * collection (/templates). Les vignettes sont statiques ; un clic ouvre
  * l'aperçu vivant, avec ses animations et la réponse RSVP simulée. Chaque
  * modèle se partage par un lien vers sa page publique (/templates/[id]),
- * où l'on vote et commente ; la carte n'en montre que les compteurs.
+ * où l'on vote ; la carte n'en montre que le nombre de « j'aime ».
  *
  * L'événement fictif est daté dans le futur (voir sampleEvent) : celui des
  * vignettes vient du serveur, pour que le rendu serveur et l'hydratation
@@ -27,43 +27,20 @@ import { useTranslation } from "@/lib/i18n/Context";
  * @param {string} [props.titleTag] balise du nom de chaque modèle
  */
 /**
- * Compteurs d'avis d'une carte : « j'aime » et commentaires, chacun
- * seulement s'il y en a. Rien n'est cliquable : le clic reste à la carte.
+ * Nombre de « j'aime » d'une carte, seulement s'il y en a. Rien n'est
+ * cliquable : le clic reste à la carte.
  */
-function FeedbackCounts({ likeCount = 0, commentCount = 0 }) {
+function LikeCount({ count = 0 }) {
   const { t } = useTranslation();
-  if (likeCount === 0 && commentCount === 0) return null;
-
-  const items = [
-    likeCount > 0 && {
-      key: "likes",
-      Icon: ThumbsUp,
-      count: likeCount,
-      label: t("template_feedback.likes_count"),
-    },
-    commentCount > 0 && {
-      key: "comments",
-      Icon: MessageSquare,
-      count: commentCount,
-      label: t(
-        commentCount === 1
-          ? "template_feedback.comments_count_one"
-          : "template_feedback.comments_count_other",
-      ),
-    },
-  ].filter(Boolean);
+  if (count === 0) return null;
 
   return (
-    <p data-numeric className="flex items-center gap-2.5 text-xs text-ink-400">
-      {items.map(({ key, Icon, count, label }) => (
-        <span key={key} className="inline-flex items-center gap-1">
-          <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-          <span aria-hidden="true">{count}</span>
-          <span className="sr-only">
-            {label.replace("{count}", String(count))}
-          </span>
-        </span>
-      ))}
+    <p data-numeric className="inline-flex items-center gap-1 text-xs text-ink-400">
+      <ThumbsUp className="h-3.5 w-3.5" aria-hidden="true" />
+      <span aria-hidden="true">{count}</span>
+      <span className="sr-only">
+        {t("template_feedback.likes_count").replace("{count}", String(count))}
+      </span>
     </p>
   );
 }
@@ -118,10 +95,7 @@ export default function ShowcaseGrid({ templates, sample, titleTag = "h3" }) {
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
-                  <FeedbackCounts
-                    likeCount={template.likeCount}
-                    commentCount={template.commentCount}
-                  />
+                  <LikeCount count={template.likeCount} />
                   <ShareTemplateButton
                     template={{ id: template.id, name: template.name }}
                     className="relative z-10 shrink-0"

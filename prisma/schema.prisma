@@ -42,13 +42,12 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-  events           Event[]
-  templates        Template[]
-  collaborations   EventCollaborator[]
-  sessions         Session[]
-  accounts         Account[]
-  templateComments TemplateComment[]
-  templateVotes    TemplateVote[]
+  events         Event[]
+  templates      Template[]
+  collaborations EventCollaborator[]
+  sessions       Session[]
+  accounts       Account[]
+  templateVotes  TemplateVote[]
 
   @@map("users")
 }
@@ -146,7 +145,6 @@ model Template {
   event          Event?     @relation("EventTemplateCopy", fields: [eventId], references: [id], onDelete: Cascade)
   sourceTemplate Template?  @relation("TemplateCopies", fields: [sourceTemplateId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   eventCopies    Template[] @relation("TemplateCopies")
-  comments       TemplateComment[]
   votes          TemplateVote[]
 
   @@index([userId])
@@ -155,27 +153,11 @@ model Template {
   @@map("templates")
 }
 
-// ─── Avis sur les modèles ────────────────────────────────────────────────────
+// ─── Votes sur les modèles ───────────────────────────────────────────────────
 
-/// Commentaire d'un utilisateur sur un modèle public (voir app/actions/feedback.js).
-model TemplateComment {
-  id         String @id @default(cuid())
-  templateId String
-  userId     String
-
-  message String
-
-  createdAt DateTime @default(now())
-
-  template Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([templateId, createdAt])
-  @@index([userId])
-  @@map("template_comments")
-}
-
-/// Vote d'un utilisateur sur un modèle public : un seul par personne.
+/// Vote d'un utilisateur sur un modèle public : un seul par personne (voir
+/// app/actions/feedback.js). Les « j'aime » sont publics, avec le nom de
+/// leur auteur ; les « je n'aime pas » ne sont nominatifs que pour un admin.
 model TemplateVote {
   id         String @id @default(cuid())
   templateId String

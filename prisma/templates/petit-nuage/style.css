@@ -204,6 +204,7 @@ body {
   font-size: clamp(16px, 4.3vw, 19px);
   line-height: 1.55;
   color: var(--muted);
+  text-wrap: pretty;
 }
 .pn-when {
   display: inline-grid;
@@ -256,6 +257,11 @@ body {
   border-bottom: 2.5px solid var(--clay);
   rotate: 45deg;
   animation: pn-nudge 2s ease-in-out infinite;
+}
+
+/* Grand écran : le mobile prend un peu plus de place. */
+@media (min-width: 900px) and (min-height: 820px) {
+  .pn-mobile { scale: 1.2; transform-origin: 50% 0; margin-bottom: 50px; }
 }
 
 /* Téléphone couché : le texte tient dans la hauteur de l'écran. */
@@ -465,6 +471,7 @@ body {
 .pn-gift:nth-child(3n) { background: #edf4ea; }
 .pn-gift:hover { transform: translateY(-4px) rotate(-1deg); }
 .pn-gift svg { width: 30px; height: 30px; color: var(--clay); }
+.pn-gift span { text-wrap: balance; }
 
 /* ─── Code vestimentaire ─────────────────────────────────────────────────── */
 .pn-dress-text { max-width: 44ch; margin: 0 auto; color: var(--muted); }
@@ -478,6 +485,7 @@ body {
 }
 .pn-balloon {
   display: grid;
+  align-content: start;
   justify-items: center;
   gap: 8px;
   width: clamp(66px, 20vw, 110px);

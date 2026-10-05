@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { auth } from "@/lib/auth/server";
 import { getPublicTemplate } from "@/lib/landing/data";
-import { getTemplateFeedback } from "@/lib/templates/feedback";
+import { getTemplateVotes, publicName } from "@/lib/templates/feedback";
 import { SITE_URL } from "@/lib/site";
 import { sampleEvent } from "@/lib/landing/sample-event";
 import { getTranslations } from "@/lib/i18n/server";
@@ -57,9 +57,9 @@ export async function generateMetadata({ params }) {
 }
 
 /**
- * Données structurées : le modèle, ses votes et son nombre de commentaires.
+ * Données structurées : le modèle et ses votes.
  */
-function structuredData(t, template, feedback, locale) {
+function structuredData(t, template, votes, locale) {
   const url = `${SITE_URL}/templates/${template.id}`;
   return {
     "@context": "https://schema.org",
@@ -73,17 +73,16 @@ function structuredData(t, template, feedback, locale) {
     ),
     inLanguage: locale === "fr" ? "fr-FR" : "en-US",
     isPartOf: { "@id": `${SITE_URL}/#website` },
-    commentCount: feedback.commentCount,
     interactionStatistic: [
       {
         "@type": "InteractionCounter",
         interactionType: "https://schema.org/LikeAction",
-        userInteractionCount: feedback.likes,
+        userInteractionCount: votes.likes,
       },
       {
         "@type": "InteractionCounter",
         interactionType: "https://schema.org/DislikeAction",
-        userInteractionCount: feedback.dislikes,
+        userInteractionCount: votes.dislikes,
       },
     ],
   };
@@ -92,8 +91,8 @@ function structuredData(t, template, feedback, locale) {
 /**
  * Page publique d'un modèle de la galerie, ouverte par un lien partagé
  * (voir ShareTemplateButton). Aucun compte n'est requis pour la voir ; il en
- * faut un pour voter ou commenter. Seuls les modèles publiés ou mis en
- * avant y sont visibles (getPublicTemplate).
+ * faut un pour voter. Seuls les modèles publiés ou mis en avant y sont
+ * visibles (getPublicTemplate).
  */
 export default async function PublicTemplatePage({ params }) {
   const { id } = await params;
@@ -109,11 +108,11 @@ export default async function PublicTemplatePage({ params }) {
     session?.user && !session.user.suspended
       ? { userId: session.user.id, role: session.user.role ?? "user" }
       : null;
-  const feedback = await getTemplateFeedback(template.id, viewer);
+  const votes = await getTemplateVotes(template.id, viewer);
   const look = templateLook(toEditableConfig(template.config));
   // `<` échappé : une chaîne « </script> » dans un texte fermerait la balise.
   const jsonLd = JSON.stringify(
-    structuredData(t, template, feedback, locale),
+    structuredData(t, template, votes, locale),
   ).replace(/</g, "\\u003c");
 
   return (
@@ -131,8 +130,9 @@ export default async function PublicTemplatePage({ params }) {
             ? t(`portal.templates.categories.${template.category}`)
             : null
         }
-        feedback={feedback}
+        votes={votes}
         isAuthenticated={Boolean(viewer)}
+        viewerName={viewer ? publicName(session.user.name) : null}
       />
     </>
   );
