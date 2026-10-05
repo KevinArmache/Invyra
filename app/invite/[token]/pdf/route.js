@@ -4,8 +4,8 @@ import { slugify } from "@/lib/pdf/filename";
 import { renderInvitationPdf } from "@/lib/pdf/invitation-pdf";
 
 /**
- * Invitation d'un invité en PDF, à son nom et fidèle au modèle, téléchargée
- * depuis la barre de l'invité (GuestBar).
+ * Invitation d'un invité en PDF, à son nom et fidèle au modèle, avec son QR
+ * code d'entrée, téléchargée depuis la barre de l'invité (GuestBar).
  *
  * Même accès que l'invitation : le jeton suffit. Le téléchargement ne compte
  * pas comme une ouverture (`markViewed: false`) : l'invité a déjà ouvert son
@@ -25,7 +25,12 @@ export async function GET(request, { params }) {
   const { guest, event } = invitation;
   let buffer;
   try {
-    buffer = await renderInvitationPdf({ config, event, guestName: guest.name });
+    buffer = await renderInvitationPdf({
+      config,
+      event,
+      guestName: guest.name,
+      guestQr: invitation.ticket,
+    });
   } catch (error) {
     console.error("[invite/pdf] Génération impossible :", error);
     return new Response("PDF generation failed", { status: 500 });

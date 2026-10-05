@@ -5,6 +5,7 @@ import { after } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { sendMail } from '@/lib/email/transport'
 import { buildTicketEmail, TICKET_QR_CID } from '@/lib/email/ticket-email'
+import { ensureTicketCode, guestQrFor } from '@/lib/invitation/guest-qr'
 import { ticketQrPng, ticketQrSvg } from '@/lib/qr'
 import { directionsPath, stopsOf } from '@/lib/itinerary'
 import { SITE_URL } from '@/lib/site'
@@ -83,6 +84,10 @@ export async function getInvitationByToken(token, { markViewed = true } = {}) {
 
   return {
     guest: guestView(guest),
+    // QR code d'entrée, affiché sur l'invitation même avant confirmation
+    // (voir lib/invitation/guest-qr.js). Hors de guestView : le modèle n'en
+    // reçoit pas le code dans GUEST_DATA.
+    ticket: await guestQrFor(guest),
     event: {
       id: guest.event.id,
       title: guest.event.title,
@@ -227,11 +232,7 @@ export async function getTicketByToken(token) {
   if (!guest) return null
 
   const confirmed = guest.rsvpStatus === 'confirmed'
-  let code = guest.ticketCode
-  if (confirmed && !code) {
-    code = newTicketCode()
-    await prisma.guest.update({ where: { id: guest.id }, data: { ticketCode: code } })
-  }
+  const code = await ensureTicketCode(guest)
 
   const { event } = guest
   return {

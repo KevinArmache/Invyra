@@ -1,5 +1,6 @@
 import { canAccessEvent } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
+import { guestQrFor } from "@/lib/invitation/guest-qr";
 import { slugify } from "@/lib/pdf/filename";
 import { renderInvitationPdf } from "@/lib/pdf/invitation-pdf";
 import { prisma } from "@/lib/prisma";
@@ -7,7 +8,8 @@ import { prisma } from "@/lib/prisma";
 /**
  * Invitation d'un événement en PDF, fidèle au modèle, téléchargée depuis sa
  * fiche : version générique depuis l'aperçu du modèle (onglet « Aperçu »),
- * ou au nom d'un invité avec `?guest=<id>` (onglet « Invités »).
+ * ou au nom d'un invité avec `?guest=<id>` (onglet « Invités »), avec son QR
+ * code d'entrée. La version générique n'a pas de QR code.
  *
  * Ouverte au propriétaire, aux collaborateurs (lecture seule comprise) et aux
  * admins. proxy.js ne vérifie que la présence du cookie de session : l'accès
@@ -44,7 +46,7 @@ export async function GET(request, { params }) {
     guestId
       ? prisma.guest.findFirst({
           where: { id: guestId, eventId: id },
-          select: { name: true },
+          select: { id: true, name: true, ticketCode: true },
         })
       : null,
     getTranslations(),
@@ -62,6 +64,7 @@ export async function GET(request, { params }) {
       event,
       // Sans invité désigné, une formule qui convient à tous.
       guestName: guest?.name ?? t("portal.events.details.overview.pdf_guest"),
+      guestQr: guest ? await guestQrFor(guest) : null,
     });
   } catch (error) {
     console.error("[invitation/pdf] Génération impossible :", error);

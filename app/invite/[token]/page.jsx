@@ -122,6 +122,7 @@ export default async function InvitationPage({ params }) {
       token={token}
       event={invitation.event}
       guest={invitation.guest}
+      ticket={invitation.ticket}
       background={background}
       accent={accent}
     />

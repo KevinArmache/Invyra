@@ -36,6 +36,7 @@ export default function InvitationPreview({
   guestName,
   rsvpData,
   readOnly,
+  guestQr,
   title = "Aperçu de l'invitation",
   iframeRef,
   showOpening = true,
@@ -52,9 +53,10 @@ export default function InvitationPreview({
             rsvpData,
             readOnly,
             showOpening,
+            guestQr,
           })
         : null,
-    [template, event, guestName, rsvpData, readOnly, showOpening],
+    [template, event, guestName, rsvpData, readOnly, showOpening, guestQr],
   );
 
   if (!document_) return null;

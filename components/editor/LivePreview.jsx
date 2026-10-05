@@ -1,10 +1,18 @@
 "use client";
 
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import { MailOpen } from "lucide-react";
 
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { useTranslation } from "@/lib/i18n/Context";
+import { ticketQrSvg } from "@/lib/qr-svg";
+import { formatTicketCode } from "@/lib/tickets";
+
+/**
+ * Code de billet fictif de l'aperçu (celui de la page d'accueil) : l'éditeur
+ * montre où le QR code d'entrée de chaque invité apparaîtra.
+ */
+const SAMPLE_TICKET = "7K3MQ9PX2HTA";
 
 /** L'ouverture a-t-elle changé ? Ses réglages, ou son code (openingCode). */
 function openingChanged(template, previous) {
@@ -20,6 +28,9 @@ function openingChanged(template, previous) {
  * L'écran d'ouverture masquerait le contenu à chaque frappe : il n'est donc
  * affiché que sur demande (bouton « Voir l'ouverture »), ou quand on modifie
  * justement ses réglages. Modifier autre chose le fait disparaître.
+ *
+ * L'invitation y porte un QR code d'entrée d'exemple, comme celle que chaque
+ * invité recevra avec le sien.
  */
 export default function LivePreview({ template, event, guestName }) {
   const { t } = useTranslation();
@@ -29,6 +40,19 @@ export default function LivePreview({ template, event, guestName }) {
   const [showOpening, setShowOpening] = useState(false);
   const [replay, setReplay] = useState(0);
   const [previous, setPrevious] = useState(template);
+  const [sampleQr, setSampleQr] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    ticketQrSvg(SAMPLE_TICKET).then(
+      (svg) => active && setSampleQr({ code: formatTicketCode(SAMPLE_TICKET), svg }),
+      // Sans QR, l'aperçu reste valable.
+      () => {},
+    );
+    return () => {
+      active = false;
+    };
+  }, []);
 
   if (template !== previous) {
     setPrevious(template);
@@ -42,6 +66,7 @@ export default function LivePreview({ template, event, guestName }) {
         template={deferred}
         event={event}
         guestName={guestName}
+        guestQr={sampleQr}
         showOpening={showOpening}
       />
       <button

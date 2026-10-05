@@ -35,11 +35,14 @@ const SHEET_DELAY = 1400;
  *
  * @param {string} props.background  couleur de fond du modèle
  * @param {string} [props.accent]    couleur d'accent du modèle
+ * @param {{ code: string, svg: string }} [props.ticket]  QR code d'entrée de
+ *   l'invité, affiché sur l'invitation (lib/invitation/guest-qr.js)
  */
 export default function InvitationExperience({
   token,
   event,
   guest,
+  ticket,
   background = "#0a0a0a",
   accent,
 }) {
@@ -150,6 +153,7 @@ export default function InvitationExperience({
         event={event}
         guestName={guest.name}
         rsvpData={initialRsvp}
+        guestQr={ticket}
         title={t("invite.frame_title").replace("{title}", event.title)}
         onLoad={() => setIsLoaded(true)}
         // Invisible, l'invitation ne reçoit pas les touchers : sinon un
