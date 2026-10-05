@@ -65,6 +65,7 @@ import {
   markWhatsAppSent,
   sendInvitationEmail,
 } from "@/app/actions/notify";
+import { downloadFile } from "@/lib/download";
 import { clockLabel } from "@/lib/invitation/dates";
 import { useTranslation } from "@/lib/i18n/Context";
 import { MAX_SEATS } from "@/lib/tickets";
@@ -169,7 +170,7 @@ function SeatsBadge({ guest }) {
   );
 }
 
-function GuestRow({ guest, index }) {
+function GuestRow({ guest, index, eventId, hasTemplate }) {
   const { t, locale } = useTranslation();
   const router = useRouter();
   const [sending, setSending] = useState(null);
@@ -178,6 +179,10 @@ function GuestRow({ guest, index }) {
 
   const emailSent = Boolean(guest.emailSentAt || guest.invitationSentAt);
   const whatsappSent = Boolean(guest.whatsappSentAt);
+  const pdfLabel = t("portal.events.details.guests.download_invitation").replace(
+    "{name}",
+    guest.name,
+  );
 
   async function handleEmail() {
     setSending("email");
@@ -201,6 +206,21 @@ function GuestRow({ guest, index }) {
       router.refresh();
     } catch (caught) {
       toast.error(caught.message || t("common.error"));
+    } finally {
+      setSending(null);
+    }
+  }
+
+  /** Invitation de cet invité en PDF, à son nom (route invitation/pdf). */
+  async function handlePdf() {
+    setSending("pdf");
+    try {
+      await downloadFile(
+        `/dashboard/events/${eventId}/invitation/pdf?guest=${encodeURIComponent(guest.id)}`,
+        "invitation.pdf",
+      );
+    } catch {
+      toast.error(t("invite.pdf_error"));
     } finally {
       setSending(null);
     }
@@ -297,6 +317,24 @@ function GuestRow({ guest, index }) {
             {whatsappSent
               ? t("portal.events.details.guests.resend")
               : t("portal.events.details.guests.table.whatsapp")}
+          </Button>
+        )}
+
+        {hasTemplate && (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-ink-400 hover:text-gold"
+            onClick={handlePdf}
+            disabled={sending === "pdf"}
+            aria-label={pdfLabel}
+            title={pdfLabel}
+          >
+            {sending === "pdf" ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <FileDown className="h-4 w-4" />
+            )}
           </Button>
         )}
 
@@ -497,9 +535,7 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
   ).length;
 
   /**
-   * Le PDF est généré par la route guests/pdf. Il est récupéré ici plutôt que
-   * par un simple lien, pour montrer la génération en cours et signaler un
-   * échec au lieu de télécharger une page d'erreur.
+   * Le PDF est généré par la route guests/pdf (voir downloadFile).
    *
    * @param {"all"|"confirmed"} scope
    */
@@ -507,25 +543,10 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
     setExporting(scope);
     try {
       const query = scope === "confirmed" ? "?status=confirmed" : "";
-      const response = await fetch(
+      await downloadFile(
         `/dashboard/events/${eventId}/guests/pdf${query}`,
+        "guests.pdf",
       );
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-      const blob = await response.blob();
-      const filename =
-        /filename="([^"]+)"/.exec(
-          response.headers.get("content-disposition") ?? "",
-        )?.[1] ?? "guests.pdf";
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      // Laisse au navigateur le temps de lancer le téléchargement.
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch {
       toast.error(t("portal.events.details.guests.export.error"));
     } finally {
@@ -808,7 +829,13 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
           ) : (
             <ul className="divide-y divide-border/60">
               {filtered.map((guest, index) => (
-                <GuestRow key={guest.id} guest={guest} index={index} />
+                <GuestRow
+                  key={guest.id}
+                  guest={guest}
+                  index={index}
+                  eventId={eventId}
+                  hasTemplate={hasTemplate}
+                />
               ))}
             </ul>
           )}

@@ -6,6 +6,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { canAccessEvent } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
 import { clockLabel } from "@/lib/invitation/dates";
+import { slugify } from "@/lib/pdf/filename";
 import GuestListDocument from "@/lib/pdf/GuestListDocument";
 import { prisma } from "@/lib/prisma";
 import { expectedPeople } from "@/lib/tickets";
@@ -21,19 +22,6 @@ import { expectedPeople } from "@/lib/tickets";
  */
 
 const RSVP_STATUSES = new Set(["confirmed", "declined", "maybe"]);
-
-/** Nom de fichier sans accents ni caractères spéciaux. */
-function slugify(text) {
-  return (
-    text
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 60) || "event"
-  );
-}
 
 export async function GET(request, { params }) {
   const { id } = await params;

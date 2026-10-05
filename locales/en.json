@@ -369,7 +369,9 @@
           "guest_deleted": "Guest deleted.",
           "back_to_events": "Back to events",
           "edit": "Edit",
-          "customize_invitation": "Customise the invitation"
+          "customize_invitation": "Customise the invitation",
+          "download_pdf": "Download PDF",
+          "downloading_pdf": "Preparing PDF…"
         },
         "tabs": {
           "overview": "Overview",
@@ -398,7 +400,8 @@
           "active_template": "The invitation",
           "summary": "Details",
           "message": "Personal message",
-          "no_details": "No description or personal message yet."
+          "no_details": "No description or personal message yet.",
+          "pdf_guest": "Dear guest"
         },
         "guests": {
           "title": "Guest list",
@@ -467,7 +470,8 @@
           "edit_title": "Edit guest",
           "edit_desc": "Seats include the guest themselves.",
           "save": "Save",
-          "saved": "Guest updated"
+          "saved": "Guest updated",
+          "download_invitation": "Download {name}'s invitation as PDF"
         },
         "collaborators": "Collaborators",
         "collaborators_hint": "The person must already have an Invyra account.",
@@ -853,6 +857,8 @@
     "preparing_desc": "The host has not chosen the template of this invitation yet.",
     "loading": "Loading your invitation",
     "rsvp_error": "Your reply could not be saved. Please try again.",
+    "pdf_error": "The PDF couldn't be prepared. Please try again in a moment.",
+    "pdf_filename": "invitation",
     "frame_title": "Invitation: {title}",
     "rsvp_sheet": {
       "confirmed_eyebrow": "Attendance confirmed",
@@ -888,7 +894,9 @@
       "label": "Your guest area",
       "ticket": "My ticket",
       "memories": "Memories",
-      "directions": "Directions"
+      "directions": "Directions",
+      "pdf": "Download",
+      "pdf_loading": "Preparing…"
     },
     "ticket": {
       "meta_title": "Ticket",

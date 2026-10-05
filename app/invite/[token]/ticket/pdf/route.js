@@ -6,6 +6,7 @@ import { renderToBuffer } from "@react-pdf/renderer";
 import { getTicketByToken } from "@/app/actions/invitation";
 import { eventDayLabel } from "@/lib/invitation/dates";
 import { getTranslations } from "@/lib/i18n/server";
+import { slugify } from "@/lib/pdf/filename";
 import TicketDocument from "@/lib/pdf/TicketDocument";
 import { ticketQrPng } from "@/lib/qr";
 import { formatTicketCode } from "@/lib/tickets";
@@ -16,19 +17,6 @@ import { formatTicketCode } from "@/lib/tickets";
  * Même accès que l'invitation : le jeton suffit. Un invité qui n'a pas
  * confirmé n'a pas de billet (404).
  */
-
-/** Nom de fichier sans accents ni caractères spéciaux. */
-function slugify(text) {
-  return (
-    text
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 60) || "event"
-  );
-}
 
 export async function GET(request, { params }) {
   const { token } = await params;

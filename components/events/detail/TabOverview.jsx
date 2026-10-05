@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Check, Copy, LayoutTemplate, Palette } from "lucide-react";
+import { Check, Copy, FileDown, LayoutTemplate, Loader2, Palette } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState, Panel } from "@/components/shell/primitives";
 import RsvpBreakdown from "@/components/analytics/RsvpBreakdown";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
+import { downloadFile } from "@/lib/download";
 import { useTranslation } from "@/lib/i18n/Context";
 
 function countByStatus(guests) {
@@ -38,6 +39,7 @@ function SummaryField({ label, children, index = 0 }) {
 export default function TabOverview({ event, guests, sampleEvent }) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   const counts = countByStatus(guests);
 
@@ -53,6 +55,18 @@ export default function TabOverview({ event, guests, sampleEvent }) {
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.error(t("common.error"));
+    }
+  }
+
+  /** Invitation générique en PDF, fidèle au modèle (route invitation/pdf). */
+  async function downloadPdf() {
+    setDownloading(true);
+    try {
+      await downloadFile(`/dashboard/events/${event.id}/invitation/pdf`, "invitation.pdf");
+    } catch {
+      toast.error(t("invite.pdf_error"));
+    } finally {
+      setDownloading(false);
     }
   }
 
@@ -76,12 +90,23 @@ export default function TabOverview({ event, guests, sampleEvent }) {
                   readOnly
                 />
               </div>
-              <div className="mt-5 text-center">
+              <div className="mt-5 flex flex-wrap justify-center gap-2">
                 <Button asChild variant="outline" size="sm" className="group">
                   <Link href={`/dashboard/events/${event.id}/template`}>
                     <Palette className="transition-transform duration-500 group-hover:-rotate-12" />
                     {t("portal.events.details.actions.customize_invitation")}
                   </Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={downloadPdf}
+                  disabled={downloading}
+                >
+                  {downloading ? <Loader2 className="animate-spin" /> : <FileDown />}
+                  {downloading
+                    ? t("portal.events.details.actions.downloading_pdf")
+                    : t("portal.events.details.actions.download_pdf")}
                 </Button>
               </div>
             </div>

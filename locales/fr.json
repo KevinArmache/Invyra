@@ -369,7 +369,9 @@
           "guest_deleted": "Invité supprimé.",
           "back_to_events": "Retour aux événements",
           "edit": "Modifier",
-          "customize_invitation": "Personnaliser l'invitation"
+          "customize_invitation": "Personnaliser l'invitation",
+          "download_pdf": "Télécharger en PDF",
+          "downloading_pdf": "Préparation du PDF…"
         },
         "tabs": {
           "overview": "Aperçu",
@@ -398,7 +400,8 @@
           "active_template": "L'invitation",
           "summary": "Informations",
           "message": "Message personnel",
-          "no_details": "Aucune description ni message personnel."
+          "no_details": "Aucune description ni message personnel.",
+          "pdf_guest": "Cher invité"
         },
         "guests": {
           "title": "Liste des invités",
@@ -467,7 +470,8 @@
           "edit_title": "Modifier l'invité",
           "edit_desc": "Les places comptent l'invité lui-même.",
           "save": "Enregistrer",
-          "saved": "Invité modifié"
+          "saved": "Invité modifié",
+          "download_invitation": "Télécharger l'invitation de {name} en PDF"
         },
         "collaborators": "Collaborateurs",
         "collaborators_hint": "La personne doit déjà avoir un compte Invyra.",
@@ -853,6 +857,8 @@
     "preparing_desc": "L'organisateur n'a pas encore choisi le modèle de cette invitation.",
     "loading": "Chargement de votre invitation",
     "rsvp_error": "Votre réponse n'a pas pu être enregistrée. Réessayez.",
+    "pdf_error": "Le PDF n'a pas pu être préparé. Réessayez dans un instant.",
+    "pdf_filename": "invitation",
     "frame_title": "Invitation : {title}",
     "rsvp_sheet": {
       "confirmed_eyebrow": "Présence confirmée",
@@ -888,7 +894,9 @@
       "label": "Votre espace invité",
       "ticket": "Mon billet",
       "memories": "Souvenirs",
-      "directions": "Itinéraire"
+      "directions": "Itinéraire",
+      "pdf": "Télécharger",
+      "pdf_loading": "Préparation…"
     },
     "ticket": {
       "meta_title": "Billet",
