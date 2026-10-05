@@ -108,11 +108,11 @@ export default async function UnsubscribePage({ searchParams }) {
             <input type="hidden" name="token" value={tokenValue} />
             <input type="hidden" name="subscribe" value={user.marketingEmails ? "0" : "1"} />
             {user.marketingEmails ? (
-              <SubmitButton size="lg" icon={BellOff}>
+              <SubmitButton size="lg" icon={<BellOff />}>
                 {t("unsubscribe.unsubscribe_btn")}
               </SubmitButton>
             ) : (
-              <SubmitButton size="lg" variant="outline" icon={BellRing}>
+              <SubmitButton size="lg" variant="outline" icon={<BellRing />}>
                 {t("unsubscribe.resubscribe_btn")}
               </SubmitButton>
             )}

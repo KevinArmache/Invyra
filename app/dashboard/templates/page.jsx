@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { getTemplatesPage } from "@/app/actions/template";
 import { getCurrentUser } from "@/app/actions/auth";
 import { getTranslations } from "@/lib/i18n/server";
+import { withVoteCounts } from "@/lib/templates/feedback";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/shell/primitives";
 import TemplatesBrowser from "@/components/templates/TemplatesBrowser";
@@ -28,6 +29,13 @@ export default async function TemplatesPage({ searchParams }) {
   ]);
 
   if (!user) redirect("/login");
+
+  // Votes des cartes, comme sur la collection publique (le layout du
+  // tableau de bord écarte déjà les comptes suspendus).
+  const templates = await withVoteCounts(result.templates, {
+    userId: user.id,
+    role: user.role ?? "user",
+  });
 
   return (
     <>
@@ -54,6 +62,7 @@ export default async function TemplatesPage({ searchParams }) {
 
       <TemplatesBrowser
         {...result}
+        templates={templates}
         activeCategory={typeof category === "string" ? category : ""}
         query={typeof q === "string" ? q : ""}
         currentUser={{ id: user.id, role: user.role }}

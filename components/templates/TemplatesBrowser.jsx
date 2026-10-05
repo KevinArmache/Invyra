@@ -34,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EmptyState, StatusBadge } from "@/components/shell/primitives";
 import PaginationNav from "@/components/common/PaginationNav";
+import CardVotes from "@/components/templates/CardVotes";
 import CategoryFilter from "@/components/templates/CategoryFilter";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import PreviewDialog from "@/components/invitation/PreviewDialog";
@@ -85,7 +86,8 @@ const SAMPLE_EVENT = {
  * Galerie des modèles, une page à la fois. Le serveur filtre (catégorie,
  * recherche) et pagine : ce composant ne fait que refléter l'URL.
  *
- * @param {Array}  props.templates       modèles de la page
+ * @param {Array}  props.templates       modèles de la page, avec leurs votes
+ *   (voir withVoteCounts)
  * @param {number} props.total           résultats du filtre courant
  * @param {number} props.totalAll        modèles visibles, sans filtre
  * @param {Array}  props.categories      `[{ key, count }]` présentes
@@ -337,16 +339,27 @@ export default function TemplatesBrowser({
                       {dateFormat.format(new Date(template.createdAt))}
                     </p>
 
-                    <p
-                      className="mt-2 inline-flex items-center gap-1.5 text-xs text-ink-400"
-                      title={t("portal.templates.list.usage_hint")}
-                    >
-                      <Copy className="h-3 w-3" aria-hidden="true" />
-                      <span data-numeric>
-                        {template._count?.eventCopies ?? 0}
-                      </span>
-                      <span>{t("portal.templates.list.usage_label")}</span>
-                    </p>
+                    <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+                      <p
+                        className="inline-flex items-center gap-1.5 text-xs text-ink-400"
+                        title={t("portal.templates.list.usage_hint")}
+                      >
+                        <Copy className="h-3 w-3" aria-hidden="true" />
+                        <span data-numeric>
+                          {template._count?.eventCopies ?? 0}
+                        </span>
+                        <span>{t("portal.templates.list.usage_label")}</span>
+                      </p>
+
+                      {/* On ne vote que sur un modèle public (voir voteTemplate). */}
+                      {shareable && template.votes && (
+                        <CardVotes
+                          templateId={template.id}
+                          initial={template.votes}
+                          isAuthenticated
+                        />
+                      )}
+                    </div>
 
                     {(editable || duplicable || shareable) && (
                       <div className="mt-4 flex items-center gap-1 border-t border-border/60 pt-3">
