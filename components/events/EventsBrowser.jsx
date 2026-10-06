@@ -24,6 +24,7 @@ import InvitationPreview from "@/components/invitation/InvitationPreview";
 import PreviewDialog from "@/components/invitation/PreviewDialog";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import DeleteEventDialog from "@/components/events/DeleteEventDialog";
+import { SAMPLE_GUEST_QR } from "@/lib/invitation/sample-qr";
 import { useTranslation } from "@/lib/i18n/Context";
 
 const DAY = 86_400_000;
@@ -316,6 +317,7 @@ export default function EventsBrowser({ events, today }) {
             template={preview.invitationTemplate}
             event={previewEvent(preview)}
             guestName={t("landing.hero.scene.guest")}
+            guestQr={SAMPLE_GUEST_QR}
           />
         ) : (
           preview && (

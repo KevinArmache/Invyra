@@ -11,6 +11,7 @@ import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
 import CardVotes from "@/components/templates/CardVotes";
 import ShareTemplateButton from "@/components/templates/ShareTemplateButton";
 import { sampleEvent } from "@/lib/landing/sample-event";
+import { SAMPLE_GUEST_QR } from "@/lib/invitation/sample-qr";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**
@@ -173,6 +174,7 @@ export default function ShowcaseGrid({
             template={preview.template.config}
             event={preview.event}
             guestName={guestName}
+            guestQr={SAMPLE_GUEST_QR}
             title={preview.template.name}
           />
         )}

@@ -5,6 +5,7 @@ import { MailOpen, Music2, RotateCcw } from "lucide-react";
 
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import { sampleEvent } from "@/lib/landing/sample-event";
+import { SAMPLE_GUEST_QR } from "@/lib/invitation/sample-qr";
 import { toEditableConfig } from "@/lib/templates/validation";
 import { OPENING_FIELDS } from "@/lib/invitation/opening";
 import { useTranslation } from "@/lib/i18n/Context";
@@ -160,6 +161,7 @@ export default function OpeningDemo({ template }) {
                 template={config}
                 event={event}
                 guestName={t("landing.hero.scene.guest")}
+                guestQr={SAMPLE_GUEST_QR}
                 title={template.name}
               />
             ) : (

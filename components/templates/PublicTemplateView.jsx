@@ -13,6 +13,7 @@ import VoteButtons from "@/components/templates/VoteButtons";
 import VotersSheet from "@/components/templates/VotersSheet";
 import { useTemplateVotes } from "@/hooks/useTemplateVotes";
 import { useTranslation } from "@/lib/i18n/Context";
+import { SAMPLE_GUEST_QR } from "@/lib/invitation/sample-qr";
 
 /**
  * Page publique d'un modèle, celle qu'ouvre un lien partagé : l'invitation
@@ -123,6 +124,7 @@ export default function PublicTemplateView({
             template={template.config}
             event={event}
             guestName={t("landing.hero.scene.guest")}
+            guestQr={SAMPLE_GUEST_QR}
             title={template.name}
           />
         </div>

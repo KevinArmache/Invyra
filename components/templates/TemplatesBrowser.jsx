@@ -40,6 +40,7 @@ import InvitationPreview from "@/components/invitation/InvitationPreview";
 import PreviewDialog from "@/components/invitation/PreviewDialog";
 import ShareTemplateButton from "@/components/templates/ShareTemplateButton";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
+import { SAMPLE_GUEST_QR } from "@/lib/invitation/sample-qr";
 import {
   deleteTemplate,
   duplicateTemplate,
@@ -554,6 +555,7 @@ export default function TemplatesBrowser({
             template={preview.config}
             event={{ ...SAMPLE_EVENT, title: preview.name }}
             guestName="Marie Dupont"
+            guestQr={SAMPLE_GUEST_QR}
           />
         )}
       </PreviewDialog>
