@@ -1056,8 +1056,7 @@
     "no_results": "Aucun modèle dans cette catégorie pour le moment.",
     "breadcrumb_label": "Fil d'Ariane",
     "breadcrumb_home": "Accueil",
-    "breadcrumb_current": "Modèles",
-    "page_suffix": "Page {n}"
+    "breadcrumb_current": "Modèles"
   },
   "landing": {
     "meta": {

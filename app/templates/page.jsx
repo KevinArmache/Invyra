@@ -1,14 +1,13 @@
 import { cache } from "react";
 import Link from "next/link";
 import { headers } from "next/headers";
+import { permanentRedirect } from "next/navigation";
 import { ArrowRight, ChevronRight, LayoutTemplate } from "lucide-react";
 
 import { auth } from "@/lib/auth/server";
-import {
-  COLLECTION_PAGE_SIZE,
-  getCollectionTemplates,
-} from "@/lib/landing/data";
+import { getCollectionTemplates } from "@/lib/landing/data";
 import { sampleEvent } from "@/lib/landing/sample-event";
+import { normalizeCategory } from "@/lib/templates/categories";
 import { withVoteCounts } from "@/lib/templates/feedback";
 import { getTranslations } from "@/lib/i18n/server";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
@@ -24,29 +23,22 @@ function param(value) {
 }
 
 /** Une seule lecture par requête, partagée entre métadonnées et page. */
-const loadCollection = cache((page, category) =>
-  getCollectionTemplates({ page, category }),
+const loadCollection = cache((category) =>
+  getCollectionTemplates({ category }),
 );
 
-/** Chemin canonique de la vue : la page 1 sans filtre est « /templates ». */
-function collectionPath({ page, category }) {
-  const params = new URLSearchParams();
-  if (category) params.set("category", category);
-  if (page > 1) params.set("page", String(page));
-  const search = params.toString();
-  return search ? `/templates?${search}` : "/templates";
+/** Chemin canonique de la vue : sans filtre, c'est « /templates ». */
+function collectionPath({ category }) {
+  return category
+    ? `/templates?${new URLSearchParams({ category })}`
+    : "/templates";
 }
 
-/** Titre de la vue : catégorie, puis numéro de page au-delà de la première. */
+/** Titre de la vue, précédé de la catégorie filtrée. */
 function viewTitle(t, collection) {
   const parts = [t("templates_page.meta_title")];
   if (collection.category) {
     parts.unshift(t(`portal.templates.categories.${collection.category}`));
-  }
-  if (collection.page > 1) {
-    parts.push(
-      t("templates_page.page_suffix").replace("{n}", String(collection.page)),
-    );
   }
   return parts.join(" · ");
 }
@@ -54,7 +46,7 @@ function viewTitle(t, collection) {
 export async function generateMetadata({ searchParams }) {
   const query = await searchParams;
   const [collection, { t, locale }] = await Promise.all([
-    loadCollection(param(query.page), param(query.category)),
+    loadCollection(param(query.category)),
     getTranslations(),
   ]);
 
@@ -102,7 +94,6 @@ export async function generateMetadata({ searchParams }) {
  */
 function structuredData(t, collection, locale) {
   const path = collectionPath(collection);
-  const offset = (collection.page - 1) * COLLECTION_PAGE_SIZE;
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -119,7 +110,7 @@ function structuredData(t, collection, locale) {
           numberOfItems: collection.total,
           itemListElement: collection.templates.map((template, index) => ({
             "@type": "ListItem",
-            position: offset + index + 1,
+            position: index + 1,
             url: `${SITE_URL}/templates/${template.id}`,
             name: template.name,
           })),
@@ -147,15 +138,23 @@ function structuredData(t, collection, locale) {
 }
 
 /**
- * Collection publique des modèles mis en avant par un admin (étoile dans
- * /dashboard/templates), paginée et filtrable par catégorie. Aucun compte
- * n'est requis.
+ * Collection publique des coups de cœur : tous les modèles mis en avant par
+ * un admin (étoile dans /dashboard/templates), quel que soit leur statut,
+ * sur une seule page et filtrables par catégorie. Aucun compte n'est requis.
  */
 export default async function TemplatesCollectionPage({ searchParams }) {
   const query = await searchParams;
+  // La collection était paginée : les anciens liens « ?page=2 » mènent
+  // désormais à la vue complète.
+  if (param(query.page) !== undefined) {
+    permanentRedirect(
+      collectionPath({ category: normalizeCategory(param(query.category)) }),
+    );
+  }
+
   const [session, collection, { t, locale }] = await Promise.all([
     auth.api.getSession({ headers: await headers() }),
-    loadCollection(param(query.page), param(query.category)),
+    loadCollection(param(query.category)),
     getTranslations(),
   ]);
 
@@ -270,8 +269,6 @@ export default async function TemplatesCollectionPage({ searchParams }) {
               {hasCollection ? (
                 <TemplatesCollection
                   templates={templates}
-                  page={collection.page}
-                  pageCount={collection.pageCount}
                   category={collection.category ?? ""}
                   categories={collection.categories}
                   sample={sampleEvent()}

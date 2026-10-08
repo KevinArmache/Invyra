@@ -1056,8 +1056,7 @@
     "no_results": "No template in this category yet.",
     "breadcrumb_label": "Breadcrumb",
     "breadcrumb_home": "Home",
-    "breadcrumb_current": "Templates",
-    "page_suffix": "Page {n}"
+    "breadcrumb_current": "Templates"
   },
   "landing": {
     "meta": {

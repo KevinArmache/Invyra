@@ -519,10 +519,12 @@ Tous ont le même format, du HTML, du CSS et du JavaScript :
   cette copie, jamais le modèle d'origine.
 - **Partage** : un modèle publié (terminé) ou mis en avant a une page
   publique, `/templates/[id]`, ouverte sans compte et listée dans le
-  sitemap. Il apparaît aussi dans la collection `/templates`. Le bouton de
-  partage (accueil, page Modèles) en donne le lien ; les brouillons et les
-  copies d'événement n'en ont jamais (`getPublicTemplate`,
-  `getCollectionTemplates`, `lib/landing/data.js`).
+  sitemap. Le bouton de partage (accueil, page Modèles) en donne le lien ;
+  les brouillons non étoilés et les copies d'événement n'en ont jamais
+  (`getPublicTemplate`, `lib/landing/data.js`).
+- **Coups de cœur** : la collection `/templates` montre tous les modèles
+  étoilés par un admin, quel que soit leur statut (brouillon, en cours,
+  terminé), sur une seule page et sans limite (`getCollectionTemplates`).
 
 Ce qu'un modèle peut utiliser (voir `lib/invitation/document.js`) :
 
