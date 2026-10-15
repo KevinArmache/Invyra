@@ -44,6 +44,7 @@ export type GuestMinAggregateOutputType = {
   name: string | null
   email: string | null
   phone: string | null
+  source: string | null
   dietaryRestrictions: string | null
   plusOne: boolean | null
   notes: string | null
@@ -69,6 +70,7 @@ export type GuestMaxAggregateOutputType = {
   name: string | null
   email: string | null
   phone: string | null
+  source: string | null
   dietaryRestrictions: string | null
   plusOne: boolean | null
   notes: string | null
@@ -94,6 +96,7 @@ export type GuestCountAggregateOutputType = {
   name: number
   email: number
   phone: number
+  source: number
   dietaryRestrictions: number
   plusOne: number
   notes: number
@@ -133,6 +136,7 @@ export type GuestMinAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  source?: true
   dietaryRestrictions?: true
   plusOne?: true
   notes?: true
@@ -158,6 +162,7 @@ export type GuestMaxAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  source?: true
   dietaryRestrictions?: true
   plusOne?: true
   notes?: true
@@ -183,6 +188,7 @@ export type GuestCountAggregateInputType = {
   name?: true
   email?: true
   phone?: true
+  source?: true
   dietaryRestrictions?: true
   plusOne?: true
   notes?: true
@@ -293,8 +299,9 @@ export type GuestGroupByOutputType = {
   id: string
   eventId: string
   name: string
-  email: string
+  email: string | null
   phone: string | null
+  source: string
   dietaryRestrictions: string | null
   plusOne: boolean
   notes: string | null
@@ -341,8 +348,9 @@ export type GuestWhereInput = {
   id?: Prisma.StringFilter<"Guest"> | string
   eventId?: Prisma.StringFilter<"Guest"> | string
   name?: Prisma.StringFilter<"Guest"> | string
-  email?: Prisma.StringFilter<"Guest"> | string
+  email?: Prisma.StringNullableFilter<"Guest"> | string | null
   phone?: Prisma.StringNullableFilter<"Guest"> | string | null
+  source?: Prisma.StringFilter<"Guest"> | string
   dietaryRestrictions?: Prisma.StringNullableFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableFilter<"Guest"> | string | null
@@ -369,8 +377,9 @@ export type GuestOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   dietaryRestrictions?: Prisma.SortOrderInput | Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -403,8 +412,9 @@ export type GuestWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.GuestWhereInput | Prisma.GuestWhereInput[]
   eventId?: Prisma.StringFilter<"Guest"> | string
   name?: Prisma.StringFilter<"Guest"> | string
-  email?: Prisma.StringFilter<"Guest"> | string
+  email?: Prisma.StringNullableFilter<"Guest"> | string | null
   phone?: Prisma.StringNullableFilter<"Guest"> | string | null
+  source?: Prisma.StringFilter<"Guest"> | string
   dietaryRestrictions?: Prisma.StringNullableFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableFilter<"Guest"> | string | null
@@ -429,8 +439,9 @@ export type GuestOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   eventId?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  email?: Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  source?: Prisma.SortOrder
   dietaryRestrictions?: Prisma.SortOrderInput | Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -462,8 +473,9 @@ export type GuestScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Guest"> | string
   eventId?: Prisma.StringWithAggregatesFilter<"Guest"> | string
   name?: Prisma.StringWithAggregatesFilter<"Guest"> | string
-  email?: Prisma.StringWithAggregatesFilter<"Guest"> | string
+  email?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
+  source?: Prisma.StringWithAggregatesFilter<"Guest"> | string
   dietaryRestrictions?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolWithAggregatesFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableWithAggregatesFilter<"Guest"> | string | null
@@ -486,8 +498,9 @@ export type GuestScalarWhereWithAggregatesInput = {
 export type GuestCreateInput = {
   id?: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -514,8 +527,9 @@ export type GuestUncheckedCreateInput = {
   id?: string
   eventId: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -540,8 +554,9 @@ export type GuestUncheckedCreateInput = {
 export type GuestUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -568,8 +583,9 @@ export type GuestUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -595,8 +611,9 @@ export type GuestCreateManyInput = {
   id?: string
   eventId: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -619,8 +636,9 @@ export type GuestCreateManyInput = {
 export type GuestUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -644,8 +662,9 @@ export type GuestUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -686,6 +705,7 @@ export type GuestCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   dietaryRestrictions?: Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -717,6 +737,7 @@ export type GuestMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   dietaryRestrictions?: Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -742,6 +763,7 @@ export type GuestMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   dietaryRestrictions?: Prisma.SortOrder
   plusOne?: Prisma.SortOrder
   notes?: Prisma.SortOrder
@@ -853,8 +875,9 @@ export type GuestUpdateOneRequiredWithoutPhotosNestedInput = {
 export type GuestCreateWithoutEventInput = {
   id?: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -879,8 +902,9 @@ export type GuestCreateWithoutEventInput = {
 export type GuestUncheckedCreateWithoutEventInput = {
   id?: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -935,8 +959,9 @@ export type GuestScalarWhereInput = {
   id?: Prisma.StringFilter<"Guest"> | string
   eventId?: Prisma.StringFilter<"Guest"> | string
   name?: Prisma.StringFilter<"Guest"> | string
-  email?: Prisma.StringFilter<"Guest"> | string
+  email?: Prisma.StringNullableFilter<"Guest"> | string | null
   phone?: Prisma.StringNullableFilter<"Guest"> | string | null
+  source?: Prisma.StringFilter<"Guest"> | string
   dietaryRestrictions?: Prisma.StringNullableFilter<"Guest"> | string | null
   plusOne?: Prisma.BoolFilter<"Guest"> | boolean
   notes?: Prisma.StringNullableFilter<"Guest"> | string | null
@@ -959,8 +984,9 @@ export type GuestScalarWhereInput = {
 export type GuestCreateWithoutGuestbookMessagesInput = {
   id?: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -986,8 +1012,9 @@ export type GuestUncheckedCreateWithoutGuestbookMessagesInput = {
   id?: string
   eventId: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -1027,8 +1054,9 @@ export type GuestUpdateToOneWithWhereWithoutGuestbookMessagesInput = {
 export type GuestUpdateWithoutGuestbookMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1054,8 +1082,9 @@ export type GuestUncheckedUpdateWithoutGuestbookMessagesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1079,8 +1108,9 @@ export type GuestUncheckedUpdateWithoutGuestbookMessagesInput = {
 export type GuestCreateWithoutPhotosInput = {
   id?: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -1106,8 +1136,9 @@ export type GuestUncheckedCreateWithoutPhotosInput = {
   id?: string
   eventId: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -1147,8 +1178,9 @@ export type GuestUpdateToOneWithWhereWithoutPhotosInput = {
 export type GuestUpdateWithoutPhotosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1174,8 +1206,9 @@ export type GuestUncheckedUpdateWithoutPhotosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   eventId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1199,8 +1232,9 @@ export type GuestUncheckedUpdateWithoutPhotosInput = {
 export type GuestCreateManyEventInput = {
   id?: string
   name: string
-  email: string
+  email?: string | null
   phone?: string | null
+  source?: string
   dietaryRestrictions?: string | null
   plusOne?: boolean
   notes?: string | null
@@ -1223,8 +1257,9 @@ export type GuestCreateManyEventInput = {
 export type GuestUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1249,8 +1284,9 @@ export type GuestUpdateWithoutEventInput = {
 export type GuestUncheckedUpdateWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1275,8 +1311,9 @@ export type GuestUncheckedUpdateWithoutEventInput = {
 export type GuestUncheckedUpdateManyWithoutEventInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   dietaryRestrictions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   plusOne?: Prisma.BoolFieldUpdateOperationsInput | boolean
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1342,6 +1379,7 @@ export type GuestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   name?: boolean
   email?: boolean
   phone?: boolean
+  source?: boolean
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
@@ -1371,6 +1409,7 @@ export type GuestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   email?: boolean
   phone?: boolean
+  source?: boolean
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
@@ -1397,6 +1436,7 @@ export type GuestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   name?: boolean
   email?: boolean
   phone?: boolean
+  source?: boolean
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
@@ -1423,6 +1463,7 @@ export type GuestSelectScalar = {
   name?: boolean
   email?: boolean
   phone?: boolean
+  source?: boolean
   dietaryRestrictions?: boolean
   plusOne?: boolean
   notes?: boolean
@@ -1442,7 +1483,7 @@ export type GuestSelectScalar = {
   updatedAt?: boolean
 }
 
-export type GuestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "name" | "email" | "phone" | "dietaryRestrictions" | "plusOne" | "notes" | "seats" | "attendingCount" | "invitationToken" | "rsvpStatus" | "ticketCode" | "checkedInAt" | "checkedInCount" | "invitationSentAt" | "emailSentAt" | "whatsappSentAt" | "invitationViewedAt" | "rsvpRespondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["guest"]>
+export type GuestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "eventId" | "name" | "email" | "phone" | "source" | "dietaryRestrictions" | "plusOne" | "notes" | "seats" | "attendingCount" | "invitationToken" | "rsvpStatus" | "ticketCode" | "checkedInAt" | "checkedInCount" | "invitationSentAt" | "emailSentAt" | "whatsappSentAt" | "invitationViewedAt" | "rsvpRespondedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["guest"]>
 export type GuestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   event?: boolean | Prisma.EventDefaultArgs<ExtArgs>
   guestbookMessages?: boolean | Prisma.Guest$guestbookMessagesArgs<ExtArgs>
@@ -1467,8 +1508,16 @@ export type $GuestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     eventId: string
     name: string
-    email: string
+    /**
+     * Facultatif pour un invité inscrit par le lien unique (téléphone
+     * obligatoire) ; toujours demandé quand l'hôte ajoute un invité.
+     */
+    email: string | null
     phone: string | null
+    /**
+     * "host" : ajouté par l'hôte ; "link" : inscrit par le lien unique.
+     */
+    source: string
     dietaryRestrictions: string | null
     /**
      * Déprécié : remplacé par `seats` (voir 004-guest-ticket-checkin.sql).
@@ -1935,6 +1984,7 @@ export interface GuestFieldRefs {
   readonly name: Prisma.FieldRef<"Guest", 'String'>
   readonly email: Prisma.FieldRef<"Guest", 'String'>
   readonly phone: Prisma.FieldRef<"Guest", 'String'>
+  readonly source: Prisma.FieldRef<"Guest", 'String'>
   readonly dietaryRestrictions: Prisma.FieldRef<"Guest", 'String'>
   readonly plusOne: Prisma.FieldRef<"Guest", 'Boolean'>
   readonly notes: Prisma.FieldRef<"Guest", 'String'>

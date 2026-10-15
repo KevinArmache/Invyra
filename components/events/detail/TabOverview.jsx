@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Check, Copy, FileDown, LayoutTemplate, Loader2, Palette } from "lucide-react";
+import { Check, Copy, FileDown, LayoutTemplate, Link2, Loader2, Palette } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -36,26 +36,37 @@ function SummaryField({ label, children, index = 0 }) {
   );
 }
 
-export default function TabOverview({ event, guests, sampleEvent }) {
+export default function TabOverview({ event, guests, sampleEvent, publicLink = null }) {
   const { t } = useTranslation();
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState(null);
   const [downloading, setDownloading] = useState(false);
 
   const counts = countByStatus(guests);
 
-  async function copyPageLink() {
-    // Il n'existe pas de lien public unique : chaque invité a son jeton. On
-    // copie donc l'adresse de cette page de gestion, utile à un
-    // collaborateur, et le libellé le dit.
-    const url = `${window.location.origin}/dashboard/events/${event.id}`;
+  async function copy(kind, url, messageKey) {
     try {
       await navigator.clipboard.writeText(url);
-      setCopied(true);
-      toast.success(t("portal.events.details.overview.link_copied"));
-      setTimeout(() => setCopied(false), 2000);
+      setCopied(kind);
+      toast.success(t(messageKey));
+      setTimeout(() => setCopied(null), 2000);
     } catch {
       toast.error(t("common.error"));
     }
+  }
+
+  // L'adresse de cette page de gestion, utile à un collaborateur : le
+  // libellé le dit. Le lien à envoyer aux invités, quand l'hôte a activé le
+  // lien unique, a son propre bouton.
+  function copyPageLink() {
+    copy(
+      "page",
+      `${window.location.origin}/dashboard/events/${event.id}`,
+      "portal.events.details.overview.link_copied",
+    );
+  }
+
+  function copyPublicLink() {
+    copy("public", publicLink.url, "portal.events.details.guests.public_link.copied");
   }
 
   /** Invitation générique en PDF, fidèle au modèle (route invitation/pdf). */
@@ -129,19 +140,31 @@ export default function TabOverview({ event, guests, sampleEvent }) {
           delay={160}
           title={t("portal.events.details.overview.summary")}
           action={
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={copyPageLink}
-              title={t("portal.events.details.overview.copy_link_hint")}
-            >
-              {copied ? (
-                <Check className="animate-pop h-3.5 w-3.5 text-positive" />
-              ) : (
-                <Copy className="h-3.5 w-3.5" />
+            <div className="flex flex-wrap items-center gap-1">
+              {publicLink?.enabled && publicLink.url && (
+                <Button variant="ghost" size="sm" onClick={copyPublicLink}>
+                  {copied === "public" ? (
+                    <Check className="animate-pop h-3.5 w-3.5 text-positive" />
+                  ) : (
+                    <Link2 className="h-3.5 w-3.5" />
+                  )}
+                  {t("portal.events.details.overview.copy_public_link")}
+                </Button>
               )}
-              {t("portal.events.details.overview.copy_link")}
-            </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={copyPageLink}
+                title={t("portal.events.details.overview.copy_link_hint")}
+              >
+                {copied === "page" ? (
+                  <Check className="animate-pop h-3.5 w-3.5 text-positive" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" />
+                )}
+                {t("portal.events.details.overview.copy_link")}
+              </Button>
+            </div>
           }
         >
           <dl className="space-y-6 p-5">

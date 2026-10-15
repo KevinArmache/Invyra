@@ -3,11 +3,13 @@
 import { prisma } from '@/lib/prisma'
 import { getSession, isEventOwnerOrAdmin } from '@/app/actions/auth'
 import { getMyCollaboratorRole } from '@/app/actions/collaborator'
-import { buildInvitationEmail } from '@/lib/email/invitation-email'
-import { directionsPath, stopsOf } from '@/lib/itinerary'
 import { sendMail } from '@/lib/email/transport'
-import { toEditableConfig } from '@/lib/templates/validation'
-import { templateLook } from '@/lib/templates/look'
+import {
+  EVENT_FOR_EMAIL,
+  appUrl as baseAppUrl,
+  deliverInvitationEmail,
+  emailFor,
+} from '@/lib/email/guest-invitation'
 
 // ──────────────────────────────────────────────
 // Droits : envoyer une invitation, ou récupérer son lien, est réservé au
@@ -24,72 +26,19 @@ async function assertCanSendForEvent(eventId) {
   throw new Error("Vous n'avez pas le droit d'envoyer les invitations de cet événement")
 }
 
-/** Événement avec ce qu'il faut pour l'e-mail : modèle et organisateur. */
-const EVENT_FOR_EMAIL = {
-  include: {
-    templateCopy: { select: { config: true } },
-    user: { select: { name: true } },
-  },
-}
-
-/** Photo d'accueil du modèle de l'événement, s'il en a une. */
-function eventImage(event) {
-  const config = toEditableConfig(event.templateCopy?.config || event.invitationTemplate)
-  return templateLook(config).image || ''
-}
-
-function emailFor(guest, event, appUrl) {
-  const stops = stopsOf(event)
-  return buildInvitationEmail({
-    guestName: guest.name,
-    eventTitle: event.title,
-    eventDate: event.eventDate,
-    eventTime: event.time,
-    eventLocation: event.location,
-    stops,
-    directionsLink: stops.length ? `${appUrl}${directionsPath(guest.invitationToken)}` : '',
-    dressCode: event.dressCode,
-    customMessage: event.customMessage,
-    contactPhone: event.contactPhone,
-    hostName: event.user?.name,
-    imageUrl: eventImage(event),
-    inviteLink: `${appUrl}/invite/${guest.invitationToken}`,
-    appUrl,
-  })
-}
-
 // ──────────────────────────────────────────────
 // Envoi individuel (1 invité)
 // ──────────────────────────────────────────────
 export async function sendInvitationEmail(guestId) {
   const guest = await prisma.guest.findUnique({
     where: { id: guestId },
-    include: { event: EVENT_FOR_EMAIL }
+    select: { eventId: true, email: true }
   })
 
   if (!guest || !guest.email) throw new Error('Invité introuvable ou adresse email manquante')
   await assertCanSendForEvent(guest.eventId)
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
-  const { subject, text, html } = emailFor(guest, guest.event, appUrl)
-
-  try {
-    const info = await sendMail({ to: guest.email, subject, text, html })
-    console.log('[Email] Envoyé avec succès :', info.messageId)
-  } catch (err) {
-    console.error('[Email] Erreur d\'envoi :', err.message)
-    throw new Error(`Échec de l'envoi à ${guest.email} : ${err.message}`)
-  }
-
-  await prisma.guest.update({
-    where: { id: guestId },
-    data: {
-      emailSentAt: new Date(),
-      invitationSentAt: new Date()
-    }
-  })
-
-  return { success: true }
+  return deliverInvitationEmail(guestId)
 }
 
 // ──────────────────────────────────────────────
@@ -107,7 +56,8 @@ export async function sendBulkInvitationEmails(eventId) {
   const guests = await prisma.guest.findMany({
     where: {
       eventId,
-      // `email` est obligatoire dans le schéma : on écarte seulement les vides.
+      // Un invité inscrit par le lien unique peut ne pas avoir d'e-mail :
+      // `not: ""` écarte aussi les NULL (en SQL, NULL <> '' n'est pas vrai).
       email: { not: "" },
       emailSentAt: null, // seulement ceux qui n'ont pas encore reçu l'email
     }
@@ -117,7 +67,7 @@ export async function sendBulkInvitationEmails(eventId) {
     return { success: true, sent: 0, message: 'Aucun invité en attente d\'email' }
   }
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const appUrl = baseAppUrl()
 
   let sent = 0
   const errors = []

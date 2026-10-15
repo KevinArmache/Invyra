@@ -100,8 +100,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function InvitationPage({ params }) {
-  const { token } = await params;
+export default async function InvitationPage({ params, searchParams }) {
+  const [{ token }, query] = await Promise.all([params, searchParams]);
   const { invitation, failed } = await loadInvitation(token);
 
   if (failed) return <InvitationUnavailable />;
@@ -125,6 +125,8 @@ export default async function InvitationPage({ params }) {
       ticket={invitation.ticket}
       background={background}
       accent={accent}
+      // Arrivée depuis le lien unique, juste après l'inscription.
+      welcome={query?.welcome === "1"}
     />
   );
 }

@@ -283,6 +283,14 @@ model Event {
   /// demande et régénérable par l'hôte (voir app/actions/checkin.js).
   checkInToken String? @unique
 
+  /// Lien unique de l'invitation (/join/<jeton>) : chaque personne qui
+  /// l'ouvre saisit son nom et reçoit son invitation personnelle (voir
+  /// app/actions/public-link.js). Créé à la demande, régénérable.
+  publicToken       String? @unique
+  publicLinkEnabled Boolean @default(false)
+  /// Personnes qu'un inscrit par le lien unique peut annoncer, lui compris.
+  publicMaxSeats    Int     @default(1)
+
   /// L'hôte peut couper le livre d'or ou le mur de photos des invités.
   guestbookEnabled Boolean @default(true)
   photosEnabled    Boolean @default(true)
@@ -325,8 +333,12 @@ model Guest {
   eventId String
 
   name                String
-  email               String
+  /// Facultatif pour un invité inscrit par le lien unique (téléphone
+  /// obligatoire) ; toujours demandé quand l'hôte ajoute un invité.
+  email               String?
   phone               String?
+  /// "host" : ajouté par l'hôte ; "link" : inscrit par le lien unique.
+  source              String  @default("host")
   dietaryRestrictions String?
   /// Déprécié : remplacé par `seats` (voir 004-guest-ticket-checkin.sql).
   plusOne             Boolean @default(false)

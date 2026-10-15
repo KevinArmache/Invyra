@@ -129,11 +129,14 @@ export async function addGuest(eventId, data) {
  * Modifie un invité : nom, email, téléphone et places réservées. Si l'invité
  * avait annoncé plus de personnes que ses nouvelles places, sa réponse est
  * ramenée à ce nombre.
+ *
+ * Un invité inscrit par le lien unique (`source: "link"`) peut rester sans
+ * email, à condition de garder un téléphone : c'est ce qu'il a donné.
  */
 export async function updateGuest(guestId, data) {
   const guest = await prisma.guest.findUnique({
     where: { id: guestId },
-    select: { id: true, eventId: true, attendingCount: true },
+    select: { id: true, eventId: true, attendingCount: true, source: true },
   });
   if (!guest) throw new Error("Invité introuvable");
 
@@ -143,21 +146,30 @@ export async function updateGuest(guestId, data) {
   const email = String(data?.email ?? "").trim().slice(0, 200);
   const phone = String(data?.phone ?? "").trim().slice(0, 30);
   const seats = clampSeats(data?.seats);
-  if (!name || !email.includes("@")) {
+  const emailOptional = guest.source === "link";
+  if (!name) throw new Error("Le nom est obligatoire.");
+  if (email ? !email.includes("@") : !emailOptional) {
     throw new Error("Le nom et un email valide sont obligatoires.");
   }
+  if (!email && !phone) {
+    throw new Error("Gardez au moins un email ou un téléphone pour cet invité.");
+  }
 
-  const duplicate = await prisma.guest.findFirst({
-    where: { eventId: guest.eventId, email, NOT: { id: guest.id } },
-    select: { id: true },
-  });
-  if (duplicate) throw new Error("Un autre invité utilise déjà cet email.");
+  // Sans email, pas de recherche de doublon : `email: ""` ne correspond à
+  // personne, et un filtre vide (undefined) correspondrait à tout le monde.
+  if (email) {
+    const duplicate = await prisma.guest.findFirst({
+      where: { eventId: guest.eventId, email, NOT: { id: guest.id } },
+      select: { id: true },
+    });
+    if (duplicate) throw new Error("Un autre invité utilise déjà cet email.");
+  }
 
   return prisma.guest.update({
     where: { id: guest.id },
     data: {
       name,
-      email,
+      email: email || null,
       phone: phone || null,
       seats,
       ...(guest.attendingCount > seats && { attendingCount: seats }),

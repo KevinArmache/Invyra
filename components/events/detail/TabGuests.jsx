@@ -12,6 +12,7 @@ import {
   EyeOff,
   FileDown,
   HelpCircle,
+  Link2,
   Loader2,
   Mail,
   MessageCircle,
@@ -54,6 +55,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EmptyState, Panel } from "@/components/shell/primitives";
 import CSVImporter from "@/components/events/CSVImporter";
+import PublicLinkPanel from "@/components/events/detail/PublicLinkPanel";
 import {
   addGuest,
   deleteGuest,
@@ -253,8 +255,18 @@ function GuestRow({ guest, index, eventId, hasTemplate }) {
           <p className="flex items-center gap-2 text-sm text-ink-50">
             <span className="truncate">{guest.name}</span>
             <SeatsBadge guest={guest} />
+            {guest.source === "link" && (
+              <span
+                className="inline-flex shrink-0 items-center gap-1 rounded-full border border-gold/25 px-1.5 py-0.5 text-[10px] text-gold"
+                title={t("portal.events.details.guests.via_link_hint")}
+              >
+                <Link2 className="h-2.5 w-2.5" aria-hidden="true" />
+                {t("portal.events.details.guests.via_link")}
+              </span>
+            )}
           </p>
-          <p className="truncate text-xs text-ink-400">{guest.email}</p>
+          {/* Un invité inscrit par le lien unique peut n'avoir que son téléphone. */}
+          <p className="truncate text-xs text-ink-400">{guest.email || guest.phone}</p>
           {(guest.dietaryRestrictions || guest.notes) && (
             <p className="mt-0.5 truncate text-xs text-ink-400">
               {[guest.dietaryRestrictions, guest.notes]
@@ -280,24 +292,26 @@ function GuestRow({ guest, index, eventId, hasTemplate }) {
       </div>
 
       <div className="flex shrink-0 items-center gap-1.5">
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleEmail}
-          disabled={sending === "email"}
-          className={`h-8 gap-1.5 text-xs ${emailSent ? "border-positive/25 text-positive" : ""}`}
-        >
-          {sending === "email" ? (
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-          ) : emailSent ? (
-            <Check className="animate-pop h-3.5 w-3.5" />
-          ) : (
-            <Mail className="h-3.5 w-3.5" />
-          )}
-          {emailSent
-            ? t("portal.events.details.guests.resend")
-            : t("portal.events.details.guests.table.email")}
-        </Button>
+        {guest.email && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleEmail}
+            disabled={sending === "email"}
+            className={`h-8 gap-1.5 text-xs ${emailSent ? "border-positive/25 text-positive" : ""}`}
+          >
+            {sending === "email" ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : emailSent ? (
+              <Check className="animate-pop h-3.5 w-3.5" />
+            ) : (
+              <Mail className="h-3.5 w-3.5" />
+            )}
+            {emailSent
+              ? t("portal.events.details.guests.resend")
+              : t("portal.events.details.guests.table.email")}
+          </Button>
+        )}
 
         {guest.phone && (
           <Button
@@ -398,6 +412,8 @@ function EditGuestDialog({ guest, open, onOpenChange }) {
   const g = (key) => t(`portal.events.details.guests.${key}`);
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  // Inscrit par le lien unique : il a donné son téléphone, l'email est facultatif.
+  const emailOptional = guest.source === "link";
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -443,13 +459,16 @@ function EditGuestDialog({ guest, open, onOpenChange }) {
           <div className="grid gap-1.5">
             <Label htmlFor={`edit-email-${guest.id}`}>
               {t("portal.events.new.labels.email")}
+              {emailOptional && (
+                <span className="font-normal text-ink-400">{t("join.optional")}</span>
+              )}
             </Label>
             <Input
               id={`edit-email-${guest.id}`}
               name="email"
               type="email"
-              defaultValue={guest.email}
-              required
+              defaultValue={guest.email ?? ""}
+              required={!emailOptional}
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-[1fr_7rem]">
@@ -501,8 +520,16 @@ function EditGuestDialog({ guest, open, onOpenChange }) {
 /**
  * @param {boolean} props.hasTemplate  l'événement a une invitation :
  *   sans lui, l'envoi en masse enverrait un lien vers une page vide.
+ * @param {object} props.publicLink  lien unique de l'événement (voir
+ *   getPublicLink), affiché au-dessus de la liste
  */
-export default function TabGuests({ guests, eventId, hasTemplate = false }) {
+export default function TabGuests({
+  guests,
+  eventId,
+  eventTitle,
+  publicLink,
+  hasTemplate = false,
+}) {
   const { t } = useTranslation();
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -557,10 +584,12 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
     if (!needle) return guests;
+    // Email et téléphone peuvent manquer (invité inscrit par le lien unique).
     return guests.filter(
       (guest) =>
         guest.name.toLowerCase().includes(needle) ||
-        guest.email.toLowerCase().includes(needle),
+        guest.email?.toLowerCase().includes(needle) ||
+        guest.phone?.includes(needle),
     );
   }, [guests, query]);
 
@@ -616,231 +645,245 @@ export default function TabGuests({ guests, eventId, hasTemplate = false }) {
     router.refresh();
   }
 
+  const joinedCount = guests.filter((guest) => guest.source === "link").length;
+
   return (
-    <Panel
-      title={t("portal.events.details.guests.title")}
-      description={t("portal.events.details.guests.subtitle")}
-      action={
-        <div className="flex flex-wrap items-center gap-2">
-          {guests.length > 0 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="outline" disabled={exporting !== null}>
-                  {exporting ? (
-                    <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
-                  ) : (
-                    <FileDown className="mr-1.5 h-4 w-4" />
-                  )}
-                  {exporting
-                    ? t("portal.events.details.guests.export.exporting")
-                    : t("portal.events.details.guests.export.button")}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem
-                  onSelect={() => handleExport("all")}
-                  className="cursor-pointer"
-                >
-                  <Users className="h-4 w-4 text-gold" />
-                  {t("portal.events.details.guests.export.all")}
-                  <span data-numeric className="ml-auto text-xs text-ink-400">
-                    {guests.length}
+    <div className="space-y-6">
+      {publicLink && (
+        <PublicLinkPanel
+          eventId={eventId}
+          eventTitle={eventTitle}
+          link={publicLink}
+          joinedCount={joinedCount}
+          hasTemplate={hasTemplate}
+        />
+      )}
+      <Panel
+        delay={80}
+        title={t("portal.events.details.guests.title")}
+        description={t("portal.events.details.guests.subtitle")}
+        action={
+          <div className="flex flex-wrap items-center gap-2">
+            {guests.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="sm" variant="outline" disabled={exporting !== null}>
+                    {exporting ? (
+                      <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                    ) : (
+                      <FileDown className="mr-1.5 h-4 w-4" />
+                    )}
+                    {exporting
+                      ? t("portal.events.details.guests.export.exporting")
+                      : t("portal.events.details.guests.export.button")}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuItem
+                    onSelect={() => handleExport("all")}
+                    className="cursor-pointer"
+                  >
+                    <Users className="h-4 w-4 text-gold" />
+                    {t("portal.events.details.guests.export.all")}
+                    <span data-numeric className="ml-auto text-xs text-ink-400">
+                      {guests.length}
+                    </span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => handleExport("confirmed")}
+                    disabled={confirmedCount === 0}
+                    className="cursor-pointer"
+                  >
+                    <CheckCircle2 className="h-4 w-4 text-gold" />
+                    {t("portal.events.details.guests.export.confirmed")}
+                    <span data-numeric className="ml-auto text-xs text-ink-400">
+                      {confirmedCount}
+                    </span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+            {guests.length > 0 && (
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleSendBulk}
+                disabled={!hasTemplate || pendingEmails === 0 || isSendingBulk}
+                title={
+                  hasTemplate
+                    ? t("portal.events.details.guests.bulk_hint")
+                    : t("portal.events.details.guests.bulk_needs_template")
+                }
+              >
+                {isSendingBulk ? (
+                  <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                ) : (
+                  <Mail className="mr-1.5 h-4 w-4" />
+                )}
+                {isSendingBulk
+                  ? t("portal.events.details.actions.sending")
+                  : t("portal.events.details.actions.send_invitations")}
+                {!isSendingBulk && (
+                  <span data-numeric className="ml-1.5 text-ink-400">
+                    ({pendingEmails})
                   </span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onSelect={() => handleExport("confirmed")}
-                  disabled={confirmedCount === 0}
-                  className="cursor-pointer"
-                >
-                  <CheckCircle2 className="h-4 w-4 text-gold" />
-                  {t("portal.events.details.guests.export.confirmed")}
-                  <span data-numeric className="ml-auto text-xs text-ink-400">
-                    {confirmedCount}
-                  </span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
-          {guests.length > 0 && (
+                )}
+              </Button>
+            )}
             <Button
               size="sm"
-              variant="outline"
-              onClick={handleSendBulk}
-              disabled={!hasTemplate || pendingEmails === 0 || isSendingBulk}
-              title={
-                hasTemplate
-                  ? t("portal.events.details.guests.bulk_hint")
-                  : t("portal.events.details.guests.bulk_needs_template")
-              }
+              variant={showAdd ? "secondary" : "default"}
+              onClick={() => setShowAdd((open) => !open)}
             >
-              {isSendingBulk ? (
-                <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
-              ) : (
-                <Mail className="mr-1.5 h-4 w-4" />
-              )}
-              {isSendingBulk
-                ? t("portal.events.details.actions.sending")
-                : t("portal.events.details.actions.send_invitations")}
-              {!isSendingBulk && (
-                <span data-numeric className="ml-1.5 text-ink-400">
-                  ({pendingEmails})
-                </span>
-              )}
+              <UserPlus className="mr-1.5 h-4 w-4" />
+              {showAdd
+                ? t("common.close")
+                : t("portal.events.details.guests.add_btn")}
             </Button>
-          )}
-          <Button
-            size="sm"
-            variant={showAdd ? "secondary" : "default"}
-            onClick={() => setShowAdd((open) => !open)}
-          >
-            <UserPlus className="mr-1.5 h-4 w-4" />
-            {showAdd
-              ? t("common.close")
-              : t("portal.events.details.guests.add_btn")}
-          </Button>
-        </div>
-      }
-    >
-      {showAdd && (
-        <div className="grid animate-in fade-in-0 slide-in-from-top-2 gap-8 border-b border-border/60 bg-ink-800/30 p-5 duration-500 md:grid-cols-2">
-          <form onSubmit={handleAdd} className="space-y-3">
-            <h3 className="eyebrow">{t("portal.events.new.add_guest")}</h3>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="guest-name" className="sr-only">
-                {t("portal.events.new.labels.name")}
-              </Label>
-              <Input
-                id="guest-name"
-                name="name"
-                placeholder={t("portal.events.new.labels.name")}
-                required
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="guest-email" className="sr-only">
-                {t("portal.events.new.labels.email")}
-              </Label>
-              <Input
-                id="guest-email"
-                name="email"
-                type="email"
-                placeholder={t("portal.events.new.labels.email")}
-                required
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="guest-phone" className="sr-only">
-                {t("portal.events.new.labels.phone")}
-              </Label>
-              <Input
-                id="guest-phone"
-                name="phone"
-                type="tel"
-                placeholder={t("portal.events.new.labels.phone")}
-              />
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Label
-                htmlFor="guest-seats"
-                className="shrink-0 text-xs font-normal text-ink-300"
-              >
-                {t("portal.events.details.guests.seats_label")}
-              </Label>
-              <Input
-                id="guest-seats"
-                name="seats"
-                type="number"
-                inputMode="numeric"
-                min={1}
-                max={MAX_SEATS}
-                defaultValue={1}
-                required
-                className="w-20"
-              />
-              <span className="text-xs leading-snug text-ink-400">
-                {t("portal.events.details.guests.seats_hint")}
-              </span>
-            </div>
-
-            <Button type="submit" className="w-full" disabled={isAdding}>
-              {isAdding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t("portal.events.new.buttons.add")}
-            </Button>
-          </form>
-
-          <div className="space-y-3">
-            <h3 className="eyebrow">{t("portal.events.new.import_csv")}</h3>
-            <CSVImporter onImport={handleImport} />
           </div>
-        </div>
-      )}
+        }
+      >
+        {showAdd && (
+          <div className="grid animate-in fade-in-0 slide-in-from-top-2 gap-8 border-b border-border/60 bg-ink-800/30 p-5 duration-500 md:grid-cols-2">
+            <form onSubmit={handleAdd} className="space-y-3">
+              <h3 className="eyebrow">{t("portal.events.new.add_guest")}</h3>
 
-      {!hasTemplate && guests.length > 0 && (
-        <p className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-border/60 bg-caution/5 px-5 py-3 text-sm text-ink-300">
-          {t("portal.events.details.guests.bulk_needs_template")}
-          <Link
-            href={`/dashboard/events/${eventId}/template`}
-            className="text-gold underline-offset-4 hover:underline"
-          >
-            {t("portal.events.details.actions.customize_invitation")}
-          </Link>
-        </p>
-      )}
-
-      {guests.length === 0 ? (
-        <EmptyState
-          icon={UserPlus}
-          title={t("portal.events.new.no_guests_yet")}
-          description={t("portal.events.details.guests.subtitle")}
-          action={
-            !showAdd && (
-              <Button onClick={() => setShowAdd(true)}>
-                <UserPlus className="mr-1.5 h-4 w-4" />
-                {t("portal.events.details.guests.add_btn")}
-              </Button>
-            )
-          }
-        />
-      ) : (
-        <>
-          <div className="border-b border-border/60 p-5">
-            <div className="relative max-w-sm">
-              <Search
-                className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400"
-                aria-hidden="true"
-              />
-              <Input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={t("portal.events.details.guests.search")}
-                aria-label={t("portal.events.details.guests.search")}
-                className="pl-9"
-              />
-            </div>
-          </div>
-
-          {filtered.length === 0 ? (
-            <EmptyState icon={Search} title={t("common.no_results")} />
-          ) : (
-            <ul className="divide-y divide-border/60">
-              {filtered.map((guest, index) => (
-                <GuestRow
-                  key={guest.id}
-                  guest={guest}
-                  index={index}
-                  eventId={eventId}
-                  hasTemplate={hasTemplate}
+              <div className="space-y-1.5">
+                <Label htmlFor="guest-name" className="sr-only">
+                  {t("portal.events.new.labels.name")}
+                </Label>
+                <Input
+                  id="guest-name"
+                  name="name"
+                  placeholder={t("portal.events.new.labels.name")}
+                  required
                 />
-              ))}
-            </ul>
-          )}
-        </>
-      )}
-    </Panel>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="guest-email" className="sr-only">
+                  {t("portal.events.new.labels.email")}
+                </Label>
+                <Input
+                  id="guest-email"
+                  name="email"
+                  type="email"
+                  placeholder={t("portal.events.new.labels.email")}
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="guest-phone" className="sr-only">
+                  {t("portal.events.new.labels.phone")}
+                </Label>
+                <Input
+                  id="guest-phone"
+                  name="phone"
+                  type="tel"
+                  placeholder={t("portal.events.new.labels.phone")}
+                />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Label
+                  htmlFor="guest-seats"
+                  className="shrink-0 text-xs font-normal text-ink-300"
+                >
+                  {t("portal.events.details.guests.seats_label")}
+                </Label>
+                <Input
+                  id="guest-seats"
+                  name="seats"
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  max={MAX_SEATS}
+                  defaultValue={1}
+                  required
+                  className="w-20"
+                />
+                <span className="text-xs leading-snug text-ink-400">
+                  {t("portal.events.details.guests.seats_hint")}
+                </span>
+              </div>
+
+              <Button type="submit" className="w-full" disabled={isAdding}>
+                {isAdding && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t("portal.events.new.buttons.add")}
+              </Button>
+            </form>
+
+            <div className="space-y-3">
+              <h3 className="eyebrow">{t("portal.events.new.import_csv")}</h3>
+              <CSVImporter onImport={handleImport} />
+            </div>
+          </div>
+        )}
+
+        {!hasTemplate && guests.length > 0 && (
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-border/60 bg-caution/5 px-5 py-3 text-sm text-ink-300">
+            {t("portal.events.details.guests.bulk_needs_template")}
+            <Link
+              href={`/dashboard/events/${eventId}/template`}
+              className="text-gold underline-offset-4 hover:underline"
+            >
+              {t("portal.events.details.actions.customize_invitation")}
+            </Link>
+          </p>
+        )}
+
+        {guests.length === 0 ? (
+          <EmptyState
+            icon={UserPlus}
+            title={t("portal.events.new.no_guests_yet")}
+            description={t("portal.events.details.guests.subtitle")}
+            action={
+              !showAdd && (
+                <Button onClick={() => setShowAdd(true)}>
+                  <UserPlus className="mr-1.5 h-4 w-4" />
+                  {t("portal.events.details.guests.add_btn")}
+                </Button>
+              )
+            }
+          />
+        ) : (
+          <>
+            <div className="border-b border-border/60 p-5">
+              <div className="relative max-w-sm">
+                <Search
+                  className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-ink-400"
+                  aria-hidden="true"
+                />
+                <Input
+                  type="search"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder={t("portal.events.details.guests.search")}
+                  aria-label={t("portal.events.details.guests.search")}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+
+            {filtered.length === 0 ? (
+              <EmptyState icon={Search} title={t("common.no_results")} />
+            ) : (
+              <ul className="divide-y divide-border/60">
+                {filtered.map((guest, index) => (
+                  <GuestRow
+                    key={guest.id}
+                    guest={guest}
+                    index={index}
+                    eventId={eventId}
+                    hasTemplate={hasTemplate}
+                  />
+                ))}
+              </ul>
+            )}
+          </>
+        )}
+      </Panel>
+    </div>
   );
 }

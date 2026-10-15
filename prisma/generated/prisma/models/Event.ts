@@ -20,8 +20,18 @@ export type EventModel = runtime.Types.Result.DefaultSelection<Prisma.$EventPayl
 
 export type AggregateEvent = {
   _count: EventCountAggregateOutputType | null
+  _avg: EventAvgAggregateOutputType | null
+  _sum: EventSumAggregateOutputType | null
   _min: EventMinAggregateOutputType | null
   _max: EventMaxAggregateOutputType | null
+}
+
+export type EventAvgAggregateOutputType = {
+  publicMaxSeats: number | null
+}
+
+export type EventSumAggregateOutputType = {
+  publicMaxSeats: number | null
 }
 
 export type EventMinAggregateOutputType = {
@@ -39,6 +49,9 @@ export type EventMinAggregateOutputType = {
   status: string | null
   autoSend: boolean | null
   checkInToken: string | null
+  publicToken: string | null
+  publicLinkEnabled: boolean | null
+  publicMaxSeats: number | null
   guestbookEnabled: boolean | null
   photosEnabled: boolean | null
   createdAt: Date | null
@@ -60,6 +73,9 @@ export type EventMaxAggregateOutputType = {
   status: string | null
   autoSend: boolean | null
   checkInToken: string | null
+  publicToken: string | null
+  publicLinkEnabled: boolean | null
+  publicMaxSeats: number | null
   guestbookEnabled: boolean | null
   photosEnabled: boolean | null
   createdAt: Date | null
@@ -84,6 +100,9 @@ export type EventCountAggregateOutputType = {
   status: number
   autoSend: number
   checkInToken: number
+  publicToken: number
+  publicLinkEnabled: number
+  publicMaxSeats: number
   guestbookEnabled: number
   photosEnabled: number
   createdAt: number
@@ -91,6 +110,14 @@ export type EventCountAggregateOutputType = {
   _all: number
 }
 
+
+export type EventAvgAggregateInputType = {
+  publicMaxSeats?: true
+}
+
+export type EventSumAggregateInputType = {
+  publicMaxSeats?: true
+}
 
 export type EventMinAggregateInputType = {
   id?: true
@@ -107,6 +134,9 @@ export type EventMinAggregateInputType = {
   status?: true
   autoSend?: true
   checkInToken?: true
+  publicToken?: true
+  publicLinkEnabled?: true
+  publicMaxSeats?: true
   guestbookEnabled?: true
   photosEnabled?: true
   createdAt?: true
@@ -128,6 +158,9 @@ export type EventMaxAggregateInputType = {
   status?: true
   autoSend?: true
   checkInToken?: true
+  publicToken?: true
+  publicLinkEnabled?: true
+  publicMaxSeats?: true
   guestbookEnabled?: true
   photosEnabled?: true
   createdAt?: true
@@ -152,6 +185,9 @@ export type EventCountAggregateInputType = {
   status?: true
   autoSend?: true
   checkInToken?: true
+  publicToken?: true
+  publicLinkEnabled?: true
+  publicMaxSeats?: true
   guestbookEnabled?: true
   photosEnabled?: true
   createdAt?: true
@@ -197,6 +233,18 @@ export type EventAggregateArgs<ExtArgs extends runtime.Types.Extensions.Internal
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: EventAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: EventSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: EventMinAggregateInputType
@@ -227,6 +275,8 @@ export type EventGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   _count?: EventCountAggregateInputType | true
+  _avg?: EventAvgAggregateInputType
+  _sum?: EventSumAggregateInputType
   _min?: EventMinAggregateInputType
   _max?: EventMaxAggregateInputType
 }
@@ -249,11 +299,16 @@ export type EventGroupByOutputType = {
   status: string
   autoSend: boolean
   checkInToken: string | null
+  publicToken: string | null
+  publicLinkEnabled: boolean
+  publicMaxSeats: number
   guestbookEnabled: boolean
   photosEnabled: boolean
   createdAt: Date
   updatedAt: Date
   _count: EventCountAggregateOutputType | null
+  _avg: EventAvgAggregateOutputType | null
+  _sum: EventSumAggregateOutputType | null
   _min: EventMinAggregateOutputType | null
   _max: EventMaxAggregateOutputType | null
 }
@@ -294,6 +349,9 @@ export type EventWhereInput = {
   status?: Prisma.StringFilter<"Event"> | string
   autoSend?: Prisma.BoolFilter<"Event"> | boolean
   checkInToken?: Prisma.StringNullableFilter<"Event"> | string | null
+  publicToken?: Prisma.StringNullableFilter<"Event"> | string | null
+  publicLinkEnabled?: Prisma.BoolFilter<"Event"> | boolean
+  publicMaxSeats?: Prisma.IntFilter<"Event"> | number
   guestbookEnabled?: Prisma.BoolFilter<"Event"> | boolean
   photosEnabled?: Prisma.BoolFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
@@ -324,6 +382,9 @@ export type EventOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
   checkInToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicLinkEnabled?: Prisma.SortOrder
+  publicMaxSeats?: Prisma.SortOrder
   guestbookEnabled?: Prisma.SortOrder
   photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -339,6 +400,7 @@ export type EventOrderByWithRelationInput = {
 export type EventWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   checkInToken?: string
+  publicToken?: string
   AND?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
   OR?: Prisma.EventWhereInput[]
   NOT?: Prisma.EventWhereInput | Prisma.EventWhereInput[]
@@ -357,6 +419,8 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   emailTemplate?: Prisma.StringNullableFilter<"Event"> | string | null
   status?: Prisma.StringFilter<"Event"> | string
   autoSend?: Prisma.BoolFilter<"Event"> | boolean
+  publicLinkEnabled?: Prisma.BoolFilter<"Event"> | boolean
+  publicMaxSeats?: Prisma.IntFilter<"Event"> | number
   guestbookEnabled?: Prisma.BoolFilter<"Event"> | boolean
   photosEnabled?: Prisma.BoolFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
@@ -367,7 +431,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   templateCopy?: Prisma.XOR<Prisma.TemplateNullableScalarRelationFilter, Prisma.TemplateWhereInput> | null
   guestbookMessages?: Prisma.GuestbookMessageListRelationFilter
   photos?: Prisma.EventPhotoListRelationFilter
-}, "id" | "checkInToken">
+}, "id" | "checkInToken" | "publicToken">
 
 export type EventOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -387,13 +451,18 @@ export type EventOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
   checkInToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  publicLinkEnabled?: Prisma.SortOrder
+  publicMaxSeats?: Prisma.SortOrder
   guestbookEnabled?: Prisma.SortOrder
   photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.EventCountOrderByAggregateInput
+  _avg?: Prisma.EventAvgOrderByAggregateInput
   _max?: Prisma.EventMaxOrderByAggregateInput
   _min?: Prisma.EventMinOrderByAggregateInput
+  _sum?: Prisma.EventSumOrderByAggregateInput
 }
 
 export type EventScalarWhereWithAggregatesInput = {
@@ -417,6 +486,9 @@ export type EventScalarWhereWithAggregatesInput = {
   status?: Prisma.StringWithAggregatesFilter<"Event"> | string
   autoSend?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
   checkInToken?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  publicToken?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  publicLinkEnabled?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
+  publicMaxSeats?: Prisma.IntWithAggregatesFilter<"Event"> | number
   guestbookEnabled?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
   photosEnabled?: Prisma.BoolWithAggregatesFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Event"> | Date | string
@@ -440,6 +512,9 @@ export type EventCreateInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -470,6 +545,9 @@ export type EventUncheckedCreateInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -498,6 +576,9 @@ export type EventUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -528,6 +609,9 @@ export type EventUncheckedUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -557,6 +641,9 @@ export type EventCreateManyInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -580,6 +667,9 @@ export type EventUpdateManyMutationInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -604,6 +694,9 @@ export type EventUncheckedUpdateManyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -643,10 +736,17 @@ export type EventCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
   checkInToken?: Prisma.SortOrder
+  publicToken?: Prisma.SortOrder
+  publicLinkEnabled?: Prisma.SortOrder
+  publicMaxSeats?: Prisma.SortOrder
   guestbookEnabled?: Prisma.SortOrder
   photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type EventAvgOrderByAggregateInput = {
+  publicMaxSeats?: Prisma.SortOrder
 }
 
 export type EventMaxOrderByAggregateInput = {
@@ -664,6 +764,9 @@ export type EventMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
   checkInToken?: Prisma.SortOrder
+  publicToken?: Prisma.SortOrder
+  publicLinkEnabled?: Prisma.SortOrder
+  publicMaxSeats?: Prisma.SortOrder
   guestbookEnabled?: Prisma.SortOrder
   photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -685,10 +788,17 @@ export type EventMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   autoSend?: Prisma.SortOrder
   checkInToken?: Prisma.SortOrder
+  publicToken?: Prisma.SortOrder
+  publicLinkEnabled?: Prisma.SortOrder
+  publicMaxSeats?: Prisma.SortOrder
   guestbookEnabled?: Prisma.SortOrder
   photosEnabled?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type EventSumOrderByAggregateInput = {
+  publicMaxSeats?: Prisma.SortOrder
 }
 
 export type EventScalarRelationFilter = {
@@ -827,6 +937,9 @@ export type EventCreateWithoutUserInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -855,6 +968,9 @@ export type EventUncheckedCreateWithoutUserInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -913,6 +1029,9 @@ export type EventScalarWhereInput = {
   status?: Prisma.StringFilter<"Event"> | string
   autoSend?: Prisma.BoolFilter<"Event"> | boolean
   checkInToken?: Prisma.StringNullableFilter<"Event"> | string | null
+  publicToken?: Prisma.StringNullableFilter<"Event"> | string | null
+  publicLinkEnabled?: Prisma.BoolFilter<"Event"> | boolean
+  publicMaxSeats?: Prisma.IntFilter<"Event"> | number
   guestbookEnabled?: Prisma.BoolFilter<"Event"> | boolean
   photosEnabled?: Prisma.BoolFilter<"Event"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Event"> | Date | string
@@ -936,6 +1055,9 @@ export type EventCreateWithoutTemplateCopyInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -965,6 +1087,9 @@ export type EventUncheckedCreateWithoutTemplateCopyInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1008,6 +1133,9 @@ export type EventUpdateWithoutTemplateCopyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1037,6 +1165,9 @@ export type EventUncheckedUpdateWithoutTemplateCopyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1064,6 +1195,9 @@ export type EventCreateWithoutCollaboratorsInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1093,6 +1227,9 @@ export type EventUncheckedCreateWithoutCollaboratorsInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1136,6 +1273,9 @@ export type EventUpdateWithoutCollaboratorsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1165,6 +1305,9 @@ export type EventUncheckedUpdateWithoutCollaboratorsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1192,6 +1335,9 @@ export type EventCreateWithoutGuestsInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1221,6 +1367,9 @@ export type EventUncheckedCreateWithoutGuestsInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1264,6 +1413,9 @@ export type EventUpdateWithoutGuestsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1293,6 +1445,9 @@ export type EventUncheckedUpdateWithoutGuestsInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1320,6 +1475,9 @@ export type EventCreateWithoutGuestbookMessagesInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1349,6 +1507,9 @@ export type EventUncheckedCreateWithoutGuestbookMessagesInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1392,6 +1553,9 @@ export type EventUpdateWithoutGuestbookMessagesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1421,6 +1585,9 @@ export type EventUncheckedUpdateWithoutGuestbookMessagesInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1448,6 +1615,9 @@ export type EventCreateWithoutPhotosInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1477,6 +1647,9 @@ export type EventUncheckedCreateWithoutPhotosInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1520,6 +1693,9 @@ export type EventUpdateWithoutPhotosInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1549,6 +1725,9 @@ export type EventUncheckedUpdateWithoutPhotosInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1576,6 +1755,9 @@ export type EventCreateManyUserInput = {
   status?: string
   autoSend?: boolean
   checkInToken?: string | null
+  publicToken?: string | null
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: number
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: Date | string
@@ -1599,6 +1781,9 @@ export type EventUpdateWithoutUserInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1627,6 +1812,9 @@ export type EventUncheckedUpdateWithoutUserInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1655,6 +1843,9 @@ export type EventUncheckedUpdateManyWithoutUserInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   autoSend?: Prisma.BoolFieldUpdateOperationsInput | boolean
   checkInToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  publicLinkEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  publicMaxSeats?: Prisma.IntFieldUpdateOperationsInput | number
   guestbookEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   photosEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1737,6 +1928,9 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   autoSend?: boolean
   checkInToken?: boolean
+  publicToken?: boolean
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: boolean
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: boolean
@@ -1768,6 +1962,9 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   autoSend?: boolean
   checkInToken?: boolean
+  publicToken?: boolean
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: boolean
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: boolean
@@ -1793,6 +1990,9 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   autoSend?: boolean
   checkInToken?: boolean
+  publicToken?: boolean
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: boolean
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: boolean
@@ -1818,13 +2018,16 @@ export type EventSelectScalar = {
   status?: boolean
   autoSend?: boolean
   checkInToken?: boolean
+  publicToken?: boolean
+  publicLinkEnabled?: boolean
+  publicMaxSeats?: boolean
   guestbookEnabled?: boolean
   photosEnabled?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "itinerary" | "time" | "dressCode" | "customMessage" | "contactPhone" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "checkInToken" | "guestbookEnabled" | "photosEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "description" | "eventDate" | "location" | "itinerary" | "time" | "dressCode" | "customMessage" | "contactPhone" | "animationConfig" | "invitationTemplate" | "emailTemplate" | "status" | "autoSend" | "checkInToken" | "publicToken" | "publicLinkEnabled" | "publicMaxSeats" | "guestbookEnabled" | "photosEnabled" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   guests?: boolean | Prisma.Event$guestsArgs<ExtArgs>
@@ -1888,6 +2091,17 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
      * demande et régénérable par l'hôte (voir app/actions/checkin.js).
      */
     checkInToken: string | null
+    /**
+     * Lien unique de l'invitation (/join/<jeton>) : chaque personne qui
+     * l'ouvre saisit son nom et reçoit son invitation personnelle (voir
+     * app/actions/public-link.js). Créé à la demande, régénérable.
+     */
+    publicToken: string | null
+    publicLinkEnabled: boolean
+    /**
+     * Personnes qu'un inscrit par le lien unique peut annoncer, lui compris.
+     */
+    publicMaxSeats: number
     /**
      * L'hôte peut couper le livre d'or ou le mur de photos des invités.
      */
@@ -2341,6 +2555,9 @@ export interface EventFieldRefs {
   readonly status: Prisma.FieldRef<"Event", 'String'>
   readonly autoSend: Prisma.FieldRef<"Event", 'Boolean'>
   readonly checkInToken: Prisma.FieldRef<"Event", 'String'>
+  readonly publicToken: Prisma.FieldRef<"Event", 'String'>
+  readonly publicLinkEnabled: Prisma.FieldRef<"Event", 'Boolean'>
+  readonly publicMaxSeats: Prisma.FieldRef<"Event", 'Int'>
   readonly guestbookEnabled: Prisma.FieldRef<"Event", 'Boolean'>
   readonly photosEnabled: Prisma.FieldRef<"Event", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Event", 'DateTime'>

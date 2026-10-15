@@ -41,6 +41,8 @@ import { cleanItinerary } from "@/lib/itinerary";
  *   admin consulte l'événement d'un autre compte
  * @param {{ canManage: boolean, url: string | null }} props.checkIn  lien
  *   de l'équipe d'accueil (voir getCheckInLink)
+ * @param {object} props.publicLink  lien unique de l'invitation (voir
+ *   getPublicLink)
  * @param {object} props.memories  livre d'or et photos (voir getEventMemories)
  */
 export default function EventDetailView({
@@ -50,6 +52,7 @@ export default function EventDetailView({
   countdown,
   owner = null,
   checkIn,
+  publicLink,
   memories,
 }) {
   const { t, locale } = useTranslation();
@@ -296,6 +299,7 @@ export default function EventDetailView({
             event={event}
             guests={guests}
             sampleEvent={sampleEvent}
+            publicLink={publicLink}
           />
         </TabsContent>
 
@@ -303,6 +307,8 @@ export default function EventDetailView({
           <TabGuests
             guests={guests}
             eventId={event.id}
+            eventTitle={event.title}
+            publicLink={publicLink}
             hasTemplate={Boolean(event.invitationTemplate)}
           />
         </TabsContent>

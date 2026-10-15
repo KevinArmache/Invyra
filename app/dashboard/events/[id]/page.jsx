@@ -5,6 +5,7 @@ import { getGuests } from "@/app/actions/guest";
 import { getCollaborators } from "@/app/actions/collaborator";
 import { getSession } from "@/app/actions/auth";
 import { getCheckInLink } from "@/app/actions/checkin";
+import { getPublicLink } from "@/app/actions/public-link";
 import { getEventMemories } from "@/app/actions/memories";
 import { getEventOwnerAdmin } from "@/app/actions/admin";
 import { countdownTarget } from "@/lib/invitation/document";
@@ -34,16 +35,17 @@ export default async function EventDetailPage({ params }) {
   // l'événement avant de demander les invités, puis les collaborateurs.
   let data;
   try {
-    const [event, guests, collaborators, session, checkIn, memories] =
+    const [event, guests, collaborators, session, checkIn, publicLink, memories] =
       await Promise.all([
         getEventById(id),
         getGuests(id),
         getCollaborators(id),
         getSession(),
         getCheckInLink(id),
+        getPublicLink(id),
         getEventMemories(id),
       ]);
-    data = { event, guests, collaborators, session, checkIn, memories };
+    data = { event, guests, collaborators, session, checkIn, publicLink, memories };
   } catch {
     // getEventById lève aussi bien pour un identifiant inconnu que pour un
     // accès refusé : dans les deux cas l'utilisateur n'a rien à voir ici.
@@ -72,6 +74,7 @@ export default async function EventDetailPage({ params }) {
       countdown={countdown}
       owner={owner}
       checkIn={data.checkIn}
+      publicLink={data.publicLink}
       memories={data.memories}
     />
   );

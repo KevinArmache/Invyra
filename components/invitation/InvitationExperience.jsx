@@ -7,6 +7,7 @@ import { updateRsvpStatus } from "@/app/actions/invitation";
 import GuestBar from "@/components/invitation/GuestBar";
 import InvitationPreview from "@/components/invitation/InvitationPreview";
 import RsvpDetailsSheet from "@/components/invitation/RsvpDetailsSheet";
+import WelcomeNote from "@/components/invitation/WelcomeNote";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**
@@ -37,6 +38,8 @@ const SHEET_DELAY = 1400;
  * @param {string} [props.accent]    couleur d'accent du modèle
  * @param {{ code: string, svg: string }} [props.ticket]  QR code d'entrée de
  *   l'invité, affiché sur l'invitation (lib/invitation/guest-qr.js)
+ * @param {boolean} [props.welcome]  l'invité vient de s'inscrire par le lien
+ *   unique : un encart l'invite à garder cette adresse (WelcomeNote)
  */
 export default function InvitationExperience({
   token,
@@ -45,6 +48,7 @@ export default function InvitationExperience({
   ticket,
   background = "#0a0a0a",
   accent,
+  welcome = false,
 }) {
   const { t } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -174,6 +178,8 @@ export default function InvitationExperience({
         <span className="sr-only">{t("invite.loading")}</span>
         <span className="block h-px w-16 animate-pulse bg-[#e2b963]/70" />
       </div>
+
+      {welcome && isOpened && <WelcomeNote eventTitle={event.title} />}
 
       {isOpened && !sheet?.open && (
         <GuestBar
