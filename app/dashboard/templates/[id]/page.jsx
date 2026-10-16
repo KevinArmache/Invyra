@@ -3,10 +3,13 @@ import { notFound } from "next/navigation";
 import { getSession } from "@/app/actions/auth";
 import {
   getUserTemplateById,
+  updatePrintTemplate,
   updateUserTemplate,
 } from "@/app/actions/template";
 import TemplateEditorForm from "@/components/templates/TemplateEditorForm";
+import PrintTemplateEditor from "@/components/stationery/PrintTemplateEditor";
 import { toEditableConfig } from "@/lib/templates/validation";
+import { normalizePrintConfig } from "@/lib/print/config";
 import { getTranslations } from "@/lib/i18n/server";
 
 export async function generateMetadata({ params }) {
@@ -31,11 +34,27 @@ export default async function EditTemplatePage({ params }) {
     notFound();
   }
 
+  const session = await getSession();
+
+  // Invitation papier : son propre éditeur, réservé aux admins (voir
+  // updatePrintTemplate).
+  if (template.medium === "print") {
+    const config = normalizePrintConfig(template.config);
+    if (session?.role !== "admin" || !config) notFound();
+    return (
+      <PrintTemplateEditor
+        initialName={template.name}
+        initialStatus={template.status ?? "draft"}
+        initialCategory={template.category}
+        initialConfig={config}
+        onSave={updatePrintTemplate.bind(null, id)}
+      />
+    );
+  }
+
   // `bind` fige l'identifiant côté serveur : le client ne peut pas le
   // remplacer pour écrire dans le modèle d'un autre utilisateur.
   const saveTemplate = updateUserTemplate.bind(null, id);
-
-  const session = await getSession();
 
   return (
     <TemplateEditorForm

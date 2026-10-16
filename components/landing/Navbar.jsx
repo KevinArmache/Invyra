@@ -17,6 +17,7 @@ const SECTIONS = [
   { id: "how-it-works", key: "nav.how_it_works" },
   { id: "features", key: "nav.features" },
   { id: "templates", key: "nav.templates", showcaseOnly: true },
+  { id: "stationery", key: "nav.stationery", stationeryOnly: true },
   { id: "availability", key: "nav.availability", desktop: false },
   { id: "pricing", key: "nav.pricing" },
   { id: "faq", key: "nav.faq" },
@@ -34,13 +35,16 @@ const SECTIONS = [
  * `isAuthenticated` vient du Server Component parent : pas de bouton fantôme
  * qui bascule après le chargement.
  *
- * `current` : "home" sur l'accueil ; "templates" sur la collection, où les
- * liens ramènent aux sections de l'accueil (/#…) et où « Modèles » mène à
- * /templates.
+ * `current` : "home" sur l'accueil ; "templates" ou "stationery" sur une
+ * collection, où les liens ramènent aux sections de l'accueil (/#…), où
+ * « Modèles » mène à /templates et « Papeterie » à /stationery.
+ *
+ * `hasStationery` : des invitations papier sont en vitrine (lien « Papeterie »).
  */
 export default function Navbar({
   isAuthenticated = false,
   hasShowcase = false,
+  hasStationery = false,
   current = "home",
 }) {
   const { t } = useTranslation();
@@ -52,10 +56,14 @@ export default function Navbar({
   const onHome = current === "home";
   const active = onHome ? observed : current;
   const sections = SECTIONS.filter(
-    (section) => hasShowcase || !section.showcaseOnly,
+    (section) =>
+      (hasShowcase || !section.showcaseOnly) &&
+      (hasStationery || !section.stationeryOnly),
   );
   const hrefOf = (section) => {
     if (onHome) return `#${section.id}`;
+    // La papeterie a sa collection : on y va directement.
+    if (section.id === "stationery") return "/stationery";
     return section.id === current ? `/${current}` : `/#${section.id}`;
   };
   const currentAttr = (section) => {
@@ -93,7 +101,9 @@ export default function Navbar({
   useEffect(() => {
     if (!onHome) return;
     const order = SECTIONS.filter(
-      (section) => hasShowcase || !section.showcaseOnly,
+      (section) =>
+        (hasShowcase || !section.showcaseOnly) &&
+        (hasStationery || !section.stationeryOnly),
     ).map((section) => section.id);
     const visible = new Set();
     const observer = new IntersectionObserver(
@@ -113,7 +123,7 @@ export default function Navbar({
       if (element) observer.observe(element);
     }
     return () => observer.disconnect();
-  }, [hasShowcase, onHome]);
+  }, [hasShowcase, hasStationery, onHome]);
 
   // ── Menu mobile : page figée dessous, Échap pour fermer ──────────────
   useEffect(() => {

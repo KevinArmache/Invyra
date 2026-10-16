@@ -22,6 +22,11 @@ const nextConfig = {
     "/dashboard/events/*/invitation/pdf": [
       "./node_modules/@sparticuz/chromium/bin/**",
     ],
+    // Invitations papier (lib/print/render.js) : bon à tirer et fichiers
+    // de l'imprimeur.
+    "/stationery/*/proof": ["./node_modules/@sparticuz/chromium/bin/**"],
+    "/dashboard/templates/*/print": ["./node_modules/@sparticuz/chromium/bin/**"],
+    "/dashboard/events/*/stationery": ["./node_modules/@sparticuz/chromium/bin/**"],
   },
 };
 

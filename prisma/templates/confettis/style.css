@@ -1,0 +1,35 @@
+.face { background: #fff6ec; color: #5b2a5a; font-family: 'Poppins', 'Helvetica Neue', sans-serif; font-variant-numeric: lining-nums proportional-nums; }
+.face p, .face h1, .face h2 { text-wrap: balance; }
+.cf-bg { position: absolute; inset: 0; background: radial-gradient(90% 70% at 50% 42%, #fffaf3 0%, #fff6ec 55%, #ffe9d6 100%); }
+.cf-bg--back { background: #fff1e4; }
+.cf-confetti { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.cf-front, .cf-back {
+  position: absolute; inset: calc(var(--bleed) + 9mm) calc(var(--bleed) + 8mm);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.cf-kicker {
+  margin: 0 0 4mm; padding: 1.2mm 3.4mm; border-radius: 99mm; background: #5b2a5a; color: #fff6ec;
+  font-family: 'Fredoka', sans-serif; font-size: 8pt; font-weight: 600; letter-spacing: 0.06em; transform: rotate(-3deg);
+}
+.cf-photo-frame {
+  position: relative; width: 50mm; height: 50mm; margin: 0; overflow: hidden; border-radius: 50%;
+  background: #ffd9cf; box-shadow: 0 0 0 2.4mm #ffffff, 0 2.4mm 5mm 1.4mm rgb(91 42 90 / 0.18);
+}
+.cf-photo-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 22pt; color: #ff6f59; }
+.cf-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cf-photo[src=""], .cf-photo:not([src]) { display: none; }
+.cf-title { margin: 7mm 0 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 19pt; line-height: 1.08; color: #5b2a5a; }
+.cf-date { margin: 4mm 0 0; }
+.cf-date span { display: inline-block; padding: 1.4mm 4mm; border-radius: 99mm; background: #ff6f59; color: #fff; font-size: 7.6pt; font-weight: 600; letter-spacing: 0.04em; }
+
+.cf-guest { margin: 0 0 2mm; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 11pt; color: #ff6f59; }
+.cf-back-title { margin: 0 0 5mm; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 16pt; }
+.cf-list { width: 100%; margin: 0; padding: 0; list-style: none; text-align: left; }
+.cf-list li { display: flex; align-items: flex-start; gap: 2.6mm; padding: 1.8mm 0; font-size: 8.6pt; line-height: 1.35; }
+.cf-list svg { width: 4.4mm; height: 4.4mm; flex-shrink: 0; color: #23a99a; }
+.cf-message { margin: 3mm 0 0; font-size: 8.2pt; line-height: 1.45; color: #7a4a78; }
+.cf-rsvp { display: flex; align-items: center; gap: 3.4mm; margin-top: 5mm; padding: 2.4mm; border-radius: 3mm; background: #ffffff; text-align: left; box-shadow: 0 0 0 0.4mm #ffc23d; }
+.cf-qr { width: 18mm; flex-shrink: 0; }
+.cf-rsvp p { margin: 0; font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 11pt; }
+.cf-rsvp span { font-family: 'Poppins', sans-serif; font-weight: 400; font-size: 7.4pt; color: #7a4a78; }
+.cf-contact { margin: 3mm 0 0; font-size: 7.4pt; color: #7a4a78; }

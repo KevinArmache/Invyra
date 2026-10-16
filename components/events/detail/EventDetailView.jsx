@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -29,6 +29,7 @@ import TabOverview from "@/components/events/detail/TabOverview";
 import TabGuests from "@/components/events/detail/TabGuests";
 import TabCheckIn from "@/components/events/detail/TabCheckIn";
 import TabMemories from "@/components/events/detail/TabMemories";
+import TabStationery from "@/components/events/detail/TabStationery";
 import { useTranslation } from "@/lib/i18n/Context";
 import { cleanItinerary } from "@/lib/itinerary";
 
@@ -44,6 +45,8 @@ import { cleanItinerary } from "@/lib/itinerary";
  * @param {object} props.publicLink  lien unique de l'invitation (voir
  *   getPublicLink)
  * @param {object} props.memories  livre d'or et photos (voir getEventMemories)
+ * @param {Array} [props.stationery]  modèles papier proposés (onglet Papeterie)
+ * @param {boolean} [props.isAdmin]   fichiers de l'imprimeur
  */
 export default function EventDetailView({
   event,
@@ -54,6 +57,8 @@ export default function EventDetailView({
   checkIn,
   publicLink,
   memories,
+  stationery = [],
+  isAdmin = false,
 }) {
   const { t, locale } = useTranslation();
   const router = useRouter();
@@ -74,15 +79,28 @@ export default function EventDetailView({
 
   const stopCount = cleanItinerary(event.itinerary).length;
 
-  const sampleEvent = {
-    title: event.title,
-    eventDate: event.eventDate,
-    location: event.location,
-    time: event.time || "",
-    dressCode: event.dressCode || "",
-    contactPhone: event.contactPhone || "",
-    customMessage: event.customMessage || "",
-  };
+  // Stable d'un rendu à l'autre : les aperçus papier ne se reconstruisent
+  // que si l'événement change.
+  const sampleEvent = useMemo(
+    () => ({
+      title: event.title,
+      eventDate: event.eventDate,
+      location: event.location,
+      time: event.time || "",
+      dressCode: event.dressCode || "",
+      contactPhone: event.contactPhone || "",
+      customMessage: event.customMessage || "",
+    }),
+    [
+      event.title,
+      event.eventDate,
+      event.location,
+      event.time,
+      event.dressCode,
+      event.contactPhone,
+      event.customMessage,
+    ],
+  );
 
   // Le parcours d'une invitation, en quatre chiffres.
   const total = guests.length;
@@ -291,6 +309,9 @@ export default function EventDetailView({
             <TabsTrigger value="memories">
               {t("portal.events.details.tabs.memories")}
             </TabsTrigger>
+            <TabsTrigger value="stationery">
+              {t("portal.events.details.tabs.stationery")}
+            </TabsTrigger>
           </TabsList>
         </div>
 
@@ -324,6 +345,18 @@ export default function EventDetailView({
 
         <TabsContent value="memories" className="mt-6">
           <TabMemories eventId={event.id} memories={memories} />
+        </TabsContent>
+
+        <TabsContent value="stationery" className="mt-6">
+          <TabStationery
+            eventId={event.id}
+            event={sampleEvent}
+            invitation={event.invitationTemplate}
+            catalog={stationery}
+            publicLink={publicLink}
+            guestCount={guests.length}
+            isAdmin={isAdmin}
+          />
         </TabsContent>
       </Tabs>
 

@@ -12,7 +12,8 @@
     "open_menu": "Open menu",
     "close_menu": "Close menu",
     "main": "Main navigation",
-    "skip": "Skip to content"
+    "skip": "Skip to content",
+    "stationery": "Stationery"
   },
   "login": {
     "title": "Welcome back",
@@ -377,7 +378,8 @@
           "overview": "Overview",
           "guests": "Guests",
           "checkin": "Event day",
-          "memories": "Memories"
+          "memories": "Memories",
+          "stationery": "Stationery"
         },
         "kpi": {
           "invited": "Guests",
@@ -570,6 +572,24 @@
           "guest_access": "Your guests reach it from their invitation (\"Memories\" button) and from their ticket.",
           "delete_video_confirm": "Delete this video?",
           "video": "Video"
+        },
+        "stationery": {
+          "title": "Printed invitations",
+          "subtitle": "Pick a card to print: it uses your event details and photos.",
+          "empty_title": "No print template yet",
+          "empty_desc": "Printed invitations will soon be available in your space.",
+          "choose": "Print templates",
+          "photos_from_invitation": "The photos of your online invitation are reused on the card. We adjust framing and text before the proof.",
+          "photos_sample": "The photos shown are samples. Add your photos to your online invitation: they will be reused on the card.",
+          "mode_label": "Printing",
+          "generic_option": "The same card for everyone",
+          "generic_hint": "The QR code leads to the shared link: each guest writes their name there.",
+          "generic_hint_no_link": "Without an active shared link, the card has no QR code.",
+          "named_option": "One card per guest, with their name ({count} cards)",
+          "named_hint": "Each card carries the guest's name and personal QR code: reply, directions and ticket in one scan.",
+          "enable_link_tip": "Turn on the shared link in the Guests tab to print a common QR code on every card.",
+          "order_message": "Hello, I would like to print the invitations for “{event}” with the “{name}” design ({format}), {mode}.",
+          "see_template": "See the template page"
         }
       },
       "itinerary": {
@@ -630,7 +650,12 @@
         "feature_success": "The template now appears on the home page.",
         "unfeature_success": "The template was removed from the home page.",
         "reset_filters": "Show all templates",
-        "announce_btn": "Announce by email"
+        "announce_btn": "Announce by email",
+        "medium_label": "Template type",
+        "medium_digital": "Online invitations",
+        "medium_print": "Stationery",
+        "no_print_templates": "No print template yet",
+        "no_print_templates_desc": "Add a print template with the prisma/scripts/seed-code-template.mjs script, or duplicate an existing one."
       },
       "editor": {
         "save_btn": "Save template",
@@ -1137,6 +1162,183 @@
     "breadcrumb_home": "Home",
     "breadcrumb_current": "Templates"
   },
+  "stationery": {
+    "meta_title": "Printed invitations",
+    "meta_description": "Invitations to print: flat and folded cards, fine papers and foil. Print-ready files, linked to your online invitation.",
+    "template_meta_title": "{name} · Printed invitation",
+    "template_meta_description": "Discover the printed invitation “{name}”: mockup, size, papers and finishes. Print-ready file.",
+    "breadcrumb": "Stationery",
+    "eyebrow": "Stationery",
+    "eyebrow_single": "Printed invitation",
+    "title": "Invitations to ",
+    "title_highlight": "hold in your hands",
+    "subtitle": "Pick your card, we adapt it to your event and prepare a file any print shop accepts.",
+    "count_one": "1 print template",
+    "count_other": "{count} print templates",
+    "empty_title": "Stationery is on its way",
+    "empty_desc": "Our first printed invitations are being prepared. Come back soon.",
+    "badge_foil": "Foil",
+    "open_template": "See the printed invitation",
+    "mockup_label": "Mockup of the printed invitation {name}",
+    "open_card": "Open the card",
+    "close_card": "Close the card",
+    "flip_card": "Flip",
+    "named_toggle": "With a guest name",
+    "named_hint": "Each card can carry its guest's name, printed from your guest list.",
+    "faces_label": "Card faces",
+    "family_desc": {
+      "flat": "A flat card printed on both sides: simple, elegant and affordable in large quantities.",
+      "folded": "A card folded in two: the cover comes first, the inside gathers the text, photos and details of the day."
+    },
+    "size_finished": "Finished size",
+    "size_closed": "Closed",
+    "size_open": "Open",
+    "size_bleed": "Bleed",
+    "paper_label": "Paper",
+    "papers": {
+      "matte": {
+        "name": "Matte coated",
+        "desc": "Smooth and glare-free, it renders colours and photos sharply."
+      },
+      "cotton": {
+        "name": "Cotton",
+        "desc": "Thick and soft to the touch, with a light grain: the paper of fine invitations."
+      },
+      "laid": {
+        "name": "Laid",
+        "desc": "A textured paper with fine lines, with a classic charm."
+      },
+      "pearl": {
+        "name": "Pearl",
+        "desc": "A discreet iridescent sheen that catches the light."
+      },
+      "kraft": {
+        "name": "Kraft",
+        "desc": "Natural brown, for a rustic or boho invitation."
+      }
+    },
+    "finishes_label": "Finishes",
+    "finishes": {
+      "foil-gold": "Gold foil",
+      "foil-silver": "Silver foil",
+      "foil-rose": "Rose foil",
+      "foil-copper": "Copper foil",
+      "emboss": "Embossing",
+      "spot-uv": "Spot UV",
+      "letterpress": "Letterpress",
+      "edge-color": "Coloured edges",
+      "rounded-corners": "Rounded corners",
+      "laser-cut": "Laser cut"
+    },
+    "duo_note": "On the back, a QR code leads to your online invitation: guests confirm, find directions and receive their entry ticket.",
+    "order_cta": "Order printing",
+    "proof_cta": "Download the proof",
+    "create_cta": "Create my event",
+    "order_note": "We adapt the card to your event, you approve the proof, then we print and deliver. Price on quote depending on quantity, paper and finishes.",
+    "order_message": "Hello, I would like to order the printed invitation “{name}” ({format}). {url}",
+    "watermark": "PROOF",
+    "proof_filename": "proof",
+    "sides": {
+      "recto": "front",
+      "verso": "back",
+      "outside": "outside",
+      "inside": "inside"
+    },
+    "files_title": "Print shop files",
+    "files_desc": "Real-size PDF, 3 mm bleed, crop and fold marks. Sheets place several cards per page, back flipped on the long edge.",
+    "files": {
+      "proof": "Proof",
+      "print_single": "HD PDF single card",
+      "print_a4": "A4 sheet",
+      "print_a3": "A3 sheet",
+      "print_sra3": "SRA3 sheet",
+      "layer_foil": "Foil layer",
+      "layer_emboss": "Embossing layer",
+      "layer_spot-uv": "Spot UV layer",
+      "layer_cut": "Cut line"
+    },
+    "editor": {
+      "back": "Back to stationery",
+      "name_label": "Template name",
+      "category_label": "Category",
+      "css_tab": "Shared CSS",
+      "format_hint": "Each face is measured in mm, bleed included (--trim-w, --trim-h, --bleed, --safe)."
+    },
+    "formats": {
+      "flat-a6": "A6 flat card",
+      "flat-5x7": "5×7 flat card",
+      "flat-a5": "A5 flat card",
+      "flat-square": "Square flat card",
+      "flat-long": "Long card",
+      "folded-a5": "A5 folded card",
+      "folded-5x7": "5×7 folded card",
+      "folded-square": "Square folded card",
+      "folded-tent": "Landscape folded card"
+    },
+    "faces": {
+      "front": "Front",
+      "back": "Back",
+      "cover": "Cover",
+      "inside-left": "Inside left",
+      "inside-right": "Inside right",
+      "inside-top": "Inside top",
+      "inside-bottom": "Inside bottom"
+    },
+    "print_ready": {
+      "eyebrow": "Print-ready",
+      "title": "A file any print shop ",
+      "title_highlight": "accepts",
+      "subtitle": "Every printed invitation leaves the platform as a professional PDF. Your printer prints it as is, without retouching.",
+      "badge": "Real-size PDF · bleed · crop marks",
+      "points": {
+        "formats": {
+          "title": "Standard sizes",
+          "desc": "A6, A5, 5×7, square, long card, folded or flat: the sizes printers keep in stock."
+        },
+        "bleed": {
+          "title": "Bleed and crop marks",
+          "desc": "3 mm bleed around each face, crop and fold marks: the cut lands exactly."
+        },
+        "pdf": {
+          "title": "High-definition PDF",
+          "desc": "Real size, embedded fonts and sharp photos: the file prints without conversion."
+        },
+        "sheets": {
+          "title": "A4, A3, SRA3 sheets",
+          "desc": "Several cards per sheet, front and back already aligned, to print faster and cheaper."
+        },
+        "finishes": {
+          "title": "Finish layers",
+          "desc": "Foil, embossing and spot UV come on separate layers, the way printers ask for them."
+        },
+        "qr": {
+          "title": "Linked to digital",
+          "desc": "A printed QR code leads to the online invitation: reply, directions and entry ticket."
+        }
+      }
+    },
+    "steps": {
+      "title": "How it works",
+      "items": [
+        {
+          "title": "Pick your card",
+          "desc": "Browse the stationery and choose the design and paper that suit you."
+        },
+        {
+          "title": "We adapt it",
+          "desc": "Names, date, venue and photos: the card is prepared for your event."
+        },
+        {
+          "title": "You approve the proof",
+          "desc": "You receive the PDF proof and ask for changes before printing."
+        },
+        {
+          "title": "Printing and delivery",
+          "desc": "We print with our partner print shop and deliver your cards."
+        }
+      ]
+    }
+  },
   "landing": {
     "meta": {
       "title": "Invyra · Digital invitations that open like a letter",
@@ -1434,8 +1636,21 @@
         "dashboard": "Dashboard",
         "email": "Email",
         "whatsapp": "WhatsApp",
-        "instagram": "Instagram"
+        "instagram": "Instagram",
+        "stationery": "Stationery"
       }
+    },
+    "stationery": {
+      "eyebrow": "Stationery",
+      "title": "Your invitations, ",
+      "title_highlight": "on paper too",
+      "subtitle": "Flat cards, folded cards, thick papers and foil: the same care as your online invitations, ready for the print shop.",
+      "points": [
+        "Standard sizes",
+        "Print-ready file",
+        "QR code to the online invitation"
+      ],
+      "view_all": "See all stationery"
     }
   },
   "checkin": {

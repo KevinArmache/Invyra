@@ -21,9 +21,9 @@ export async function generateMetadata() {
  * même vue, et seul le serveur trie les modèles.
  */
 export default async function TemplatesPage({ searchParams }) {
-  const { page, category, q } = await searchParams;
+  const { page, category, q, medium } = await searchParams;
   const [result, user, { t }] = await Promise.all([
-    getTemplatesPage({ page, category, query: q }),
+    getTemplatesPage({ page, category, query: q, medium }),
     getCurrentUser(),
     getTranslations(),
   ]);
@@ -49,7 +49,7 @@ export default async function TemplatesPage({ searchParams }) {
         )}
         action={
           // La création de modèles est réservée aux administrateurs.
-          user.role === "admin" ? (
+          user.role === "admin" && result.medium !== "print" ? (
             <Button asChild size="lg" className="group">
               <Link href="/dashboard/templates/new">
                 <Plus size={18} className="transition-transform duration-300 group-hover:rotate-90" />
@@ -66,6 +66,7 @@ export default async function TemplatesPage({ searchParams }) {
         activeCategory={typeof category === "string" ? category : ""}
         query={typeof q === "string" ? q : ""}
         currentUser={{ id: user.id, role: user.role }}
+        medium={result.medium}
       />
     </>
   );

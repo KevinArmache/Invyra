@@ -1,0 +1,55 @@
+.face { background: #f6f0e4; color: #2c2620; font-family: 'Cormorant Garamond', Georgia, serif; font-variant-numeric: lining-nums proportional-nums; }
+.face p, .face h1, .face h2 { text-wrap: balance; }
+.sd-paper { position: absolute; inset: 0; background: radial-gradient(120% 90% at 50% 38%, #fcf8ef 0%, #f6f0e4 58%, #ede3cf 100%); }
+.sd-frame { position: absolute; inset: calc(var(--bleed) + 6mm); }
+.sd-frame svg { display: block; width: 100%; height: 100%; }
+.sd-center, .sd-text, .sd-back {
+  position: absolute; inset: calc(var(--bleed) + 15mm) calc(var(--bleed) + 14mm);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.sd-kicker { margin: 0; font-family: 'Cinzel', serif; font-size: 6.8pt; letter-spacing: 0.42em; text-transform: uppercase; color: #7a6d5c; }
+.sd-wreath { position: relative; width: 48mm; height: 48mm; margin: 6mm 0 3mm; }
+.sd-wreath svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sd-wreath--small { width: 30mm; height: 30mm; margin: 0 0 8mm; }
+.sd-monogram { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-top: 1mm; font-family: 'Cinzel', serif; font-size: 15pt; letter-spacing: 0.06em; }
+.sd-wreath--small .sd-monogram { font-size: 9.5pt; }
+.sd-names { margin: 1mm 0 0; font-family: 'Pinyon Script', cursive; font-weight: 400; font-size: 27pt; line-height: 1.15; color: #2c2620; }
+.sd-names--inside { font-size: 24pt; margin: 2mm 0; }
+.sd-date { margin: 5mm 0 0; font-family: 'Cinzel', serif; font-size: 7.4pt; letter-spacing: 0.3em; text-transform: uppercase; color: #5d5246; }
+
+.sd-inner { position: absolute; inset: calc(var(--bleed) + 14mm); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.sd-arch {
+  position: relative; width: 84mm; height: 108mm; margin: 0; overflow: hidden;
+  border-radius: 42mm 42mm 1.5mm 1.5mm; background: #e9ddc7;
+  box-shadow: 0 0 0 0.35mm #b89b5e, 0 0 0 2.2mm #f6f0e4, 0 0 0 2.5mm #cdb488;
+}
+.sd-arch-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel', serif; font-size: 22pt; color: #b89b5e; }
+.sd-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sd-photo[src=""], .sd-photo:not([src]) { display: none; }
+.sd-strip { display: flex; gap: 4.5mm; margin: 8mm 0 0; padding: 0; list-style: none; }
+.sd-strip li {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 23mm; height: 23mm; overflow: hidden; border-radius: 50%;
+  background: #e9ddc7; box-shadow: 0 0 0 0.3mm #b89b5e; color: #b89b5e; font-size: 9pt;
+}
+.sd-shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sd-shot[src=""], .sd-shot:not([src]) { display: none; }
+.sd-strip:has(.sd-shot:not([src=""])) li:has(.sd-shot[src=""]) { display: none; }
+.sd-caption { margin: 6mm 0 0; font-style: italic; font-size: 11pt; color: #6b5e4f; }
+
+.sd-guest { margin: 0 0 5mm; font-family: 'Pinyon Script', cursive; font-size: 15pt; color: #8a6d3b; }
+.sd-lead, .sd-body { margin: 0; font-size: 11.5pt; line-height: 1.45; color: #4a4036; }
+.sd-body { max-width: 96mm; }
+.sd-divider { width: 34mm; height: 3.4mm; margin: 6mm 0 5mm; }
+.sd-when { margin: 0; font-family: 'Cinzel', serif; font-size: 8.4pt; letter-spacing: 0.22em; text-transform: uppercase; }
+.sd-time { margin: 1.5mm 0 0; font-size: 12pt; }
+.sd-where { margin: 3mm 0 0; font-size: 12.5pt; font-weight: 600; max-width: 90mm; }
+.sd-note { margin: 5mm 0 0; font-size: 10.5pt; color: #5d5246; }
+.sd-note span { font-family: 'Cinzel', serif; font-size: 6.6pt; letter-spacing: 0.3em; text-transform: uppercase; margin-right: 1.5mm; color: #8a6d3b; }
+.sd-message { margin: 5mm 0 0; max-width: 88mm; font-style: italic; font-size: 11pt; line-height: 1.45; color: #5d5246; }
+
+.sd-rsvp { display: flex; flex-direction: column; align-items: center; }
+.sd-qr { width: 25mm; margin: 4mm 0; box-shadow: 0 0 0 0.3mm #cdb488; }
+.sd-rsvp-text { margin: 0; max-width: 70mm; font-size: 10.5pt; line-height: 1.4; color: #5d5246; }
+.sd-contact { margin: 8mm 0 0; font-family: 'Cinzel', serif; font-size: 6.8pt; letter-spacing: 0.24em; text-transform: uppercase; color: #7a6d5c; }
+.sd-credit { position: absolute; bottom: 0; margin: 0; font-family: 'Cinzel', serif; font-size: 5pt; letter-spacing: 0.3em; text-transform: uppercase; color: #a89a85; }

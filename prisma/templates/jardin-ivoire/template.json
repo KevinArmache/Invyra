@@ -1,0 +1,18 @@
+{
+  "name": "Jardin d'Ivoire",
+  "category": "wedding",
+  "medium": "print",
+  "fonts": [
+    "playfair",
+    "great-vibes",
+    "lora"
+  ],
+  "paper": "laid",
+  "finishes": [],
+  "pieces": [
+    {
+      "kind": "invitation",
+      "format": "flat-5x7"
+    }
+  ]
+}

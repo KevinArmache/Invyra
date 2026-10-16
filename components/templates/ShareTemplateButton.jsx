@@ -31,9 +31,12 @@ import { useTranslation } from "@/lib/i18n/Context";
  *
  * @param {{ id: string, name: string }} props.template
  * @param {"icon"|"button"} [props.variant]
+ * @param {string} [props.path]  page publique, si ce n'est pas /templates/[id]
+ *   (une invitation papier vit sur /stationery/[id])
  */
 export default function ShareTemplateButton({
   template,
+  path,
   variant = "icon",
   align = "end",
   className = "",
@@ -44,7 +47,7 @@ export default function ShareTemplateButton({
   const label = t("share.button_label").replace("{name}", template.name);
 
   function link() {
-    return `${window.location.origin}/templates/${template.id}`;
+    return `${window.location.origin}${path ?? `/templates/${template.id}`}`;
   }
 
   function message() {

@@ -4,8 +4,10 @@ import { auth } from "@/lib/auth/server";
 import {
   getBookedDates,
   getShowcaseTemplates,
+  getStationeryShowcase,
   todayKey,
 } from "@/lib/landing/data";
+import { linkQrSvg } from "@/lib/qr-svg";
 import { sampleEvent } from "@/lib/landing/sample-event";
 import { getTranslations } from "@/lib/i18n/server";
 import { CONTACT_EMAIL, INSTAGRAM_URL, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -16,6 +18,7 @@ import HowItWorksSection from "@/components/landing/HowItWorksSection";
 import FeaturesSection from "@/components/landing/FeaturesSection";
 import OpeningDemo from "@/components/landing/OpeningDemo";
 import TemplatesShowcase from "@/components/landing/TemplatesShowcase";
+import StationeryShowcase from "@/components/stationery/StationeryShowcase";
 import AvailabilityCalendar from "@/components/landing/AvailabilityCalendar";
 import PricingSection from "@/components/landing/PricingSection";
 import FaqSection from "@/components/landing/FaqSection";
@@ -109,12 +112,16 @@ function structuredData(t) {
 export default async function HomePage() {
   // Lue sur le serveur : la barre s'affiche d'emblée dans le bon état, au lieu
   // de basculer de « Se connecter » à « Tableau de bord » après l'hydratation.
-  const [session, showcase, bookedDates, { t }] = await Promise.all([
+  const [session, showcase, stationery, bookedDates, { t }] = await Promise.all([
     auth.api.getSession({ headers: await headers() }),
     getShowcaseTemplates(),
+    getStationeryShowcase(),
     getBookedDates(),
     getTranslations(),
   ]);
+  // QR code des cartes d'exemple : il mène à la collection papier.
+  const sampleQr =
+    stationery.total > 0 ? await linkQrSvg(`${SITE_URL}/stationery`) : null;
 
   const isAuthenticated = Boolean(session?.user);
   const hasShowcase = showcase.total > 0;
@@ -129,7 +136,11 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLd }}
       />
-      <Navbar isAuthenticated={isAuthenticated} hasShowcase={hasShowcase} />
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        hasShowcase={hasShowcase}
+        hasStationery={stationery.total > 0}
+      />
       <main id="main">
         <HeroSection hasShowcase={hasShowcase} />
         <CategoryMarquee />
@@ -140,6 +151,11 @@ export default async function HomePage() {
           templates={showcase.templates}
           hasCollection={hasCollection}
           sample={sampleEvent()}
+        />
+        <StationeryShowcase
+          templates={stationery.templates}
+          qr={sampleQr}
+          hasCollection={stationery.isFeatured}
         />
         <AvailabilityCalendar
           bookedDates={bookedDates}
@@ -154,6 +170,7 @@ export default async function HomePage() {
         isAuthenticated={isAuthenticated}
         hasShowcase={hasShowcase}
         hasCollection={hasCollection}
+        hasStationery={stationery.total > 0}
       />
     </>
   );

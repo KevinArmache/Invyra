@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import { auth } from "@/lib/auth/server";
 import { getPublicTemplate } from "@/lib/landing/data";
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
     loadTemplate(id),
     getTranslations(),
   ]);
-  if (!template) {
+  if (!template || template.medium === "print") {
     return { title: t("notfound.meta_title"), robots: { index: false } };
   }
 
@@ -102,6 +102,8 @@ export default async function PublicTemplatePage({ params }) {
     getTranslations(),
   ]);
   if (!template) notFound();
+  // Une invitation papier a sa propre page, avec sa maquette.
+  if (template.medium === "print") permanentRedirect(`/stationery/${template.id}`);
 
   // Un compte suspendu garde un cookie valide : il est traité comme déconnecté.
   const viewer =

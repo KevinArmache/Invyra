@@ -48,12 +48,14 @@ function FooterLink({ href, children, external = false }) {
 /**
  * @param {boolean} props.hasShowcase    la vitrine des modèles est sur l'accueil
  * @param {boolean} props.hasCollection  la collection /templates a des modèles
+ * @param {boolean} props.hasStationery  la papeterie (/stationery) a des modèles
  *   mis en avant : « Modèles » y mène plutôt qu'à la section de l'accueil
  */
 export default async function Footer({
   isAuthenticated = false,
   hasShowcase = false,
   hasCollection = false,
+  hasStationery = false,
 }) {
   const { t } = await getTranslations();
   const year = new Date().getFullYear();
@@ -76,6 +78,7 @@ export default async function Footer({
               },
             ]
           : []),
+        ...(hasStationery ? [{ label: link("stationery"), href: "/stationery" }] : []),
         { label: link("availability"), href: "/#availability" },
         { label: link("pricing"), href: "/#pricing" },
         { label: link("faq"), href: "/#faq" },

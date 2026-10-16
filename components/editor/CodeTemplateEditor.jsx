@@ -50,7 +50,7 @@ const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
  * surfaces : l'éditeur flottait visiblement au-dessus du reste de la page.
  * Les valeurs sont en hexadécimal parce que Monaco n'accepte pas oklch().
  */
-const INVYRA_THEME = {
+export const INVYRA_THEME = {
   base: "vs-dark",
   inherit: true,
   rules: [

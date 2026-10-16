@@ -1,0 +1,19 @@
+{
+  "name": "Soirée Noire",
+  "category": "gala",
+  "medium": "print",
+  "fonts": [
+    "cinzel",
+    "cormorant"
+  ],
+  "paper": "matte",
+  "finishes": [
+    "foil-gold"
+  ],
+  "pieces": [
+    {
+      "kind": "invitation",
+      "format": "folded-tent"
+    }
+  ]
+}

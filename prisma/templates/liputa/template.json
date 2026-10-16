@@ -1,0 +1,19 @@
+{
+  "name": "Liputa",
+  "category": "wedding",
+  "medium": "print",
+  "fonts": [
+    "dm-serif",
+    "josefin"
+  ],
+  "paper": "matte",
+  "finishes": [
+    "foil-copper"
+  ],
+  "pieces": [
+    {
+      "kind": "invitation",
+      "format": "folded-square"
+    }
+  ]
+}

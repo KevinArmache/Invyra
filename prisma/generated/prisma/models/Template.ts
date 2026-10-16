@@ -32,6 +32,7 @@ export type TemplateMinAggregateOutputType = {
   name: string | null
   status: $Enums.TemplateStatus | null
   category: string | null
+  medium: string | null
   featured: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -45,6 +46,7 @@ export type TemplateMaxAggregateOutputType = {
   name: string | null
   status: $Enums.TemplateStatus | null
   category: string | null
+  medium: string | null
   featured: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -59,6 +61,7 @@ export type TemplateCountAggregateOutputType = {
   status: number
   config: number
   category: number
+  medium: number
   featured: number
   createdAt: number
   updatedAt: number
@@ -74,6 +77,7 @@ export type TemplateMinAggregateInputType = {
   name?: true
   status?: true
   category?: true
+  medium?: true
   featured?: true
   createdAt?: true
   updatedAt?: true
@@ -87,6 +91,7 @@ export type TemplateMaxAggregateInputType = {
   name?: true
   status?: true
   category?: true
+  medium?: true
   featured?: true
   createdAt?: true
   updatedAt?: true
@@ -101,6 +106,7 @@ export type TemplateCountAggregateInputType = {
   status?: true
   config?: true
   category?: true
+  medium?: true
   featured?: true
   createdAt?: true
   updatedAt?: true
@@ -188,6 +194,7 @@ export type TemplateGroupByOutputType = {
   status: $Enums.TemplateStatus | null
   config: runtime.JsonValue
   category: string | null
+  medium: string
   featured: boolean
   createdAt: Date
   updatedAt: Date
@@ -223,6 +230,7 @@ export type TemplateWhereInput = {
   status?: Prisma.EnumTemplateStatusNullableFilter<"Template"> | $Enums.TemplateStatus | null
   config?: Prisma.JsonFilter<"Template">
   category?: Prisma.StringNullableFilter<"Template"> | string | null
+  medium?: Prisma.StringFilter<"Template"> | string
   featured?: Prisma.BoolFilter<"Template"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
@@ -243,6 +251,7 @@ export type TemplateOrderByWithRelationInput = {
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   config?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
+  medium?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -266,6 +275,7 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumTemplateStatusNullableFilter<"Template"> | $Enums.TemplateStatus | null
   config?: Prisma.JsonFilter<"Template">
   category?: Prisma.StringNullableFilter<"Template"> | string | null
+  medium?: Prisma.StringFilter<"Template"> | string
   featured?: Prisma.BoolFilter<"Template"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
@@ -286,6 +296,7 @@ export type TemplateOrderByWithAggregationInput = {
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   config?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
+  medium?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -306,6 +317,7 @@ export type TemplateScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumTemplateStatusNullableWithAggregatesFilter<"Template"> | $Enums.TemplateStatus | null
   config?: Prisma.JsonWithAggregatesFilter<"Template">
   category?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
+  medium?: Prisma.StringWithAggregatesFilter<"Template"> | string
   featured?: Prisma.BoolWithAggregatesFilter<"Template"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Template"> | Date | string
@@ -317,6 +329,7 @@ export type TemplateCreateInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -337,6 +350,7 @@ export type TemplateUncheckedCreateInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -351,6 +365,7 @@ export type TemplateUpdateInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -371,6 +386,7 @@ export type TemplateUncheckedUpdateInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -388,6 +404,7 @@ export type TemplateCreateManyInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -399,6 +416,7 @@ export type TemplateUpdateManyMutationInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -413,6 +431,7 @@ export type TemplateUncheckedUpdateManyInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -442,6 +461,7 @@ export type TemplateCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   config?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  medium?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -455,6 +475,7 @@ export type TemplateMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   status?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  medium?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -468,6 +489,7 @@ export type TemplateMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   status?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  medium?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -650,6 +672,7 @@ export type TemplateCreateWithoutUserInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -668,6 +691,7 @@ export type TemplateUncheckedCreateWithoutUserInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -714,6 +738,7 @@ export type TemplateScalarWhereInput = {
   status?: Prisma.EnumTemplateStatusNullableFilter<"Template"> | $Enums.TemplateStatus | null
   config?: Prisma.JsonFilter<"Template">
   category?: Prisma.StringNullableFilter<"Template"> | string | null
+  medium?: Prisma.StringFilter<"Template"> | string
   featured?: Prisma.BoolFilter<"Template"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
@@ -725,6 +750,7 @@ export type TemplateCreateWithoutEventCopiesInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -744,6 +770,7 @@ export type TemplateUncheckedCreateWithoutEventCopiesInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -762,6 +789,7 @@ export type TemplateCreateWithoutSourceTemplateInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -780,6 +808,7 @@ export type TemplateUncheckedCreateWithoutSourceTemplateInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -815,6 +844,7 @@ export type TemplateUpdateWithoutEventCopiesInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -834,6 +864,7 @@ export type TemplateUncheckedUpdateWithoutEventCopiesInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -863,6 +894,7 @@ export type TemplateCreateWithoutVotesInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -882,6 +914,7 @@ export type TemplateUncheckedCreateWithoutVotesInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -911,6 +944,7 @@ export type TemplateUpdateWithoutVotesInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -930,6 +964,7 @@ export type TemplateUncheckedUpdateWithoutVotesInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -943,6 +978,7 @@ export type TemplateCreateWithoutEmailCampaignsInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -962,6 +998,7 @@ export type TemplateUncheckedCreateWithoutEmailCampaignsInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -991,6 +1028,7 @@ export type TemplateUpdateWithoutEmailCampaignsInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1010,6 +1048,7 @@ export type TemplateUncheckedUpdateWithoutEmailCampaignsInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1023,6 +1062,7 @@ export type TemplateCreateWithoutEventInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1041,6 +1081,7 @@ export type TemplateUncheckedCreateWithoutEventInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1071,6 +1112,7 @@ export type TemplateUpdateWithoutEventInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1089,6 +1131,7 @@ export type TemplateUncheckedUpdateWithoutEventInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1105,6 +1148,7 @@ export type TemplateCreateManyUserInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1116,6 +1160,7 @@ export type TemplateUpdateWithoutUserInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1134,6 +1179,7 @@ export type TemplateUncheckedUpdateWithoutUserInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1150,6 +1196,7 @@ export type TemplateUncheckedUpdateManyWithoutUserInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1163,6 +1210,7 @@ export type TemplateCreateManySourceTemplateInput = {
   status?: $Enums.TemplateStatus | null
   config: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: string | null
+  medium?: string
   featured?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1174,6 +1222,7 @@ export type TemplateUpdateWithoutSourceTemplateInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1192,6 +1241,7 @@ export type TemplateUncheckedUpdateWithoutSourceTemplateInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1208,6 +1258,7 @@ export type TemplateUncheckedUpdateManyWithoutSourceTemplateInput = {
   status?: Prisma.NullableEnumTemplateStatusFieldUpdateOperationsInput | $Enums.TemplateStatus | null
   config?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  medium?: Prisma.StringFieldUpdateOperationsInput | string
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1271,6 +1322,7 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   status?: boolean
   config?: boolean
   category?: boolean
+  medium?: boolean
   featured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1292,6 +1344,7 @@ export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   status?: boolean
   config?: boolean
   category?: boolean
+  medium?: boolean
   featured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1309,6 +1362,7 @@ export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   status?: boolean
   config?: boolean
   category?: boolean
+  medium?: boolean
   featured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1326,12 +1380,13 @@ export type TemplateSelectScalar = {
   status?: boolean
   config?: boolean
   category?: boolean
+  medium?: boolean
   featured?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "sourceTemplateId" | "name" | "status" | "config" | "category" | "featured" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
+export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "eventId" | "sourceTemplateId" | "name" | "status" | "config" | "category" | "medium" | "featured" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
 export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.Template$userArgs<ExtArgs>
   event?: boolean | Prisma.Template$eventArgs<ExtArgs>
@@ -1375,6 +1430,13 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
      * "wedding", "birthday", "party"… ; null = sans catégorie.
      */
     category: string | null
+    /**
+     * "digital" : invitation électronique ; "print" : invitation papier
+     * (voir lib/print/). Les deux ne se mélangent jamais : la galerie et les
+     * événements ne lisent que les modèles digitaux, la vitrine /stationery
+     * que les modèles papier.
+     */
+    medium: string
     featured: boolean
     createdAt: Date
     updatedAt: Date
@@ -1815,6 +1877,7 @@ export interface TemplateFieldRefs {
   readonly status: Prisma.FieldRef<"Template", 'TemplateStatus'>
   readonly config: Prisma.FieldRef<"Template", 'Json'>
   readonly category: Prisma.FieldRef<"Template", 'String'>
+  readonly medium: Prisma.FieldRef<"Template", 'String'>
   readonly featured: Prisma.FieldRef<"Template", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Template", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Template", 'DateTime'>

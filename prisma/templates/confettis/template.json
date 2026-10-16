@@ -1,0 +1,17 @@
+{
+  "name": "Confettis",
+  "category": "birthday",
+  "medium": "print",
+  "fonts": [
+    "fredoka",
+    "poppins"
+  ],
+  "paper": "matte",
+  "finishes": [],
+  "pieces": [
+    {
+      "kind": "invitation",
+      "format": "flat-a6"
+    }
+  ]
+}

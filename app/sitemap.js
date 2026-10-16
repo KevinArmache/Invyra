@@ -5,9 +5,9 @@ import { SITE_URL } from "@/lib/site";
 export const revalidate = 3600;
 
 /**
- * Pages publiques à indexer : l'accueil, la collection des modèles,
- * l'inscription, la connexion et la page de chaque modèle publié. Les
- * invitations sont personnelles : jamais ici.
+ * Pages publiques à indexer : l'accueil, les collections des modèles
+ * (électroniques et papier), l'inscription, la connexion et la page de
+ * chaque modèle publié. Les invitations sont personnelles : jamais ici.
  */
 export default async function sitemap() {
   const lastModified = new Date();
@@ -26,8 +26,14 @@ export default async function sitemap() {
       changeFrequency: "weekly",
       priority: 0.8,
     },
+    {
+      url: `${SITE_URL}/stationery`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
     ...templates.map((template) => ({
-      url: `${SITE_URL}/templates/${template.id}`,
+      url: `${SITE_URL}/${template.medium === "print" ? "stationery" : "templates"}/${template.id}`,
       lastModified: template.updatedAt,
       changeFrequency: "monthly",
       priority: 0.7,

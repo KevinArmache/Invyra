@@ -5,6 +5,7 @@ import { getSession, isEventOwnerOrAdmin } from "@/app/actions/auth";
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { validateTemplateConfig } from "@/lib/templates/validation";
 import { normalizeCategory } from "@/lib/templates/categories";
+import { validatePrintConfig } from "@/lib/print/config";
 
 const TEMPLATE_STATUSES = ["draft", "in_progress", "completed"];
 
@@ -43,8 +44,14 @@ function canManageReusableTemplate(session, template) {
  * Modèles réutilisables visibles par tout utilisateur connecté : toute la
  * galerie, quel que soit le statut. Les copies propres aux événements
  * (eventId) en sont exclues : elles portent les textes d'un client.
+ *
+ * Seulement les invitations électroniques : un modèle papier (medium
+ * "print", voir lib/print/) ne peut pas devenir l'invitation en ligne d'un
+ * événement. Les modèles papier ont leurs propres requêtes.
  */
-const VISIBLE_TEMPLATES_WHERE = { eventId: null };
+const VISIBLE_TEMPLATES_WHERE = { eventId: null, medium: "digital" };
+
+const MEDIUMS = ["digital", "print"];
 
 /** Même règle que updateEvent : propriétaire, admin ou collaborateur éditeur. */
 async function assertCanEditEvent(eventId) {
@@ -119,13 +126,15 @@ export async function getTemplates() {
  *   modèle visible (pour les filtres) ; `totalAll` : modèles visibles sans
  *   filtre (pour distinguer « aucun modèle » de « aucun résultat »).
  */
-export async function getTemplatesPage({ page = 1, category, query } = {}) {
+export async function getTemplatesPage({ page = 1, category, query, medium } = {}) {
   const user = await getSession();
   if (!user) {
-    return { templates: [], total: 0, page: 1, pageCount: 1, categories: [], totalAll: 0 };
+    return { templates: [], total: 0, page: 1, pageCount: 1, categories: [], totalAll: 0, medium: "digital" };
   }
 
-  const visible = VISIBLE_TEMPLATES_WHERE;
+  // Les modèles papier ne se gèrent, pour l'instant, que par un admin.
+  const safeMedium = medium === "print" && user.role === "admin" ? "print" : "digital";
+  const visible = { ...VISIBLE_TEMPLATES_WHERE, medium: safeMedium };
   const safeCategory = normalizeCategory(category);
   const search = typeof query === "string" ? query.trim().slice(0, 100) : "";
   const where = {
@@ -165,6 +174,7 @@ export async function getTemplatesPage({ page = 1, category, query } = {}) {
       .filter((group) => normalizeCategory(group.category))
       .map((group) => ({ key: group.category, count: group._count._all })),
     totalAll: groups.reduce((sum, group) => sum + group._count._all, 0),
+    medium: safeMedium,
   };
 }
 
@@ -251,6 +261,36 @@ export async function updateUserTemplate(templateId, name, templateConfig, statu
 }
 
 /**
+ * Enregistre un modèle papier de la galerie (lib/print/config.js). Réservé
+ * aux admins : ses faces sont du HTML et du CSS écrits à la main.
+ */
+export async function updatePrintTemplate(templateId, name, printConfig, status, category) {
+  const user = await getSession();
+  if (!user) throw new Error("Unauthorized");
+  if (user.role !== "admin") {
+    throw new Error("Seul un administrateur peut modifier un modèle papier");
+  }
+  if (!name) throw new Error("Le nom du modèle est requis");
+
+  const existing = await prisma.template.findFirst({
+    where: { id: templateId, eventId: null, medium: "print" },
+    select: { id: true },
+  });
+  if (!existing) throw new Error("Modèle non trouvé");
+
+  return prisma.template.update({
+    where: { id: templateId },
+    data: {
+      name: String(name).trim().slice(0, 200),
+      status: assertTemplateStatus(status),
+      category: normalizeCategory(category),
+      config: validatePrintConfig(printConfig),
+    },
+    select: { id: true },
+  });
+}
+
+/**
  * Copie d'un modèle visible, au nom de l'utilisateur, en brouillon : c'est le
  * point de départ pour décliner un modèle pour un nouveau client.
  */
@@ -260,14 +300,15 @@ export async function duplicateTemplate(templateId) {
   assertCanCreateTemplate(user);
 
   const source = await prisma.template.findFirst({
-    where: { id: templateId, ...VISIBLE_TEMPLATES_WHERE },
+    where: { id: templateId, eventId: null, medium: { in: MEDIUMS } },
   });
   if (!source) throw new Error("Modèle non trouvé");
 
   // La copie est revalidée comme tout modèle écrit en base.
-  const config = validateTemplateConfig(source.config, {
-    allowCode: user.role === "admin",
-  });
+  const config =
+    source.medium === "print"
+      ? validatePrintConfig(source.config)
+      : validateTemplateConfig(source.config, { allowCode: user.role === "admin" });
 
   return await prisma.template.create({
     data: {
@@ -275,6 +316,7 @@ export async function duplicateTemplate(templateId) {
       name: `${source.name} (copie)`.slice(0, 200),
       status: "draft",
       category: source.category,
+      medium: source.medium,
       config,
     },
   });

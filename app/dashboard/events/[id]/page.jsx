@@ -8,6 +8,8 @@ import { getCheckInLink } from "@/app/actions/checkin";
 import { getPublicLink } from "@/app/actions/public-link";
 import { getEventMemories } from "@/app/actions/memories";
 import { getEventOwnerAdmin } from "@/app/actions/admin";
+import { getStationeryCatalog } from "@/lib/landing/data";
+import { normalizePrintConfig } from "@/lib/print/config";
 import { countdownTarget } from "@/lib/invitation/document";
 import { getTranslations } from "@/lib/i18n/server";
 import EventDetailView from "@/components/events/detail/EventDetailView";
@@ -35,7 +37,7 @@ export default async function EventDetailPage({ params }) {
   // l'événement avant de demander les invités, puis les collaborateurs.
   let data;
   try {
-    const [event, guests, collaborators, session, checkIn, publicLink, memories] =
+    const [event, guests, collaborators, session, checkIn, publicLink, memories, catalog] =
       await Promise.all([
         getEventById(id),
         getGuests(id),
@@ -44,8 +46,9 @@ export default async function EventDetailPage({ params }) {
         getCheckInLink(id),
         getPublicLink(id),
         getEventMemories(id),
+        getStationeryCatalog(),
       ]);
-    data = { event, guests, collaborators, session, checkIn, publicLink, memories };
+    data = { event, guests, collaborators, session, checkIn, publicLink, memories, catalog };
   } catch {
     // getEventById lève aussi bien pour un identifiant inconnu que pour un
     // accès refusé : dans les deux cas l'utilisateur n'a rien à voir ici.
@@ -76,6 +79,11 @@ export default async function EventDetailPage({ params }) {
       checkIn={data.checkIn}
       publicLink={data.publicLink}
       memories={data.memories}
+      // Modèles papier proposés, prêts pour l'aperçu (onglet Papeterie).
+      stationery={data.catalog
+        .map((template) => ({ ...template, config: normalizePrintConfig(template.config) }))
+        .filter((template) => template.config)}
+      isAdmin={data.session?.role === "admin"}
     />
   );
 }

@@ -140,6 +140,12 @@ model Template {
   /// "wedding", "birthday", "party"… ; null = sans catégorie.
   category String?
 
+  /// "digital" : invitation électronique ; "print" : invitation papier
+  /// (voir lib/print/). Les deux ne se mélangent jamais : la galerie et les
+  /// événements ne lisent que les modèles digitaux, la vitrine /stationery
+  /// que les modèles papier.
+  medium String @default("digital")
+
   // Mis en avant sur la page d'accueil publique (choisi par un admin).
   featured Boolean @default(false)
 
@@ -158,6 +164,7 @@ model Template {
   @@index([userId])
   @@index([featured])
   @@index([category])
+  @@index([medium])
   @@map("templates")
 }
 

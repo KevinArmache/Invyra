@@ -12,7 +12,8 @@
     "open_menu": "Ouvrir le menu",
     "close_menu": "Fermer le menu",
     "main": "Navigation principale",
-    "skip": "Aller au contenu"
+    "skip": "Aller au contenu",
+    "stationery": "Papeterie"
   },
   "login": {
     "title": "Bon retour !",
@@ -377,7 +378,8 @@
           "overview": "Aperçu",
           "guests": "Invités",
           "checkin": "Jour J",
-          "memories": "Souvenirs"
+          "memories": "Souvenirs",
+          "stationery": "Papeterie"
         },
         "kpi": {
           "invited": "Invités",
@@ -570,6 +572,24 @@
           "guest_access": "Vos invités y accèdent depuis leur invitation (bouton « Souvenirs ») et depuis leur billet.",
           "delete_video_confirm": "Supprimer cette vidéo ?",
           "video": "Vidéo"
+        },
+        "stationery": {
+          "title": "Invitations papier",
+          "subtitle": "Choisissez une carte à imprimer : elle reprend les informations et les photos de votre événement.",
+          "empty_title": "Pas encore de modèle papier",
+          "empty_desc": "Les invitations papier arrivent bientôt dans votre espace.",
+          "choose": "Modèles papier",
+          "photos_from_invitation": "Les photos de votre invitation en ligne sont reprises sur la carte. Nous ajustons le cadrage et les textes avant le bon à tirer.",
+          "photos_sample": "Les photos montrées sont des exemples. Ajoutez vos photos à votre invitation en ligne : elles seront reprises sur la carte.",
+          "mode_label": "Impression",
+          "generic_option": "Une même carte pour tous",
+          "generic_hint": "Le QR code mène au lien unique : chaque invité y inscrit son nom.",
+          "generic_hint_no_link": "Sans lien unique actif, la carte n'a pas de QR code.",
+          "named_option": "Une carte au nom de chaque invité ({count} cartes)",
+          "named_hint": "Chaque carte porte le nom de l'invité et son QR code personnel : réponse, itinéraire et billet en un geste.",
+          "enable_link_tip": "Activez le lien unique dans l'onglet Invités pour imprimer un QR code commun sur toutes les cartes.",
+          "order_message": "Bonjour, je souhaite faire imprimer les invitations de « {event} » avec le modèle « {name} » ({format}), {mode}.",
+          "see_template": "Voir la page du modèle"
         }
       },
       "itinerary": {
@@ -630,7 +650,12 @@
         "feature_success": "Le modèle apparaît maintenant sur l'accueil.",
         "unfeature_success": "Le modèle a été retiré de l'accueil.",
         "reset_filters": "Voir tous les modèles",
-        "announce_btn": "Annoncer par e-mail"
+        "announce_btn": "Annoncer par e-mail",
+        "medium_label": "Type de modèle",
+        "medium_digital": "Invitations en ligne",
+        "medium_print": "Papeterie",
+        "no_print_templates": "Aucun modèle papier",
+        "no_print_templates_desc": "Ajoutez un modèle papier avec le script prisma/scripts/seed-code-template.mjs, ou dupliquez un modèle existant."
       },
       "editor": {
         "save_btn": "Enregistrer le modèle",
@@ -1137,6 +1162,183 @@
     "breadcrumb_home": "Accueil",
     "breadcrumb_current": "Modèles"
   },
+  "stationery": {
+    "meta_title": "Invitations papier",
+    "meta_description": "Faire-part et invitations à imprimer : cartes plates, pliées, papiers d'exception et dorure. Des fichiers prêts pour l'imprimerie, reliés à votre invitation en ligne.",
+    "template_meta_title": "{name} · Invitation papier",
+    "template_meta_description": "Découvrez l'invitation papier « {name} » : maquette, format, papiers et finitions. Fichier prêt pour l'imprimerie.",
+    "breadcrumb": "Papeterie",
+    "eyebrow": "Papeterie",
+    "eyebrow_single": "Invitation papier",
+    "title": "Des invitations à ",
+    "title_highlight": "tenir entre les mains",
+    "subtitle": "Choisissez votre carte, nous l'adaptons à votre événement et préparons un fichier que toute imprimerie accepte.",
+    "count_one": "1 modèle papier",
+    "count_other": "{count} modèles papier",
+    "empty_title": "La papeterie arrive",
+    "empty_desc": "Nos premières invitations papier sont en préparation. Revenez bientôt.",
+    "badge_foil": "Dorure",
+    "open_template": "Voir l'invitation papier",
+    "mockup_label": "Maquette de l'invitation papier {name}",
+    "open_card": "Ouvrir la carte",
+    "close_card": "Fermer la carte",
+    "flip_card": "Retourner",
+    "named_toggle": "À un nom d'invité",
+    "named_hint": "Chaque carte peut porter le nom de son invité, imprimé à partir de votre liste.",
+    "faces_label": "Faces de la carte",
+    "family_desc": {
+      "flat": "Une carte plate, imprimée recto verso : simple, élégante, et économique à imprimer en grande quantité.",
+      "folded": "Une carte pliée en deux : la couverture se découvre d'abord, l'intérieur réunit le texte, les photos et les détails de la journée."
+    },
+    "size_finished": "Format fini",
+    "size_closed": "Fermée",
+    "size_open": "Ouverte",
+    "size_bleed": "Fonds perdus",
+    "paper_label": "Papier",
+    "papers": {
+      "matte": {
+        "name": "Couché mat",
+        "desc": "Lisse et sans reflet, il rend les couleurs et les photos avec netteté."
+      },
+      "cotton": {
+        "name": "Coton",
+        "desc": "Épais et doux au toucher, avec un léger grain : le papier des faire-part d'exception."
+      },
+      "laid": {
+        "name": "Vergé",
+        "desc": "Un papier texturé, marqué de fines lignes, au charme classique."
+      },
+      "pearl": {
+        "name": "Nacré",
+        "desc": "Un reflet irisé discret qui accroche la lumière."
+      },
+      "kraft": {
+        "name": "Kraft",
+        "desc": "Brun naturel, pour une invitation champêtre ou bohème."
+      }
+    },
+    "finishes_label": "Finitions",
+    "finishes": {
+      "foil-gold": "Dorure or",
+      "foil-silver": "Dorure argent",
+      "foil-rose": "Dorure rose",
+      "foil-copper": "Dorure cuivre",
+      "emboss": "Gaufrage",
+      "spot-uv": "Vernis sélectif",
+      "letterpress": "Letterpress",
+      "edge-color": "Tranche colorée",
+      "rounded-corners": "Coins arrondis",
+      "laser-cut": "Découpe laser"
+    },
+    "duo_note": "Au dos, un QR code mène à votre invitation en ligne : vos invités confirment leur présence, trouvent l'itinéraire et reçoivent leur billet d'entrée.",
+    "order_cta": "Commander l'impression",
+    "proof_cta": "Télécharger le BAT",
+    "create_cta": "Créer mon événement",
+    "order_note": "Nous adaptons la carte à votre événement, vous validez le bon à tirer, puis nous imprimons et livrons. Prix sur devis selon la quantité, le papier et les finitions.",
+    "order_message": "Bonjour, je souhaite commander l'invitation papier « {name} » ({format}). {url}",
+    "watermark": "BON À TIRER",
+    "proof_filename": "bat",
+    "sides": {
+      "recto": "recto",
+      "verso": "verso",
+      "outside": "extérieur",
+      "inside": "intérieur"
+    },
+    "files_title": "Fichiers pour l'imprimerie",
+    "files_desc": "PDF à taille réelle, fonds perdus de 3 mm, traits de coupe et repères de pli. Les planches posent plusieurs cartes par feuille, verso retourné sur le grand côté.",
+    "files": {
+      "proof": "Bon à tirer",
+      "print_single": "PDF HD carte seule",
+      "print_a4": "Planche A4",
+      "print_a3": "Planche A3",
+      "print_sra3": "Planche SRA3",
+      "layer_foil": "Calque dorure",
+      "layer_emboss": "Calque gaufrage",
+      "layer_spot-uv": "Calque vernis",
+      "layer_cut": "Tracé de découpe"
+    },
+    "editor": {
+      "back": "Retour à la papeterie",
+      "name_label": "Nom du modèle",
+      "category_label": "Catégorie",
+      "css_tab": "CSS commun",
+      "format_hint": "Chaque face se mesure en mm, fonds perdus compris (--trim-w, --trim-h, --bleed, --safe)."
+    },
+    "formats": {
+      "flat-a6": "Carte plate A6",
+      "flat-5x7": "Carte plate 5×7",
+      "flat-a5": "Carte plate A5",
+      "flat-square": "Carte plate carrée",
+      "flat-long": "Carte longue",
+      "folded-a5": "Carte pliée A5",
+      "folded-5x7": "Carte pliée 5×7",
+      "folded-square": "Carte pliée carrée",
+      "folded-tent": "Carte pliée paysage"
+    },
+    "faces": {
+      "front": "Recto",
+      "back": "Dos",
+      "cover": "Couverture",
+      "inside-left": "Intérieur gauche",
+      "inside-right": "Intérieur droit",
+      "inside-top": "Intérieur haut",
+      "inside-bottom": "Intérieur bas"
+    },
+    "print_ready": {
+      "eyebrow": "Prêt pour l'imprimerie",
+      "title": "Un fichier que toute imprimerie ",
+      "title_highlight": "accepte",
+      "subtitle": "Chaque invitation papier sort de la plateforme en PDF professionnel. Votre imprimeur l'imprime tel quel, sans retouche.",
+      "badge": "PDF à taille réelle · fonds perdus · traits de coupe",
+      "points": {
+        "formats": {
+          "title": "Formats standards",
+          "desc": "A6, A5, 5×7, carré, carte longue, pliée ou plate : les formats que les imprimeurs ont en stock."
+        },
+        "bleed": {
+          "title": "Fonds perdus et traits de coupe",
+          "desc": "3 mm de fond perdu autour de chaque face, traits de coupe et repères de pli : la coupe tombe juste."
+        },
+        "pdf": {
+          "title": "PDF haute définition",
+          "desc": "Taille réelle, polices intégrées et photos nettes : le fichier s'imprime sans conversion."
+        },
+        "sheets": {
+          "title": "Planches A4, A3, SRA3",
+          "desc": "Plusieurs cartes par feuille, recto et verso déjà calés, pour imprimer vite et moins cher."
+        },
+        "finishes": {
+          "title": "Calques de finition",
+          "desc": "Dorure, gaufrage et vernis sélectif arrivent sur des calques séparés, comme les imprimeurs les demandent."
+        },
+        "qr": {
+          "title": "Relié au digital",
+          "desc": "Un QR code imprimé mène à l'invitation en ligne : réponse, itinéraire et billet d'entrée."
+        }
+      }
+    },
+    "steps": {
+      "title": "Comment ça se passe",
+      "items": [
+        {
+          "title": "Choisissez votre carte",
+          "desc": "Parcourez la papeterie et retenez le modèle et le papier qui vous ressemblent."
+        },
+        {
+          "title": "Nous l'adaptons",
+          "desc": "Noms, date, lieu et photos : la carte est préparée pour votre événement."
+        },
+        {
+          "title": "Vous validez le BAT",
+          "desc": "Vous recevez le bon à tirer en PDF et demandez les retouches avant impression."
+        },
+        {
+          "title": "Impression et livraison",
+          "desc": "Nous imprimons chez notre imprimeur partenaire et vous livrons vos cartes."
+        }
+      ]
+    }
+  },
   "landing": {
     "meta": {
       "title": "Invyra · Invitations numériques qui s'ouvrent comme une lettre",
@@ -1434,8 +1636,21 @@
         "dashboard": "Tableau de bord",
         "email": "Email",
         "whatsapp": "WhatsApp",
-        "instagram": "Instagram"
+        "instagram": "Instagram",
+        "stationery": "Papeterie"
       }
+    },
+    "stationery": {
+      "eyebrow": "Papeterie",
+      "title": "Vos invitations, ",
+      "title_highlight": "aussi sur papier",
+      "subtitle": "Cartes plates, cartes pliées, papiers épais et dorure : le même soin que vos invitations en ligne, prêt à passer chez l'imprimeur.",
+      "points": [
+        "Formats standards",
+        "Fichier prêt pour l'imprimerie",
+        "QR code vers l'invitation en ligne"
+      ],
+      "view_all": "Voir toute la papeterie"
     }
   },
   "checkin": {

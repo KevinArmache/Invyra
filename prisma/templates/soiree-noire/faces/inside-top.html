@@ -1,0 +1,14 @@
+<div class="sn-bg"></div>
+<div class="sn-inside">
+  <!-- Photo des hôtes -->
+  <figure class="sn-photo-frame">
+    <span class="sn-photo-fallback">{{MONOGRAM}}</span>
+    <img class="sn-photo" src="https://images.unsplash.com/photo-1522941471521-6ee21ec5cc26?w=1400&q=80&auto=format&fit=crop" alt="Les hôtes">
+  </figure>
+  <div class="sn-intro">
+    <p class="sn-guest" data-if="GUEST_NAME">{{GUEST_NAME}},</p>
+    <p class="sn-lead">nous avons le plaisir de vous convier à notre soirée de gala.</p>
+    <svg class="sn-rule" viewBox="0 0 60 6" data-finish="foil-gold" aria-hidden="true"><path d="M2 3 H25" stroke="currentColor" stroke-width="0.4"/><path d="M35 3 H58" stroke="currentColor" stroke-width="0.4"/><path d="M30 0.4 L32.6 3 L30 5.6 L27.4 3Z" fill="currentColor"/><circle cx="24" cy="3" r="0.8" fill="currentColor"/><circle cx="36" cy="3" r="0.8" fill="currentColor"/></svg>
+    <p class="sn-message" data-if="CUSTOM_MESSAGE">{{CUSTOM_MESSAGE}}</p>
+  </div>
+</div>

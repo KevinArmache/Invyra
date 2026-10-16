@@ -1,0 +1,13 @@
+<div class="sn-bg"></div>
+<div class="sn-inside">
+  <dl class="sn-details">
+    <div><dt>Date</dt><dd>{{EVENT_DATE}}</dd></div>
+    <div data-if="TIME"><dt>Heure</dt><dd>{{TIME}}</dd></div>
+    <div><dt>Lieu</dt><dd>{{LOCATION}}</dd></div>
+    <div data-if="DRESS_CODE"><dt>Tenue</dt><dd>{{DRESS_CODE}}</dd></div>
+  </dl>
+  <div class="sn-rsvp" data-if="INVITE_QR">
+    <div class="sn-qr">{{INVITE_QR}}</div>
+    <p>Réponse souhaitée<span>Scannez pour confirmer et recevoir votre billet</span></p>
+  </div>
+</div>

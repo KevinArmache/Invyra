@@ -11,6 +11,14 @@
  *   index.html, style.css, script.js          l'invitation ;
  *   opening.html, opening.css, opening.js     son ouverture (facultative).
  *
+ * Modèle papier (`"medium": "print"` dans template.json, voir lib/print/) :
+ *   template.json   nom, catégorie, polices, papier, finitions et pièces
+ *                   ([{ "kind": "invitation", "format": "folded-a5" }]) ;
+ *   style.css       partagé par toutes les faces ;
+ *   faces/<face>.html          une face par fichier (cover.html…) ; pour
+ *                              une suite de plusieurs pièces,
+ *                              faces/<pièce>/<face>.html.
+ *
  * Options :
  *   --dry        affiche ce qui serait fait, sans rien écrire ;
  *   --publish    statut « terminé » : visible de tous les utilisateurs.
@@ -32,6 +40,7 @@ import pg from "pg";
 
 import { normalizeCategory, TEMPLATE_CATEGORIES } from "../../lib/templates/categories.js";
 import { normalizeFonts } from "../../lib/invitation/fonts.js";
+import { getFormat } from "../../lib/print/formats.js";
 
 /** Même limite que MAX_CODE_LENGTH (lib/templates/config.js). */
 const MAX_CODE_LENGTH = 200_000;
@@ -80,44 +89,91 @@ if (unknownFonts.length > 0) {
   process.exit(1);
 }
 
-const openingCode = {
-  html: read("opening.html"),
-  css: read("opening.css"),
-  js: read("opening.js"),
-};
-const config = {
-  type: "code",
-  html: read("index.html"),
-  css: read("style.css"),
-  js: read("script.js"),
-  opening: meta.opening ?? {},
-  // Sans HTML, pas d'ouverture en code : l'ouverture standard s'applique.
-  openingCode: openingCode.html.trim() ? openingCode : null,
-  fonts,
-  music: null,
-};
+const medium = meta.medium === "print" ? "print" : "digital";
 
-if (!config.html.trim()) {
-  console.error(`index.html est vide ou absent dans ${dir}`);
-  process.exit(1);
-}
-for (const [label, source] of [
-  ["index.html", config.html],
-  ["style.css", config.css],
-  ["script.js", config.js],
-  ["opening.html", openingCode.html],
-  ["opening.css", openingCode.css],
-  ["opening.js", openingCode.js],
-]) {
-  if (source.length > MAX_CODE_LENGTH) {
-    console.error(`${label} dépasse ${MAX_CODE_LENGTH} caractères.`);
+/** Config d'une invitation électronique (index.html, script.js, ouverture…). */
+function digitalConfig() {
+  const openingCode = {
+    html: read("opening.html"),
+    css: read("opening.css"),
+    js: read("opening.js"),
+  };
+  const config = {
+    type: "code",
+    html: read("index.html"),
+    css: read("style.css"),
+    js: read("script.js"),
+    opening: meta.opening ?? {},
+    // Sans HTML, pas d'ouverture en code : l'ouverture standard s'applique.
+    openingCode: openingCode.html.trim() ? openingCode : null,
+    fonts,
+    music: null,
+  };
+
+  if (!config.html.trim()) {
+    console.error(`index.html est vide ou absent dans ${dir}`);
     process.exit(1);
   }
+  for (const [label, source] of [
+    ["index.html", config.html],
+    ["style.css", config.css],
+    ["script.js", config.js],
+    ["opening.html", openingCode.html],
+    ["opening.css", openingCode.css],
+    ["opening.js", openingCode.js],
+  ]) {
+    if (source.length > MAX_CODE_LENGTH) {
+      console.error(`${label} dépasse ${MAX_CODE_LENGTH} caractères.`);
+      process.exit(1);
+    }
+  }
+  if (config.openingCode && !/\sdata-opening[\s>]/.test(config.openingCode.html)) {
+    console.error("opening.html doit contenir un élément [data-opening].");
+    process.exit(1);
+  }
+  return config;
 }
-if (config.openingCode && !/\sdata-opening[\s>]/.test(config.openingCode.html)) {
-  console.error("opening.html doit contenir un élément [data-opening].");
-  process.exit(1);
+
+/** Config d'une invitation papier : une face HTML par fichier (lib/print/config.js). */
+function printConfig() {
+  if (!Array.isArray(meta.pieces) || meta.pieces.length === 0) {
+    console.error("template.json : « pieces » manquant (ex. [{ \"kind\": \"invitation\", \"format\": \"folded-a5\" }]).");
+    process.exit(1);
+  }
+  const several = meta.pieces.length > 1;
+  const pieces = meta.pieces.map((piece) => {
+    const format = getFormat(piece.format);
+    if (!format) {
+      console.error(`Format inconnu : ${piece.format} (voir lib/print/formats.js)`);
+      process.exit(1);
+    }
+    const faces = {};
+    for (const face of format.faces) {
+      const file = several ? `faces/${piece.kind}/${face}.html` : `faces/${face}.html`;
+      faces[face] = read(file);
+      if (!faces[face].trim()) {
+        console.error(`${file} est vide ou absent dans ${dir}`);
+        process.exit(1);
+      }
+    }
+    return { kind: piece.kind ?? "invitation", format: format.id, faces };
+  });
+  const config = {
+    type: "print",
+    css: read("style.css"),
+    fonts,
+    pieces,
+    paper: meta.paper ?? "matte",
+    finishes: Array.isArray(meta.finishes) ? meta.finishes : [],
+  };
+  if (JSON.stringify(config).length > MAX_CODE_LENGTH) {
+    console.error(`Le modèle papier dépasse ${MAX_CODE_LENGTH} caractères.`);
+    process.exit(1);
+  }
+  return config;
 }
+
+const config = medium === "print" ? printConfig() : digitalConfig();
 
 const status = flags.has("--publish") ? "completed" : "draft";
 const featured = flags.has("--featured");
@@ -143,11 +199,11 @@ async function main() {
     if (dryRun) return;
     await client.query(
       `UPDATE templates
-       SET config = $2::jsonb, category = $3, "updatedAt" = NOW()
+       SET config = $2::jsonb, category = $3, medium = $4, "updatedAt" = NOW()
            ${flags.has("--publish") ? `, status = 'completed'::"TemplateStatus"` : ""}
            ${featured ? ", featured = true" : ""}
        WHERE id = $1`,
-      [row.id, JSON.stringify(config), category],
+      [row.id, JSON.stringify(config), category, medium],
     );
     console.log("Config mise à jour.");
     return;
@@ -162,14 +218,14 @@ async function main() {
   const id = randomUUID();
 
   console.log(
-    `Création du modèle « ${meta.name} » (${JSON.stringify(config).length} octets de config, catégorie ${category ?? "aucune"}, statut ${status}${featured ? ", en vitrine" : ""}, ${ownerId ? "propriétaire : premier admin" : "sans propriétaire"})${dryRun ? " : essai à blanc, rien n'est écrit" : ""}.`,
+    `Création du modèle ${medium === "print" ? "papier" : "digital"} « ${meta.name} » (${JSON.stringify(config).length} octets de config, catégorie ${category ?? "aucune"}, statut ${status}${featured ? ", en vitrine" : ""}, ${ownerId ? "propriétaire : premier admin" : "sans propriétaire"})${dryRun ? " : essai à blanc, rien n'est écrit" : ""}.`,
   );
   if (dryRun) return;
 
   await client.query(
-    `INSERT INTO templates (id, "userId", name, status, config, category, featured, "createdAt", "updatedAt")
-     VALUES ($1, $2, $3, $4::"TemplateStatus", $5::jsonb, $6, $7, NOW(), NOW())`,
-    [id, ownerId, meta.name, status, JSON.stringify(config), category, featured],
+    `INSERT INTO templates (id, "userId", name, status, config, category, featured, medium, "createdAt", "updatedAt")
+     VALUES ($1, $2, $3, $4::"TemplateStatus", $5::jsonb, $6, $7, $8, NOW(), NOW())`,
+    [id, ownerId, meta.name, status, JSON.stringify(config), category, featured, medium],
   );
   console.log(`Modèle créé : ${id}`);
 }

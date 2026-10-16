@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -13,6 +13,7 @@ import {
   Mail,
   Pencil,
   Plus,
+  Printer,
   Search,
   Star,
   Trash2,
@@ -40,6 +41,10 @@ import InvitationPreview from "@/components/invitation/InvitationPreview";
 import PreviewDialog from "@/components/invitation/PreviewDialog";
 import ShareTemplateButton from "@/components/templates/ShareTemplateButton";
 import TemplateThumbnail from "@/components/invitation/TemplateThumbnail";
+import PrintTemplatePreview from "@/components/stationery/PrintTemplatePreview";
+import PaperFace from "@/components/stationery/PaperFace";
+import { mainPiece, normalizePrintConfig } from "@/lib/print/config";
+import { samplePrintEvent } from "@/lib/print/sample";
 import { SAMPLE_GUEST_QR } from "@/lib/invitation/sample-qr";
 import {
   deleteTemplate,
@@ -84,6 +89,34 @@ const SAMPLE_EVENT = {
 };
 
 /**
+ * Vignette d'un modèle papier : sa face principale, posée sur une table
+ * sombre, à l'échelle de la carte.
+ */
+function PrintThumbnail({ template }) {
+  const config = useMemo(() => normalizePrintConfig(template.config), [template.config]);
+  const event = useMemo(() => samplePrintEvent(template.category), [template.category]);
+  const { format } = mainPiece(config);
+  if (!format) return null;
+  const ratio = format.trim.height / format.trim.width;
+  return (
+    <div
+      className="absolute inset-0 flex items-center justify-center"
+      style={{
+        background:
+          "radial-gradient(80% 70% at 50% 30%, color-mix(in oklch, var(--gold) 9%, var(--ink-850)), var(--ink-900) 75%)",
+      }}
+    >
+      <div
+        className="overflow-hidden rounded-[2px] shadow-[0_18px_40px_-14px_rgb(0_0_0/0.75)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1 group-hover:-rotate-[1.5deg]"
+        style={{ width: `${Math.min(ratio < 1 ? 82 : 66, 118 / ratio)}%` }}
+      >
+        <PaperFace config={config} face={format.faces[0]} event={event} animated={false} title={template.name} />
+      </div>
+    </div>
+  );
+}
+
+/**
  * Galerie des modèles, une page à la fois. Le serveur filtre (catégorie,
  * recherche) et pagine : ce composant ne fait que refléter l'URL.
  *
@@ -93,6 +126,8 @@ const SAMPLE_EVENT = {
  * @param {number} props.totalAll        modèles visibles, sans filtre
  * @param {Array}  props.categories      `[{ key, count }]` présentes
  * @param {string} props.activeCategory  "" = toutes
+ * @param {"digital"|"print"} [props.medium]  invitations en ligne ou papier
+ *   (onglets réservés aux admins, voir getTemplatesPage)
  */
 export default function TemplatesBrowser({
   templates,
@@ -104,7 +139,9 @@ export default function TemplatesBrowser({
   activeCategory,
   query: initialQuery,
   currentUser,
+  medium = "digital",
 }) {
+  const isPrint = medium === "print";
   const { t, locale } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
@@ -116,6 +153,7 @@ export default function TemplatesBrowser({
   /** URL de la galerie avec ces filtres (page 1 par défaut). */
   function hrefFor({ category = activeCategory, q = initialQuery, page: target = 1 } = {}) {
     const params = new URLSearchParams();
+    if (isPrint) params.set("medium", "print");
     if (category) params.set("category", category);
     if (q.trim()) params.set("q", q.trim());
     if (target > 1) params.set("page", String(target));
@@ -190,19 +228,53 @@ export default function TemplatesBrowser({
     });
   }
 
+  // Onglets « Invitations en ligne » / « Papeterie », réservés aux admins.
+  const tabs =
+    currentUser.role === "admin" ? (
+      <nav
+        aria-label={t("portal.templates.list.medium_label")}
+        className="animate-rise mb-6 inline-flex rounded-full border border-border p-1"
+        style={{ "--rise-delay": "80ms" }}
+      >
+        {[
+          ["digital", LayoutTemplate],
+          ["print", Printer],
+        ].map(([key, Icon]) => {
+          const active = medium === key;
+          return (
+            <Link
+              key={key}
+              href={key === "print" ? `${pathname}?medium=print` : pathname}
+              aria-current={active ? "page" : undefined}
+              className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm transition-colors duration-300 ${
+                active ? "bg-gold/15 text-ink-50" : "text-ink-400 hover:text-ink-100"
+              }`}
+            >
+              <Icon className="h-4 w-4" aria-hidden="true" />
+              {t(`portal.templates.list.medium_${key}`)}
+            </Link>
+          );
+        })}
+      </nav>
+    ) : null;
+
   if (totalAll === 0) {
     return (
+      <>
+      {tabs}
       <div className="surface animate-rise rounded-xl" style={{ "--rise-delay": "150ms" }}>
         <EmptyState
-          icon={LayoutTemplate}
-          title={t("portal.templates.list.no_templates")}
+          icon={isPrint ? Printer : LayoutTemplate}
+          title={t(isPrint ? "portal.templates.list.no_print_templates" : "portal.templates.list.no_templates")}
           description={t(
-            currentUser.role === "admin"
+            isPrint
+              ? "portal.templates.list.no_print_templates_desc"
+              : currentUser.role === "admin"
               ? "portal.templates.list.no_templates_desc_admin"
               : "portal.templates.list.no_templates_desc",
           )}
           action={
-            currentUser.role === "admin" ? (
+            currentUser.role === "admin" && !isPrint ? (
               <Button asChild>
                 <Link href="/dashboard/templates/new">
                   <Plus size={18} />
@@ -213,6 +285,7 @@ export default function TemplatesBrowser({
           }
         />
       </div>
+      </>
     );
   }
 
@@ -224,6 +297,7 @@ export default function TemplatesBrowser({
 
   return (
     <>
+      {tabs}
       <div className="animate-rise mb-6 space-y-4" style={{ "--rise-delay": "120ms" }}>
         <div className="relative max-w-md">
           <Search
@@ -287,13 +361,17 @@ export default function TemplatesBrowser({
                   {/* Vignette : le modèle est rendu à l'échelle réduite, figé,
                       et seulement quand la carte approche de l'écran. */}
                   <div className="relative aspect-3/4 overflow-hidden border-b border-border/60 bg-ink-900">
-                    <div className="absolute inset-0 origin-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]">
-                      <TemplateThumbnail
-                        template={template.config}
-                        event={{ ...SAMPLE_EVENT, title: template.name }}
-                        title={template.name}
-                      />
-                    </div>
+                    {isPrint ? (
+                      <PrintThumbnail template={template} />
+                    ) : (
+                      <div className="absolute inset-0 origin-top transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]">
+                        <TemplateThumbnail
+                          template={template.config}
+                          event={{ ...SAMPLE_EVENT, title: template.name }}
+                          title={template.name}
+                        />
+                      </div>
+                    )}
 
                     <button
                       type="button"
@@ -342,7 +420,7 @@ export default function TemplatesBrowser({
 
                     <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
                       <p
-                        className="inline-flex items-center gap-1.5 text-xs text-ink-400"
+                        className={`items-center gap-1.5 text-xs text-ink-400 ${isPrint ? "hidden" : "inline-flex"}`}
                         title={t("portal.templates.list.usage_hint")}
                       >
                         <Copy className="h-3 w-3" aria-hidden="true" />
@@ -367,6 +445,7 @@ export default function TemplatesBrowser({
                         {shareable && (
                           <ShareTemplateButton
                             template={{ id: template.id, name: template.name }}
+                            path={isPrint ? `/stationery/${template.id}` : undefined}
                             align="start"
                           />
                         )}
@@ -434,7 +513,7 @@ export default function TemplatesBrowser({
                           </Button>
                         )}
 
-                        {currentUser.role === "admin" && shareable && (
+                        {currentUser.role === "admin" && shareable && !isPrint && (
                           <Button
                             variant="ghost"
                             size="icon"
@@ -516,6 +595,13 @@ export default function TemplatesBrowser({
         </p>
       )}
 
+      {isPrint ? (
+        <PrintTemplatePreview
+          template={preview}
+          onOpenChange={(open) => !open && setPreview(null)}
+          canShare={Boolean(preview && canShare(preview))}
+        />
+      ) : (
       <PreviewDialog
         open={Boolean(preview)}
         onOpenChange={(open) => !open && setPreview(null)}
@@ -559,6 +645,7 @@ export default function TemplatesBrowser({
           />
         )}
       </PreviewDialog>
+      )}
     </>
   );
 }

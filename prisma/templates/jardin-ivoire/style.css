@@ -1,0 +1,41 @@
+.face { background: #f5f0e6; color: #3d4835; font-family: 'Lora', Georgia, serif; font-variant-numeric: lining-nums proportional-nums; }
+.face p, .face h1, .face h2 { text-wrap: balance; }
+.jd-bg { position: absolute; inset: 0; background: radial-gradient(110% 80% at 50% 45%, #fbf8f1 0%, #f5f0e6 60%, #ece5d6 100%); }
+.jd-bg--back { background: #eef0e6; }
+.jd-branch { position: absolute; width: 50mm; height: 50mm; }
+.jd-branch svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.jd-branch--tl { top: 0; left: 0; }
+.jd-branch--br { right: 0; bottom: 0; transform: rotate(180deg); }
+.jd-branch--tr { top: 0; right: 0; width: 40mm; height: 40mm; transform: scaleX(-1); opacity: 0.6; }
+.jd-branch--bl { bottom: 0; left: 0; width: 40mm; height: 40mm; transform: scaleY(-1); opacity: 0.6; }
+
+.jd-front, .jd-back {
+  position: absolute; inset: calc(var(--bleed) + 11mm) calc(var(--bleed) + 10mm);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.jd-kicker { margin: 0 0 5mm; font-family: 'Playfair Display', serif; font-size: 7pt; letter-spacing: 0.38em; text-transform: uppercase; color: #b0684a; }
+.jd-arch {
+  position: relative; width: 62mm; height: 80mm; margin: 0; overflow: hidden;
+  border-radius: 31mm 31mm 0 0; background: #dfe3d3;
+  box-shadow: 0 0 0 1.8mm #f5f0e6, 0 0 0 2.1mm #7c8a68;
+}
+.jd-arch-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Great Vibes', cursive; font-size: 30pt; color: #7c8a68; }
+.jd-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.jd-photo[src=""], .jd-photo:not([src]) { display: none; }
+.jd-names { margin: 6mm 0 0; font-family: 'Great Vibes', cursive; font-weight: 400; font-size: 25pt; line-height: 1.15; color: #3d4835; }
+.jd-date { margin: 3mm 0 0; font-family: 'Playfair Display', serif; font-size: 7.6pt; letter-spacing: 0.3em; text-transform: uppercase; color: #b0684a; }
+.jd-place { margin: 1.6mm 0 0; font-style: italic; font-size: 9.5pt; color: #5c6650; }
+
+.jd-guest { margin: 0 0 3mm; font-family: 'Great Vibes', cursive; font-size: 15pt; color: #b0684a; }
+.jd-title { margin: 0 0 6mm; font-family: 'Playfair Display', serif; font-weight: 400; font-style: italic; font-size: 17pt; }
+.jd-details { width: 100%; margin: 0; }
+.jd-details div { display: grid; grid-template-columns: 22mm 1fr; gap: 3mm; padding: 2.6mm 0; border-top: 0.25mm solid #c9cfb8; text-align: left; }
+.jd-details div:last-child { border-bottom: 0.25mm solid #c9cfb8; }
+.jd-details dt { font-family: 'Playfair Display', serif; font-size: 6.6pt; letter-spacing: 0.28em; text-transform: uppercase; color: #7c8a68; padding-top: 0.8mm; }
+.jd-details dd { margin: 0; font-size: 10pt; line-height: 1.35; }
+.jd-message { margin: 6mm 0 0; font-style: italic; font-size: 10pt; line-height: 1.45; color: #5c6650; }
+.jd-rsvp { display: flex; align-items: center; gap: 4mm; margin-top: 7mm; text-align: left; }
+.jd-qr { width: 21mm; flex-shrink: 0; box-shadow: 0 0 0 0.3mm #7c8a68; }
+.jd-rsvp p { margin: 0; font-family: 'Playfair Display', serif; font-size: 11pt; }
+.jd-rsvp span { font-family: 'Lora', serif; font-size: 8.4pt; color: #5c6650; }
+.jd-contact { margin: 5mm 0 0; font-size: 8.4pt; letter-spacing: 0.08em; color: #5c6650; }
