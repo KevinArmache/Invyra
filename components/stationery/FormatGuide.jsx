@@ -18,15 +18,18 @@ export default function FormatGuide({ format }) {
   const h = open.height * scale;
   const pad = 6;
   const sheet = format.sheets[format.sheets.length - 1];
-  const labels = sheet.cells.map((cell, index) => {
-    const col = index % sheet.cols;
-    const row = Math.floor(index / sheet.cols);
-    return {
-      x: pad + (col + 0.5) * format.trim.width * scale,
-      y: pad + (row + 0.5) * format.trim.height * scale,
-      text: t(`stationery.faces.${cell.face}`),
-    };
-  });
+  const labels = format.fold
+    ? sheet.cells.map((cell, index) => {
+        const col = index % sheet.cols;
+        const row = Math.floor(index / sheet.cols);
+        return {
+          x: pad + (col + 0.5) * format.trim.width * scale,
+          y: pad + (row + 0.5) * format.trim.height * scale,
+          text: t(`stationery.faces.${cell.face}`),
+        };
+      })
+    : // Carte plate : une seule face sur le schéma, imprimée des deux côtés.
+      [{ x: pad + w / 2, y: pad + h / 2, text: format.faces.map((face) => t(`stationery.faces.${face}`)).join(" / ") }];
 
   return (
     <figure className="surface rounded-xl p-5">

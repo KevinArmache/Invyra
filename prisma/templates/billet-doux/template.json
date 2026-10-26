@@ -1,0 +1,20 @@
+{
+  "name": "Billet Doux",
+  "category": "wedding",
+  "medium": "print",
+  "fonts": [
+    "playfair",
+    "josefin",
+    "dm-mono"
+  ],
+  "paper": "matte",
+  "finishes": [
+    "foil-gold"
+  ],
+  "pieces": [
+    {
+      "kind": "invitation",
+      "format": "flat-ticket"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+<header class="bd-band">
+  <div class="bd-brand" data-finish="foil-gold"><svg class="bd-brand-plane" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" transform="rotate(90 12 12)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg><span>Billet Doux</span></div>
+  <p class="bd-kind">Carte d'embarquement · Boarding pass</p>
+  <p class="bd-class">Première classe</p>
+  <div class="bd-stub-head"><span>Embarquement</span><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" transform="rotate(90 12 12)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+</header>
+
+<div class="bd-main">
+  <div class="bd-route">
+    <div class="bd-city"><span class="bd-code">CÉL</span><span class="bd-city-name">Célibat</span></div>
+    <div class="bd-path"><svg class="" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" transform="rotate(90 12 12)" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg></div>
+    <div class="bd-city"><span class="bd-code">VIE</span><span class="bd-city-name">Pour la vie</span></div>
+  </div>
+  <h1 class="bd-names"><span>Le mariage de</span>{{EVENT_TITLE}}</h1>
+  <dl class="bd-fields">
+    <div class="bd-wide"><dt>Passager</dt><dd><span data-if="GUEST_NAME">{{GUEST_NAME}}</span><span data-if="!GUEST_NAME">Invité d'honneur</span></dd></div>
+    <div><dt>Vol</dt><dd>{{MONOGRAM}}</dd></div>
+    <div class="bd-wide"><dt>Date</dt><dd>{{EVENT_DATE}}</dd></div>
+    <div><dt>Embarquement</dt><dd>{{TIME}}</dd></div>
+    <div class="bd-wide"><dt>Terminal</dt><dd>{{LOCATION}}</dd></div>
+    <div><dt>Siège</dt><dd>♥</dd></div>
+  </dl>
+</div>
+
+<!-- Photo des mariés -->
+<figure class="bd-window">
+  <span class="bd-window-fallback">{{MONOGRAM}}</span>
+  <img class="bd-photo" src="https://images.unsplash.com/photo-1621829845053-c8114fc01eb3?w=1400&q=80&auto=format&fit=crop" alt="Les mariés">
+</figure>
+<p class="bd-window-caption">Vue sur l'avenir</p>
+
+<span class="bd-perf" aria-hidden="true"></span>
+
+<aside class="bd-stub">
+  <span class="bd-stub-mono">{{MONOGRAM}}</span>
+  <dl>
+    <div><dt>Passager</dt><dd><span data-if="GUEST_NAME">{{GUEST_NAME}}</span><span data-if="!GUEST_NAME">Invité d'honneur</span></dd></div>
+    <div><dt>Date</dt><dd>{{EVENT_DATE}}</dd></div>
+    <div><dt>Siège</dt><dd>♥ · Première</dd></div>
+  </dl>
+  <svg class="bd-barcode" viewBox="0 0 46 9" preserveAspectRatio="none" aria-hidden="true"><rect x="0" y="0" width="0.25" height="9" fill="currentColor"/><rect x="2.71" y="0" width="0.91" height="9" fill="currentColor"/><rect x="3.98" y="0" width="0.47" height="9" fill="currentColor"/><rect x="4.81" y="0" width="0.91" height="9" fill="currentColor"/><rect x="6.08" y="0" width="0.47" height="9" fill="currentColor"/><rect x="10.93" y="0" width="0.69" height="9" fill="currentColor"/><rect x="11.8" y="0" width="0.69" height="9" fill="currentColor"/><rect x="13.54" y="0" width="0.69" height="9" fill="currentColor"/><rect x="14.41" y="0" width="0.25" height="9" fill="currentColor"/><rect x="15.02" y="0" width="0.47" height="9" fill="currentColor"/><rect x="16.64" y="0" width="0.69" height="9" fill="currentColor"/><rect x="18.16" y="0" width="0.69" height="9" fill="currentColor"/><rect x="19.03" y="0" width="0.69" height="9" fill="currentColor"/><rect x="20.26" y="0" width="0.47" height="9" fill="currentColor"/><rect x="21.09" y="0" width="0.91" height="9" fill="currentColor"/><rect x="22.36" y="0" width="0.91" height="9" fill="currentColor"/><rect x="24.54" y="0" width="0.91" height="9" fill="currentColor"/><rect x="27.69" y="0" width="0.91" height="9" fill="currentColor"/><rect x="29.79" y="0" width="0.25" height="9" fill="currentColor"/><rect x="32.24" y="0" width="0.47" height="9" fill="currentColor"/><rect x="35.93" y="0" width="0.91" height="9" fill="currentColor"/><rect x="37.38" y="0" width="0.25" height="9" fill="currentColor"/><rect x="37.99" y="0" width="0.91" height="9" fill="currentColor"/><rect x="39.08" y="0" width="0.47" height="9" fill="currentColor"/><rect x="40.09" y="0" width="0.91" height="9" fill="currentColor"/><rect x="42.63" y="0" width="0.25" height="9" fill="currentColor"/><rect x="43.42" y="0" width="0.69" height="9" fill="currentColor"/><rect x="44.9" y="0" width="0.25" height="9" fill="currentColor"/><rect x="45.33" y="0" width="0.47" height="9" fill="currentColor"/></svg>
+</aside>

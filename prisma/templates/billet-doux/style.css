@@ -1,0 +1,112 @@
+.face {
+  --bd-cream: #f1ece3; --bd-card: #fbf9f4; --bd-ink: #14243b; --bd-red: #c8432b; --bd-gold: #b58b4c;
+  background: var(--bd-card); color: var(--bd-ink);
+  font-family: 'Josefin Sans', 'Helvetica Neue', sans-serif;
+  font-variant-numeric: lining-nums proportional-nums;
+}
+.face p, .face h1, .face h2 { text-wrap: balance; }
+.bd-mono { font-family: 'DM Mono', ui-monospace, monospace; }
+
+/* ── Recto ─────────────────────────────────────────────── */
+.bd-band {
+  position: absolute; top: 0; left: 0; right: 0; height: calc(var(--bleed) + 19mm);
+  background: var(--bd-ink); color: var(--bd-cream);
+}
+.bd-brand {
+  position: absolute; left: calc(var(--bleed) + 8mm); top: calc(var(--bleed) + 5.5mm);
+  display: flex; align-items: center; gap: 2.2mm;
+  font-family: 'Playfair Display', Georgia, serif; font-size: 13pt; letter-spacing: 0.16em; text-transform: uppercase;
+}
+.bd-brand-plane { width: 6mm; height: 6mm; }
+.bd-kind {
+  position: absolute; left: calc(var(--bleed) + 8mm); top: calc(var(--bleed) + 13mm); margin: 0;
+  font-size: 5.6pt; letter-spacing: 0.32em; text-transform: uppercase; color: #c9c2b4;
+}
+.bd-class {
+  position: absolute; right: calc(var(--bleed) + 66mm); top: calc(var(--bleed) + 7mm); margin: 0;
+  padding: 0.9mm 2.4mm; border: 0.3mm solid var(--bd-gold); border-radius: 99mm;
+  font-size: 6pt; letter-spacing: 0.24em; text-transform: uppercase; color: #e6d3ae;
+}
+.bd-stub-head {
+  position: absolute; left: calc(var(--bleed) + 156mm); right: calc(var(--bleed) + 6mm); top: calc(var(--bleed) + 6.5mm);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 6pt; letter-spacing: 0.3em; text-transform: uppercase; color: #c9c2b4;
+}
+.bd-stub-head svg { width: 5mm; height: 5mm; color: var(--bd-cream); }
+
+.bd-main { position: absolute; left: calc(var(--bleed) + 8mm); top: calc(var(--bleed) + 25mm); width: 102mm; }
+.bd-route { display: flex; align-items: flex-end; gap: 4mm; }
+.bd-city { display: flex; flex-direction: column; }
+.bd-code { font-family: 'DM Mono', ui-monospace, monospace; font-size: 21pt; line-height: 1; letter-spacing: 0.04em; }
+.bd-city-name { margin-top: 1mm; font-size: 5.8pt; letter-spacing: 0.24em; text-transform: uppercase; color: #6b7280; }
+.bd-path { flex: 1; display: flex; align-items: center; gap: 1.5mm; padding-bottom: 5mm; color: var(--bd-red); }
+.bd-path::before, .bd-path::after { content: ""; flex: 1; border-top: 0.35mm dashed currentColor; opacity: 0.7; }
+.bd-path svg { width: 5mm; height: 5mm; }
+.bd-names { margin: 4.5mm 0 0; font-family: 'Playfair Display', Georgia, serif; font-weight: 400; font-style: italic; font-size: 15pt; line-height: 1.15; }
+.bd-names span { font-style: normal; font-family: 'Josefin Sans', sans-serif; font-size: 6pt; letter-spacing: 0.3em; text-transform: uppercase; color: var(--bd-red); display: block; margin-bottom: 0.8mm; }
+
+.bd-fields { display: grid; grid-template-columns: 1fr 1fr 0.8fr; gap: 3.4mm 4mm; margin: 5mm 0 0; }
+.bd-fields div { min-width: 0; }
+.bd-wide { grid-column: span 2; }
+.bd-fields dt { font-size: 5.2pt; letter-spacing: 0.28em; text-transform: uppercase; color: var(--bd-red); }
+.bd-fields dd { margin: 0.7mm 0 0; font-family: 'DM Mono', ui-monospace, monospace; font-size: 7.4pt; line-height: 1.25; text-transform: uppercase; overflow-wrap: anywhere; }
+
+/* Photo des mariés : un hublot d'avion. */
+.bd-window {
+  position: absolute; left: calc(var(--bleed) + 115mm); top: calc(var(--bleed) + 27mm);
+  width: 29mm; height: 46mm; margin: 0; overflow: hidden; border-radius: 14.5mm;
+  background: #dfe4ea; box-shadow: 0 0 0 1.2mm var(--bd-cream), 0 0 0 1.5mm var(--bd-gold);
+}
+.bd-window-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 13pt; color: var(--bd-gold); }
+.bd-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bd-photo[src=""], .bd-photo:not([src]) { display: none; }
+.bd-window-caption {
+  position: absolute; left: calc(var(--bleed) + 115mm); top: calc(var(--bleed) + 76.5mm); width: 29mm; margin: 0;
+  text-align: center; font-size: 5pt; letter-spacing: 0.26em; text-transform: uppercase; color: #6b7280;
+}
+
+/* Perforation entre le billet et le talon. */
+.bd-perf {
+  position: absolute; top: 0; bottom: 0; left: calc(var(--bleed) + 150mm); width: 1.2mm; margin-left: -0.6mm;
+  background: radial-gradient(circle, rgb(20 36 59 / 0.35) 0.32mm, transparent 0.38mm) center top / 1.2mm 2.2mm repeat-y;
+}
+
+.bd-stub { position: absolute; left: calc(var(--bleed) + 156mm); right: calc(var(--bleed) + 6mm); top: calc(var(--bleed) + 23mm); bottom: calc(var(--bleed) + 5mm); display: flex; flex-direction: column; }
+.bd-stub-mono { font-family: 'Playfair Display', Georgia, serif; font-size: 19pt; line-height: 1; letter-spacing: 0.04em; }
+.bd-stub dl { margin: 4mm 0 0; display: grid; gap: 2.6mm; }
+.bd-stub dt { font-size: 5pt; letter-spacing: 0.28em; text-transform: uppercase; color: var(--bd-red); }
+.bd-stub dd { margin: 0.5mm 0 0; font-family: 'DM Mono', ui-monospace, monospace; font-size: 6.6pt; text-transform: uppercase; line-height: 1.2; }
+.bd-barcode { margin-top: auto; width: 100%; height: 9mm; color: var(--bd-ink); }
+
+/* ── Verso ─────────────────────────────────────────────── */
+.bd-back { position: absolute; inset: 0; background: var(--bd-ink); color: var(--bd-cream); }
+.bd-arc { position: absolute; left: calc(var(--bleed) + 6mm); right: calc(var(--bleed) + 6mm); top: calc(var(--bleed) + 4mm); height: 14mm; color: var(--bd-gold); opacity: 0.85; }
+.bd-arc svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.bd-col { position: absolute; top: calc(var(--bleed) + 21mm); bottom: calc(var(--bleed) + 9mm); display: flex; flex-direction: column; justify-content: center; color: var(--bd-cream); }
+.bd-col--program { left: calc(var(--bleed) + 9mm); width: 66mm; }
+.bd-col--stops { left: calc(var(--bleed) + 80mm); width: 64mm; text-align: center; }
+.bd-col--rsvp { right: calc(var(--bleed) + 8mm); width: 50mm; }
+.bd-heading { margin: 0 0 3mm; font-family: 'Playfair Display', Georgia, serif; font-weight: 400; font-style: italic; font-size: 12.5pt; }
+.bd-program { margin: 0; }
+.bd-program div { display: grid; grid-template-columns: 17mm 1fr; gap: 2mm; padding: 1.5mm 0; border-top: 0.25mm solid rgb(241 236 227 / 0.18); }
+.bd-program dt { font-size: 5.2pt; letter-spacing: 0.28em; text-transform: uppercase; color: #e6d3ae; padding-top: 0.5mm; }
+.bd-program dd { margin: 0; font-family: 'DM Mono', ui-monospace, monospace; font-size: 6.8pt; line-height: 1.3; text-transform: uppercase; }
+.bd-message { margin: 2.6mm 0 0; font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 8.4pt; line-height: 1.4; color: #d9d2c4; }
+
+.bd-stops { display: flex; justify-content: center; gap: 3.5mm; margin: 0; padding: 0; list-style: none; }
+.bd-stops li {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 18mm; height: 26mm; overflow: hidden; border-radius: 9mm;
+  background: #22344f; box-shadow: 0 0 0 0.9mm #1c2c45, 0 0 0 1.15mm var(--bd-gold); color: var(--bd-gold); font-size: 8pt;
+}
+.bd-shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.bd-shot[src=""], .bd-shot:not([src]) { display: none; }
+.bd-stops:has(.bd-shot:not([src=""])) li:has(.bd-shot[src=""]) { display: none; }
+.bd-stops-caption { margin: 3.5mm 0 0; font-size: 5.4pt; letter-spacing: 0.28em; text-transform: uppercase; color: #c9c2b4; }
+
+.bd-ticket { padding: 3mm; border-radius: 2.2mm; background: var(--bd-card); color: var(--bd-ink); text-align: center; }
+.bd-ticket-title { margin: 0; font-size: 5.6pt; letter-spacing: 0.28em; text-transform: uppercase; color: var(--bd-red); }
+.bd-qr { width: 23mm; margin: 2.2mm auto; }
+.bd-ticket-hint { margin: 0; font-size: 6.2pt; line-height: 1.35; color: #4b5563; }
+.bd-contact { margin: 2.6mm 0 0; text-align: center; font-family: 'DM Mono', ui-monospace, monospace; font-size: 6.4pt; letter-spacing: 0.06em; color: #d9d2c4; }
+.bd-credit { position: absolute; left: 0; right: 0; bottom: calc(var(--bleed) + 3mm); margin: 0; text-align: center; font-size: 4.6pt; letter-spacing: 0.32em; text-transform: uppercase; color: rgb(241 236 227 / 0.4); }

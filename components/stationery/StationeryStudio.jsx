@@ -121,7 +121,18 @@ export default function StationeryStudio({ template, event, qr, votes, isAuthent
               }}
             >
               <div className="grain pointer-events-none absolute inset-0" aria-hidden="true" />
-              <div className={`relative mx-auto ${format.mockup === "tent" ? "max-w-[30rem]" : format.mockup === "book" ? "max-w-[44rem]" : "max-w-[24rem]"}`}>
+              <div
+                className={`relative mx-auto ${
+                  format.mockup === "tent"
+                    ? "max-w-[30rem]"
+                    : format.mockup === "book"
+                      ? "max-w-[44rem]"
+                      : // Carte plate en paysage (billet) : plus large, sinon minuscule.
+                        format.trim.width > format.trim.height
+                        ? "max-w-[38rem]"
+                        : "max-w-[24rem]"
+                }`}
+              >
                 <PaperCard
                   config={template.config}
                   event={event}

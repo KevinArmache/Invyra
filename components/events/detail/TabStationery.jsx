@@ -166,7 +166,15 @@ export default function TabStationery({ eventId, event, invitation, catalog, pub
                   "radial-gradient(90% 80% at 50% 25%, color-mix(in oklch, var(--gold) 8%, var(--ink-850)), var(--ink-900) 78%)",
               }}
             >
-              <div className={`mx-auto ${format.mockup === "book" ? "max-w-[40rem]" : format.mockup === "tent" ? "max-w-[26rem]" : "max-w-[20rem]"}`}>
+              <div
+                className={`mx-auto ${
+                  format.mockup === "book"
+                    ? "max-w-[40rem]"
+                    : format.mockup === "tent" || format.trim.width > format.trim.height
+                      ? "max-w-[30rem]"
+                      : "max-w-[20rem]"
+                }`}
+              >
                 <PaperCard
                   config={config}
                   event={event}
