@@ -1,10 +1,16 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CalendarCheck, ChevronLeft, ChevronRight, Mail } from "lucide-react";
+import {
+  CalendarCheck,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/lib/i18n/Context";
+import { whatsappLink } from "@/lib/site";
 
 /** Nombre de mois consultables à partir du mois courant. */
 const MONTHS_AHEAD = 24;
@@ -37,18 +43,13 @@ function monthsBetween(fromKey, toKey) {
  * quel qu'il soit (mariage, anniversaire, gala…). Elle reste choisissable :
  * plusieurs événements peuvent avoir lieu le même jour. Un clic sur une date
  * affiche le nombre d'événements déjà prévus (jamais leurs détails) et
- * propose de demander la date par email.
+ * propose de demander la date sur WhatsApp.
  *
  * @param {Array<{date: string, count: number}>} props.bookedDates
  * @param {string} props.today  AAAA-MM-JJ, calculé côté serveur pour que le
  *   rendu serveur et le rendu client tombent d'accord.
- * @param {string} props.contactEmail  destinataire des demandes de réservation
  */
-export default function AvailabilityCalendar({
-  bookedDates,
-  today,
-  contactEmail,
-}) {
+export default function AvailabilityCalendar({ bookedDates, today }) {
   const { t, locale } = useTranslation();
   const intlLocale = locale === "fr" ? "fr-FR" : "en-US";
 
@@ -114,8 +115,8 @@ export default function AvailabilityCalendar({
     )}`;
   }
 
-  /** Lien email pré-rempli, avec la date choisie s'il y en a une. */
-  function mailtoFor(key) {
+  /** Lien WhatsApp pré-rempli, avec la date choisie s'il y en a une. */
+  function requestLinkFor(key) {
     const dateLabel = key ? longDate(key) : null;
     const subject = dateLabel
       ? `${t("landing.availability.mail_subject")} : ${dateLabel}`
@@ -124,9 +125,9 @@ export default function AvailabilityCalendar({
       "{date}",
       dateLabel ?? t("landing.availability.mail_date_placeholder"),
     );
-    return `mailto:${contactEmail}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
+    return whatsappLink(`${subject}
+
+${body}`);
   }
 
   function moveTo(nextOffset) {
@@ -212,8 +213,12 @@ export default function AvailabilityCalendar({
           </ul>
 
           <Button asChild size="lg" className="mt-10">
-            <a href={mailtoFor(selected)}>
-              <Mail className="h-4 w-4" />
+            <a
+              href={requestLinkFor(selected)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle className="h-4 w-4" />
               {t("landing.availability.cta")}
             </a>
           </Button>
@@ -362,8 +367,12 @@ export default function AvailabilityCalendar({
                   )}
                 </div>
                 <Button asChild size="sm" className="shrink-0">
-                  <a href={mailtoFor(selected)}>
-                    <Mail className="h-3.5 w-3.5" />
+                  <a
+                    href={requestLinkFor(selected)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <MessageCircle className="h-3.5 w-3.5" />
                     {t("landing.availability.book_this_date")}
                   </a>
                 </Button>

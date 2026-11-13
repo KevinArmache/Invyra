@@ -84,7 +84,6 @@ de `prisma/migrations-sql/` (voir [Base de données](#base-de-données)).
 | `NEXT_PUBLIC_APP_URL` | URL publique, utilisée pour les liens d'invitation, le sitemap et l'Open Graph |
 | `SMTP_HOST` `SMTP_PORT` `SMTP_USER` `SMTP_PASS` | Envoi des emails (Nodemailer) ; port 465 en SSL, 587 en STARTTLS |
 | `BLOB_READ_WRITE_TOKEN` | Store Vercel Blob **public** pour les photos, la musique et les souvenirs. Sans lui, seul le collage d'un lien d'image fonctionne |
-| `CONTACT_EMAIL` | Facultatif. Destinataire des demandes de contact |
 | `CRON_SECRET` | Facultatif. Protège la tâche planifiée `/api/cron/keepalive` |
 
 Sur Vercel, si `NEXT_PUBLIC_APP_URL` est absente, l'URL publique retombe sur

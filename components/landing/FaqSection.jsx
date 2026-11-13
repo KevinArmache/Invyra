@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { getTranslations } from "@/lib/i18n/server";
-import { CONTACT_EMAIL } from "@/lib/site";
+import { WHATSAPP_URL } from "@/lib/site";
 
 /**
  * Questions fréquentes. Chaque réponse décrit le comportement réel de la
@@ -41,11 +41,13 @@ export default async function FaqSection() {
             {t("landing.faq.subtitle")}
           </p>
           <a
-            href={`mailto:${CONTACT_EMAIL}`}
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="group mt-8 inline-flex items-center gap-2 text-sm text-ink-300 transition-colors hover:text-gold"
           >
             <MessageCircle className="h-4 w-4 text-gold transition-transform duration-300 group-hover:-rotate-12" />
-            {CONTACT_EMAIL}
+            {t("landing.footer.links.whatsapp")}
           </a>
         </header>
 

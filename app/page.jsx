@@ -10,7 +10,7 @@ import {
 import { linkQrSvg } from "@/lib/qr-svg";
 import { sampleEvent } from "@/lib/landing/sample-event";
 import { getTranslations } from "@/lib/i18n/server";
-import { CONTACT_EMAIL, INSTAGRAM_URL, SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import CategoryMarquee from "@/components/landing/CategoryMarquee";
@@ -62,8 +62,6 @@ function structuredData(t) {
         name: SITE_NAME,
         url: SITE_URL,
         logo: `${SITE_URL}/logo.png`,
-        email: CONTACT_EMAIL,
-        sameAs: [INSTAGRAM_URL],
       },
       {
         "@type": "WebSite",
@@ -160,7 +158,6 @@ export default async function HomePage() {
         <AvailabilityCalendar
           bookedDates={bookedDates}
           today={todayKey()}
-          contactEmail={CONTACT_EMAIL}
         />
         <PricingSection />
         <FaqSection />
