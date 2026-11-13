@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Mail, MessageCircle } from "lucide-react";
 
 import BrandMark from "@/components/common/BrandMark";
-import Signature from "@/components/landing/Signature";
 import { getTranslations } from "@/lib/i18n/server";
 import { CONTACT_EMAIL, INSTAGRAM_URL, WHATSAPP_URL } from "@/lib/site";
 
@@ -162,20 +161,9 @@ export default async function Footer({
           Invyra
         </p>
 
-        <div className="mt-6 flex flex-col gap-3 border-t border-border/60 pt-7 text-xs text-ink-400 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-6 border-t border-border/60 pt-7 text-xs text-ink-400">
           <p>
             © {year} Invyra. {t("landing.footer.rights")}
-          </p>
-          <p data-reveal="fade" className="flex items-baseline gap-1.5">
-            {t("landing.footer.made_by")}
-            <Signature
-              name="Kevin Armache"
-              href={INSTAGRAM_URL}
-              label={t("landing.footer.made_by_label").replace(
-                "{name}",
-                "Kevin Armache",
-              )}
-            />
           </p>
         </div>
       </div>
