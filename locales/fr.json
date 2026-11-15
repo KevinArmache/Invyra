@@ -32,7 +32,7 @@
   },
   "register": {
     "title": "Créer un compte",
-    "subtitle": "Votre premier événement et jusqu'à 15 invités sont offerts.",
+    "subtitle": "Créez votre événement et préparez vos invitations en quelques minutes.",
     "name": "Nom complet",
     "name_placeholder": "Votre nom",
     "email": "Email",
@@ -53,7 +53,7 @@
     "optional": "optionnel",
     "tagline": "Composez votre première invitation en quelques minutes.",
     "meta_title": "Créer un compte",
-    "meta_description": "Créez votre compte Invyra gratuitement : un événement et jusqu'à 15 invités offerts, sans écrire de code."
+    "meta_description": "Créez votre compte Invyra : invitations électroniques et papier pour mariage, anniversaire ou baptême, sans écrire de code."
   },
   "settings": {
     "title": "Paramètres",
@@ -87,14 +87,14 @@
     "password_length": "Le mot de passe doit contenir au moins 8 caractères",
     "plan_title": "Votre formule",
     "plan_desc": "Ce que comprend votre compte",
-    "plan_free_name": "Découverte",
-    "plan_premium_name": "Événement premium",
-    "plan_free_limits": "1 événement, jusqu'à 15 invités",
-    "plan_premium_limits": "1 événement, invités illimités",
+    "plan_free_name": "Formule à activer",
+    "plan_premium_name": "Formule activée",
+    "plan_free_limits": "Électronique 1 $ ou papier 2,50 $ par invitation",
+    "plan_premium_limits": "1 événement, invitations illimitées",
     "plan_admin_limits": "Compte administrateur : aucune limite d'événements ni d'invités.",
-    "plan_upgrade": "Passer au premium sur WhatsApp",
-    "plan_upgrade_hint": "1 $ par invité. Notre équipe active la formule après votre message.",
-    "plan_upgrade_message": "Bonjour, je souhaite passer à l'Événement premium sur Invyra. Mon email : {email}",
+    "plan_upgrade": "Activer ma formule sur WhatsApp",
+    "plan_upgrade_hint": "Indiquez votre nombre d'invitations : nous vous donnons le montant et activons votre formule.",
+    "plan_upgrade_message": "Bonjour, je souhaite activer ma formule Invyra (électronique ou papier). Mon email : {email}",
     "plan_premium_hint": "Ajoutez autant d'invités que nécessaire.",
     "danger_zone": "Zone de danger",
     "irreversible": "Actions irréversibles",
@@ -164,9 +164,8 @@
       "admin": "Administration",
       "account": "Mon compte",
       "new_event": "Nouvel événement",
-      "plan_free": "Découverte",
-      "plan_premium": "Premium",
-      "upgrade": "Passer au premium"
+      "plan_premium": "Formule active",
+      "upgrade": "Activer ma formule"
     },
     "admin": {
       "overview": "Vue d'ensemble",
@@ -183,10 +182,10 @@
       "role": "Rôle",
       "role_admin": "Admin",
       "plan": "Formule",
-      "plan_free": "Découverte",
-      "plan_premium": "Premium",
-      "set_premium": "Passer en premium",
-      "set_free": "Repasser en Découverte",
+      "plan_free": "Essai",
+      "plan_premium": "Activée",
+      "set_premium": "Activer la formule",
+      "set_free": "Repasser en essai",
       "plan_updated": "Formule de {name} : {plan}",
       "status": "Statut",
       "registered_on": "Inscrit le",
@@ -588,7 +587,14 @@
           "named_option": "Une carte au nom de chaque invité ({count} cartes)",
           "named_hint": "Chaque carte porte le nom de l'invité et son QR code personnel : réponse, itinéraire et billet en un geste.",
           "enable_link_tip": "Activez le lien unique dans l'onglet Invités pour imprimer un QR code commun sur toutes les cartes.",
-          "order_message": "Bonjour, je souhaite faire imprimer les invitations de « {event} » avec le modèle « {name} » ({format}), {mode}.",
+          "order_message": "Bonjour, je souhaite faire imprimer les invitations de « {event} » avec le modèle « {name} » ({format}) : {mode}, {quantity} cartes à {price}, soit {total}.",
+          "order_mode_generic": "une même carte pour tous",
+          "order_mode_named": "une carte au nom de chaque invité",
+          "quantity_label": "Nombre de cartes",
+          "quantity_line": "{quantity} cartes × {price}",
+          "total_label": "Total",
+          "min_hint": "À partir de {min} cartes.",
+          "min_note": "Commande minimum de {min} cartes : les cartes en plus sont imprimées sans nom.",
           "see_template": "Voir la page du modèle"
         }
       },
@@ -797,8 +803,8 @@
       "status_paused": "En pause",
       "status_sent": "Envoyé",
       "audience_all": "Tous les utilisateurs",
-      "audience_free": "Formule Découverte",
-      "audience_premium": "Formule premium",
+      "audience_free": "Comptes en essai",
+      "audience_premium": "Comptes activés",
       "failed_count": "{count} échec(s)",
       "new_title": "Nouvel e-mail",
       "new_subtitle": "Rédigez l'annonce, vérifiez l'aperçu, puis envoyez-la.",
@@ -1164,7 +1170,7 @@
   },
   "stationery": {
     "meta_title": "Invitations papier",
-    "meta_description": "Faire-part et invitations à imprimer : cartes plates, pliées, papiers d'exception et dorure. Des fichiers prêts pour l'imprimerie, reliés à votre invitation en ligne.",
+    "meta_description": "Invitations papier à 2,50 $ l'unité, enveloppe comprise : cartes plates ou pliées, papiers d'exception et dorure, reliées à votre invitation en ligne.",
     "template_meta_title": "{name} · Invitation papier",
     "template_meta_description": "Découvrez l'invitation papier « {name} » : maquette, format, papiers et finitions. Fichier prêt pour l'imprimerie.",
     "breadcrumb": "Papeterie",
@@ -1234,8 +1240,8 @@
     "order_cta": "Commander l'impression",
     "proof_cta": "Télécharger le BAT",
     "create_cta": "Créer mon événement",
-    "order_note": "Nous adaptons la carte à votre événement, vous validez le bon à tirer, puis nous imprimons et livrons. Prix sur devis selon la quantité, le papier et les finitions.",
-    "order_message": "Bonjour, je souhaite commander l'invitation papier « {name} » ({format}). {url}",
+    "order_note": "Nous adaptons la carte à votre événement, vous validez le bon à tirer, puis nous imprimons et livrons. {price} par invitation, enveloppe et invitation en ligne comprises, à partir de {min} cartes.",
+    "order_message": "Bonjour, je souhaite commander l'invitation papier « {name} » ({format}), à {price} par invitation. {url}",
     "watermark": "BON À TIRER",
     "proof_filename": "bat",
     "sides": {
@@ -1354,15 +1360,15 @@
       "cta_primary": "Découvrir les modèles",
       "cta_register": "Créer mon compte",
       "cta_secondary": "Voir comment ça marche",
-      "free_note": "Gratuit jusqu'à 15 invités",
+      "free_note": "1 $ par invitation, sans abonnement",
       "facts": [
         {
           "value": 3,
           "label": "ouvertures animées"
         },
         {
-          "value": 15,
-          "label": "invités offerts"
+          "value": 2,
+          "label": "formats : en ligne et papier"
         },
         {
           "value": 0,
@@ -1524,18 +1530,16 @@
       "eyebrow": "Tarifs",
       "title": "Des tarifs ",
       "title_highlight": "simples",
-      "subtitle": "Commencez gratuitement. Passez au premium quand votre liste dépasse 15 invités.",
-      "badge": "Pour les grandes listes d'invités",
+      "subtitle": "Vous payez seulement les invitations que vous envoyez, en ligne ou sur papier.",
+      "badge": "Papier et en ligne",
       "plans": {
-        "free": {
-          "name": "Découverte",
-          "desc": "Pour un premier événement",
-          "price": "0 $",
-          "period": "pour toujours",
-          "cta": "Commencer gratuitement",
+        "digital": {
+          "name": "Électronique",
+          "desc": "L'invitation en ligne, envoyée à chaque invité",
+          "period": "par invitation",
+          "cta": "Créer mon invitation",
           "features": [
-            "1 événement",
-            "Jusqu'à 15 invités",
+            "Une invitation personnelle pour chaque invité",
             "Toute la galerie de modèles",
             "Personnalisation sans code",
             "Envoi par email et WhatsApp",
@@ -1543,18 +1547,20 @@
             "Billets QR, itinéraire et livre d'or"
           ]
         },
-        "pro": {
-          "name": "Événement premium",
-          "desc": "Quand la liste d'invités s'allonge",
-          "price": "1 $",
-          "period": "par invité",
-          "cta": "Demander sur WhatsApp",
-          "whatsapp_message": "Bonjour, je souhaite passer à l'Événement premium sur Invyra.",
+        "print": {
+          "name": "Physique",
+          "desc": "La carte imprimée, avec son invitation en ligne",
+          "period": "par invitation",
+          "cta": "Choisir mon modèle papier",
+          "whatsapp_message": "Bonjour, je souhaite commander des invitations papier sur Invyra.",
           "features": [
-            "Invités illimités",
-            "1 événement",
-            "Tout ce que comprend Découverte",
-            "Activation et aide sur WhatsApp"
+            "Carte imprimée au nom de chaque invité",
+            "Enveloppe comprise",
+            "Invitation électronique comprise, via le QR code au dos",
+            "Papiers et finitions du modèle choisi",
+            "Bon à tirer à valider avant impression",
+            "Impression et livraison par notre équipe",
+            "À partir de 100 cartes"
           ]
         }
       }
@@ -1594,8 +1600,12 @@
           "a": "Oui. Depuis son invitation, chaque invité accède au livre d'or et peut ajouter ses photos et vidéos, visibles par les autres invités. Vous pouvez masquer un contenu ou fermer le partage à tout moment."
         },
         {
-          "q": "Combien d'invités avec l'offre gratuite ?",
-          "a": "Jusqu'à 15 invités pour un événement. Au-delà, l'Événement premium coûte 1 $ par invité, sans limite de nombre."
+          "q": "Combien coûte une invitation ?",
+          "a": "1 $ par invitation électronique. 2,50 $ par invitation papier, à partir de 100 cartes : la carte au nom de l'invité, son enveloppe et son invitation électronique sont comprises."
+        },
+        {
+          "q": "Comment payer ?",
+          "a": "Écrivez-nous sur WhatsApp avec votre nombre d'invitations : nous vous indiquons le montant et activons votre formule."
         },
         {
           "q": "Puis-je préparer l'événement à plusieurs ?",
@@ -1610,7 +1620,7 @@
     "cta": {
       "title": "Votre invitation peut partir ",
       "title_highlight": "aujourd'hui",
-      "subtitle": "Créez votre événement, choisissez un modèle, ajoutez vos invités : les 15 premiers sont offerts.",
+      "subtitle": "Créez votre événement, choisissez un modèle en ligne ou sur papier, puis ajoutez vos invités.",
       "button": "Créer mon compte",
       "secondary": "Voir les tarifs"
     },

@@ -22,7 +22,7 @@ import ShareTemplateButton from "@/components/templates/ShareTemplateButton";
 import { mainPiece } from "@/lib/print/config";
 import { availableFinishes, availablePapers } from "@/lib/print/options";
 import { SAMPLE_GUEST } from "@/lib/print/sample";
-import { whatsappLink } from "@/lib/site";
+import { PRINT_MIN_QUANTITY, PRINT_PRICE_USD, formatUsd, whatsappLink } from "@/lib/site";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /**
@@ -47,7 +47,7 @@ function viewOf(format, face) {
  *   demande de commande
  */
 export default function StationeryStudio({ template, event, qr, votes, isAuthenticated, categoryLabel, pageUrl }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const s = (key) => t(`stationery.${key}`);
   const { format } = mainPiece(template.config);
   const [open, setOpen] = useState(false);
@@ -59,10 +59,12 @@ export default function StationeryStudio({ template, event, qr, votes, isAuthent
   const guestName = named ? SAMPLE_GUEST : "";
 
   if (!format) return null;
+  const price = formatUsd(PRINT_PRICE_USD, locale);
   const orderHref = whatsappLink(
     s("order_message")
       .replace("{name}", template.name)
       .replace("{format}", t(`stationery.formats.${format.id}`))
+      .replace("{price}", price)
       .replace("{url}", pageUrl),
   );
   const folded = Boolean(format.fold);
@@ -308,7 +310,9 @@ export default function StationeryStudio({ template, event, qr, votes, isAuthent
                   </Link>
                 </Button>
               </div>
-              <p className="text-xs text-ink-400">{s("order_note")}</p>
+              <p className="text-xs text-ink-400">
+                {s("order_note").replace("{price}", price).replace("{min}", String(PRINT_MIN_QUANTITY))}
+              </p>
 
               <div className="flex items-center justify-between gap-3 border-t border-border/60 pt-5">
                 {votes ? (

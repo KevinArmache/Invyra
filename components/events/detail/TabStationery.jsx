@@ -6,6 +6,8 @@ import { BookOpen, FileDown, Loader2, MessageCircle, Printer, RotateCcw } from "
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { EmptyState, Panel } from "@/components/shell/primitives";
 import PaperCard from "@/components/stationery/PaperCard";
 import PaperFace from "@/components/stationery/PaperFace";
@@ -14,7 +16,7 @@ import { invitationPhotos, mainPiece, withPhotos } from "@/lib/print/config";
 import { formatDimensions } from "@/lib/print/formats";
 import { getFinish } from "@/lib/print/options";
 import { linkQrSvg } from "@/lib/qr-svg";
-import { whatsappLink } from "@/lib/site";
+import { PRINT_MIN_QUANTITY, PRINT_PRICE_USD, formatUsd, whatsappLink } from "@/lib/site";
 import { useTranslation } from "@/lib/i18n/Context";
 
 /** Cartes nominatives par fichier HD (voir la route events/[id]/stationery). */
@@ -33,13 +35,15 @@ const PART_SIZE = 100;
  * @param {number} props.guestCount
  */
 export default function TabStationery({ eventId, event, invitation, catalog, publicLink, guestCount, isAdmin }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const k = (key) => t(`portal.events.details.stationery.${key}`);
   const s = (key) => t(`stationery.${key}`);
   const [selectedId, setSelectedId] = useState(catalog[0]?.id ?? null);
   const [open, setOpen] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [named, setNamed] = useState(false);
+  // Nombre de cartes communes à imprimer (saisi en texte, borné au calcul).
+  const [copies, setCopies] = useState(String(PRINT_MIN_QUANTITY));
   const [qr, setQr] = useState(null);
   const [downloading, setDownloading] = useState(null);
 
@@ -86,13 +90,26 @@ export default function TabStationery({ eventId, event, invitation, catalog, pub
     }
   }
 
+  // Prix à l'invitation, commande minimum comprise : une carte par invité en
+  // mode nominatif, sinon le nombre saisi. Les cartes ajoutées pour atteindre
+  // le minimum sont imprimées sans nom.
+  const quantity = Math.max(
+    named ? guestCount : Math.round(Number(copies)) || 0,
+    PRINT_MIN_QUANTITY,
+  );
+  const unitPrice = formatUsd(PRINT_PRICE_USD, locale);
+  const total = formatUsd(quantity * PRINT_PRICE_USD, locale);
+
   const orderHref = selected
     ? whatsappLink(
         k("order_message")
           .replace("{event}", event.title)
           .replace("{name}", selected.name)
           .replace("{format}", format ? s(`formats.${format.id}`) : "")
-          .replace("{mode}", named ? k("named_option").replace("{count}", String(guestCount)) : k("generic_option")),
+          .replace("{mode}", named ? k("order_mode_named") : k("order_mode_generic"))
+          .replace("{quantity}", String(quantity))
+          .replace("{price}", unitPrice)
+          .replace("{total}", total),
       )
     : null;
 
@@ -247,6 +264,46 @@ export default function TabStationery({ eventId, event, invitation, catalog, pub
                 )}
               </fieldset>
 
+              {/* Montant de la commande, repris dans le message WhatsApp. */}
+              <div className="space-y-3 rounded-lg border border-border/70 p-4">
+                {!named && (
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="stationery-copies">{k("quantity_label")}</Label>
+                    <Input
+                      id="stationery-copies"
+                      type="number"
+                      inputMode="numeric"
+                      min={PRINT_MIN_QUANTITY}
+                      step={1}
+                      value={copies}
+                      onChange={(changeEvent) => setCopies(changeEvent.target.value)}
+                      onBlur={() => setCopies(String(quantity))}
+                    />
+                    <p className="text-xs text-ink-400">
+                      {k("min_hint").replace("{min}", String(PRINT_MIN_QUANTITY))}
+                    </p>
+                  </div>
+                )}
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <p className="text-sm text-ink-300">
+                    {k("quantity_line")
+                      .replace("{quantity}", String(quantity))
+                      .replace("{price}", unitPrice)}
+                  </p>
+                  <p className="flex items-baseline gap-2">
+                    <span className="text-xs text-ink-400">{k("total_label")}</span>
+                    <span data-numeric className="font-display text-2xl text-gold">
+                      {total}
+                    </span>
+                  </p>
+                </div>
+                {named && guestCount < PRINT_MIN_QUANTITY && (
+                  <p className="text-xs text-ink-400">
+                    {k("min_note").replace("{min}", String(PRINT_MIN_QUANTITY))}
+                  </p>
+                )}
+              </div>
+
               <div className="grid gap-2 sm:grid-cols-2">
                 <Button asChild size="lg" className="h-11 sm:col-span-2">
                   <a href={orderHref} target="_blank" rel="noopener noreferrer">
@@ -265,7 +322,9 @@ export default function TabStationery({ eventId, event, invitation, catalog, pub
                   {s("proof_cta")}
                 </Button>
               </div>
-              <p className="text-xs text-ink-400">{s("order_note")}</p>
+              <p className="text-xs text-ink-400">
+                {s("order_note").replace("{price}", unitPrice).replace("{min}", String(PRINT_MIN_QUANTITY))}
+              </p>
 
               {isAdmin && (
                 <div className="border-t border-border/60 pt-4">

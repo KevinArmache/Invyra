@@ -64,7 +64,7 @@ function RoleBadge({ role }) {
   );
 }
 
-/** Formule du compte : Premium en or, Découverte en neutre. */
+/** Formule du compte : activée en or, essai en neutre. */
 function PlanBadge({ plan }) {
   const { t } = useTranslation();
 
@@ -128,7 +128,7 @@ export default function UsersTable({ users, currentUserId }) {
     );
   }
 
-  /** Active ou retire l'Événement premium vendu sur la page Tarifs. */
+  /** Active ou retire la formule payée (électronique ou papier) sur WhatsApp. */
   function togglePlan(user) {
     const nextPlan = user.plan === "premium" ? "free" : "premium";
     run(

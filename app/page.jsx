@@ -10,7 +10,13 @@ import {
 import { linkQrSvg } from "@/lib/qr-svg";
 import { sampleEvent } from "@/lib/landing/sample-event";
 import { getTranslations } from "@/lib/i18n/server";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import {
+  DIGITAL_PRICE_USD,
+  PRINT_MIN_QUANTITY,
+  PRINT_PRICE_USD,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/site";
 import Navbar from "@/components/landing/Navbar";
 import HeroSection from "@/components/landing/HeroSection";
 import CategoryMarquee from "@/components/landing/CategoryMarquee";
@@ -81,17 +87,33 @@ function structuredData(t) {
         offers: [
           {
             "@type": "Offer",
-            name: t("landing.pricing.plans.free.name"),
-            price: "0",
+            name: t("landing.pricing.plans.digital.name"),
+            price: String(DIGITAL_PRICE_USD),
             priceCurrency: "USD",
-            description: t("landing.pricing.plans.free.features").join(", "),
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: DIGITAL_PRICE_USD,
+              priceCurrency: "USD",
+              unitText: "invitation",
+            },
+            description: t("landing.pricing.plans.digital.features").join(", "),
           },
           {
             "@type": "Offer",
-            name: t("landing.pricing.plans.pro.name"),
-            price: "1",
+            name: t("landing.pricing.plans.print.name"),
+            price: String(PRINT_PRICE_USD),
             priceCurrency: "USD",
-            description: t("landing.pricing.plans.pro.features").join(", "),
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: PRINT_PRICE_USD,
+              priceCurrency: "USD",
+              unitText: "invitation",
+            },
+            eligibleQuantity: {
+              "@type": "QuantitativeValue",
+              minValue: PRINT_MIN_QUANTITY,
+            },
+            description: t("landing.pricing.plans.print.features").join(", "),
           },
         ],
       },
@@ -159,7 +181,7 @@ export default async function HomePage() {
           bookedDates={bookedDates}
           today={todayKey()}
         />
-        <PricingSection />
+        <PricingSection hasStationery={stationery.total > 0} />
         <FaqSection />
         <FinalCta />
       </main>

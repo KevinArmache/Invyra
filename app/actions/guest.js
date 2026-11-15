@@ -9,7 +9,7 @@ import {
 import { getMyCollaboratorRole } from "@/app/actions/collaborator";
 import { nanoid } from "nanoid";
 import { sendInvitationEmail, sendBulkInvitationEmails } from "./notify";
-import { FREE_GUEST_LIMIT } from "@/lib/site";
+import { DIGITAL_PRICE_USD, FREE_GUEST_LIMIT, formatUsd } from "@/lib/site";
 import { clampSeats, newTicketCode } from "@/lib/tickets";
 
 const GUEST_LIMITS = {
@@ -75,8 +75,9 @@ export async function addGuest(eventId, data) {
       const limit = GUEST_LIMITS[user.plan] ?? 0;
 
       if (guestCount >= limit) {
+        // Le seuil de l'essai n'est jamais cité : seul le tarif l'est.
         throw new Error(
-          `L'offre Découverte est limitée à ${FREE_GUEST_LIMIT} invités. Passez à l'Événement premium pour en ajouter d'autres.`,
+          `Pour ajouter d'autres invités, activez votre formule (${formatUsd(DIGITAL_PRICE_USD)} par invitation) en nous écrivant sur WhatsApp.`,
         );
       }
     }

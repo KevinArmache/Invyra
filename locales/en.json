@@ -32,7 +32,7 @@
   },
   "register": {
     "title": "Create an account",
-    "subtitle": "Your first event and up to 15 guests are free.",
+    "subtitle": "Create your event and prepare your invitations in a few minutes.",
     "name": "Full name",
     "name_placeholder": "Your name",
     "email": "Email",
@@ -53,7 +53,7 @@
     "optional": "optional",
     "tagline": "Compose your first invitation in minutes.",
     "meta_title": "Create an account",
-    "meta_description": "Create your Invyra account for free: one event and up to 15 guests included, no code to write."
+    "meta_description": "Create your Invyra account: digital and printed invitations for weddings, birthdays or christenings, no code to write."
   },
   "settings": {
     "title": "Settings",
@@ -87,14 +87,14 @@
     "password_length": "Password must be at least 8 characters",
     "plan_title": "Your plan",
     "plan_desc": "What your account includes",
-    "plan_free_name": "Starter",
-    "plan_premium_name": "Premium event",
-    "plan_free_limits": "1 event, up to 15 guests",
-    "plan_premium_limits": "1 event, unlimited guests",
+    "plan_free_name": "Plan to activate",
+    "plan_premium_name": "Plan activated",
+    "plan_free_limits": "Digital $1 or printed $2.50 per invitation",
+    "plan_premium_limits": "1 event, unlimited invitations",
     "plan_admin_limits": "Admin account: no limit on events or guests.",
-    "plan_upgrade": "Go premium on WhatsApp",
-    "plan_upgrade_hint": "$1 per guest. Our team activates the plan after your message.",
-    "plan_upgrade_message": "Hello, I would like to upgrade to the Premium event on Invyra. My email: {email}",
+    "plan_upgrade": "Activate my plan on WhatsApp",
+    "plan_upgrade_hint": "Tell us how many invitations you need: we give you the amount and activate your plan.",
+    "plan_upgrade_message": "Hello, I would like to activate my Invyra plan (digital or printed). My email: {email}",
     "plan_premium_hint": "Add as many guests as you need.",
     "danger_zone": "Danger zone",
     "irreversible": "Irreversible actions",
@@ -164,9 +164,8 @@
       "admin": "Admin panel",
       "account": "My account",
       "new_event": "New event",
-      "plan_free": "Starter",
-      "plan_premium": "Premium",
-      "upgrade": "Go premium"
+      "plan_premium": "Active plan",
+      "upgrade": "Activate my plan"
     },
     "admin": {
       "overview": "Overview",
@@ -183,10 +182,10 @@
       "role": "Role",
       "role_admin": "Admin",
       "plan": "Plan",
-      "plan_free": "Starter",
-      "plan_premium": "Premium",
-      "set_premium": "Switch to premium",
-      "set_free": "Back to Starter",
+      "plan_free": "Trial",
+      "plan_premium": "Activated",
+      "set_premium": "Activate plan",
+      "set_free": "Back to trial",
       "plan_updated": "{name}'s plan: {plan}",
       "status": "Status",
       "registered_on": "Registered on",
@@ -588,7 +587,14 @@
           "named_option": "One card per guest, with their name ({count} cards)",
           "named_hint": "Each card carries the guest's name and personal QR code: reply, directions and ticket in one scan.",
           "enable_link_tip": "Turn on the shared link in the Guests tab to print a common QR code on every card.",
-          "order_message": "Hello, I would like to print the invitations for “{event}” with the “{name}” design ({format}), {mode}.",
+          "order_message": "Hello, I would like to print the invitations for “{event}” with the “{name}” design ({format}): {mode}, {quantity} cards at {price}, {total} in total.",
+          "order_mode_generic": "the same card for everyone",
+          "order_mode_named": "one card with each guest's name",
+          "quantity_label": "Number of cards",
+          "quantity_line": "{quantity} cards × {price}",
+          "total_label": "Total",
+          "min_hint": "From {min} cards.",
+          "min_note": "Minimum order of {min} cards: the extra cards are printed without a name.",
           "see_template": "See the template page"
         }
       },
@@ -797,8 +803,8 @@
       "status_paused": "Paused",
       "status_sent": "Sent",
       "audience_all": "All users",
-      "audience_free": "Discovery plan",
-      "audience_premium": "Premium plan",
+      "audience_free": "Trial accounts",
+      "audience_premium": "Activated accounts",
       "failed_count": "{count} failed",
       "new_title": "New email",
       "new_subtitle": "Write the announcement, check the preview, then send it.",
@@ -1164,7 +1170,7 @@
   },
   "stationery": {
     "meta_title": "Printed invitations",
-    "meta_description": "Invitations to print: flat and folded cards, fine papers and foil. Print-ready files, linked to your online invitation.",
+    "meta_description": "Printed invitations at $2.50 each, envelope included: flat or folded cards, fine papers and foil, linked to your online invitation.",
     "template_meta_title": "{name} · Printed invitation",
     "template_meta_description": "Discover the printed invitation “{name}”: mockup, size, papers and finishes. Print-ready file.",
     "breadcrumb": "Stationery",
@@ -1234,8 +1240,8 @@
     "order_cta": "Order printing",
     "proof_cta": "Download the proof",
     "create_cta": "Create my event",
-    "order_note": "We adapt the card to your event, you approve the proof, then we print and deliver. Price on quote depending on quantity, paper and finishes.",
-    "order_message": "Hello, I would like to order the printed invitation “{name}” ({format}). {url}",
+    "order_note": "We adapt the card to your event, you approve the proof, then we print and deliver. {price} per invitation, envelope and online invitation included, from {min} cards.",
+    "order_message": "Hello, I would like to order the printed invitation “{name}” ({format}), at {price} per invitation. {url}",
     "watermark": "PROOF",
     "proof_filename": "proof",
     "sides": {
@@ -1354,15 +1360,15 @@
       "cta_primary": "Explore the templates",
       "cta_register": "Create my account",
       "cta_secondary": "See how it works",
-      "free_note": "Free up to 15 guests",
+      "free_note": "$1 per invitation, no subscription",
       "facts": [
         {
           "value": 3,
           "label": "animated openings"
         },
         {
-          "value": 15,
-          "label": "guests included free"
+          "value": 2,
+          "label": "formats: online and paper"
         },
         {
           "value": 0,
@@ -1524,18 +1530,16 @@
       "eyebrow": "Pricing",
       "title": "Simple ",
       "title_highlight": "pricing",
-      "subtitle": "Start for free. Go premium when your list grows past 15 guests.",
-      "badge": "For long guest lists",
+      "subtitle": "You only pay for the invitations you send, online or on paper.",
+      "badge": "Paper and online",
       "plans": {
-        "free": {
-          "name": "Starter",
-          "desc": "For a first event",
-          "price": "$0",
-          "period": "forever",
-          "cta": "Start for free",
+        "digital": {
+          "name": "Digital",
+          "desc": "The online invitation, sent to each guest",
+          "period": "per invitation",
+          "cta": "Create my invitation",
           "features": [
-            "1 event",
-            "Up to 15 guests",
+            "A personal invitation for each guest",
             "The whole template gallery",
             "No-code customisation",
             "Sending by email and WhatsApp",
@@ -1543,18 +1547,20 @@
             "QR tickets, directions and guestbook"
           ]
         },
-        "pro": {
-          "name": "Premium event",
-          "desc": "When the guest list grows",
-          "price": "$1",
-          "period": "per guest",
-          "cta": "Ask on WhatsApp",
-          "whatsapp_message": "Hello, I would like to upgrade to the Premium event on Invyra.",
+        "print": {
+          "name": "Printed",
+          "desc": "The printed card, with its online invitation",
+          "period": "per invitation",
+          "cta": "Choose my paper design",
+          "whatsapp_message": "Hello, I would like to order printed invitations on Invyra.",
           "features": [
-            "Unlimited guests",
-            "1 event",
-            "Everything in Starter",
-            "Activation and help on WhatsApp"
+            "A printed card with each guest's name",
+            "Envelope included",
+            "Digital invitation included, through the QR code on the back",
+            "The papers and finishes of the chosen design",
+            "A proof to approve before printing",
+            "Printing and delivery by our team",
+            "From 100 cards"
           ]
         }
       }
@@ -1594,8 +1600,12 @@
           "a": "Yes. From their invitation, each guest can reach the guestbook and add their photos and videos, which the other guests can see. You can hide an item or close sharing at any time."
         },
         {
-          "q": "How many guests on the free plan?",
-          "a": "Up to 15 guests for one event. Beyond that, the Premium event costs $1 per guest, with no limit on numbers."
+          "q": "How much does an invitation cost?",
+          "a": "$1 per digital invitation. $2.50 per printed invitation, from 100 cards: the card with the guest's name, its envelope and the digital invitation are included."
+        },
+        {
+          "q": "How do I pay?",
+          "a": "Message us on WhatsApp with your number of invitations: we give you the amount and activate your plan."
         },
         {
           "q": "Can I prepare the event with others?",
@@ -1610,7 +1620,7 @@
     "cta": {
       "title": "Your invitation can go out ",
       "title_highlight": "today",
-      "subtitle": "Create your event, pick a template, add your guests: the first 15 are free.",
+      "subtitle": "Create your event, pick an online or paper design, then add your guests.",
       "button": "Create my account",
       "secondary": "See pricing"
     },

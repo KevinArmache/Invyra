@@ -36,8 +36,8 @@ function isActive(pathname, href, exact) {
  *
  * Le repère de la page active est un filet or qui se déplie, l'icône prend
  * l'or ; au survol, l'icône avance d'un cran. En bas, la carte du compte
- * indique la formule (Découverte ou Premium) et, pour un compte gratuit, le
- * chemin vers le premium.
+ * signale une formule activée et, pour un compte qui ne l'est pas encore,
+ * propose de l'activer (l'essai n'est jamais nommé).
  *
  * @param {boolean} props.showQuickAction  bouton « Nouvel événement » en tête
  */
@@ -233,17 +233,11 @@ export default function Sidebar({
                 {user.name || t("portal.sidebar.account")}
               </p>
               <p className="flex items-center gap-1.5 truncate text-xs text-ink-400">
-                <span
-                  className={`rounded-full border px-1.5 py-px text-[10px] leading-tight ${
-                    isPremium
-                      ? "border-gold/40 bg-gold/10 text-gold"
-                      : "border-border text-ink-300"
-                  }`}
-                >
-                  {isPremium
-                    ? t("portal.sidebar.plan_premium")
-                    : t("portal.sidebar.plan_free")}
-                </span>
+                {isPremium && (
+                  <span className="shrink-0 rounded-full border border-gold/40 bg-gold/10 px-1.5 py-px text-[10px] leading-tight text-gold">
+                    {t("portal.sidebar.plan_premium")}
+                  </span>
+                )}
                 <span className="truncate">{user.email}</span>
               </p>
             </div>

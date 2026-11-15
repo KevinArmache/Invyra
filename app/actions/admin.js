@@ -39,8 +39,9 @@ export async function updateUserRole(userId, role) {
 }
 
 /**
- * Formule d'un compte : « free » (Découverte) ou « premium ». C'est ainsi
- * qu'un admin active l'Événement premium vendu sur la page Tarifs.
+ * Formule d'un compte : « free » (essai, jamais annoncé) ou « premium »
+ * (formule activée). C'est ainsi qu'un admin active la formule payée sur
+ * WhatsApp, électronique ou papier.
  */
 export async function updateUserPlan(userId, plan) {
   await requireAdmin();

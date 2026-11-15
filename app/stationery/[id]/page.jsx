@@ -9,7 +9,7 @@ import { normalizePrintConfig, printTemplateImage } from "@/lib/print/config";
 import { samplePrintEvent } from "@/lib/print/sample";
 import { linkQrSvg } from "@/lib/qr-svg";
 import { getTranslations } from "@/lib/i18n/server";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { PRINT_MIN_QUANTITY, PRINT_PRICE_USD, SITE_NAME, SITE_URL } from "@/lib/site";
 import Navbar from "@/components/landing/Navbar";
 import StationeryStudio from "@/components/stationery/StationeryStudio";
 import PrintReadySection from "@/components/stationery/PrintReadySection";
@@ -73,6 +73,20 @@ function structuredData(t, template, votes, locale) {
         inLanguage: locale === "fr" ? "fr-FR" : "en-US",
         isPartOf: { "@id": `${SITE_URL}/#website` },
         ...(image && { image }),
+        offers: {
+          "@type": "Offer",
+          url,
+          price: String(PRINT_PRICE_USD),
+          priceCurrency: "USD",
+          priceSpecification: {
+            "@type": "UnitPriceSpecification",
+            price: PRINT_PRICE_USD,
+            priceCurrency: "USD",
+            unitText: "invitation",
+          },
+          eligibleQuantity: { "@type": "QuantitativeValue", minValue: PRINT_MIN_QUANTITY },
+          seller: { "@id": `${SITE_URL}/#organization` },
+        },
         interactionStatistic: [
           {
             "@type": "InteractionCounter",

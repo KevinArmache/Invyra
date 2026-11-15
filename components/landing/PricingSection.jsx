@@ -3,22 +3,39 @@ import { ArrowRight, Check, MessageCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getTranslations } from "@/lib/i18n/server";
-import { whatsappLink } from "@/lib/site";
+import {
+  DIGITAL_PRICE_USD,
+  PRINT_PRICE_USD,
+  formatUsd,
+  whatsappLink,
+} from "@/lib/site";
 
 /**
- * Deux formules, telles que l'application les applique (voir PLAN_LIMITS
- * dans app/actions/event.js et GUEST_LIMITS dans app/actions/guest.js) :
- * Découverte, 1 événement et 15 invités ; Événement premium, 1 événement
- * et des invités illimités, activé par l'équipe après un message WhatsApp.
+ * Les deux modes tarifaires, facturés à l'invitation : électronique, et
+ * physique (carte imprimée, enveloppe et invitation électronique comprises).
+ * Le paiement passe par WhatsApp, puis l'équipe active le compte. L'essai
+ * appliqué aux comptes non activés (FREE_GUEST_LIMIT) n'est volontairement
+ * jamais annoncé ici.
+ *
+ * @param {boolean} [props.hasStationery] la collection papier est en ligne :
+ *   la carte « Physique » y mène, sinon elle ouvre WhatsApp.
  */
-export default async function PricingSection() {
-  const { t } = await getTranslations();
+export default async function PricingSection({ hasStationery = false }) {
+  const { t, locale } = await getTranslations();
 
   const plans = [
-    { key: "free", href: "/register", featured: false },
     {
-      key: "pro",
-      href: whatsappLink(t("landing.pricing.plans.pro.whatsapp_message")),
+      key: "digital",
+      price: DIGITAL_PRICE_USD,
+      href: "/register",
+      featured: false,
+    },
+    {
+      key: "print",
+      price: PRINT_PRICE_USD,
+      href: hasStationery
+        ? "/stationery"
+        : whatsappLink(t("landing.pricing.plans.print.whatsapp_message")),
       featured: true,
     },
   ];
@@ -56,8 +73,8 @@ export default async function PricingSection() {
           </p>
         </header>
 
-        {/* items-start : la carte gratuite ne s'étire pas à la hauteur de la
-            carte mise en avant, volontairement plus haute. */}
+        {/* items-start : la carte électronique ne s'étire pas à la hauteur
+            de la carte mise en avant, volontairement plus haute. */}
         <div className="mx-auto mt-20 grid max-w-4xl items-start gap-6 md:grid-cols-2">
           {plans.map((plan, planIndex) => {
             const features = t(`landing.pricing.plans.${plan.key}.features`);
@@ -101,7 +118,7 @@ export default async function PricingSection() {
                         plan.featured ? "text-gold-shimmer" : "text-ink-50"
                       }`}
                     >
-                      {t(`landing.pricing.plans.${plan.key}.price`)}
+                      {formatUsd(plan.price, locale)}
                     </span>
                     <span className="text-sm text-ink-400">
                       {t(`landing.pricing.plans.${plan.key}.period`)}
