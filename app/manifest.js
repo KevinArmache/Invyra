@@ -11,7 +11,7 @@ export default function manifest() {
     name: `${SITE_NAME} · Invitations numériques`,
     short_name: SITE_NAME,
     description:
-      "Créez une invitation numérique sans code, envoyez-la par email ou WhatsApp et suivez les réponses.",
+      "Choisissez un modèle d'invitation numérique, envoyez-le par email ou WhatsApp et suivez les réponses.",
     start_url: "/dashboard",
     display: "standalone",
     background_color: BRAND_HEX.page,

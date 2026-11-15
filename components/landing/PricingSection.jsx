@@ -17,17 +17,25 @@ import {
  * appliqué aux comptes non activés (FREE_GUEST_LIMIT) n'est volontairement
  * jamais annoncé ici.
  *
+ * Les deux cartes invitent à choisir un modèle : seuls les administrateurs
+ * créent les modèles, les clients en choisissent un puis le personnalisent.
+ *
+ * @param {boolean} [props.hasTemplates] la collection /templates est en
+ *   ligne : la carte « Électronique » y mène, sinon vers l'inscription.
  * @param {boolean} [props.hasStationery] la collection papier est en ligne :
  *   la carte « Physique » y mène, sinon elle ouvre WhatsApp.
  */
-export default async function PricingSection({ hasStationery = false }) {
+export default async function PricingSection({
+  hasTemplates = false,
+  hasStationery = false,
+}) {
   const { t, locale } = await getTranslations();
 
   const plans = [
     {
       key: "digital",
       price: DIGITAL_PRICE_USD,
-      href: "/register",
+      href: hasTemplates ? "/templates" : "/register",
       featured: false,
     },
     {

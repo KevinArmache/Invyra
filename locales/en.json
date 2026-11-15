@@ -32,7 +32,7 @@
   },
   "register": {
     "title": "Create an account",
-    "subtitle": "Create your event and prepare your invitations in a few minutes.",
+    "subtitle": "Choose a design and send your invitations in a few minutes.",
     "name": "Full name",
     "name_placeholder": "Your name",
     "email": "Email",
@@ -102,7 +102,7 @@
     "delete_desc": "Deleting your account erases your events, your guests and their replies. It cannot be undone.",
     "delete_confirm_word": "DELETE",
     "delete_dialog_title": "Permanently delete your account?",
-    "delete_dialog_body": "Your events, guests and their replies will be erased. Templates you created stay available to others. This cannot be undone.",
+    "delete_dialog_body": "Your events, guests and their replies will be erased. This cannot be undone.",
     "delete_type_to_confirm": "Type {word} to confirm",
     "admin_cannot_delete": "Admin accounts cannot be deleted from this page.",
     "emails_title": "Emails",
@@ -1349,7 +1349,7 @@
   "landing": {
     "meta": {
       "title": "Invyra · Digital invitations that open like a letter",
-      "description": "Create a digital invitation without code, send it by email or WhatsApp, follow the replies and welcome your guests with a QR code ticket.",
+      "description": "Choose a digital invitation design, send it by email or WhatsApp, follow the replies and welcome your guests with a QR code ticket.",
       "og_alt": "Invyra, digital invitations"
     },
     "hero": {
@@ -1537,7 +1537,7 @@
           "name": "Digital",
           "desc": "The online invitation, sent to each guest",
           "period": "per invitation",
-          "cta": "Create my invitation",
+          "cta": "Choose my design",
           "features": [
             "A personal invitation for each guest",
             "The whole template gallery",
@@ -1569,7 +1569,7 @@
       "eyebrow": "FAQ",
       "title": "Frequently asked ",
       "title_highlight": "questions",
-      "subtitle": "What to know before creating your invitation.",
+      "subtitle": "What to know before choosing your design.",
       "items": [
         {
           "q": "Do my guests need an account?",

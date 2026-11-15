@@ -181,7 +181,10 @@ export default async function HomePage() {
           bookedDates={bookedDates}
           today={todayKey()}
         />
-        <PricingSection hasStationery={stationery.total > 0} />
+        <PricingSection
+          hasTemplates={hasCollection}
+          hasStationery={stationery.total > 0}
+        />
         <FaqSection />
         <FinalCta />
       </main>

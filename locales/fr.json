@@ -32,7 +32,7 @@
   },
   "register": {
     "title": "Créer un compte",
-    "subtitle": "Créez votre événement et préparez vos invitations en quelques minutes.",
+    "subtitle": "Choisissez un modèle et envoyez vos invitations en quelques minutes.",
     "name": "Nom complet",
     "name_placeholder": "Votre nom",
     "email": "Email",
@@ -102,7 +102,7 @@
     "delete_desc": "La suppression efface vos événements, vos invités et leurs réponses. Elle est définitive.",
     "delete_confirm_word": "SUPPRIMER",
     "delete_dialog_title": "Supprimer définitivement votre compte ?",
-    "delete_dialog_body": "Vos événements, vos invités et leurs réponses seront effacés. Les modèles que vous avez créés resteront disponibles pour les autres. Cette action est irréversible.",
+    "delete_dialog_body": "Vos événements, vos invités et leurs réponses seront effacés. Cette action est irréversible.",
     "delete_type_to_confirm": "Tapez {word} pour confirmer",
     "admin_cannot_delete": "Les comptes administrateur ne peuvent pas être supprimés depuis cette page.",
     "emails_title": "E-mails",
@@ -1349,7 +1349,7 @@
   "landing": {
     "meta": {
       "title": "Invyra · Invitations numériques qui s'ouvrent comme une lettre",
-      "description": "Créez une invitation numérique sans code, envoyez-la par email ou WhatsApp, suivez les réponses et accueillez vos invités avec un billet à QR code.",
+      "description": "Choisissez un modèle d'invitation numérique, envoyez-le par email ou WhatsApp, suivez les réponses et accueillez vos invités avec un billet à QR code.",
       "og_alt": "Invyra, invitations numériques"
     },
     "hero": {
@@ -1537,7 +1537,7 @@
           "name": "Électronique",
           "desc": "L'invitation en ligne, envoyée à chaque invité",
           "period": "par invitation",
-          "cta": "Créer mon invitation",
+          "cta": "Choisir mon modèle",
           "features": [
             "Une invitation personnelle pour chaque invité",
             "Toute la galerie de modèles",
@@ -1569,7 +1569,7 @@
       "eyebrow": "FAQ",
       "title": "Questions ",
       "title_highlight": "fréquentes",
-      "subtitle": "Ce qu'il faut savoir avant de créer votre invitation.",
+      "subtitle": "Ce qu'il faut savoir avant de choisir votre modèle.",
       "items": [
         {
           "q": "Mes invités doivent-ils créer un compte ?",
